@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Dashboard</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="">Home</a></li>
+            <li><a href="">Profile</a></li>
+            <li><a href="">Settings</a></li>
+            <a href="{{ url_for('admin.add_user') }}">Add New User</a>
+            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+
+        </ul>
+    </nav>
+    <main>
+        <section>
+            <h2>Overview</h2>
+            <p>This is the overview section of the dashboard.</p>
+        </section>
+        <section>
+            <h2>Statistics</h2>
+            <p>This is the statistics section of the dashboard.</p>
+        </section>
+        <section>
+            <h2>Recent Activity</h2>
+            <p>This is the recent activity section of the dashboard.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Your Company</p>
+    </footer>
+</body>
+</html>
