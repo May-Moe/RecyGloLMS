@@ -31,7 +31,9 @@ def load_user(user_id):
 from recyglolms.main import main_bp
 from recyglolms.auth import auth_bp
 from recyglolms.adduser import admin_bp
+from recyglolms.upload import upload_bp
 
 app.register_blueprint(main_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
+app.register_blueprint(upload_bp)

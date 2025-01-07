@@ -53,14 +53,58 @@ def add_user():
 
     return render_template('adduser.html')
 
-# # Route to view all users
-# @admin_bp.route('/users', methods=['GET'])
-# @login_required
-# def view_users():
-#     # Ensure only admins can access
-#     if not current_user.role:  # Assuming role=1 is admin
-#         flash("Unauthorized access!", "danger")
-#         return redirect(url_for('auth.login'))
+# Route to view all users
+@admin_bp.route('/viewallusers', methods=['GET'])
+@login_required
+def view_users():
+    # Ensure only admins can access
+    if not current_user.role:  # Assuming role=1 is admin
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
 
-#     users = User.query.all()  # Fetch all users
-#     return render_template('users.html', users=users)
+    users = User.query.all()  # Fetch all users
+    return render_template('viewallusers.html', users=users)
+
+# Route to edit a user
+@admin_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def edit_user(user_id):
+    # Ensure only admins can access
+    if not current_user.role:  # Assuming role=1 is admin
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    user = User.query.get_or_404(user_id)  # Fetch user or return 404
+    if request.method == 'POST':
+        user.name = request.form['name']
+        user.email = request.form['email']
+        role = request.form.get('role', '0')
+        try:
+            role = int(role)
+            if role not in [0, 1]:
+                raise ValueError("Invalid role value")
+            user.role = role
+        except ValueError:
+            flash("Invalid role value. Must be 0 (user) or 1 (admin).", "danger")
+            return render_template('edituser.html', user=user)
+
+        db.session.commit()
+        flash("User updated successfully!", "success")
+        return redirect(url_for('admin.view_users'))
+
+    return render_template('edituser.html', user=user)
+
+# Route to delete a user
+@admin_bp.route('/delete_user/<int:user_id>', methods=['POST'])
+@login_required
+def delete_user(user_id):
+    # Ensure only admins can access
+    if not current_user.role:  # Assuming role=1 is admin
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash("User deleted successfully!", "success")
+    return redirect(url_for('admin.view_users'))
