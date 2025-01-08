@@ -65,6 +65,7 @@ def view_users():
     users = User.query.all()  # Fetch all users
     return render_template('viewallusers.html', users=users)
 
+
 # Route to edit a user
 @admin_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -79,6 +80,8 @@ def edit_user(user_id):
         user.name = request.form['name']
         user.email = request.form['email']
         role = request.form.get('role', '0')
+        password = request.form['password']
+        
         try:
             role = int(role)
             if role not in [0, 1]:
@@ -87,6 +90,11 @@ def edit_user(user_id):
         except ValueError:
             flash("Invalid role value. Must be 0 (user) or 1 (admin).", "danger")
             return render_template('edituser.html', user=user)
+
+        # Check if the password is provided and hash it if necessary
+        if password:
+            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+            user.password = hashed_password
 
         db.session.commit()
         flash("User updated successfully!", "success")

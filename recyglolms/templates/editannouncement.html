@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Announcement</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Announcement</h1>
+        <form action="{{ url_for('announcement.edit_announcement', announcement_id=announcement.announcementid) }}" method="POST" enctype="multipart/form-data">
+            <!-- Title -->
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ announcement.title }}" required>
+            </div>
+
+            <!-- Content -->
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea id="content" name="content" class="form-control" rows="5" required>{{ announcement.content }}</textarea>
+            </div>
+
+            <!-- Image -->
+            <div class="form-group">
+                <label for="announcement_img">Current Image</label>
+                {% if announcement.announcement_img %}
+                    <div>
+                        <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" alt="Current Announcement Image" style="max-width: 200px; max-height: 200px;">
+                    </div>
+                {% else %}
+                    <p>No image uploaded</p>
+                {% endif %}
+                <label for="announcement_img">Upload New Image (Optional)</label>
+                <input type="file" id="announcement_img" name="announcement_img" class="form-control">
+            </div>
+
+            <!-- Date -->
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" class="form-control" value="{{ announcement.date}}" disabled>
+            </div>
+
+            <!-- Buttons -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="{{ url_for('announcement.view_all_announcements') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

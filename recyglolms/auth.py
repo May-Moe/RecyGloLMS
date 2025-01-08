@@ -43,7 +43,7 @@ def login():
             if user.role == 1:
                 return redirect(url_for('admin.dashboard'))  # Admin dashboard
             elif user.role == 0:
-                return redirect(url_for('main.index'))  # User dashboard
+                return redirect(url_for('main.home'))  # User dashboard
         else:
             # Invalid email or password
             flash('Invalid email or password.', 'danger')

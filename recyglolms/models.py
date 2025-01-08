@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
 class Announcement(db.Model):
     announcementid = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
+    announcement_img = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
     userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)

@@ -35,6 +35,7 @@
                 <tr>
                     <th>Title</th>
                     <th>Content</th>
+                    <th>Image</th>
                     <th>Date Posted</th>
                     <th>Actions</th>
                 </tr>
@@ -44,7 +45,14 @@
                     <tr>
                         <td>{{ announcement.title }}</td>
                         <td>{{ announcement.content }}</td>
-                        <td>{{ announcement.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            {% if announcement.announcement_img %}
+                            <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" alt="Announcement Image" style="max-width: 100px; max-height: 100px;">
+                            {% else %}
+                                No Image
+                            {% endif %}
+                        </td>
+                        <td>{{ announcement.date}}</td>
                         <td>
                             <a href="{{ url_for('announcement.edit_announcement', announcement_id=announcement.announcementid) }}" class="btn btn-warning">Edit</a>
                             <form action="{{ url_for('announcement.delete_announcement', announcement_id=announcement.announcementid) }}" method="POST" style="display:inline;">
