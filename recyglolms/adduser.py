@@ -53,8 +53,7 @@ def add_user():
 
     return render_template('adduser.html')
 
-# Route to view all users
-@admin_bp.route('/viewallusers', methods=['GET'])
+@admin_bp.route('/viewallusers', methods=['GET', 'POST'])
 @login_required
 def view_users():
     # Ensure only admins can access
@@ -62,7 +61,19 @@ def view_users():
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
-    users = User.query.all()  # Fetch all users
+    users = []  # Default empty list of users
+    
+    # Check if the request is a POST and if there is a search query
+    if request.method == 'POST':
+        search_query = request.form.get('search_query')  # Get the search query from the form
+        if search_query:  # If search query is not empty, filter users by email
+            users = User.query.filter(User.email.ilike(f'%{search_query}%')).all()
+        else:  # If search query is empty (i.e., user deleted text), show all users
+            users = User.query.all()
+    else:
+        # Default case: show all users when the page is first loaded
+        users = User.query.all()
+
     return render_template('viewallusers.html', users=users)
 
 

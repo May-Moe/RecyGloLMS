@@ -25,7 +25,15 @@
         <a href="{{ url_for('admin.add_user') }}" class="btn btn-primary mb-3">Add New User</a>
         <a href="{{ url_for('admin.dashboard') }}" class="btn btn-primary mb-3">Back to Dashboard</a>
         
+        <!-- Search Form -->
+        <form method="POST" class="mb-4">
+            <div class="form-group">
+                <input type="text" id="search_query" name="search_query" class="form-control" placeholder="Enter email to search" value="{{ request.form.get('search_query', '') }}">
+            </div>
+            
+        </form>
 
+        <!-- User Table -->
         {% if users %}
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
@@ -45,7 +53,6 @@
                     <td>{{ user.email }}</td>
                     <td>{{ "Admin" if user.role == 1 else "User" }}</td>
                     <td>
-                        <!-- Example actions -->
                         <a href="{{ url_for('admin.edit_user', user_id=user.userid) }}" class="btn btn-sm btn-primary">Edit</a>
                         <form action="{{ url_for('admin.delete_user', user_id=user.userid) }}" method="POST" style="display:inline;">
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
@@ -60,8 +67,6 @@
             No users found!
         </div>
         {% endif %}
-
-        
     </div>
 
     <!-- Include Bootstrap JS for interactivity -->

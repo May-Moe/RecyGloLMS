@@ -108,15 +108,19 @@ def delete_file(uploadid):
     flash("File deleted successfully!", "success")
     return redirect(url_for('upload.view_files'))
 
-# Route to view all files with previews
-@upload_bp.route('/files', methods=['GET'])
+@upload_bp.route('/files', methods=['GET', 'POST'])
 @login_required
 def view_files():
     if not current_user.role:  # Ensure only admins can access
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
     
-    files = Upload.query.all()
+    search_query = request.form.get('search_query', '').strip()
+    
+    if search_query:
+        files = Upload.query.filter(Upload.filename.ilike(f"%{search_query}%")).all()
+    else:
+        files = Upload.query.all()
 
     # Construct preview URLs
     for file in files:
