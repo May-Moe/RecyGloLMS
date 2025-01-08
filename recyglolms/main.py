@@ -10,12 +10,6 @@ main_bp = Blueprint('main', __name__)
 def index():
     return render_template('index.html')  # Render the home page template
 
-# Example route for announcements
-@main_bp.route('/announcements')
-@login_required
-def announcements():
-    # Fetch announcements from the database (placeholder for now)
-    return render_template('announcements.html')
 
 # Example route for handling user uploads
 @main_bp.route('/uploads')

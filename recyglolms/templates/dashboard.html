@@ -31,6 +31,7 @@
             <li><a href="">Home</a></li>
             <li><a href="">Profile</a></li>
             <li><a href="">Settings</a></li>
+            <a href="{{ url_for('announcement.view_all_announcements') }}">View All Announcements</a>
             <a href="{{ url_for('admin.view_users') }}">View All Users</a>
             <a href="{{ url_for('upload.view_files') }}">View All files</a>
             <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>

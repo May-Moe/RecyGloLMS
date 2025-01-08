@@ -36,6 +36,7 @@
                     <th>File Type</th>
                     <th>Upload Date</th>
                     <th>Actions</th>
+                    <th>Preview</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,12 +45,16 @@
                     <td>{{ file.filename }}</td>
                     <td>{{ file.filetype }}</td>
                     <td>{{ file.uploaddate }}</td>
+                    
                     <td>
                         <a href="{{ url_for('upload.edit_file', uploadid=file.uploadid) }}" class="btn btn-sm btn-primary">Edit</a>
                         <form action="{{ url_for('upload.delete_file', uploadid=file.uploadid) }}" method="POST" style="display:inline;">
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
                     </td>
+                    <td><a href="{{ url_for('upload.uploaded_file', filename=file.filename) }}" target="_blank" class="btn btn-primary">
+                        View Current File
+                    </a></td>
                 </tr>
                 {% endfor %}
             </tbody>

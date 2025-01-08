@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
         return str(self.userid)
 
 class Announcement(db.Model):
-    announcementID = db.Column(db.Integer, primary_key=True)
+    announcementid = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
