@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+from datetime import datetime
 from recyglolms.__inti__ import db, bcrypt
-from recyglolms.models import User
+from recyglolms.models import User, Course, Module, Video
 from flask_login import login_required, current_user
 
 # Blueprint for admin functionality
@@ -127,3 +128,117 @@ def delete_user(user_id):
     db.session.commit()
     flash("User deleted successfully!", "success")
     return redirect(url_for('admin.view_users'))
+
+# Combined Management Route
+@admin_bp.route('/manage_course', methods=['GET', 'POST'])
+@login_required
+def manage_course():
+    # Ensure admin access
+    if not current_user.role:  # Assuming role=1 is admin
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    # Handle form submissions
+    if request.method == 'POST':
+        form_type = request.form.get('form_type')
+
+        if form_type == 'add_course':
+            # Add a new course
+            name = request.form.get('course_name')
+            description = request.form.get('course_description')
+
+            if not name or not description:
+                flash("Course name and description are required.", "danger")
+            else:
+                new_course = Course(name=name, description=description, created_date=datetime.utcnow())
+                db.session.add(new_course)
+                db.session.commit()
+                flash("Course added successfully!", "success")
+
+        elif form_type == 'add_module':
+            # Add a new module
+            name = request.form.get('module_name')
+            description = request.form.get('module_description')
+            course_id = request.form.get('module_course_id')
+
+            if not name or not description or not course_id:
+                flash("Module name, description, and associated course are required.", "danger")
+            else:
+                new_module = Module(name=name, description=description, courseid=course_id, created_date=datetime.utcnow())
+                db.session.add(new_module)
+                db.session.commit()
+                flash("Module added successfully!", "success")
+
+        elif form_type == 'add_video':
+            # Add a new video
+            title = request.form.get('video_title')
+            url = request.form.get('video_url')
+            duration = request.form.get('video_duration')
+            module_id = request.form.get('video_module_id')
+
+            if not title or not url or not duration or not module_id:
+                flash("Video title, URL, duration, and associated module are required.", "danger")
+            else:
+                new_video = Video(title=title, url=url, duration=duration, moduleid=module_id)
+                db.session.add(new_video)
+                db.session.commit()
+                flash("Video added successfully!", "success")
+
+        return redirect(url_for('admin.manage_course'))
+
+    # Fetch existing data for rendering
+    courses = Course.query.all()
+    modules = Module.query.all()
+    videos = Video.query.all()
+
+    return render_template('managecourse.html', courses=courses, modules=modules, videos=videos)
+# Admin dashboard to view all user progress
+@admin_bp.route('/view_all_progress', methods=['GET'])
+@login_required
+def view_all_progress():
+    if not current_user.role:  # Ensure user is admin
+        flash("Unauthorized access", "danger")
+        return redirect(url_for('main.home'))
+
+    # Fetch all users
+    users = User.query.all()
+
+    # Create a dictionary to store progress for each user
+    user_progress_data = {}
+
+    for user in users:
+        # For each user, get all courses and calculate progress
+        courses = Course.query.all()
+        progress_data = {}
+
+        # Iterate through courses to get progress data for each course
+        for course in courses:
+            # Calculate the progress for the user for this particular course
+            progress_percentage = course.calculate_course_progress(user.userid)
+            progress_data[course.name] = progress_percentage
+
+        user_progress_data[user.userid] = {
+            'name': user.name,
+            'progress': progress_data
+        }
+
+    # Pass all users' progress to the template
+    return render_template('view_all_progress.html', user_progress_data=user_progress_data, courses=courses)
+
+# View progress of a specific user
+@admin_bp.route('/user_progress/<int:userid>', methods=['GET'])
+@login_required
+def user_progress(userid):
+    if not current_user.role:
+        flash("Unauthorized access", "danger")
+        return redirect(url_for('main.home'))
+
+    user = User.query.get_or_404(userid)
+    courses = Course.query.all()
+
+    progress_data = {
+        course.name: course.calculate_course_progress(user.userid) for course in courses
+    }
+
+    return render_template('each_user_progress.html', user=user, progress_data=progress_data)
+

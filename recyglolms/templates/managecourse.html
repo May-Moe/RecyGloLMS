@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Content</title>
+</head>
+<body>
+    <h1>Manage Courses, Modules, and Videos</h1>
+
+    <!-- Add Course Form -->
+    <h2>Add Course</h2>
+    <form method="POST">
+        <input type="hidden" name="form_type" value="add_course">
+        <input type="text" name="course_name" placeholder="Course Name" required>
+        <textarea name="course_description" placeholder="Course Description" required></textarea>
+        <button type="submit">Add Course</button>
+    </form>
+
+    <!-- Add Module Form -->
+    <h2>Add Module</h2>
+    <form method="POST">
+        <input type="hidden" name="form_type" value="add_module">
+        <input type="text" name="module_name" placeholder="Module Name" required>
+        <textarea name="module_description" placeholder="Module Description" required></textarea>
+        <select name="module_course_id" required>
+            <option value="">Select Course</option>
+            {% for course in courses %}
+            <option value="{{ course.courseid }}">{{ course.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Add Module</button>
+    </form>
+
+    <!-- Add Video Form -->
+    <h2>Add Video</h2>
+    <form method="POST">
+        <input type="hidden" name="form_type" value="add_video">
+        <input type="text" name="video_title" placeholder="Video Title" required>
+        <input type="url" name="video_url" placeholder="Video URL" required>
+        <input type="number" name="video_duration" placeholder="Duration (in seconds)" required>
+        <select name="video_module_id" required>
+            <option value="">Select Module</option>
+            {% for module in modules %}
+            <option value="{{ module.moduleid }}">{{ module.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Add Video</button>
+    </form>
+
+    <!-- Display Existing Data -->
+    <hr>
+    <h2>Existing Data</h2>
+
+    <h3>Courses</h3>
+    <ul>
+        {% for course in courses %}
+        <li>{{ course.name }}: {{ course.description }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Modules</h3>
+    <ul>
+        {% for module in modules %}
+        <li>{{ module.name }} (Course: {{ module.course.name }})</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Videos</h3>
+    <ul>
+        {% for video in videos %}
+        <li>{{ video.title }} (Module: {{ video.module.name }}, Duration: {{ video.duration }} seconds)</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Progress</title>
+</head>
+<body>
+    <h1>Progress for {{ user.name }}</h1>
+    <h2>Email: {{ user.email }}</h2>
+    <h3>Progress by Course:</h3>
+    <ul>
+        {% for course_name, progress in progress_data.items() %}
+            <li>
+                <strong>{{ course_name }}</strong> - Progress: {{ progress | round(2) }}%
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

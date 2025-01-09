@@ -1,0 +1,23 @@
+<html>
+    <h2>All Users' Progress</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>User Name</th>
+                {% for course in courses %}
+                    <th>{{ course.name }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for user_id, user_data in user_progress_data.items() %}
+            <tr>
+                <td>{{ user_data.name }}</td>
+                {% for course in courses %}
+                    <td>{{ user_data.progress[course.name] }}%</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </html>

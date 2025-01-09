@@ -30,7 +30,7 @@ def load_user(user_id):
 # Import and register blueprints after extensions are initialized
 from recyglolms.main import main_bp
 from recyglolms.auth import auth_bp
-from recyglolms.adduser import admin_bp
+from recyglolms.admin import admin_bp
 from recyglolms.upload import upload_bp
 from recyglolms.announcement import announcement_bp
 

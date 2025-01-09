@@ -32,7 +32,9 @@
             <li><a href="">Profile</a></li>
             <li><a href="">Settings</a></li>
             <a href="{{ url_for('announcement.view_all_announcements') }}">View All Announcements</a>
+            <a href="{{ url_for('admin.view_all_progress') }}">View all user progress</a>
             <a href="{{ url_for('admin.view_users') }}">View All Users</a>
+            <a href="{{ url_for('admin.manage_course') }}">Manage Courses</a>
             <a href="{{ url_for('upload.view_files') }}">View All files</a>
             <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
         </ul>
@@ -51,6 +53,14 @@
             <h2>Recent Activity</h2>
             <p>This is the recent activity section of the dashboard.</p>
         </section>
+        <h2>All Users</h2>
+        <ul>
+            {% for user in users %}
+                <li>
+                    <strong>{{ user.name }}</strong> - <a href="{{ url_for('admin.user_progress', userid=user.userid) }}">View Progress</a>
+                </li>
+            {% endfor %}
+        </ul>
     </main>
     
     <footer>

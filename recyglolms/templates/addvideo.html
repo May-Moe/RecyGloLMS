@@ -1,0 +1,22 @@
+<html>
+    <h2>Manage Videos</h2>
+<form method="POST">
+    <input type="text" name="title" placeholder="Video Title" required>
+    <input type="url" name="url" placeholder="Video URL" required>
+    <input type="number" name="duration" placeholder="Duration (in seconds)" required>
+    <select name="module_id" required>
+        <option value="">Select Module</option>
+        {% for module in modules %}
+        <option value="{{ module.moduleid }}">{{ module.name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Add Video</button>
+</form>
+<hr>
+<h3>Existing Videos</h3>
+<ul>
+    {% for video in videos %}
+    <li>{{ video.title }} (Module: {{ video.module.name }}, Duration: {{ video.duration }} seconds)</li>
+    {% endfor %}
+</ul>
+</html>
