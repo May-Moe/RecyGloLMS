@@ -9,21 +9,25 @@
     <h1>Welcome, {{ current_user.name }}</h1>
     <h2>Your Progress</h2>
     
-    {% if progress_data and progress != 0 %}
-        <ul>
-            {% for course_name, progress in progress_data.items() %}
-                <li>{{ course_name }}: {{ progress }}%</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No progress data available.</p>
-    {% endif %}
+    {% if progress_data and progress_data|length > 0 %}
+    <ul>
+        {% for course_name, progress in progress_data.items() %}
+            {% if progress != 0 %}
+                <li>
+                    <strong>{{ course_name }}</strong> - Progress: {{ progress | round(2) }}%
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No progress data available.</p>
+{% endif %}
 
     <h2>Your Options:</h2>
     <ul>
         <li><a href="{{ url_for('main.view_activities') }}">View All Activities</a></li>
         <li><a href="{{ url_for('main.add_activity') }}">Add New Activity</a></li>
-        <li><a href="{{ url_for('main.learning_page') }}">Learning page</a></li>
+        <li><a href="{{ url_for('main.learning') }}">Learning page</a></li>
         <li><a href="{{ url_for('main.user_progress') }}">Progress</a></li>
     </ul>
 

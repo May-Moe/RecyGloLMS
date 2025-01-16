@@ -1,11 +1,21 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from datetime import datetime
-from recyglolms.__inti__ import db, bcrypt
+from werkzeug.utils import secure_filename
+from recyglolms.__inti__ import db, bcrypt, app
 from recyglolms.models import User, Course, Module, Video
 from flask_login import login_required, current_user
+import os
+
 
 # Blueprint for admin functionality
 admin_bp = Blueprint('admin', __name__)
+# Configure upload folder and allowed file types
+UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')  # Absolute path
+ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip', 'rar', '7z', 'tar', 'gz', 'tgz', 'bz2', 'xz'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Admin Dashboard Route
 @admin_bp.route('/dashboard')

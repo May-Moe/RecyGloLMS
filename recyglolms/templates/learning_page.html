@@ -9,101 +9,14 @@
 <body>
     <div class="container mt-5">
         <h1>Learning Dashboard</h1>
-
-        <!-- Course Dropdown -->
-        <div class="mb-3">
-            <label for="courseSelect" class="form-label">Select Course</label>
-            <select class="form-select" id="courseSelect">
-                <option selected disabled>Select a course</option>
-                {% for course_name, modules in course_data.items() %}
-                    <option value="{{ course_name }}">{{ course_name }}</option> <!-- Changed to course_name -->
-                {% endfor %}
-            </select>
+        {% for course in courses %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h2>{{ course.name }}</h2>
+                <a href="{{ url_for('main.course_detail', courseid=course.courseid) }}" class="btn btn-primary">View Modules</a>
+            </div>
         </div>
-
-        <!-- Module Dropdown (Initial state hidden) -->
-        <div class="mb-3" id="moduleDropdown" style="display: none;">
-            <label for="moduleSelect" class="form-label">Select Module</label>
-            <select class="form-select" id="moduleSelect">
-                <option selected disabled>Select a module</option>
-            </select>
-        </div>
-
-        <!-- Video Dropdown (Initial state hidden) -->
-        <div class="mb-3" id="videoDropdown" style="display: none;">
-            <label for="videoSelect" class="form-label">Select Video</label>
-            <select class="form-select" id="videoSelect">
-                <option selected disabled>Select a video</option>
-            </select>
-        </div>
-
-        <!-- Progress Button -->
-        <button class="btn btn-primary" id="progressButton" style="display: none;">Update Progress</button>
+        {% endfor %}
     </div>
-
-    <script>
-        // Fetching the course, module, and video data
-        let courseData = {{ course_data | tojson }};
-        
-        const courseSelect = document.getElementById('courseSelect');
-        const moduleSelect = document.getElementById('moduleSelect');
-        const videoSelect = document.getElementById('videoSelect');
-        const moduleDropdown = document.getElementById('moduleDropdown');
-        const videoDropdown = document.getElementById('videoDropdown');
-        const progressButton = document.getElementById('progressButton');
-
-        // On Course Selection
-        courseSelect.addEventListener('change', function() {
-            const selectedCourse = courseSelect.value;
-            const modules = courseData[selectedCourse];
-
-            moduleSelect.innerHTML = '<option selected disabled>Select a module</option>';
-            for (let moduleName in modules) {
-                let option = document.createElement('option');
-                option.value = moduleName;
-                option.textContent = moduleName;
-                moduleSelect.appendChild(option);
-            }
-
-            moduleDropdown.style.display = 'block';
-            videoDropdown.style.display = 'none'; // Hide video dropdown initially
-            progressButton.style.display = 'none'; // Hide progress button initially
-        });
-
-        // On Module Selection
-        moduleSelect.addEventListener('change', function() {
-            const selectedCourse = courseSelect.value;
-            const selectedModule = moduleSelect.value;
-            const videos = courseData[selectedCourse][selectedModule];
-
-            videoSelect.innerHTML = '<option selected disabled>Select a video</option>';
-            videos.forEach(video => {
-                let option = document.createElement('option');
-                option.value = video.videoid; // Correcting to videoid
-                option.textContent = video.title; // Assuming title exists in your video data
-                videoSelect.appendChild(option);
-            });
-
-            videoDropdown.style.display = 'block';
-            progressButton.style.display = 'block'; // Show progress button
-        });
-
-        // On Progress Button Click (Simulate watching a video)
-        progressButton.addEventListener('click', function() {
-            const videoId = videoSelect.value;
-            const watchedDuration = 5;  // Let's assume the user watched 5 minutes
-
-            fetch(`/update_video_progress/${videoId}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ watched_duration: watchedDuration })
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(err => console.error(err));
-        });
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data.course.name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 560px; /* Adjust as needed */
+            margin: 0 auto;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .video-overlay span {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        iframe {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>{{ data.course.name }}</h1>
+        <p>{{ data.course.description }}</p>
+        {% for module_data in data.modules %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>{{ module_data.module.name }}</h4>
+                <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#module{{ module_data.module.moduleid }}">
+                    Show Videos
+                </button>
+            </div>
+            <div id="module{{ module_data.module.moduleid }}" class="collapse">
+                <div class="card-body">
+                    {% if module_data.videos %}
+                    <ul class="list-group">
+                        {% for video in module_data.videos %}
+                        <li class="list-group-item">
+                            <h5>{{ video.title }}</h5>
+                            <div class="video-container">
+                                <iframe 
+                                    id="video{{ video.videoid }}"
+                                    src="{{ video.url }}" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen 
+                                    class="w-100" 
+                                    style="height: 315px;" 
+                                    data-video-id="{{ video.videoid }}">
+                                </iframe>
+                                <div class="video-overlay" onclick="startVideo({{ video.videoid }}, this)">
+                                    <span>▶ Play</span>
+                                </div>
+                            </div>
+                            <p>Duration: {{ video.duration // 60 }} min {{ video.duration % 60 }} sec</p>
+                            <button class="btn btn-success mt-2" onclick="markComplete({{ video.videoid }})">
+                                Mark as Complete
+                            </button>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No videos available for this module.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function startVideo(videoId, overlayElement) {
+            // Remove the overlay
+            overlayElement.style.display = 'none';
+
+            // Update progress
+            updateProgress(videoId);
+
+            // Autoplay the video
+            const iframe = document.getElementById(`video${videoId}`);
+            const videoUrl = iframe.src;
+            iframe.src = `${videoUrl}?autoplay=1`; // Add autoplay to the video URL
+        }
+
+        function updateProgress(videoId) {
+            console.log(`Sending POST request for video ID: ${videoId}`); // Debug log
+        
+            fetch(`/update_video_progress/${videoId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    completed: true // Signal to mark as complete
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Progress updated successfully:", data);
+            })
+            .catch(error => {
+                console.error("Error updating progress:", error);
+            });
+        }
+
+        // Function to mark video as complete manually
+        function markComplete(videoid) {
+            fetch(`/update_video_progress/${videoid}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ increment: 1000 })  // Mark complete by incrementing by the full duration
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Progress updated:', data);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
