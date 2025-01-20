@@ -23,6 +23,25 @@
     <p>No progress data available.</p>
 {% endif %}
 
+    <div class="profile-section">
+        <h3>User Profile</h3>
+        <p><strong>Email:</strong> {{ current_useremail }}</p>
+        <p><strong>Username:</strong> {{ current_username }}</p>
+        
+        <!-- Form to update the username -->
+        <form method="POST" action="{{ url_for('main.home') }}">
+            <label for="username">Change Username:</label>
+            <input 
+                type="text" 
+                id="username" 
+                name="username" 
+                placeholder="Enter new username" 
+                value="{{ current_username }}"
+                required>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+
     <h2>Your Options:</h2>
     <ul>
         <li><a href="{{ url_for('main.view_activities') }}">View All Activities</a></li>

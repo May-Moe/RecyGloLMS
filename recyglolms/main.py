@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from datetime import datetime
-from recyglolms.models import Course, Video, Progress, Activity, Module
+from recyglolms.models import Course, Video, Progress, Activity, Module, User
 from recyglolms.__inti__ import db
 
 main_bp = Blueprint('main', __name__)
@@ -11,14 +11,34 @@ main_bp = Blueprint('main', __name__)
 def index():
     return render_template('login.html')
 
-@main_bp.route('/home')
+@main_bp.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
     courses = Course.query.all()
     progress_data = {
         course.name: course.calculate_course_progress(current_user.userid) for course in courses
     }
-    return render_template('home.html', courses=courses, progress_data=progress_data)
+
+    if request.method == 'POST':  # Handle username update
+        new_username = request.form.get('username')
+        if new_username:  # Validate the input
+            current_user.name = new_username
+            db.session.commit()  # Save the change to the database
+            flash("Username updated successfully!", "success")
+            return redirect(url_for('main.home'))  # Corrected endpoint name
+
+    # Pass current user info to the template
+    current_username = current_user.name
+    current_useremail = current_user.email
+
+    return render_template(
+        'home.html',
+        courses=courses,
+        progress_data=progress_data,
+        current_username=current_username,
+        current_useremail=current_useremail
+    )
+
 
 # Add activity route
 @main_bp.route('/add_activity', methods=['GET', 'POST'])
