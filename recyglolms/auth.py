@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from recyglolms.__inti__ import db, bcrypt
 from recyglolms.models import User
 from flask_login import login_user, logout_user, login_required, current_user
+from datetime import datetime
 
 # Create Blueprint for authentication
 auth_bp = Blueprint('auth', __name__)
@@ -35,6 +36,10 @@ def login():
 
         # Check if user exists and password is correct
         if user and bcrypt.check_password_hash(user.password, password):
+            # Update last login timestamp
+            user.last_login = datetime.utcnow()
+            db.session.commit()
+
             # Log in the user
             login_user(user)
             flash('Login successful!', 'success')

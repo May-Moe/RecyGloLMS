@@ -25,12 +25,30 @@
         <a href="{{ url_for('admin.add_user') }}" class="btn btn-primary mb-3">Add New User</a>
         <a href="{{ url_for('admin.dashboard') }}" class="btn btn-primary mb-3">Back to Dashboard</a>
         
-        <!-- Search Form -->
         <form method="POST" class="mb-4">
-            <div class="form-group">
-                <input type="text" id="search_query" name="search_query" class="form-control" placeholder="Enter email to search" value="{{ request.form.get('search_query', '') }}">
+            <div class="row">
+                <!-- Email Search -->
+                <div class="col-md-4 mb-3">
+                    <input type="text" id="search_query" name="search_query" class="form-control" 
+                           placeholder="Enter email to search" value="{{ request.form.get('search_query', '') }}">
+                </div>
+                
+                <!-- Inactivity Days Filter (Dropdown) -->
+                <div class="col-md-4 mb-3">
+                    <select id="inactivity_filter" name="inactivity_filter" class="form-control">
+                        <option value="">Filter by inactivity</option>
+                        <option value="0" {% if request.form.get('inactivity_filter') == '0' %}selected{% endif %}>View All</option>
+                        <option value="7" {% if request.form.get('inactivity_filter') == '7' %}selected{% endif %}>More than 7 days</option>
+                        <option value="15" {% if request.form.get('inactivity_filter') == '15' %}selected{% endif %}>More than 15 days</option>
+                        <option value="30" {% if request.form.get('inactivity_filter') == '30' %}selected{% endif %}>More than 30 days</option>
+                    </select>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="col-md-2 mb-3">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
             </div>
-            
         </form>
 
         <!-- User Table -->
@@ -42,6 +60,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Last Login</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -52,6 +71,7 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ "Admin" if user.role == 1 else "User" }}</td>
+                    <td>{{ user.last_login }}</td>
                     <td>
                         <a href="{{ url_for('admin.edit_user', user_id=user.userid) }}" class="btn btn-sm btn-primary">Edit</a>
                         <form action="{{ url_for('admin.delete_user', user_id=user.userid) }}" method="POST" style="display:inline;">

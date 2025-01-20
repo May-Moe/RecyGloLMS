@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import db, bcrypt, app
 from recyglolms.models import User, Course, Module, Video
 from flask_login import login_required, current_user
+from datetime import datetime, timedelta
 import os
 
 
@@ -64,6 +65,8 @@ def add_user():
 
     return render_template('adduser.html')
 
+
+
 @admin_bp.route('/viewallusers', methods=['GET', 'POST'])
 @login_required
 def view_users():
@@ -72,18 +75,32 @@ def view_users():
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
-    users = []  # Default empty list of users
-    
-    # Check if the request is a POST and if there is a search query
+    users = User.query  # Base query for users
+
+    # Check if the request is a POST
     if request.method == 'POST':
-        search_query = request.form.get('search_query')  # Get the search query from the form
-        if search_query:  # If search query is not empty, filter users by email
-            users = User.query.filter(User.email.ilike(f'%{search_query}%')).all()
-        else:  # If search query is empty (i.e., user deleted text), show all users
-            users = User.query.all()
-    else:
-        # Default case: show all users when the page is first loaded
-        users = User.query.all()
+        search_query = request.form.get('search_query', '').strip()  # Get search query from the form
+        inactivity_filter = request.form.get('inactivity_filter', '').strip()  # Get inactivity filter from dropdown
+
+        # Filter by email if a search query is provided
+        if search_query:
+            users = users.filter(User.email.ilike(f'%{search_query}%'))
+
+        # Filter by inactivity based on the selected option
+        if inactivity_filter:
+            days_map = {
+                "0": 0,
+                "7": 7,
+                "15": 15,
+                "30": 30,
+            }
+            days = days_map.get(inactivity_filter)
+            if days:
+                threshold_date = datetime.utcnow() - timedelta(days=days)
+                users = users.filter((User.last_login == None) | (User.last_login < threshold_date))
+
+    # Execute the query and fetch all users
+    users = users.all()
 
     return render_template('viewallusers.html', users=users)
 

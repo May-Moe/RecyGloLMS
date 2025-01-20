@@ -9,6 +9,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.Boolean, default=False)  # False for regular user, True for admin
+    last_login = db.Column(db.DateTime, default=None)  # New field for last login time
 
     announcements = db.relationship('Announcement', backref='user', lazy=True)
     progress = db.relationship('Progress', backref='user', lazy=True)  # Tracks user progress on videos
