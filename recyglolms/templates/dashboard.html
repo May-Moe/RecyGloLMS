@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <!-- Chart.js for creating charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <!-- Bootstrap CSS for styling and alerts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -41,17 +44,147 @@
     </nav>
     
     <main>
+        <!-- Statistics Cards -->
+         <h1>Dashboard</h1>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Users</h5>
+                        <p class="card-text display-5">{{ total_users }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Inactive Users (>30 days)</h5>
+                        <p class="card-text display-5">{{ inactive_users }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Courses</h5>
+                        <p class="card-text display-5">{{ total_courses }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-info mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Videos</h5>
+                        <p class="card-text display-5">{{ total_videos }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <section>
-            <h2>Overview</h2>
-            <p>This is the overview section of the dashboard.</p>
+            <h1 class="mb-4">Courses Overview</h1>
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Number of Modules</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                    <tr>
+                        <td>{{ course.course_name }}</td>
+                        <td>{{ course.module_count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </section>
-        <section>
-            <h2>Statistics</h2>
-            <p>This is the statistics section of the dashboard.</p>
-        </section>
+
+        <!-- Chart for users' active and inactive information showing-->
         <section>
             <h2>Recent Activity</h2>
-            <p>This is the recent activity section of the dashboard.</p>
+            <div class="col-md-6 offset-md-3">
+                <canvas id="userActivityChart" style="max-width: 550px; max-height: 300px;"></canvas>
+                <script>
+                    const ctx = document.getElementById('userActivityChart').getContext('2d');
+
+                    const userActivityChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: [
+                                'Active within 7 Days',
+                                'Active within 15 Days',
+                               
+                                'Inactive for 30 Days'
+                            ],
+                            datasets: [{
+                                label: 'User Activity',
+                                data: [
+                                    {{ user_data.active_7_days }},
+                                    {{ user_data.active_15_days }},
+                                  
+                                    {{ user_data.inactive_30_days }}
+                                ],
+                                backgroundColor: [
+                                    '#4caf50', // Green
+                                    '#ffeb3b', // Yellow
+                                
+                                    '#f44336'  // Red
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: {
+                                legend: {
+                                    position: 'right', // Moves the legend to the side
+                                    labels: {
+                                        font: {
+                                            size: 14,
+                                            family: 'Arial, sans-serif',
+                                            weight: 'bold'
+                                        },
+                                        color: '#333' // Dark color for the legend text
+                                    }
+                                },
+                                tooltip: {
+                                    enabled: true, // Enable tooltips for hover interaction
+                                    callbacks: {
+                                        label: function(context) {
+                                            const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                                            const percentage = ((context.raw / total) * 100).toFixed(1);
+                                            return `${context.label}: ${context.raw} users (${percentage}%)`;
+                                        }
+                                    }
+                                },
+                                datalabels: {
+                                    color: '#ffffff', // White text for better contrast
+                                    align: 'center', // Center the text on the segment
+                                    backgroundColor: '#000000a0', // Semi-transparent black background
+                                    borderColor: '#ffffff', // White border for contrast
+                                    borderWidth: 1,
+                                    borderRadius: 4, // Rounded corners
+                                    padding: 4, // Space around the label text
+                                    font: {
+                                        size: 8, // Font size
+                                        family: 'Arial, sans-serif', // Clean font family
+                                        weight: 'bold' // Bold text
+                                    },
+                                    formatter: (value, ctx) => {
+                                        const total = ctx.dataset.data.reduce((sum, val) => sum + val, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
+                                        const label = ctx.chart.data.labels[ctx.dataIndex]; // Get label text
+                                        return `${label}\n${percentage}%`; // Two-line label
+                                    }
+                                }
+                            }
+                        },
+                        plugins: [ChartDataLabels]
+                    });
+                </script>
+            </div>
         </section>
         <h2>All Users</h2>
         <ul>

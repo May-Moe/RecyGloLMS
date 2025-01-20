@@ -26,7 +26,59 @@ def dashboard():
     if not current_user.role:  # Assuming role=1 is admin, role=0 is user
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
-    return render_template('dashboard.html')
+     # Total number of users
+    total_users = User.query.count()
+
+    # Total users who haven't logged in for more than 30 days
+    thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    inactive_users = User.query.filter((User.last_login == None) | (User.last_login < thirty_days_ago)).count()
+
+    # Total number of courses
+    total_courses = Course.query.count()  # Replace `Course` with your courses model
+
+    # Total number of videos
+    total_videos = Video.query.count()  # Replace `Video` with your videos model
+    
+    # Fetch courses and annotate them with their module count
+    courses = Course.query.outerjoin(Module).group_by(Course).order_by(db.func.count(Module.moduleid).desc()).all()
+
+    # Prepare course data with module counts for rendering
+    course_data = [
+        {
+            'course_name': course.name,
+            'module_count': len(course.modules),
+            'description': course.description,
+        }
+        for course in courses
+    ]
+    
+      # Get current date and calculate time thresholds
+    now = datetime.utcnow()
+    days_7 = now - timedelta(days=7)
+    days_15 = now - timedelta(days=15)
+    days_30 = now - timedelta(days=30)
+
+    # Query users based on last login time
+    active_7_days = User.query.filter(User.last_login >= days_7).count()
+    active_15_days = User.query.filter(User.last_login >= days_15, User.last_login < days_7).count()
+    active_30_days = User.query.filter(User.last_login >= days_30, User.last_login < days_15).count()
+    inactive_30_days = User.query.filter(User.last_login < days_30).count()
+
+    # Pass data to the template for rendering
+    user_data = {
+        'active_7_days': active_7_days,
+        'active_15_days': active_15_days,
+        'active_30_days': active_30_days,
+        'inactive_30_days': inactive_30_days
+    }
+    
+    return render_template('dashboard.html',
+        total_users=total_users,
+        inactive_users=inactive_users,
+        total_courses=total_courses,
+        total_videos=total_videos,
+        courses=course_data,
+        user_data=user_data)
 
 # Route for adding a new user
 @admin_bp.route('/adduser', methods=['GET', 'POST'])
