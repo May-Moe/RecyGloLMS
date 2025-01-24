@@ -1,0 +1,285 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: #144421;
+    color: rgb(255, 255, 255);
+    padding: 40px;
+    text-align: left;
+    border-radius: 5px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.container {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    margin: 0px auto;
+    margin-left: 250px; /* Offset for sidebar */
+    margin-top: 60px;
+    /* padding: 0 20px; */
+    transition: margin-left 0.5s, width 0.5s;
+}
+
+
+.section {
+    /* background-color: #fff; */
+    padding: 20px 100px;
+    margin-bottom: 20px;
+    /* border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
+}
+
+.about-us {
+    background: url('../img/home.webp') no-repeat center center fixed;
+    background-size: cover;
+    padding: 80px;
+    font-size: 16px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: row;
+    /* align-items: center;
+    justify-content: center; */
+}
+
+.about-text {
+    flex: 1;
+    /* padding-right: 40px; */
+}
+
+.about-text h2{
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+}
+
+.about-text p{
+    font-size: 16px;
+    color: white;
+    text-align: left;
+    margin-top: 15px;
+}
+.about-image {
+    flex: 1;
+    text-align: center;
+}
+
+.about-image img {
+    max-width: 50%;
+    height: auto;
+}
+
+.section h2 {
+    margin-top: 0;
+}
+
+.section p {
+    line-height: 1.6;
+}
+
+.section a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.section a:hover {
+    text-decoration: underline;
+}
+
+.support {
+    padding: 60px;
+    font-size: 16px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+    gap: 20px;
+}
+
+.support-text1, .support-text2 {
+    width: 60%;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.support-text1 {
+    flex: 1;
+    background-color: #e3f2fd;
+}
+
+.support-text2 {
+    flex: 1;
+    background-color: #e3f2fd;
+}
+
+.support-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.support-container .feedback {
+    flex: 1;
+    background-color: #ffffff;
+}
+
+.support h2{
+    text-align: center;
+    color: #114f0e;
+}
+
+.support .header{
+    color: #114f0e;
+    font-size: 30px;
+}
+
+.feedback {
+    flex: 1;
+    background-color: #e3f2fd;
+}
+
+.card{
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin: 10px 0;
+}
+
+p {
+    font-family: 'Georgia', serif;
+    color: #555;
+    line-height: 1.8;
+    margin-top: 20px;
+}
+
+.feedback-form {
+    padding: 0px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* .feedback-form h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+} */
+
+.feedback-form .form-group {
+    margin-bottom: 15px;
+}
+
+.feedback-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.feedback-form input[type="text"],
+.feedback-form input[type="email"],
+.feedback-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.feedback-form textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.feedback-form button {
+    background-color: #1c7b45;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    
+}
+
+.feedback-form button:hover {
+    background-color: #0e4a18;
+}
+
+.programs{
+    background-color: #f4f4f4;
+    padding: 60px;
+    font-size: 16px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #144421;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    font-size: 13px;
+}
+
+footer p{
+    color: white;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 100px;
+    }
+
+    header {
+        padding: 15px;
+    }
+
+    .section {
+        padding: 15px;
+    }
+
+    .about-us {
+        padding: 15px;
+        font-size: 14px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .about-text h2 p{
+        margin-left: 0;
+    }
+
+    .about-image img {
+        margin-left: 0;
+        margin-top: 15px;
+    }
+
+    .card {
+        padding: 15px;
+        width: 100%;
+    }
+    
+    footer {
+        padding: 15px;
+    }
+
+}

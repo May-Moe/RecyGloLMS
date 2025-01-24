@@ -1,0 +1,84 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/AddVideo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Add Modules</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
+                        <p id="profile-email">may@gmail.com</p>
+                        <button id="logout-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="Activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <a href="{{ url_for('admin.add_module') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
+            <h2>Add Videos</h2>
+            <form id="AddAnnouncementForm">
+                <div class="form-group">
+                    <label for="module">Modules</label>
+                    <select id="module" name="module">
+                        <option value="ESG">ESG</option>
+                        <option value="Waste">Waste</option>
+                    </select>
+                </div>
+                <div class="form-group">    
+                    <label for="title">Video Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">    
+                    <label for="title">URL</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">    
+                    <label for="title">Duration</label>
+                    <input type="time" id="title" name="title" required>
+                </div>
+            </form>
+            <div class="buttons">
+                <button type="submit" class="submit-button">Submit</button>
+                <a href="{{ url_for('admin.manage_course') }}"><button type="button" class="cancel-button">Cancel</button></a>
+            </div>
+        </div>
+    </div>
+    <script src="static/JS/script.js"></script>
+</body>
+</html>

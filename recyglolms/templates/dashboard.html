@@ -1,216 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <!-- Chart.js for creating charts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <!-- Bootstrap CSS for styling and alerts -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="static/CSS/style.css">
+        <link rel="stylesheet" href="static/CSS/dashboard.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="icon" href="static/img/favicon.ico">
+        <title>Dashboard</title>
+        <!-- Include Chart.js and ChartDataLabels -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    </head>
 <body>
-    <!-- Flash message section -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div id="flash-messages" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+    <div class="dashboard">
+        <!-- nav -->
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
 
-    <header>
-        <h1>Welcome to the Dashboard</h1>
-    </header>
-    
-    <nav>
-        <ul>
-            <li><a href="">Home</a></li>
-            <li><a href="">Profile</a></li>
-            <li><a href="">Settings</a></li>
-            <a href="{{ url_for('announcement.view_all_announcements') }}">View All Announcements</a>
-            <a href="{{ url_for('admin.view_all_progress') }}">View all user progress</a>
-            <a href="{{ url_for('admin.view_users') }}">View All Users</a>
-            <a href="{{ url_for('admin.manage_course') }}">Manage Courses</a>
-            <a href="{{ url_for('upload.view_files') }}">View All files</a>
-            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-        </ul>
-    </nav>
-    
-    <main>
-        <!-- Statistics Cards -->
-         <h1>Dashboard</h1>
-        <div class="row">
-            <div class="col-md-3">
-                <div class="card text-white bg-primary mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Users</h5>
-                        <p class="card-text display-5">{{ total_users }}</p>
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <button id="logout-button">Logout</button>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-danger mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Inactive Users (>30 days)</h5>
-                        <p class="card-text display-5">{{ inactive_users }}</p>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="Activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+            </ul>
+        </nav>
+        <!-- nav end -->
+
+        <!-- body start -->
+        <div class="container">
+            <!-- first row of dashboard -->
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <div class="card-text">
+                            <div class="card-title">Courses</div>
+                            <div class="card-value">{{ total_courses }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-video"></i>
+                        </div>
+                        <div class="card-text">
+                            <div class="card-title">Videos</div>
+                            <div class="card-value">{{ total_videos }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="card-text">
+                            <div class="card-title">Users</div>
+                            <div class="card-value">{{ total_users }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-text">
+                            <div class="card-title">Inactive Users</div>
+                            <div class="card-value">{{ inactive_users }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Courses</h5>
-                        <p class="card-text display-5">{{ total_courses }}</p>
+            <!-- first row of dashboard end -->
+
+            <!-- second row in dashboard -->
+            <div class="chart">
+                <!-- second row first card -->
+                <div class="card2">
+                    <div class="card2-title">Top Courses</div>
+                   
+                    <div class="card2-value">
+                        <table class="card2-table">
+                            <thead>
+                                <tr>
+                                    <th>Course Title</th>
+                                    <th>Modules</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for course in courses %}
+                                <tr>
+                                    <td>{{ course.course_name }}</td>
+                                    <td>{{ course.module_count }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="view-all">
+                        <a href="{{ url_for('admin.manage_course') }}">View All Courses <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                </div>
+                <!-- second row first card end -->
+
+                <!-- second row second card -->
+                <div class="card2">
+                    <div class="card2-title">Active Tracking</div>
+                    <div class="card2-pie">
+                        <canvas id="userActivityChart" class="piechart"></canvas>
+                    </div>
+                    <div class="view-all">
+                        <a href="{{ url_for('admin.view_users') }}">View All Users <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                </div>
+                <!-- second row second card end-->
+            </div>
+            <!-- second row in dashboard end -->
+
+            <!-- third row start -->
+        <div class="chart3">
+            <!-- third row first card -->
+            <div class="card3">
+                <div class="card3-title">Feedback Box</div>
+                <div class="card3-value">
+                    <div class="card3-profile">
+                        <img src="static/img/profile.webp" alt="">
+                    </div>
+                    <div class="feedback-title">Sir, Can I know when will be the course4 start?</div> 
+                    <div class="feedback-date">
+                        <p>2 Feb 2025</p>
                     </div>
                 </div>
+
+                <div class="view-all">
+                    <a href="Courses.html">View All Feedback <i class="fas fa-arrow-right"></i></a>
+                  </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-info mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Videos</h5>
-                        <p class="card-text display-5">{{ total_videos }}</p>
-                    </div>
-                </div>
-            </div>
+            <!-- third row first card end -->
+    </div>
+         <!-- third row end -->
         </div>
-        <section>
-            <h1 class="mb-4">Courses Overview</h1>
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Course Name</th>
-                        <th>Number of Modules</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for course in courses %}
-                    <tr>
-                        <td>{{ course.course_name }}</td>
-                        <td>{{ course.module_count }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
 
-        <!-- Chart for users' active and inactive information showing-->
-        <section>
-            <h2>Recent Activity</h2>
-            <div class="col-md-6 offset-md-3">
-                <canvas id="userActivityChart" style="max-width: 550px; max-height: 300px;"></canvas>
-                <script>
-                    const ctx = document.getElementById('userActivityChart').getContext('2d');
-
-                    const userActivityChart = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: [
-                                'Active within 7 Days',
-                                'Active within 15 Days',
-                               
-                                'Inactive for 30 Days'
-                            ],
-                            datasets: [{
-                                label: 'User Activity',
-                                data: [
-                                    {{ user_data.active_7_days }},
-                                    {{ user_data.active_15_days }},
-                                  
-                                    {{ user_data.inactive_30_days }}
-                                ],
-                                backgroundColor: [
-                                    '#4caf50', // Green
-                                    '#ffeb3b', // Yellow
-                                
-                                    '#f44336'  // Red
-                                ],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: true,
-                            plugins: {
-                                legend: {
-                                    position: 'right', // Moves the legend to the side
-                                    labels: {
-                                        font: {
-                                            size: 14,
-                                            family: 'Arial, sans-serif',
-                                            weight: 'bold'
-                                        },
-                                        color: '#333' // Dark color for the legend text
-                                    }
-                                },
-                                tooltip: {
-                                    enabled: true, // Enable tooltips for hover interaction
-                                    callbacks: {
-                                        label: function(context) {
-                                            const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
-                                            const percentage = ((context.raw / total) * 100).toFixed(1);
-                                            return `${context.label}: ${context.raw} users (${percentage}%)`;
-                                        }
-                                    }
-                                },
-                                datalabels: {
-                                    color: '#ffffff', // White text for better contrast
-                                    align: 'center', // Center the text on the segment
-                                    backgroundColor: '#000000a0', // Semi-transparent black background
-                                    borderColor: '#ffffff', // White border for contrast
-                                    borderWidth: 1,
-                                    borderRadius: 4, // Rounded corners
-                                    padding: 4, // Space around the label text
-                                    font: {
-                                        size: 8, // Font size
-                                        family: 'Arial, sans-serif', // Clean font family
-                                        weight: 'bold' // Bold text
-                                    },
-                                    formatter: (value, ctx) => {
-                                        const total = ctx.dataset.data.reduce((sum, val) => sum + val, 0);
-                                        const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
-                                        const label = ctx.chart.data.labels[ctx.dataIndex]; // Get label text
-                                        return `${label}\n${percentage}%`; // Two-line label
-                                    }
-                                }
-                            }
-                        },
-                        plugins: [ChartDataLabels]
-                    });
-                </script>
-            </div>
-        </section>
-        <h2>All Users</h2>
-        <ul>
-            {% for user in users %}
-                <li>
-                    <strong>{{ user.name }}</strong> - <a href="{{ url_for('admin.user_progress', userid=user.userid) }}">View Progress</a>
+        
+        <!-- Announcement section start -->
+        <div class="announcements">
+            <h2>Announcements</h2>
+            <ul>
+                <li class="announcement-item">
+                    <div class="calendar-container">
+                        <div class="calendar">
+                            <header>
+                                <pre class="left">◀</pre>
+                                <div class="header-display">
+                                    <p class="display">""</p>
+                                </div>
+  
+                                <pre class="right">▶</pre>
+  
+                            </header>
+  
+                        <div class="week">
+                            <div>Su</div>
+                            <div>Mo</div>
+                            <div>Tu</div>
+                            <div>We</div>
+                            <div>Th</div>
+                            <div>Fr</div>
+                            <div>Sa</div>
+                        </div>
+                        <div class="days"></div>
+                        </div>
+                    <div class="display-selected">
+                        <p class="selected"></p>
+                    </div>
+                </div>
+                    </li>
+                <li class="announcement-item">
+                    <img src="static/img/gg.jpg" alt="Announcement Image">
                 </li>
-            {% endfor %}
-        </ul>
-    </main>
-    
-    <footer>
-        <p>&copy; 2023 Your Company</p>
-    </footer>
-
-    <!-- Bootstrap JS for alerts and close button functionality -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
+                <li class="announcement-item">
+                    <img src="static/img/home.webp" alt="Announcement Image">
+                </li>
+            </ul>
+        </div>
+        <!-- Announcement sesssion end -->
+    </div>
+    <script src="static/JS/script.js"></script>
     <script>
-        // Auto hide flash messages after 5 seconds
-        setTimeout(function () {
-            var flashMessages = document.getElementById('flash-messages');
-            if (flashMessages) {
-                flashMessages.style.display = 'none';
-            }
-        }, 5000); // 5000 milliseconds = 5 seconds
+        const ctx = document.getElementById('userActivityChart').getContext('2d');
+
+        const userActivityChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Active within 7 Days',
+                    'Active within 15 Days',
+                   
+                    'Inactive for 30 Days'
+                ],
+                datasets: [{
+                    label: 'User Activity',
+                    data: [
+                        {{ user_data.active_7_days }},
+                        {{ user_data.active_15_days }},
+                        {{ user_data.inactive_30_days }}
+                    ],
+                    backgroundColor: [
+                        '#4caf50', // Green
+                        '#ffeb3b', // Yellow
+                        '#f44336'  // Red
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom', // Moves the legend to the side
+                        labels: {
+                            font: {
+                                size: 10,
+                                family: 'Arial, sans-serif',
+                                weight: 'bold'
+                            },
+                            color: '#333' // Dark color for the legend text
+                        }
+                    },
+                    tooltip: {
+                        enabled: true, // Enable tooltips for hover interaction
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                                const percentage = ((context.raw / total) * 100).toFixed(1);
+                                return `${context.label}: ${context.raw} users (${percentage}%)`;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        color: '#ffffff', // White text for better contrast
+                        align: 'center', // Center the text on the segment
+                        backgroundColor: '#000000a0', // Semi-transparent black background
+                        borderColor: '#ffffff', // White border for contrast
+                        borderWidth: 1,
+                        borderRadius: 4, // Rounded corners
+                        padding: 2, // Space around the label text
+                        font: {
+                            size: 8, // Font size
+                            family: 'Arial, sans-serif', // Clean font family
+                            weight: 'bold' // Bold text
+                        },
+                        formatter: (value, ctx) => {
+                            const total = ctx.dataset.data.reduce((sum, val) => sum + val, 0);
+                            const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
+                            const label = ctx.chart.data.labels[ctx.dataIndex]; // Get label text
+                            return `${label}\n${percentage}%`; // Two-line label
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
     </script>
 </body>
 </html>

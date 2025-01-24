@@ -18,6 +18,12 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+#Admin home page
+@admin_bp.route('/admin_home')
+@login_required
+def admin_home():
+    return render_template('admin_home.html')
+
 # Admin Dashboard Route
 @admin_bp.route('/dashboard')
 @login_required
@@ -71,6 +77,10 @@ def dashboard():
         'active_30_days': active_30_days,
         'inactive_30_days': inactive_30_days
     }
+       
+    current_user_name = current_user.name,
+    current_user_email = current_user.email
+  
     
     return render_template('dashboard.html',
         total_users=total_users,
@@ -78,7 +88,9 @@ def dashboard():
         total_courses=total_courses,
         total_videos=total_videos,
         courses=course_data,
-        user_data=user_data)
+        user_data=user_data,
+        current_user_name=current_user_name,
+        current_user_email=current_user_email)
 
 # Route for adding a new user
 @admin_bp.route('/adduser', methods=['GET', 'POST'])
@@ -109,7 +121,7 @@ def add_user():
         else:
             # Hash the password and create a new user
             hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-            new_user = User(name=name, email=email, password=hashed_password, role=role)
+            new_user = User(name=name, email=email, password=hashed_password, role=role, last_login=datetime.now()) 
             db.session.add(new_user)
             db.session.commit()
             flash("User added successfully!", "success")
@@ -172,6 +184,8 @@ def edit_user(user_id):
         user.email = request.form['email']
         role = request.form.get('role', '0')
         password = request.form['password']
+        # change
+        last_login=datetime.now(),
         
         try:
             role = int(role)
@@ -209,68 +223,97 @@ def delete_user(user_id):
     return redirect(url_for('admin.view_users'))
 
 # Combined Management Route
-@admin_bp.route('/manage_course', methods=['GET', 'POST'])
+# Route to view all courses, modules, and videos
+@admin_bp.route('/manage_course', methods=['GET'])
 @login_required
 def manage_course():
-    # Ensure admin access
-    if not current_user.role:  # Assuming role=1 is admin
+    if not current_user.role:  # Ensure only admins can access
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
-    # Handle form submissions
-    if request.method == 'POST':
-        form_type = request.form.get('form_type')
-
-        if form_type == 'add_course':
-            # Add a new course
-            name = request.form.get('course_name')
-            description = request.form.get('course_description')
-
-            if not name or not description:
-                flash("Course name and description are required.", "danger")
-            else:
-                new_course = Course(name=name, description=description, created_date=datetime.utcnow())
-                db.session.add(new_course)
-                db.session.commit()
-                flash("Course added successfully!", "success")
-
-        elif form_type == 'add_module':
-            # Add a new module
-            name = request.form.get('module_name')
-            description = request.form.get('module_description')
-            course_id = request.form.get('module_course_id')
-
-            if not name or not description or not course_id:
-                flash("Module name, description, and associated course are required.", "danger")
-            else:
-                new_module = Module(name=name, description=description, courseid=course_id, created_date=datetime.utcnow())
-                db.session.add(new_module)
-                db.session.commit()
-                flash("Module added successfully!", "success")
-
-        elif form_type == 'add_video':
-            # Add a new video
-            title = request.form.get('video_title')
-            url = request.form.get('video_url')
-            duration = request.form.get('video_duration')
-            module_id = request.form.get('video_module_id')
-
-            if not title or not url or not duration or not module_id:
-                flash("Video title, URL, duration, and associated module are required.", "danger")
-            else:
-                new_video = Video(title=title, url=url, duration=duration, moduleid=module_id)
-                db.session.add(new_video)
-                db.session.commit()
-                flash("Video added successfully!", "success")
-
-        return redirect(url_for('admin.manage_course'))
-
-    # Fetch existing data for rendering
     courses = Course.query.all()
     modules = Module.query.all()
     videos = Video.query.all()
 
     return render_template('managecourse.html', courses=courses, modules=modules, videos=videos)
+
+
+# Route to add a new course
+@admin_bp.route('/add_course', methods=['GET', 'POST'])
+@login_required
+def add_course():
+    if not current_user.role:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    if request.method == 'POST':
+        name = request.form.get('course_name')
+        description = request.form.get('course_description')
+
+        if not name or not description:
+            flash("Course name and description are required.", "danger")
+        else:
+            new_course = Course(name=name, description=description, created_date=datetime.utcnow())
+            db.session.add(new_course)
+            db.session.commit()
+            flash("Course added successfully!", "success")
+            return redirect(url_for('admin.view_all'))
+
+    return render_template('add_courses.html')
+
+
+# Route to add a new module
+@admin_bp.route('/add_module', methods=['GET', 'POST'])
+@login_required
+def add_module():
+    if not current_user.role:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    if request.method == 'POST':
+        name = request.form.get('module_name')
+        description = request.form.get('module_description')
+        course_id = request.form.get('module_course_id')
+
+        if not name or not description or not course_id:
+            flash("Module name, description, and associated course are required.", "danger")
+        else:
+            new_module = Module(name=name, description=description, courseid=course_id, created_date=datetime.utcnow())
+            db.session.add(new_module)
+            db.session.commit()
+            flash("Module added successfully!", "success")
+            return redirect(url_for('admin.view_all'))
+
+    courses = Course.query.all()  # Needed for module association
+    return render_template('add_modules.html', courses=courses)
+
+
+# Route to add a new video
+@admin_bp.route('/add_video', methods=['GET', 'POST'])
+@login_required
+def add_video():
+    if not current_user.role:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    if request.method == 'POST':
+        title = request.form.get('video_title')
+        url = request.form.get('video_url')
+        duration = request.form.get('video_duration')
+        module_id = request.form.get('video_module_id')
+
+        if not title or not url or not duration or not module_id:
+            flash("Video title, URL, duration, and associated module are required.", "danger")
+        else:
+            new_video = Video(title=title, url=url, duration=duration, moduleid=module_id)
+            db.session.add(new_video)
+            db.session.commit()
+            flash("Video added successfully!", "success")
+            return redirect(url_for('admin.view_all'))
+
+    modules = Module.query.all()  # Needed for video association
+    return render_template('add_videos.html', modules=modules)
+
 # Admin dashboard to view all user progress
 @admin_bp.route('/view_all_progress', methods=['GET'])
 @login_required

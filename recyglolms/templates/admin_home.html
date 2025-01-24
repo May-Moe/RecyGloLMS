@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/Admin_Home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>RecyGlo</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name"> {{current_user_name}}</span></h4>
+                        <p id="profile-email">may@gmail.com</p>
+                        <button id="logout-button">Logout</button>
+                    </div>
+                </div>
+                
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="Activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <header>
+                <h1>Welcome to RecyGlo!</h1>
+            </header>
+            <div class="about-us">
+                <div class="about-text">
+                    <h2>ABOUT US</h2>
+                    <p>This platform is designed to support your vocational training journey. Whether you're learning new skills, completing activities, or connecting with trainers and peers, this LMS has everything you need in one place.</p>
+                </div>
+                <div class="about-image">
+                    <img src="static/img/homepic2.png" alt="Our Images">
+                </div>
+            </div>
+            <div class="support">
+                <h2 class="header">Services And Supports</h2>
+                <div class="support-container">
+                    <div class="support-text1 card">
+                        <h2>What We Support?</h2>
+                        <p><strong>Training Videos:</strong> Dive into an extensive library of videos to develop hands-on skills in recycling and sustainability.</p>
+                        <p><strong>Interactive Activities:</strong> Participate in quizzes, assignments, and hands-on projects to apply your learning.</p>
+                        <p><strong>Track Your Progress:</strong> Monitor your achievements, stay on schedule, and reach your training goals with personalized progress tracking.</p>
+                        <p><strong>Announcements:</strong> Stay informed about important updates, upcoming sessions, and new resources.</p>
+                        <p><strong>Chat with Peers:</strong> Connect with classmates, ask questions, and share ideas in a collaborative environment.</p>
+                    </div>
+                    <div class="support-text2 card">
+                        <h2>Key Benefits for Users</h2>
+                        <p><strong>Accessible Anywhere:</strong> Whether you're at home or on the go, the LMS is available 24/7 on any device.</p>
+                        <p><strong>User-Friendly Interface:</strong> Navigate with ease through a clean and intuitive design tailored for students and staff.</p>
+                        <p><strong>Eco-Friendly Learning:</strong>Save paper and resources by going digital—because learning and sustainability go hand in hand.</p>
+                    </div>
+                    <div class="feedback card">
+                        <form class="feedback-form" id="FeedbackForm">
+                            <h2>Feedback Form</h2>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" placeholder="Enter Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="Enter Email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea name="message" id="message" placeholder="Enter Message"></textarea>
+                            </div>
+                           <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="programs">
+                <h2>Programs Offered</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque voluptates vero alias ex libero a eius maiores repellendus ea id dolorem voluptatibus ipsa obcaecati, voluptate ratione deleniti aliquid culpa. Dolore.</p>
+                <a href="#">Learn More</a>
+            </div>
+            <footer>
+                <p>© Copyright 2025 by RecyGlo Company Pte. Ltd. All rights reserved.</p>
+            </footer>
+        </div>
+        
+    </div>
+    <script src="static/JS/script.js"></script>
+</body>
+</html>

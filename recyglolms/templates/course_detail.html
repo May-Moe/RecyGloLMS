@@ -1,148 +1,228 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ data.course.name }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .video-container {
-            position: relative;
-            width: 100%;
-            max-width: 560px; /* Adjust as needed */
-            margin: 0 auto;
-        }
-
-        .video-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .video-overlay span {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        iframe {
-            position: relative;
-            z-index: 1;
-        }
-    </style>
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/Course.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>User Management</title>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>{{ data.course.name }}</h1>
-        <p>{{ data.course.description }}</p>
-        {% for module_data in data.modules %}
-        <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4>{{ module_data.module.name }}</h4>
-                <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#module{{ module_data.module.moduleid }}">
-                    Show Videos
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
                 </button>
-            </div>
-            <div id="module{{ module_data.module.moduleid }}" class="collapse">
-                <div class="card-body">
-                    {% if module_data.videos %}
-                    <ul class="list-group">
-                        {% for video in module_data.videos %}
-                        <li class="list-group-item">
-                            <h5>{{ video.title }}</h5>
-                            <div class="video-container">
-                                <iframe 
-                                    id="video{{ video.videoid }}"
-                                    src="{{ video.url }}" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowfullscreen 
-                                    class="w-100" 
-                                    style="height: 315px;" 
-                                    data-video-id="{{ video.videoid }}">
-                                </iframe>
-                                <div class="video-overlay" onclick="startVideo({{ video.videoid }}, this)">
-                                    <span>▶ Play</span>
-                                </div>
-                            </div>
-                            <p>Duration: {{ video.duration // 60 }} min {{ video.duration % 60 }} sec</p>
-                            <button class="btn btn-success mt-2" onclick="markComplete({{ video.videoid }})">
-                                Mark as Complete
-                            </button>
-                        </li>
-                        {% endfor %}
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
                     </ul>
-                    {% else %}
-                    <p>No videos available for this module.</p>
-                    {% endif %}
+                </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
+                        <p id="profile-email">may@gmail.com</p>
+                        <button id="logout-button">Logout</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function startVideo(videoId, overlayElement) {
-            // Remove the overlay
-            overlayElement.style.display = 'none';
-
-            // Update progress
-            updateProgress(videoId);
-
-            // Autoplay the video
-            const iframe = document.getElementById(`video${videoId}`);
-            const videoUrl = iframe.src;
-            iframe.src = `${videoUrl}?autoplay=1`; // Add autoplay to the video URL
-        }
-
-        function updateProgress(videoId) {
-            console.log(`Sending POST request for video ID: ${videoId}`); // Debug log
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="Home.html"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="Activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="Courses.html"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.upload_file') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="course-container">
+                <div class="header">
+                    <h1>Courses</h1>
+                    <div class="header-actions">
+                        <input type="text" id="searchBar" placeholder="Search">
+                        <div class="dropdown">
+                            <button id="addUserButton" class="addUserButton"><i class="fas fa-plus"></i> Add</button>
+                            <ul id="addCourseDropdown" class="dropdown-menu hidden">
+                                <li><a href="AddCourse.html">Courses</a></li>
+                                <li><a href="AddModule.html">Modules</a></li>
+                                <li><a href="AddVideo.html">Videos</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Course Name</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <!-- User data will be populated here -->
+                             <tr>
+                                <td>1</td>
+                                <td>RecyGlo</td>
+                                <td>This is RecyGlo</td>
+                                <td>
+                                    <a href="EditUser.html" class="editAction"><i class="fas fa-edit"></i></a>
+                                    <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                             </tr>
+                        </tbody>
         
-            fetch(`/update_video_progress/${videoId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    completed: true // Signal to mark as complete
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Progress updated successfully:", data);
-            })
-            .catch(error => {
-                console.error("Error updating progress:", error);
-            });
-        }
+                        <tbody id="userTableBody">
+                            <!-- User data will be populated here -->
+                             <tr>
+                                <td>2</td>
+                                <td>Waste Management</td>
+                                <td>what is waste management?</td>
+                                <td>
+                                    <a href="EditUser.html"  class="editAction"><i class="fas fa-edit"></i></a>
+                                    <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                             </tr>
+                        </tbody>
+    
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button id="prevPage">Previous</button>
+                    <button id="nextPage">Next</button>
+                </div>
+    
+            </div>
 
-        // Function to mark video as complete manually
-        function markComplete(videoid) {
-            fetch(`/update_video_progress/${videoid}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ increment: 1000 })  // Mark complete by incrementing by the full duration
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Progress updated:', data);
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
+            <!-- module -->
+            <div class="module-container">
+            <div class="header">
+                <h1>Modules</h1>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Module Name</th>
+                            <th>Description</th>
+                            <th>Course Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                         <tr>
+                            <td>1</td>
+                            <td>ESG</td>
+                            <td>This is RecyGlo</td>
+                            <td>RecyGlo</td>
+                            <td>
+                                <a href="EditUser.html" class="editAction"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                         </tr>
+                    </tbody>
+    
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                         <tr>
+                            <td>2</td>
+                            <td>waste</td>
+                            <td>what is waste management?</td>
+                            <td>Waste Management</td>
+                            <td>
+                                <a href="EditUser.html"  class="editAction"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                         </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
+            </div>
+
+            </div>
+
+            <!-- Videos -->
+            <div class="video-container">
+            <div class="header">
+                <h1>Videos</h1>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Video Title</th>
+                            <th>URL</th>
+                            <th>Duration</th>
+                            <th>Module</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                         <tr>
+                            <td>1</td>
+                            <td>RecyGlo ESG</td>
+                            <td>http://</td>
+                            <td>1hr</td>
+                            <td>ESG</td>
+                            <td>
+                                <a href="EditUser.html" class="editAction"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                         </tr>
+                    </tbody>
+    
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                         <tr>
+                            <td>2</td>
+                            <td>Waste Management</td>
+                            <td>http://</td>
+                            <td>2hr</td>
+                            <td>Waste</td>
+                            <td>
+                                <a href="EditUser.html"  class="editAction"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                         </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
+            </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+    </div>
+    <script src="JS/script.js"></script>
 </body>
 </html>

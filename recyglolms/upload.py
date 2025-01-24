@@ -33,17 +33,32 @@ def upload_file():
 
     if request.method == 'POST':
         file = request.files.get('file')
+        custom_name = request.form.get('filename')  # Get the user-specified filename
+
         if not file or not allowed_file(file.filename):
             flash("Invalid file type or no file selected!", "danger")
             return redirect(request.url)
 
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        if not custom_name:
+            flash("Custom file name is required!", "danger")
+            return redirect(request.url)
+
+        # Sanitize and append file extension to custom filename
+        file_extension = file.filename.rsplit('.', 1)[1].lower()
+        sanitized_name = secure_filename(custom_name)
+        final_filename = f"{sanitized_name}.{file_extension}"
+
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], final_filename)
 
         # Save the file
         file.save(filepath)
 
-        new_upload = Upload(filename=filename, filetype=filename.rsplit('.', 1)[1].lower(), uploaddate=datetime.utcnow(), userid=current_user.userid)
+        new_upload = Upload(
+            filename=final_filename,
+            filetype=file_extension,
+            uploaddate=datetime.utcnow(),
+            userid=current_user.userid
+        )
         db.session.add(new_upload)
         db.session.commit()
 
@@ -51,6 +66,7 @@ def upload_file():
         return redirect(url_for('upload.view_files'))
 
     return render_template('upload_file.html')
+
 
 # Route to edit file metadata and replace file
 @upload_bp.route('/edit/<int:uploadid>', methods=['GET', 'POST'])

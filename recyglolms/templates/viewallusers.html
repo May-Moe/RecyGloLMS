@@ -1,95 +1,125 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View All Users</title>
-    <!-- Include Bootstrap CSS for styling -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/User.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>User Management</title>
 </head>
 <body>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div id="flash-messages" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <button id="logout-button">Logout</button>
                     </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-    <div class="container mt-5">
-        <h2 class="mb-4">All Users</h2>
-        <a href="{{ url_for('admin.add_user') }}" class="btn btn-primary mb-3">Add New User</a>
-        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-primary mb-3">Back to Dashboard</a>
-        
-        <form method="POST" class="mb-4">
-            <div class="row">
-                <!-- Email Search -->
-                <div class="col-md-4 mb-3">
-                    <input type="text" id="search_query" name="search_query" class="form-control" 
-                           placeholder="Enter email to search" value="{{ request.form.get('search_query', '') }}">
                 </div>
-                
-                <!-- Inactivity Days Filter (Dropdown) -->
-                <div class="col-md-4 mb-3">
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="Activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="header">
+                <h1>User Management</h1>
+                <div class="header-actions">
+                    <form method="POST" class="mb-4">
+                    <input type="text" id="search_query" name="search_query" placeholder="Search" value="{{ request.form.get('search_query', '') }}">
                     <select id="inactivity_filter" name="inactivity_filter" class="form-control">
-                        <option value="">Filter by inactivity</option>
-                        <option value="0" {% if request.form.get('inactivity_filter') == '0' %}selected{% endif %}>View All</option>
-                        <option value="7" {% if request.form.get('inactivity_filter') == '7' %}selected{% endif %}>More than 7 days</option>
-                        <option value="15" {% if request.form.get('inactivity_filter') == '15' %}selected{% endif %}>More than 15 days</option>
-                        <option value="30" {% if request.form.get('inactivity_filter') == '30' %}selected{% endif %}>More than 30 days</option>
+                        <option value="" id="inactivity_filter1">Filter by inactivity</option>
+                        <option value="0" id="inactivity_filter1" {% if request.form.get('inactivity_filter') == '0' %}selected{% endif %}>View All</option>
+                        <option value="7" id="inactivity_filter1" {% if request.form.get('inactivity_filter') == '7' %}selected{% endif %}>More than 7 days</option>
+                        <option value="15" id="inactivity_filter1" {% if request.form.get('inactivity_filter') == '15' %}selected{% endif %}>More than 15 days</option>
+                        <option value="30" id="inactivity_filter1" {% if request.form.get('inactivity_filter') == '30' %}selected{% endif %}>More than 30 days</option>
                     </select>
-                </div>
+                    <!-- Submit Button -->
+                    <button type="submit" class="filter">Filter</button>
                 
-                <!-- Submit Button -->
-                <div class="col-md-2 mb-3">
-                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    </form>
+                    <a href="{{ url_for('admin.add_user') }}"  id="addUserLink">
+                        <button id="addUserButton"><i class="fas fa-plus"></i>Add New User</button>
+                    </a>
                 </div>
             </div>
-        </form>
-
-        <!-- User Table -->
-        {% if users %}
-        <table class="table table-striped table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Last Login</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.userid }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ "Admin" if user.role == 1 else "User" }}</td>
-                    <td>{{ user.last_login }}</td>
-                    <td>
-                        <a href="{{ url_for('admin.edit_user', user_id=user.userid) }}" class="btn btn-sm btn-primary">Edit</a>
-                        <form action="{{ url_for('admin.delete_user', user_id=user.userid) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <div class="alert alert-info" role="alert">
-            No users found!
+            <div class="table-container">
+                {% if users %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Last Login</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                        {% for user in users %}
+                         <tr>
+                            <td>{{ user.userid }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ "Admin" if user.role == 1 else "User" }}</td>
+                            <td>{{ user.last_login }}</td>
+                            <td>
+                                <a href="{{ url_for('admin.edit_user', user_id=user.userid) }}" class="editAction"><i class="fas fa-edit"></i></a>
+                                <form action="{{ url_for('admin.delete_user', user_id=user.userid) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="deleteAction" onclick="return confirm('Are you sure you want to delete this user?');"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </td>
+                         </tr>
+                         {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="alert alert-info" role="alert">
+                    No users found!
+                </div>
+                {% endif %}
+            </div>
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
+            </div>
+            </div>
+           
         </div>
-        {% endif %}
+    </main>
+</div>
     </div>
-
-    <!-- Include Bootstrap JS for interactivity -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="static/JS/script.js"></script>
 </body>
 </html>

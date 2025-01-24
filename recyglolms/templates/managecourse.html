@@ -1,87 +1,191 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Content</title>
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/Course.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>User Management</title>
 </head>
 <body>
-    <h1>Manage Courses, Modules, and Videos</h1>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
 
-    <!-- Add Course Form -->
-    <h2>Add Course</h2>
-    <form method="POST">
-        <input type="hidden" name="form_type" value="add_course">
-        <input type="text" name="course_name" placeholder="Course Name" required>
-        <textarea name="course_description" placeholder="Course Description" required></textarea>
-        <button type="submit">Add Course</button>
-    </form>
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
+                        <p id="profile-email">may@gmail.com</p>
+                        <button id="logout-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="Activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="course-container">
+                <div class="header">
+                    <h1>Courses</h1>
+                    <div class="header-actions">
+                        <input type="text" id="searchBar" placeholder="Search">
+                        <div class="dropdown">
+                            <button id="addUserButton" class="addUserButton"><i class="fas fa-plus"></i> Add</button>
+                            <ul id="addCourseDropdown" class="dropdown-menu hidden">
+                                <li><a href="{{ url_for('admin.add_course') }}">Courses</a></li>
+                                <li><a href="{{ url_for('admin.add_module') }}">Modules</a></li>
+                                <li><a href="{{ url_for('admin.add_video') }}">Videos</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Course Name</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <!-- User data will be populated here -->
+                            {% for course in courses %}
+                             <tr>
+                                <td>{{ course. courseid }}</td>
+                                <td>{{ course.name }}</td>
+                                <td>{{ course.description }}</td>
+                                <td>
+                                    <a href="EditUser.html" class="editAction"><i class="fas fa-edit"></i></a>
+                                    <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                             </tr>
+                             {% endfor %}
+                        </tbody>
+    
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button id="prevPage">Previous</button>
+                    <button id="nextPage">Next</button>
+                </div>
+    
+            </div>
 
-    <!-- Add Module Form -->
-    <h2>Add Module</h2>
-    <form method="POST">
-        <input type="hidden" name="form_type" value="add_module">
-        <input type="text" name="module_name" placeholder="Module Name" required>
-        <textarea name="module_description" placeholder="Module Description" required></textarea>
-        <select name="module_course_id" required>
-            <option value="">Select Course</option>
-            {% for course in courses %}
-            <option value="{{ course.courseid }}">{{ course.name }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Add Module</button>
-    </form>
+            <!-- module -->
+            <div class="module-container">
+            <div class="header">
+                <h1>Modules</h1>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Module Name</th>
+                            <th>Description</th>
+                            <th>Course Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                        {% for module in modules %}
+                         <tr>
+                            <td>{{ module.moduleid }}</td>
+                            <td>{{ module.name }}</td>
+                            <td>{{ module.description }}</td>
+                            <td>{{ module.course.name }}</td>
+                            <td>
+                                <a href="EditUser.html" class="editAction"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                         </tr>
+                         {% endfor %}
+                    </tbody>
 
-    <!-- Add Video Form -->
-    <h2>Add Video</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="form_type" value="add_video">
-        <div class="mb-3">
-            <label for="video_title" class="form-label">Video Title</label>
-            <input type="text" class="form-control" id="video_title" name="video_title" required>
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
+            </div>
+
+            </div>
+
+            <!-- Videos -->
+            <div class="video-container">
+            <div class="header">
+                <h1>Videos</h1>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Video Title</th>
+                            <th>URL</th>
+                            <th>Duration</th>
+                            <th>Module</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                        {% for video in videos %}
+                         <tr>
+                            <td>{{ video.videoid }}</td>
+                            <td>{{ video.title }}</td>
+                            <td>{{ video.url }}</td>
+                            <td>{{ video.duration }}</td>
+                            <td>{{ video.module.name }}</td>
+                            <td>
+                                <a href="EditUser.html" class="editAction"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                         </tr>
+                         {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
+            </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="video_url" class="form-label">YouTube Video URL</label>
-            <input type="url" class="form-control" id="video_url" name="video_url" required>
-        </div>
-        <div class="mb-3">
-            <label for="video_duration" class="form-label">Video Duration (in seconds)</label>
-            <input type="number" class="form-control" id="video_duration" name="video_duration" required>
-        </div>
-        <div class="mb-3">
-            <label for="video_module_id" class="form-label">Module</label>
-            <select class="form-select" id="video_module_id" name="video_module_id" required>
-                {% for module in modules %}
-                    <option value="{{ module.moduleid }}">{{ module.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Video</button>
-    </form>
 
-    <!-- Display Existing Data -->
-    <hr>
-    <h2>Existing Data</h2>
-
-    <h3>Courses</h3>
-    <ul>
-        {% for course in courses %}
-        <li>{{ course.name }}: {{ course.description }}</li>
-        {% endfor %}
-    </ul>
-
-    <h3>Modules</h3>
-    <ul>
-        {% for module in modules %}
-        <li>{{ module.name }} (Course: {{ module.course.name }})</li>
-        {% endfor %}
-    </ul>
-
-    <h3>Videos</h3>
-    <ul>
-        {% for video in videos %}
-        <li>{{ video.title }} (Module: {{ video.module.name }}, Duration: {{ video.duration }} seconds)</li>
-        {% endfor %}
-    </ul>
+    </main>
+</div>
+    </div>
+    <script src="static/JS/script.js"></script>
 </body>
 </html>

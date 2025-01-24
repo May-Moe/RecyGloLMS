@@ -13,6 +13,7 @@ def create_root_admin():
     # Root admin credentials
     root_email = 'admin@recyglo.com'
     root_password = 'admin1234'
+    
 
     # Check if the admin already exists
     admin = User.query.filter_by(email=root_email).first()
