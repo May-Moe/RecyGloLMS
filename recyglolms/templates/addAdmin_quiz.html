@@ -1,0 +1,203 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="CSS/addAdmin_quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/lucide-react/icons/lucide.min.js"></script>
+    <title>Add Quiz</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
+                        <p id="profile-email">may@gmail.com</p>
+                        <button id="logout-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="Home.html"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="Activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="Announcement.html"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="Courses.html"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="Upload.html"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="user.html"><i class="fas fa-user icon"></i> User</a></li>
+                <li><a href="addAdmin_quiz.html"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <a href="Admin_quiz.html" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
+            <h1 style="text-align: center; font-size: 23px; color: rgb(34, 164, 41);" >Quiz Adding Section</h1>
+            <h2 class="question-add">Questions (5)</h2>
+            <ul id="questionItems">
+                <li class="question-item">
+                    What does UI stand for in the context of design?
+                    <button class="delete-question" onclick="deleteQuestion(this)"><i class="fas fa-trash"></i></button>
+                </li>
+                <li class="question-item">
+                    Which aspect of UI design is crucial for usability?
+                    <button class="delete-question" onclick="deleteQuestion(this)"><i class="fas fa-trash"></i></button>
+                </li>
+                <li class="question-item">
+                    How to export a picture from a design tool?
+                    <button class="delete-question" onclick="deleteQuestion(this)"><i class="fas fa-trash"></i></button>
+                </li>
+                <li class="question-item">
+                    Which term refers to the visual structure of an app?
+                    <button class="delete-question" onclick="deleteQuestion(this)"><i class="fas fa-trash"></i></button>
+                </li>
+                <li class="question-item">
+                    Why is maintaining consistency important?
+                    <button class="delete-question" onclick="deleteQuestion(this)"><i class="fas fa-trash"></i></button>
+                </li>
+            </ul>
+            <button id="addQuestion">+ Add Question</button>
+
+            <hr style="margin-top: 30px; color: rgb(76, 218, 50);">
+        
+
+        <div class="question-editor">
+            <h2>Question Editor</h2>
+            <form id="questionForm">
+                <label for="questionText">Question *</label>
+                <div class="input-group">
+                    <input type="text" id="questionText" placeholder="Type your question here..." required>
+                    <button class="delete-question" onclick="clearInput('questionText')"><i class="fas fa-trash"></i></button>
+                </div>
+
+                <label>Choices *</label>
+                <div class="choices-container">
+                        <div class="choice">
+                            <input type="radio" name="correctAnswer" value="0">
+                            <div class="input-group">
+                                <input type="text" class="choiceText" placeholder="Choice 1">
+                                <button type="button" class="delete-choice" onclick="deleteChoice(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="choice">
+                            <input type="radio" name="correctAnswer" value="1">
+                            <div class="input-group">
+                                <input type="text" class="choiceText" placeholder="Choice 2">
+                                <button type="button" class="delete-choice" onclick="deleteChoice(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="choice">
+                            <input type="radio" name="correctAnswer" value="2">
+                            <div class="input-group">
+                                <input type="text" class="choiceText" placeholder="Choice 3">
+                                <button type="button" class="delete-choice" onclick="deleteChoice(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <button id="addChoice">+ Add Answer</button>
+                
+                <div class="settings">
+                    <div class="setting-item">
+                        <label for="timeLimit">Time Limit (mins)</label>
+                        <input type="number" id="timeLimit" min="1" placeholder="2">
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="points">Points</label>
+                        <input type="number" id="points" min="1" placeholder="1">
+                    </div>
+                </div>
+                <button type="submit">Save Question</button>
+            </form>
+        </div>
+        </div>
+        </div>
+    <script src="JS/script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+    const questionItems = document.getElementById("questionItems");
+    const addQuestionButton = document.getElementById("addQuestion");
+    const questionForm = document.getElementById("questionForm");
+    const addChoiceButton = document.getElementById("addChoice");
+    const choicesContainer = document.querySelector(".choices-container");
+
+    // Function to add delete button event for a question
+    function addDeleteEventToQuestion(questionItem) {
+        const deleteButton = questionItem.querySelector(".delete-question");
+        deleteButton.addEventListener("click", () => {
+            questionItem.remove();
+        });
+    }
+
+    // Add new question
+    addQuestionButton.addEventListener("click", () => {
+        const newQuestion = prompt("Enter the new question:");
+        if (newQuestion) {
+            const li = document.createElement("li");
+            li.className = "question-item";
+            li.textContent = newQuestion;
+            
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-question";
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            
+            li.appendChild(deleteButton);
+            questionItems.appendChild(li);
+            
+            addDeleteEventToQuestion(li);  // Attach delete event to the new question
+        }
+    });
+
+    // Function to add delete event for choices
+    function addDeleteEventToChoice(choiceDiv) {
+        const deleteButton = choiceDiv.querySelector(".delete-choice");
+        deleteButton.addEventListener("click", () => {
+            choiceDiv.remove();
+        });
+    }
+
+    // Add new choice
+    addChoiceButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const choiceDiv = document.createElement("div");
+        choiceDiv.className = "choice";
+
+        const radioInput = document.createElement("input");
+        radioInput.type = "radio";
+        radioInput.name = "correctAnswer";
+        radioInput.value = choicesContainer.children.length;
+
+        const textInput = document.createElement("input");
+        textInput.type = "text";
+        textInput.className

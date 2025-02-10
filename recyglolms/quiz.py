@@ -1,0 +1,156 @@
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
+from flask_login import login_required, current_user
+from recyglolms.__inti__ import db  # Fixed import
+from recyglolms.models import Quiz, Question, Answer, Module, Course
+import json  # Use built-in json module
+
+quiz_bp = Blueprint('quiz', __name__)
+
+# View all quizzes (Admin only)
+@quiz_bp.route('/quizzes', methods=['GET'])
+@login_required
+def view_all_quizzes():
+    if not current_user.role:  # Ensure correct role validation
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    courses = Course.query.all()
+    return render_template('viewall_quizzes.html', courses=courses)
+
+# Create Quiz
+@quiz_bp.route('/create_quiz', methods=['GET', 'POST'])
+@login_required
+def create_quiz():
+    if not current_user.role:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    if request.method == 'POST':
+        quiz_title = request.form.get('quiz_title')
+        quiz_description = request.form.get('quiz_description')
+        module_id = request.form.get('module_id')
+        questions_data = request.form.get('questions_data')  # JSON from frontend
+
+        if not (quiz_title and module_id and questions_data):
+            flash("Quiz title, module ID, and questions are required!", "danger")
+            return redirect(url_for('quiz.create_quiz'))
+
+        new_quiz = Quiz(title=quiz_title, description=quiz_description, moduleid=module_id)
+        db.session.add(new_quiz)
+        db.session.flush()
+
+        try:
+            questions_list = json.loads(questions_data)
+        except json.JSONDecodeError:
+            flash("Invalid question data!", "danger")
+            return redirect(url_for('quiz.create_quiz'))
+
+        for question in questions_list:
+            question_text = question.get('question', '').strip()
+            answers = question.get('answers', [])
+            correct_answer_index = int(question.get('correct_answer', -1))
+
+            if not question_text or len(answers) != 4:
+                continue
+
+            new_question = Question(text=question_text, quizid=new_quiz.quizid)
+            db.session.add(new_question)
+            db.session.flush()
+
+            for index, answer_text in enumerate(answers):
+                is_correct = index == correct_answer_index
+                new_answer = Answer(text=answer_text, is_correct=is_correct, questionid=new_question.questionid)
+                db.session.add(new_answer)
+
+        db.session.commit()
+        flash("Quiz created successfully!", "success")
+        return redirect(url_for('quiz.view_all_quizzes'))
+
+    module_id = request.args.get('module_id')
+    if not module_id:
+        flash("Module ID is required!", "danger")
+        return redirect(url_for('quiz.view_all_quizzes'))
+
+    module = Module.query.get(module_id)
+    if not module:
+        flash("Module not found!", "danger")
+        return redirect(url_for('quiz.view_all_quizzes'))
+
+    course = Course.query.get(module.courseid)
+    if not course:
+        flash("Course not found!", "danger")
+        return redirect(url_for('quiz.view_all_quizzes'))
+
+    return render_template('create_quiz.html', module=module, course=course)
+
+# View Quiz
+@quiz_bp.route('/view_quiz/<int:quiz_id>', methods=['GET'])
+@login_required
+def view_quiz(quiz_id):
+    quiz = Quiz.query.get(quiz_id)
+    if not quiz:
+        flash("Quiz not found!", "danger")
+        return redirect(url_for('quiz.view_all_quizzes'))
+
+    questions = Question.query.filter_by(quizid=quiz_id).all()
+    quiz_data = []
+    for question in questions:
+        answers = Answer.query.filter_by(questionid=question.questionid).all()
+        quiz_data.append({'question': question, 'answers': answers})
+
+    return render_template('view_quiz.html', quiz=quiz, quiz_data=quiz_data)
+
+
+@quiz_bp.route('/update_question', methods=['POST'])
+def update_question():
+    data = request.json  # Parse JSON data from frontend
+    question_id = data.get("question_id")
+    question_text = data.get("text")
+    answers = data.get("answers", [])
+
+    question = Question.query.get(question_id)
+    if not question:
+        return jsonify({"message": "Question not found"}), 404
+
+    # Update question text
+    question.text = question_text
+
+    # Reset all answers to incorrect before updating
+    for answer in question.answers:
+        answer.is_correct = False
+
+    # Update answers
+    for answer_data in answers:
+        answer_id = answer_data.get("answer_id")
+        answer_text = answer_data.get("text")
+        is_correct = answer_data.get("is_correct", False)
+
+        answer = Answer.query.get(answer_id)
+        if answer:
+            answer.text = answer_text
+            answer.is_correct = is_correct  # Update whether it's the correct answer
+
+    db.session.commit()
+    return jsonify({"message": "Question updated successfully!"}), 200
+
+# Delete Quiz
+@quiz_bp.route('/delete_quiz/<int:quiz_id>', methods=['POST'])
+@login_required
+def delete_quiz(quiz_id):
+    if not current_user.role:
+        return jsonify({"error": "Unauthorized access!"}), 403
+
+    quiz = Quiz.query.get(quiz_id)
+    if not quiz:
+        return jsonify({"error": "Quiz not found"}), 404
+
+    # Delete all related questions and answers
+    questions = Question.query.filter_by(quizid=quiz_id).all()
+    for question in questions:
+        Answer.query.filter_by(questionid=question.questionid).delete()
+        db.session.delete(question)
+    
+    db.session.delete(quiz)
+    db.session.commit()
+
+    return jsonify({"message": "Quiz deleted successfully!"}), 200

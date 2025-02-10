@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script>
+        // This function toggles the edit mode for a specific question
+        function toggleEditQuestion(questionId) {
+            let textElement = document.getElementById(`question-text-${questionId}`);
+            let textareaElement = document.getElementById(`question-textarea-${questionId}`);
+
+            if (textElement.style.display === "none") {
+                textElement.style.display = "block"; // Show text
+                textareaElement.style.display = "none"; // Hide textarea
+            } else {
+                textElement.style.display = "none"; // Hide text
+                textareaElement.style.display = "block"; // Show textarea
+            }
+        }
+
+        // This function toggles the edit mode for a specific answer
+        function toggleEditAnswer(questionId, answerIndex) {
+            let answerTextElement = document.getElementById(`answer-span-${questionId}-${answerIndex}`);
+            let answerInputElement = document.getElementById(`answer-input-${questionId}-${answerIndex}`);
+            let radioButtons = document.getElementsByName(`correct-answer-${questionId}`);
+
+            if (answerTextElement.style.display === "none") {
+                answerTextElement.style.display = "block"; // Show answer text
+                answerInputElement.style.display = "none"; // Hide input for editing
+                // Hide the radio buttons when editing ends
+                radioButtons.forEach(radio => radio.style.display = "none");
+            } else {
+                answerTextElement.style.display = "none"; // Hide answer text
+                answerInputElement.style.display = "block"; // Show input for editing
+                // Show the radio buttons when editing starts
+                radioButtons.forEach(radio => radio.style.display = "inline-block");
+            }
+        }
+
+        // This function saves the changes made to a question and its answers
+        function saveQuestionChanges(questionId) {
+            let questionText = document.getElementById(`question-textarea-${questionId}`).value;
+            let answers = [];
+            let correctAnswer = document.querySelector(`input[name='correct-answer-${questionId}']:checked`).value;
+
+            // Collect the answers for this question
+            document.querySelectorAll(`input[name^='answer_text_${questionId}']`).forEach((answerInput, index) => {
+                let isCorrect = (answerInput.value === correctAnswer);
+                answers.push({
+                    answer_id: answerInput.getAttribute("data-answer-id"),
+                    text: answerInput.value,
+                    is_correct: isCorrect
+                });
+            });
+
+            // Send request to backend to save changes
+            fetch("/update_question", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    question_id: questionId,
+                    text: questionText,
+                    answers: answers
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+
+                // After saving, hide textarea and show the updated question text
+                let textElement = document.getElementById(`question-text-${questionId}`);
+                let textareaElement = document.getElementById(`question-textarea-${questionId}`);
+                textElement.innerText = questionText;  // Update the displayed question text
+                textElement.style.display = "block";   // Show the updated text
+                textareaElement.style.display = "none"; // Hide the textarea
+
+                // Update answers
+                answers.forEach((answer, index) => {
+                    let answerTextElement = document.getElementById(`answer-span-${questionId}-${index}`);
+                    let answerInputElement = document.getElementById(`answer-input-${questionId}-${index}`);
+
+                    answerTextElement.innerText = answer.text;  // Update the answer text
+                    answerTextElement.style.display = "block"; // Show the updated answer text
+                    answerInputElement.style.display = "none"; // Hide the input
+
+                    // Mark correct answer
+                    if (answer.is_correct) {
+                        document.querySelector(`#correct-answer-${questionId}-${index}`).checked = true;
+                        // Highlight correct answer in green
+                        answerTextElement.style.color = 'green';
+                        answerTextElement.style.fontWeight = 'bold';
+                    } else {
+                        answerTextElement.style.color = ''; // Reset to default color
+                    }
+                });
+                // Reload the page after saving the changes
+             location.reload();
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        // This function updates the correct answer when the user selects a different radio button
+        function updateCorrectAnswer(questionId) {
+            let answers = document.querySelectorAll(`input[name='correct-answer-${questionId}']`);
+            answers.forEach((radioButton, index) => {
+                let answerTextElement = document.getElementById(`answer-span-${questionId}-${index}`);
+                if (radioButton.checked) {
+                    answerTextElement.style.color = 'green';
+                    answerTextElement.style.fontWeight = 'bold';
+                } else {
+                    answerTextElement.style.color = ''; // Reset to default color
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+<h2>Quiz: <span id="quiz-title" contenteditable="true">{{ quiz.title }}</span></h2>
+<p><strong>Description:</strong> <span id="quiz-description" contenteditable="true">{{ quiz.description }}</span></p>
+
+{% if quiz_data %}
+    <input type="hidden" name="quiz_id" value="{{ quiz.id if quiz.id else '' }}" required>
+
+    <div id="questions-container">
+        {% for item in quiz_data %}
+        <div class="question" id="question-container-{{ item.question.questionid }}">
+            <h3>Question {{ loop.index }}:</h3>
+            <p id="question-text-{{ item.question.questionid }}" style="display:block;">{{ item.question.text }}</p>
+            <textarea id="question-textarea-{{ item.question.questionid }}" name="question_text_{{ item.question.questionid }}" style="display:none;">{{ item.question.text }}</textarea>
+
+            <ul>
+                {% for answer in item.answers %}
+                <li>
+                    <!-- Answer text, initially displayed -->
+                    <span id="answer-span-{{ item.question.questionid }}-{{ loop.index0 }}" {% if answer.is_correct %} style="color: green; font-weight: bold;" {% endif %}>{{ answer.text }}</span>
+
+                    <!-- Answer input for editing -->
+                    <input type="text" id="answer-input-{{ item.question.questionid }}-{{ loop.index0 }}" name="answer_text_{{ item.question.questionid }}_{{ loop.index0 }}" value="{{ answer.text }}" style="display:none;" data-answer-id="{{ answer.answerid }}">
+
+                    <!-- Radio buttons for defining correct answer -->
+                    <label>
+                        <input type="radio" name="correct-answer-{{ item.question.questionid }}" id="correct-answer-{{ item.question.questionid }}-{{ loop.index0 }}" value="{{ answer.text }}" {% if answer.is_correct %} checked {% endif %} onclick="updateCorrectAnswer({{ item.question.questionid }})">
+                        Correct Answer
+                    </label>
+
+                    <!-- Edit answer button -->
+                    <button type="button" onclick="toggleEditAnswer({{ item.question.questionid }}, {{ loop.index0 }})">Edit Answer</button>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Simple Edit button for question -->
+            <button type="button" onclick="toggleEditQuestion({{ item.question.questionid }})">Edit Question</button>
+            <button type="button" onclick="saveQuestionChanges({{ item.question.questionid }})">Save Changes</button>
+        </div>
+        {% endfor %}
+    </div>
+
+{% endif %}
+
+</body>
+</html>

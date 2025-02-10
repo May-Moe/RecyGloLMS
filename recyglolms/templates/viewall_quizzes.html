@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View All Courses and Modules</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h2 class="text-center">View All Courses & Modules</h2>
+    
+        {% for course in courses %}
+            <div class="card mt-4">
+                <div class="card-header bg-primary text-white">
+                    <h4>{{ course.name }}</h4>
+                </div>
+                <div class="card-body">
+                    {% if course.modules %}
+                        <ul class="list-group">
+                            {% for module in course.modules %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>{{ module.name }}</span>
+                                    <div>
+                                        <a href="{{ url_for('quiz.create_quiz', module_id=module.moduleid) }}" class="btn btn-success btn-sm">Add New Quiz</a>
+                                        
+                                        {% if module.quizzes %}
+                                            {% for quiz in module.quizzes %}
+                                                <a href="{{ url_for('quiz.view_quiz', quiz_id=quiz.quizid) }}" class="btn btn-info btn-sm">View Quiz</a>
+                                                <form action="{{ url_for('quiz.delete_quiz', quiz_id=quiz.quizid) }}" method="POST" style="display: inline;">
+                                                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+                                            {% endfor %}
+                                        {% else %}
+                                            <span class="text-muted">No quizzes available</span>
+                                        {% endif %}
+                                        
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No modules available for this course.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

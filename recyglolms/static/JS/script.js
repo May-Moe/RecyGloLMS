@@ -238,3 +238,95 @@ function displaySelected() {
   });
 }
 displaySelected();
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const questionItems = document.getElementById("questionItems");
+    const addQuestionButton = document.getElementById("addQuestion");
+    const questionForm = document.getElementById("questionForm");
+    const addChoiceButton = document.getElementById("addChoice");
+    const choicesContainer = document.querySelector(".choices-container");
+    const saveQuizButton = document.getElementById("saveQuiz");
+
+    // Add new question
+    addQuestionButton.addEventListener("click", () => {
+        const newQuestion = prompt("Enter the new question:");
+        if (newQuestion) {
+            const li = document.createElement("li");
+            li.className = "question-item";
+            li.innerHTML = `
+                ${newQuestion}
+                <button class="delete-question" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+            `;
+            questionItems.appendChild(li);
+        }
+    });
+
+    // Add new choice
+    addChoiceButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const choiceDiv = document.createElement("div");
+        choiceDiv.className = "choice";
+
+        const radioInput = document.createElement("input");
+        radioInput.type = "radio";
+        radioInput.name = "correctAnswer";
+
+        const textInput = document.createElement("input");
+        textInput.type = "text";
+        textInput.className = "choiceText";
+        textInput.placeholder = `Choice ${choicesContainer.children.length + 1}`;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-choice";
+        deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteButton.addEventListener("click", () => choiceDiv.remove());
+
+        choiceDiv.appendChild(radioInput);
+        choiceDiv.appendChild(textInput);
+        choiceDiv.appendChild(deleteButton);
+        choicesContainer.appendChild(choiceDiv);
+    });
+
+    // Save quiz
+    saveQuizButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const quizData = {
+            title: document.getElementById("quizTitle").value,
+            description: document.getElementById("quizDescription").value,
+            questions: [],
+        };
+
+        const questionElements = document.querySelectorAll(".question-item");
+        questionElements.forEach((item, index) => {
+            const questionText = item.textContent.trim();
+            const choices = [];
+            const choiceInputs = document.querySelectorAll(".choiceText");
+
+            choiceInputs.forEach((input, i) => {
+                choices.push({
+                    text: input.value,
+                    is_correct: document.querySelectorAll("input[name='correctAnswer']")[i].checked,
+                });
+            });
+
+            quizData.questions.push({
+                question: questionText,
+                choices: choices,
+            });
+        });
+
+        fetch(`/quiz/manage/${quiz_id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(quizData),
+        })
+        .then(response => response.json())
+        .then(data => alert(data.message))
+        .catch(error => console.error("Error:", error));
+    });
+});
