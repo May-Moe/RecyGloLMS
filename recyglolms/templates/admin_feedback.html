@@ -3,9 +3,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/CSS/style.css">
-    <link rel="stylesheet" href="static/CSS/Announcement.css">
+    <link rel="stylesheet" href="static/CSS/Feedback.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>All Announcements</title>
+    <title>User Management</title>
 </head>
 <body>
     <div class="dashboard">
@@ -53,56 +53,41 @@
             </ul>
         </nav>
         <div class="container">
-            <div class="header">
-                <h1>All Announcements</h1>
-                <div class="header-actions">
-                    <input type="text" id="searchBar" placeholder="Search">
-                    <a href="{{ url_for('announcement.add_announcement') }}"  id="addAnnLink">
-                        <button id="addUserButton"><i class="fas fa-plus"></i>Add Announcements</button>
-                    </a>
-                </div>
+        <h2 style="margin-bottom: 15px;">Feedback <span class="count">2</span></h2>
+        <div class="feedback-card">
+            <div class="user-info">
+                <img src="static/img/may.jpg" alt="User" class="avatar">
+                <span class="username">Kamisato Ayato</span>
+                <span class="time">2 hours ago</span>
             </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Content</th>
-                            <th>Image</th>
-                            <th>Date Posted</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="userTableBody">
-                        <!-- User data will be populated here -->
-                        {% for announcement in announcements %}
-                         <tr>
-                            <td>{{ announcement.title }}</td>
-                            <td>{{ announcement.content }}</td>
-                            <td>{% if announcement.announcement_img %}
-                            <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" alt="gg" style="width: 100px; height: auto;">
-                            {% else %}
-                                No Image
-                            {% endif %}
-                            </td>
-                            <td>{{ announcement.date}}</td>
-                            <td>
-                                <a href="{{ url_for('announcement.edit_announcement', announcement_id=announcement.announcementid) }}"  class="editAction"><i class="fas fa-edit"></i></a>
-                                <form action="{{ url_for('announcement.delete_announcement', announcement_id=announcement.announcementid) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="deleteAction" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>
-                                </form>
-                            </td>
-                         </tr>
-                         {% endfor %}
-                    </tbody>  
-                </table>
+            <div class="tags">
+                <span class="tag">Shirt</span>
+                <span class="tag">Product</span>
+                <span class="tag satisfied">Very Satisfied</span>
             </div>
-            <div class="pagination">
-                <button id="prevPage">Previous</button>
-                <button id="nextPage">Next</button>
-            </div>
+            <h3>User-Friendly App Enhances Shopping Experience</h3>
+            <p>I'm very impressed with the ease of use of this app. From intuitive navigation to speedy checkout, everything makes my shopping experience much more enjoyable.</p>
         </div>
+
+        <div class="feedback-card">
+            <div class="user-info">
+                <img src="static/img/may.jpg" alt="User" class="avatar">
+                <span class="username">Kamisato Ayaka</span>
+                <span class="time">2 hours ago</span>
+            </div>
+            <div class="tags">
+                <span class="tag">Shirt</span>
+                <span class="tag">Product</span>
+                <span class="tag neutral">Neutral</span>
+            </div>
+            <h3>Product Quality Meets Expectations, Worth Buying Again</h3>
+            <p>The product I received is exactly as advertised. The quality is excellent and meets my expectations. I will definitely buy again from this store in the future.</p>
+        </div>
+        </div>
+
+    </main>
+</div>
     </div>
-    <script src="JS/script.js"></script>
+    <script src="static/JS/script.js"></script>
 </body>
 </html>

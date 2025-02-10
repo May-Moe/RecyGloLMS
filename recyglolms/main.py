@@ -161,3 +161,16 @@ def user_progress():
         course.name: course.calculate_course_progress(current_user.userid) for course in courses
     }
     return render_template('each_user_progress.html', user=current_user, progress_data=progress_data)
+
+
+#for user_home
+@main_bp.route('/user_home')
+@login_required
+def user_home():
+    return render_template('user_home.html')
+
+#for user_account
+@main_bp.route('/user_account')
+@login_required
+def user_account():
+    return render_template('user_account.html')

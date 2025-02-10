@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,7 +28,6 @@
         <p><strong>Email:</strong> {{ current_useremail }}</p>
         <p><strong>Username:</strong> {{ current_username }}</p>
         
-        <!-- Form to update the username -->
         <form method="POST" action="{{ url_for('main.home') }}">
             <label for="username">Change Username:</label>
             <input 
@@ -51,5 +50,273 @@
     </ul>
 
     <a href="{{ url_for('auth.logout') }}">Logout</a>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/user_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>User Dashboard</title>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- nav -->
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_username}}</span></h4>
+                        <p id="profile-email">{{ current_useremail }}</p>
+                        <button id="logout-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="user_course.html"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="Alumni-network.html"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+        <!-- nav end -->
+
+        <!-- body start -->
+        <div class="container">
+            <!-- first row of dashboard -->
+             <div class="cards-header">
+                <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_username }}</span></h5>
+                <h2 style="color: #A9C9A4;">Welcome to RecyGlo!</h2>
+             </div>
+            <div class="cards-container">
+                <a href="user_course.html">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-rotate"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Ongoing Courses</div>
+                                <div class="card-value">4</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Complete Courses</div>
+                                <div class="card-value">2</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">My Activities</div>
+                                <div class="card-value">3</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="card" style="background: linear-gradient(to right, rgba(255, 255, 255, 0.8), #A9C9A4);">
+                        <div class="card-content">
+                            <div class="card-icon" style="color: #A9C9A4;">
+                                <i class="fa-regular fa-clock"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Learning Hours</div>
+                                <div class="card-value">
+                                    2<span>h</span>
+                                    30<span>min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- first row of dashboard end -->
+
+            <!-- third row start -->
+        <div class="chart3">
+            <!-- third row first card -->
+            <div class="card3">
+                <div class="card3-title">Upcoming Courses</div>
+                <div class="card3-value">
+                    <table class="courses-table">
+                        <thead>
+                          <tr>
+                            <th>Course</th>
+                            <th>Module</th>
+                            <th>Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td> MakeUp </td>
+                            <td> Basic Class for Makeup </td>
+                            <td> 2/8/2023</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+
+                <!-- <div class="view-all">
+                    <a href="Courses.html">View All Feedback <i class="fas fa-arrow-right"></i></a>
+                  </div> -->
+                  <a href="user_course.html" class="view-courses">view all courses</a>
+            </div>
+            <!-- third row first card end -->
+    </div>
+         <!-- third row end -->
+
+            <!-- second row of dashboard -->
+            <div class="course_header">
+                <h1>Courses In Progress</h1>
+                <a href="user_progress_tracking.html" class="view-courses">My Learning</a>
+              </div>
+            <div class="courses">
+                <div class="course-card">
+                    <div class="course-header">
+                        <span class="tag">RecyGlo</span>
+                    </div>
+                    <h3>What is Waste Management? </h3>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 80%;"></div>
+                    </div>
+                    <div class="course-info">
+                        <span>2:35h of 4:30h</span>
+                        <span>80%</span>
+                    </div>
+                    <button class="continue-btn">Continue</button>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-header">
+                        <span class="tag">Crochet</span>
+                    </div>
+                    <h3>What is crocheting?</h3>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 35%;"></div>
+                    </div>
+                    <div class="course-info">
+                        <span>2:35h of 4:30h</span>
+                        <span>35%</span>
+                    </div>
+                    <button class="continue-btn">Continue</button>
+                </div>
+
+      <div class="course-card">
+        <div class="course-header">
+          <span class="tag">Languages</span>
+        </div>
+        <h3>Learning how to speak Thai</h3>
+        <div class="progress">
+          <div class="progress-bar" style="width: 80%;"></div>
+        </div>
+        <div class="course-info">
+          <span>2:35h of 4:30h</span>
+          <span>80%</span>
+        </div>
+        <button class="continue-btn">Continue</button>
+      </div>
+    </div>
+    <!-- second row of dashboard -->
+
+        </div>
+
+        
+        <!-- Announcement section start -->
+        <div class="announcements">
+            <h2>Announcements</h2>
+            <ul>
+                <li class="announcement-item">
+                    <div class="calendar-container">
+                        <div class="calendar">
+                            <header>
+                                <pre class="left">◀</pre>
+                                <div class="header-display">
+                                    <p class="display">""</p>
+                                </div>
+  
+                                <pre class="right">▶</pre>
+  
+                            </header>
+  
+                        <div class="week">
+                            <div>Su</div>
+                            <div>Mo</div>
+                            <div>Tu</div>
+                            <div>We</div>
+                            <div>Th</div>
+                            <div>Fr</div>
+                            <div>Sa</div>
+                        </div>
+                        <div class="days"></div>
+                        </div>
+                    <div class="display-selected">
+                        <p class="selected"></p>
+                    </div>
+                </div>
+                    </li>
+                <li class="announcement-item">
+                    <img src="static/img/gg.jpg" alt="Announcement Image">
+                </li>
+                <li class="announcement-item">
+                    <img src="static/img/home.webp" alt="Announcement Image">
+                </li>
+            </ul>
+        </div>
+        <!-- Announcement sesssion end -->
+    </div>
+        
+    <script src="static/JS/script.js"></script>
+    <script>
+        // This can handle events for the "Continue" button
+        document.querySelectorAll('.continue-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                alert('Continuing the course!');
+            });
+        });
+
+    </script>
 </body>
 </html>

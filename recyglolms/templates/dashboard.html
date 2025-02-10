@@ -37,7 +37,7 @@
                     <div id="profile-dropdown" class="dropdown-menu hidden">
                         <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
                         <p id="profile-email">{{ current_user_email }}</p>
-                        <button id="logout-button">Logout</button>
+                        <button id="logout-button"><a href="{{ url_for('auth.logout') }}">Logout</a></button>
                     </div>
                 </div>
             </div>
@@ -49,63 +49,77 @@
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
                 <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
-                <li><a href="Activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('admin.Activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
                 <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
                 <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+                <li><a href="#"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                <li><a href="#"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
             </ul>
         </nav>
         <!-- nav end -->
 
         <!-- body start -->
         <div class="container">
+            <div class="cards-header">
+                <h5 class="card_header_title" style="color: gray;">Hello <span class="card_header_title">{{ current_user_name }}</span></h5>
+                <h2 style="color: #A9C9A4;">Welcome to RecyGlo!</h2>
+             </div>
             <!-- first row of dashboard -->
             <div class="cards-container">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="card-icon">
-                            <i class="fa-solid fa-book-open"></i>
-                        </div>
-                        <div class="card-text">
-                            <div class="card-title">Courses</div>
-                            <div class="card-value">{{ total_courses }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <div class="card-icon">
-                            <i class="fa-solid fa-video"></i>
-                        </div>
-                        <div class="card-text">
-                            <div class="card-title">Videos</div>
-                            <div class="card-value">{{ total_videos }}</div>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Courses</div>
+                                <div class="card-value">{{ total_courses }}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <div class="card-icon">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="card-text">
-                            <div class="card-title">Users</div>
-                            <div class="card-value">{{ total_users }}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <div class="card-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="card-text">
-                            <div class="card-title">Inactive Users</div>
-                            <div class="card-value">{{ inactive_users }}</div>
+                </a>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-video"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Videos</div>
+                                <div class="card-value">{{ total_videos }}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Users</div>
+                                <div class="card-value">{{ total_users }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Inactive Users</div>
+                                <div class="card-value">{{ inactive_users }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
             <!-- first row of dashboard end -->
 
@@ -171,12 +185,39 @@
                 </div>
 
                 <div class="view-all">
-                    <a href="Courses.html">View All Feedback <i class="fas fa-arrow-right"></i></a>
+                    <a href="{{ url_for('admin.admin_feedback') }}">View All Feedback <i class="fas fa-arrow-right"></i></a>
                   </div>
             </div>
             <!-- third row first card end -->
     </div>
          <!-- third row end -->
+
+
+         <!-- fourth row start -->
+         <div class="chart3">
+            <!-- fourth row first card -->
+            <div class="card3">
+                <div class="card3-title">Feedback Box</div>
+                <div class="card3-value">
+                    <div class="card3-profile">
+                        <img src="static/img/profile.webp" alt="">
+                    </div>
+                    <div class="feedback-title">Sir, Can I know when will be the course4 start?</div> 
+                    <div class="feedback-date">
+                        <p>2 Feb 2025</p>
+                    </div>
+                </div>
+
+                <div class="view-all">
+                    <a href="{{ url_for('admin.admin_feedback') }}">View All Feedback <i class="fas fa-arrow-right"></i></a>
+                  </div>
+            </div>
+            <!-- fourth row first card end -->
+    </div>
+    
+
+
+
         </div>
 
         
@@ -244,11 +285,12 @@
                         {{ user_data.inactive_30_days }}
                     ],
                     backgroundColor: [
-                        '#4caf50', // Green
-                        '#ffeb3b', // Yellow
-                        '#f44336'  // Red
+                        '#A9C9A4', // Green
+                        '#ecdc9c', // Yellow
+                        '#ecaa9c'  // Red
                     ],
                     borderWidth: 1
+                    
                 }]
             },
             options: {

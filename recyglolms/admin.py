@@ -364,3 +364,15 @@ def user_progress(userid):
 
     return render_template('each_user_progress.html', user=user, progress_data=progress_data)
 
+#Admin Feedback page
+@admin_bp.route('/admin_feedback')
+@login_required
+def admin_feedback():
+    return render_template('admin_feedback.html')
+
+
+#Admin Activity page
+@admin_bp.route('/Activity')
+@login_required
+def Activity():
+    return render_template('Activity.html')
