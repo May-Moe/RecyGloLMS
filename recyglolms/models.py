@@ -74,6 +74,7 @@ class Module(db.Model):
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
     courseid = db.Column(db.Integer, db.ForeignKey('course.courseid'), nullable=False)
     videos = db.relationship('Video', backref='module', lazy=True)
+    quizzes = db.relationship('Quiz', backref='module', lazy=True)  # Add this line
     
     def calculate_module_progress(self, userid):
         """
@@ -118,3 +119,44 @@ class Progress(db.Model):
         self.watched_duration = watched_duration
         self.completed = completed
         db.session.commit()
+        
+# New models for Quizzes
+
+class Quiz(db.Model):
+    quizid = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)  # Quiz title
+    description = db.Column(db.Text, nullable=True)  # Optional description
+    moduleid = db.Column(db.Integer, db.ForeignKey('module.moduleid'), nullable=False)  # Foreign key to Module
+    created_date = db.Column(db.DateTime, default=datetime.utcnow)
+    questions = db.relationship('Question', backref='quiz', lazy=True,)  # Relationship with questions
+
+
+class Question(db.Model):
+    questionid = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)  # The question text
+    quizid = db.Column(db.Integer, db.ForeignKey('quiz.quizid'), nullable=False)  # Foreign key to Quiz
+    answers = db.relationship('Answer', backref='question', lazy=True)  # Relationship with answers
+
+
+class Answer(db.Model):
+    answerid = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(200), nullable=False)  # Answer text
+    is_correct = db.Column(db.Boolean, default=False)  # Whether this is the correct answer
+    questionid = db.Column(db.Integer, db.ForeignKey('question.questionid'), nullable=False)  # Foreign key to Question
+
+
+class UserResponse(db.Model):
+    responseid = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)  # Foreign key to User
+    quizid = db.Column(db.Integer, db.ForeignKey('quiz.quizid'), nullable=False)  # Foreign key to Quiz
+    score = db.Column(db.Float, default=0)  # Total score for the quiz
+    created_date = db.Column(db.DateTime, default=datetime.utcnow)  # When the user took the quiz
+    user_answers = db.relationship('UserAnswer', backref='response', lazy=True)  # Relationship with UserAnswers
+
+
+class UserAnswer(db.Model):
+    useranswerid = db.Column(db.Integer, primary_key=True)
+    responseid = db.Column(db.Integer, db.ForeignKey('user_response.responseid'), nullable=False)  # Foreign key to UserResponse
+    questionid = db.Column(db.Integer, db.ForeignKey('question.questionid'), nullable=False)  # Foreign key to Question
+    answerid = db.Column(db.Integer, db.ForeignKey('answer.answerid'), nullable=False)  # Foreign key to Answer
+    is_correct = db.Column(db.Boolean, default=False)  # Whether the selected answer was correct

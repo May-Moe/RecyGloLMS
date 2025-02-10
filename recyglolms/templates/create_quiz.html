@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+<h2>Create Quiz</h2>
+<form method="POST" action="{{ url_for('quiz.create_quiz') }}" onsubmit="prepareSubmission()">
+    <input type="hidden" name="module_id" value="{{ module.moduleid }}">
+
+    <div>
+        <label>Course:</label>
+        <span>{{ course.name }}</span>
+    </div>
+    <div>
+        <label>Module:</label>
+        <span>{{ module.name }}</span>
+    </div>
+
+    <div>
+        <label for="quiz_title">Quiz Title:</label>
+        <input type="text" id="quiz_title" name="quiz_title" required>
+    </div>
+    <div>
+        <label for="quiz_description">Quiz Description:</label>
+        <textarea id="quiz_description" name="quiz_description"></textarea>
+    </div>
+
+    <h3>Added Questions:</h3>
+    <div id="added-questions-container">
+        <!-- Added questions will be displayed here -->
+    </div>
+
+    <!-- This hidden input will store all questions and answers in JSON format -->
+    <input type="hidden" id="questions_data" name="questions_data">
+
+    <h3>Add a Question</h3>
+    <div id="questions-container">
+        <div class="question">
+            <label>Question:</label>
+            <input type="text" class="question_text" placeholder="Enter your question" required>
+
+            <div class="answers-container">
+                <label>Answers:</label>
+                <input type="text" class="answer" placeholder="Answer 1" required>
+                <input type="text" class="answer" placeholder="Answer 2" required>
+                <input type="text" class="answer" placeholder="Answer 3" required>
+                <input type="text" class="answer" placeholder="Answer 4" required>
+            </div>
+
+            <label>Correct Answer:</label>
+            <select class="correct_answer" required>
+                <option value="0">Answer 1</option>
+                <option value="1">Answer 2</option>
+                <option value="2">Answer 3</option>
+                <option value="3">Answer 4</option>
+            </select>
+
+            <button type="button" onclick="addQuestionToList(this)">Done</button>
+        </div>
+    </div>
+
+    <button type="button" onclick="addQuestion()">Add Question</button>
+    <button type="submit">Create Quiz</button>
+</form>
+
+<script>
+    let questionsArray = []; // Stores all added questions
+
+    // Function to add a new blank question input section
+    function addQuestion() {
+        const container = document.getElementById('questions-container');
+        const newQuestion = document.createElement('div');
+        newQuestion.className = 'question';
+
+        newQuestion.innerHTML = `
+            <label>Question:</label>
+            <input type="text" class="question_text" placeholder="Enter your question" required>
+
+            <div class="answers-container">
+                <label>Answers:</label>
+                <input type="text" class="answer" placeholder="Answer 1" required>
+                <input type="text" class="answer" placeholder="Answer 2" required>
+                <input type="text" class="answer" placeholder="Answer 3" required>
+                <input type="text" class="answer" placeholder="Answer 4" required>
+            </div>
+
+            <label>Correct Answer:</label>
+            <select class="correct_answer" required>
+                <option value="0">Answer 1</option>
+                <option value="1">Answer 2</option>
+                <option value="2">Answer 3</option>
+                <option value="3">Answer 4</option>
+            </select>
+
+            <button type="button" onclick="addQuestionToList(this)">Done</button>
+        `;
+
+        container.appendChild(newQuestion);
+    }
+
+    // Function to move question from input section to "Added Questions" section
+    function addQuestionToList(button) {
+        const questionDiv = button.parentElement;
+        const questionText = questionDiv.querySelector('.question_text').value;
+        const answerInputs = questionDiv.querySelectorAll('.answer');
+        const correctAnswerSelect = questionDiv.querySelector('.correct_answer');
+
+        // Validate question and answers
+        if (!questionText.trim()) {
+            alert("Please enter a question.");
+            return;
+        }
+        const answers = Array.from(answerInputs).map(input => input.value.trim());
+        if (answers.some(answer => answer === "")) {
+            alert("All answer fields must be filled.");
+            return;
+        }
+        const correctAnswerIndex = correctAnswerSelect.value;
+
+        // Create question object
+        const questionObject = {
+            question: questionText,
+            answers: answers,
+            correct_answer: correctAnswerIndex
+        };
+
+        // Store in array
+        questionsArray.push(questionObject);
+
+        // Display in "Added Questions" section
+        const addedQuestionDiv = document.createElement('div');
+        addedQuestionDiv.classList.add('added-question');
+
+        addedQuestionDiv.innerHTML = `
+            <h4>${questionText}</h4>
+            <ul>
+                ${answers.map((answer, index) => 
+                    `<li ${index == correctAnswerIndex ? 'style="color: green; font-weight: bold;"' : ''}>
+                        ${answer}
+                    </li>`).join('')}
+            </ul>
+            <button type="button" onclick="removeAddedQuestion(this, '${questionText}')">Remove</button>
+        `;
+
+        document.getElementById('added-questions-container').insertBefore(addedQuestionDiv, document.getElementById('added-questions-container').firstChild);
+
+        // Remove input section after moving question
+        questionDiv.remove();
+    }
+
+    // Function to remove a question from the "Added Questions" section and array
+    function removeAddedQuestion(button, questionText) {
+        button.parentElement.remove();
+        questionsArray = questionsArray.filter(q => q.question !== questionText);
+    }
+
+    // Prepare data for submission
+    function prepareSubmission() {
+        document.getElementById('questions_data').value = JSON.stringify(questionsArray);
+    }
+</script>
+
+</body>
+</html>
