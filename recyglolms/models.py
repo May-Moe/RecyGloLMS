@@ -129,6 +129,9 @@ class Quiz(db.Model):
     moduleid = db.Column(db.Integer, db.ForeignKey('module.moduleid'), nullable=False)  # Foreign key to Module
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
     questions = db.relationship('Question', backref='quiz', lazy=True,)  # Relationship with questions
+    
+    # Define the relationship with UserResponse
+    user_responses = db.relationship('UserResponse', backref='quiz', lazy=True)
 
 
 class Question(db.Model):
@@ -146,6 +149,7 @@ class Answer(db.Model):
 
 
 class UserResponse(db.Model):
+    __tablename__ = 'userresponse'  # Specify table name explicitly if needed
     responseid = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)  # Foreign key to User
     quizid = db.Column(db.Integer, db.ForeignKey('quiz.quizid'), nullable=False)  # Foreign key to Quiz
@@ -155,8 +159,13 @@ class UserResponse(db.Model):
 
 
 class UserAnswer(db.Model):
+    __tablename__ = 'useranswer'  # Specify table name explicitly if needed
     useranswerid = db.Column(db.Integer, primary_key=True)
-    responseid = db.Column(db.Integer, db.ForeignKey('user_response.responseid'), nullable=False)  # Foreign key to UserResponse
+    responseid = db.Column(db.Integer, db.ForeignKey('userresponse.responseid'), nullable=False)  # Foreign key to UserResponse
     questionid = db.Column(db.Integer, db.ForeignKey('question.questionid'), nullable=False)  # Foreign key to Question
     answerid = db.Column(db.Integer, db.ForeignKey('answer.answerid'), nullable=False)  # Foreign key to Answer
     is_correct = db.Column(db.Boolean, default=False)  # Whether the selected answer was correct
+    
+      # Relationships
+    question = db.relationship('Question', backref='user_answers', lazy=True)
+    answer = db.relationship('Answer', backref='user_answers', lazy=True)

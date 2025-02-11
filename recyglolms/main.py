@@ -97,7 +97,8 @@ def course_detail(courseid):
         "modules": [
             {
                 "module": module,
-                "videos": module.videos
+                "videos": module.videos,
+                "quizzes": module.quizzes  # Include quizzes for each module
             } for module in modules
         ]
     }

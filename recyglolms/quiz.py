@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
 from recyglolms.__inti__ import db  # Fixed import
-from recyglolms.models import Quiz, Question, Answer, Module, Course
+from recyglolms.models import Quiz, Question, Answer, Module, Course, UserResponse, UserAnswer
 import json  # Use built-in json module
 
 quiz_bp = Blueprint('quiz', __name__)
@@ -154,3 +154,85 @@ def delete_quiz(quiz_id):
     db.session.commit()
 
     return jsonify({"message": "Quiz deleted successfully!"}), 200
+
+# User side quiz functionalities
+
+@quiz_bp.route('/quizzes')
+@login_required
+def user_quizzes():
+    """Display all available quizzes."""
+    quizzes = Quiz.query.all()
+    return render_template('user_quizzes.html', quizzes=quizzes)
+
+@quiz_bp.route('/quiz/<int:quizid>', methods=['GET', 'POST'])
+@login_required
+def start_quiz(quizid):
+    """Start a quiz and display questions."""
+    quiz = Quiz.query.get_or_404(quizid)
+    return render_template('start_quiz.html', quiz=quiz)
+
+@quiz_bp.route('/quiz/<int:quizid>/submit', methods=['POST'])
+@login_required
+def submit_quiz(quizid):
+    """Handles quiz submission and calculates the score."""
+    quiz = Quiz.query.get_or_404(quizid)
+    
+    # Create a new UserResponse entry for the quiz attempt
+    user_response = UserResponse(userid=current_user.userid, quizid=quizid, score=0)
+    db.session.add(user_response)
+    db.session.commit()  # Commit to get responseid
+
+    score = 0
+    total_questions = len(quiz.questions)
+
+    for question in quiz.questions:
+        answer_id = request.form.get(f'question_{question.questionid}')
+        if answer_id:
+            selected_answer = Answer.query.get(int(answer_id))
+            is_correct = selected_answer.is_correct
+
+            # Store the user's answer
+            user_answer = UserAnswer(
+                responseid=user_response.responseid,
+                questionid=question.questionid,
+                answerid=selected_answer.answerid,
+                is_correct=is_correct
+            )
+            db.session.add(user_answer)
+
+            if is_correct:
+                score += 1
+
+    # Update final score
+    user_response.score = (score / total_questions) * 100  # Convert to percentage
+    db.session.commit()
+
+    return redirect(url_for('quiz.quiz_result', responseid=user_response.responseid))
+
+@quiz_bp.route('/quiz/result/<int:responseid>')
+@login_required
+def quiz_result(responseid):
+    """Display the quiz results and user answers for all attempts."""
+    # Get the current user's response for the specific attempt
+    user_response = UserResponse.query.get_or_404(responseid)
+
+    # Ensure user is only viewing their own results
+    if user_response.userid != current_user.userid:
+        return "Unauthorized", 403
+
+    # Get all attempts (user quiz results) for this quiz and order by responseid descending (latest first)
+    user_quiz_results = UserResponse.query.filter_by(userid=current_user.userid, quizid=user_response.quizid) \
+                                           .order_by(UserResponse.responseid.desc()).all()
+
+    # Get the user's answers for the current attempt
+    user_answers = UserAnswer.query.filter_by(responseid=responseid).all()
+
+    # Get answers for each previous attempt as well
+    for result in user_quiz_results:
+        result.answers = UserAnswer.query.filter_by(responseid=result.responseid).all()
+
+    # Render the quiz result page with all user quiz results and answers
+    return render_template('quiz_result.html', 
+                           user_answers=user_answers, 
+                           score=user_response.score,
+                           user_quiz_results=user_quiz_results)
