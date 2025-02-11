@@ -3,9 +3,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/CSS/style.css">
-    <link rel="stylesheet" href="static/CSS/Upload.css">
+    <link rel="stylesheet" href="static/CSS/Activity.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Upload Files</title>
+    <title>Activity</title>
 </head>
 <body>
     <div class="dashboard">
@@ -27,12 +27,11 @@
                     </ul>
                 </div>
                 <div class="dropdown">
-                    
                     <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
-                        <p id="profile-email">{{ current_user_email }}</p>
-                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
+                        <p id="profile-email">may@gmail.com</p>
+                        <button id="logout-button">Logout</button>
                     </div>
                 </div>
             </div>
@@ -55,49 +54,34 @@
         </nav>
         <div class="container">
             <div class="header">
-                <h1>Upload Files</h1>
+                <h1>User's Activities</h1>
                 <div class="header-actions">
-                    <form method="POST" id="search-form" class="mb-4">
-                    <input type="text" id="search_query" placeholder="Search by Name" name="search_query">
-                    </form>
-                    <a href="{{ url_for('upload.upload_file') }}" id="addUploadLink">
-                        <button id="addUserButton"><i class="fas fa-plus"></i>Add New Files</button>
-                    </a>
+                    <input type="text" id="searchBar" placeholder="Search">
                 </div>
             </div>
             <div class="table-container">
-                {% if files %}
                 <table>
                     <thead>
                         <tr>
-                            <th>File Name</th>
-                            <th>File Type</th>
-                            <!-- <th>Course Name</th> -->
-                            <th>Upload Date</th>
-                            <th>Action</th>
+                            <th>ID</th>
+                            <th>User Name</th>
                             <th>Preview</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="userTableBody">
-                        <!-- User data will be populated here -->
-                        {% for file in files %}
-                         <tr>
-                            <td>{{ file.filename }}</td>
-                            <td>{{ file.filetype }}</td>
-                            <td>{{ file.uploaddate }}</td>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.userid }}</td>
+                            <td>{{ user.name }}</td>
                             <td>
-                                <a href="{{ url_for('upload.edit_file', uploadid=file.uploadid) }}" class="editAction"><i class="fas fa-edit"></i></a>
-                                <form action="{{ url_for('upload.delete_file', uploadid=file.uploadid) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="deleteAction" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>
-                                </form>
+                                <a href="admin_view_activity.html" class="view-activity-button">View Activity</a>
                             </td>
                             <td>
-                            <a href="{{ file.preview_url }}" target="_blank " class="viewuploadLink">
-                                <button id="ViewLinkButton">View Upload File</button>
-                            </a>
+                                <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
                             </td>
-                         </tr>
-                         {% endfor %}
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -105,33 +89,34 @@
                 <button id="prevPage">Previous</button>
                 <button id="nextPage">Next</button>
             </div>
-            {% else %}
-        <div class="alert alert-info" role="alert">
-            No files found!
         </div>
-        {% endif %}
+    </div>
+    <!-- Popup Overlay -->
+    <div class="overlay" id="overlay">
+        <div class="modal">
+            <span class="close-icon" id="close-icon"><i class="fa-solid fa-xmark"></i></span>
+            <p class="forgot">For Users, contact your adminstrator to reset your password.</p>
         </div>
     </div>
     <script src="JS/script.js"></script>
     <script>
-        // Debounce function to wait before submitting after typing stops
-        let typingTimer;
-        const doneTypingInterval = 1000; // 1 second
-        const searchBox = $('#search_query');
+        document.addEventListener("DOMContentLoaded", () => {
+    // Function to toggle dropdown visibility
+    const toggleDropdown = (button) => {
+        const dropdown = button.nextElementSibling; // The dropdown next to the button
+        dropdown.classList.toggle('active');
+    };
 
-        // Trigger form submission when the user stops typing
-        searchBox.on('input', function() {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(function() {
-                $('#search-form').submit();
-            }, doneTypingInterval);
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', () => {
+        viewButtons.forEach((button) => {
+            const dropdown = button.nextElementSibling;
+            dropdown.classList.remove('active'); // Remove active class for all dropdowns
         });
+    });
+});
 
-        // Clear timer on keydown
-        searchBox.on('keydown', function() {
-            clearTimeout(typingTimer);
-        });
+
     </script>
-
 </body>
 </html>

@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/user_account.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Upload Files</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
+                        <p id="profile-email">may@gmail.com</p>
+                        <button id="logout-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="user_course.html"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="Alumni-network.html"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="profile-header">
+                <div class="profile-pic">
+                    <img src="static/img/may.jpg" alt="Profile Picture">
+                    <button class="edit-pic"><i class="fa fa-camera"></i></button>
+                </div>
+                <h2>{{ current_username }}</h2>
+                <p class="gmail">{{ current_useremail }}</p>
+            </div>
+            <div class="profile-body">
+                <div class="basic-info">
+                    <h3>Basic Information</h3>
+                    <p><b>Full Name:</b> <span class="editable">{{ current_username }}</span> <button class="edit-btn">✎</button></p>
+                    <p><b>Email Address:</b> {{ current_useremail }}</p>
+                    <p><b>User ID:</b> <button class="add-btn">Add User ID</button></p>
+                    <p><b>Password:</b> <button class="change-password-btn">Change password</button></p>
+                </div>
+                <div class="system-settings">
+                    <h3>System Settings</h3>
+                    <p><b>Language:</b> English (United States)</p>
+                    <p><b>Privacy Settings:</b> Only administrators and other instructors can view my profile information</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="static/JS/script.js"></script>
+</body>
+</html>
