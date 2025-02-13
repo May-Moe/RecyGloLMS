@@ -34,8 +34,22 @@ def view_all_announcements():
     announcements = Announcement.query.all()
     return render_template('viewallannouncement.html', announcements=announcements)
 
+@announcement_bp.route('/announcements_by_date/<string:date>', methods=['GET'])
+@login_required
+def get_announcements_by_date(date):
+    try:
+        selected_date = datetime.strptime(date, '%Y-%m-%d').date()
+        announcements = Announcement.query.filter(db.func.date(Announcement.event_date) == selected_date).all()
 
-# Route to add a new announcement
+        announcement_list = [
+            {"title": ann.title, "content": ann.content, "image": ann.announcement_img}
+            for ann in announcements
+        ]
+        return {"announcements": announcement_list}, 200
+    except ValueError:
+        return {"error": "Invalid date format"}, 400
+
+
 @announcement_bp.route('/add_announcement', methods=['GET', 'POST'])
 @login_required
 def add_announcement():
@@ -46,10 +60,17 @@ def add_announcement():
     if request.method == 'POST':
         title = request.form.get('title')
         content = request.form.get('content')
+        event_date_str = request.form.get('event_date')  # Get event date from form
         file = request.files.get('announcement_img')
 
-        if not title or not content:
-            flash("Both title and content are required!", "danger")
+        if not title or not content or not event_date_str:
+            flash("Title, content, and event date are required!", "danger")
+            return redirect(request.url)
+
+        try:
+            event_date = datetime.strptime(event_date_str, '%Y-%m-%d')  # Convert string to datetime
+        except ValueError:
+            flash("Invalid date format. Please use YYYY-MM-DD.", "danger")
             return redirect(request.url)
 
         # Handle file upload
@@ -57,15 +78,13 @@ def add_announcement():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        elif file:
-            flash("Invalid file format. Allowed formats: png, jpg, jpeg, gif", "danger")
-            return redirect(request.url)
 
         # Create and save new announcement
         new_announcement = Announcement(
             title=title,
             content=content,
             announcement_img=filename,
+            event_date=event_date,
             date=datetime.utcnow(),
             userid=current_user.userid
         )
@@ -73,17 +92,16 @@ def add_announcement():
         db.session.add(new_announcement)
         db.session.commit()
 
-        flash("Announcement added successfully!", "success")
+        flash("Announcement scheduled successfully!", "success")
         return redirect(url_for('announcement.view_all_announcements'))
 
     return render_template('addannounce.html')
 
 
-# Route to edit an existing announcement
 @announcement_bp.route('/edit_announcement/<int:announcement_id>', methods=['GET', 'POST'])
 @login_required
 def edit_announcement(announcement_id):
-    if not current_user.role:  # Ensure only admins can access
+    if not current_user.role:
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
@@ -92,13 +110,19 @@ def edit_announcement(announcement_id):
     if request.method == 'POST':
         title = request.form.get('title')
         content = request.form.get('content')
+        event_date_str = request.form.get('event_date')
         file = request.files.get('announcement_img')
 
-        if not title or not content:
-            flash("Both title and content are required!", "danger")
+        if not title or not content or not event_date_str:
+            flash("Title, content, and event date are required!", "danger")
             return redirect(request.url)
 
-        # Handle file upload if a new file is provided
+        try:
+            event_date = datetime.strptime(event_date_str, '%Y-%m-%d')
+        except ValueError:
+            flash("Invalid date format. Please use YYYY-MM-DD.", "danger")
+            return redirect(request.url)
+
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -107,6 +131,7 @@ def edit_announcement(announcement_id):
         # Update the announcement
         announcement.title = title
         announcement.content = content
+        announcement.event_date = event_date
         announcement.date = datetime.utcnow()
 
         db.session.commit()

@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import db, bcrypt, app
-from recyglolms.models import User, Course, Module, Video
+from recyglolms.models import User, Course, Module, Video, Feedback
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -80,6 +80,10 @@ def dashboard():
        
     current_user_name = current_user.name,
     current_user_email = current_user.email
+    
+    
+    #Pass feedback data to the template
+    feedbacks = db.session.query(Feedback, User).join(User).all()  # Fetch feedback with user details
   
     
     return render_template('dashboard.html',
@@ -90,7 +94,8 @@ def dashboard():
         courses=course_data,
         user_data=user_data,
         current_user_name=current_user_name,
-        current_user_email=current_user_email)
+        current_user_email=current_user_email,
+        feedbacks=feedbacks)
 
 # Route for adding a new user
 @admin_bp.route('/adduser', methods=['GET', 'POST'])
@@ -141,10 +146,11 @@ def view_users():
 
     users = User.query  # Base query for users
 
-    # Check if the request is a POST
+    # Handle POST requests
     if request.method == 'POST':
         search_query = request.form.get('search_query', '').strip()  # Get search query from the form
         inactivity_filter = request.form.get('inactivity_filter', '').strip()  # Get inactivity filter from dropdown
+        sort_order = request.form.get('sort_order', 'desc')  # Get sort order (default: 'desc' for descending)
 
         # Filter by email if a search query is provided
         if search_query:
@@ -163,10 +169,19 @@ def view_users():
                 threshold_date = datetime.utcnow() - timedelta(days=days)
                 users = users.filter((User.last_login == None) | (User.last_login < threshold_date))
 
+        # Sorting by Last Login
+        if sort_order == 'desc':
+            users = users.order_by(User.last_login.desc())  # Sort by Last Login Descending
+        else:
+            users = users.order_by(User.last_login.asc())  # Sort by Last Login Ascending
+
     # Execute the query and fetch all users
     users = users.all()
+    
+    current_user_name = current_user.name,
+    current_user_email = current_user.email
 
-    return render_template('viewallusers.html', users=users)
+    return render_template('viewallusers.html', users=users, current_user_name=current_user_name, current_user_email=current_user_email)
 
 
 # Route to edit a user
@@ -364,11 +379,11 @@ def user_progress(userid):
 
     return render_template('each_user_progress.html', user=user, progress_data=progress_data)
 
-#Admin Feedback page
 @admin_bp.route('/admin_feedback')
 @login_required
-def admin_feedback():
-    return render_template('admin_feedback.html')
+def view_feedbacks():
+    feedbacks = db.session.query(Feedback, User).join(User).all()  # Fetch feedback with user details
+    return render_template('admin_feedback.html', feedbacks=feedbacks)
 
 
 #Admin Activity page

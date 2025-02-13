@@ -24,6 +24,7 @@ class Announcement(db.Model):
     title = db.Column(db.String(200), nullable=False)
     announcement_img = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    event_date = db.Column(db.DateTime, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
     userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
 
@@ -42,6 +43,13 @@ class Activity(db.Model):
     description = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
     userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    image = db.relationship('ActivityImage', backref='activity_ref', lazy=True, cascade="all, delete-orphan")
+
+class ActivityImage(db.Model):
+    __tablename__ = 'activity_image'
+    id = db.Column(db.Integer, primary_key=True)
+    activityid = db.Column(db.Integer, db.ForeignKey('activity.activityid'), nullable=False)
+    activity_image = db.Column(db.String(200), nullable=False)
 
 
 class Course(db.Model):
@@ -169,3 +177,14 @@ class UserAnswer(db.Model):
       # Relationships
     question = db.relationship('Question', backref='user_answers', lazy=True)
     answer = db.relationship('Answer', backref='user_answers', lazy=True)
+    
+    
+# New models for Feedbacks
+class Feedback(db.Model):
+    __tablename__ = 'feedback' # Specify table name explicitly if needed
+    feedbackid = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    feedback = db.Column(db.Text, nullable=False)  # Feedback text
+    submit_date = db.Column(db.DateTime, default=datetime.utcnow)  # Submission timestamp
+
+    user = db.relationship('User', backref='feedbacks')

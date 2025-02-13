@@ -38,7 +38,7 @@
                     <div id="profile-dropdown" class="dropdown-menu hidden">
                         <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
                         <p id="profile-email">{{ current_user_email }}</p>
-                        <button id="logout-button">Logout</button>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
                 </div>
             </div>
@@ -168,28 +168,6 @@
             </div>
             <!-- second row in dashboard end -->
 
-            <!-- third row start -->
-        <div class="chart3">
-            <!-- third row first card -->
-            <div class="card3">
-                <div class="card3-title">Feedback Box</div>
-                <div class="card3-value">
-                    <div class="card3-profile">
-                        <img src="static/img/profile.webp" alt="">
-                    </div>
-                    <div class="feedback-title">Sir, Can I know when will be the course4 start?</div> 
-                    <div class="feedback-date">
-                        <p>2 Feb 2025</p>
-                    </div>
-                </div>
-
-                <div class="view-all">
-                    <a href="{{ url_for('admin.admin_feedback') }}">View All Feedback <i class="fas fa-arrow-right"></i></a>
-                  </div>
-            </div>
-            <!-- third row first card end -->
-    </div>
-         <!-- third row end -->
 
 
          <!-- fourth row start -->
@@ -197,74 +175,122 @@
             <!-- fourth row first card -->
             <div class="card3">
                 <div class="card3-title">Feedback Box</div>
-                <div class="card3-value">
-                    <div class="card3-profile">
-                        <img src="static/img/profile.webp" alt="">
+                <h2>User Feedbacks</h2>
+                <div class="feedback-container">
+                    {% for feedback, user in feedbacks %}
+                    <div class="card3-value">
+                        <div class="card3-profile">
+                            <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="User Profile">
+                        </div>
+                        <p>{{ user.name }}</p>
+                        <div class="feedback-content">{{ feedback.feedback }}</div> 
+                        <div class="feedback-date">
+                            <p>{{ feedback.submit_date.strftime('%d %b %Y') }}</p>
+                        </div>
                     </div>
-                    <div class="feedback-title">Sir, Can I know when will be the course4 start?</div> 
-                    <div class="feedback-date">
-                        <p>2 Feb 2025</p>
-                    </div>
+                    {% endfor %}
                 </div>
 
                 <div class="view-all">
-                    <a href="{{ url_for('admin.admin_feedback') }}">View All Feedback <i class="fas fa-arrow-right"></i></a>
+                    <a href="{{ url_for('admin.view_feedbacks') }}">View All Feedback <i class="fas fa-arrow-right"></i></a>
                   </div>
             </div>
             <!-- fourth row first card end -->
     </div>
-    
-
-
-
         </div>
-
-        
         <!-- Announcement section start -->
-        <div class="announcements">
-            <h2>Announcements</h2>
-            <ul>
-                <li class="announcement-item">
-                    <div class="calendar-container">
-                        <div class="calendar">
-                            <header>
-                                <pre class="left">◀</pre>
-                                <div class="header-display">
-                                    <p class="display">""</p>
-                                </div>
-  
-                                <pre class="right">▶</pre>
-  
-                            </header>
-  
-                        <div class="week">
-                            <div>Su</div>
-                            <div>Mo</div>
-                            <div>Tu</div>
-                            <div>We</div>
-                            <div>Th</div>
-                            <div>Fr</div>
-                            <div>Sa</div>
-                        </div>
-                        <div class="days"></div>
-                        </div>
-                    <div class="display-selected">
-                        <p class="selected"></p>
+    <div class="announcements">
+        <h2>Announcements</h2>
+        <div class="calendar-container">
+            <div class="calendar">
+                <header>
+                    <span class="left">◀</span>
+                    <div class="header-display">
+                        <p class="display"></p>
                     </div>
+                    <span class="right">▶</span>
+                </header>
+
+                <div class="week">
+                    <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
                 </div>
-                    </li>
-                <li class="announcement-item">
-                    <img src="static/img/gg.jpg" alt="Announcement Image">
-                </li>
-                <li class="announcement-item">
-                    <img src="static/img/home.webp" alt="Announcement Image">
-                </li>
-            </ul>
+                <div class="days"></div>
+            </div>
         </div>
-        <!-- Announcement sesssion end -->
+
+        <div class="announcement-list">
+            <h3 class="selected-date">Select a date to view announcements</h3>
+            <ul class="announcement-items"></ul>
+        </div>
+    </div>
+    <!-- Announcement section end -->
     </div>
     <script src="static/JS/script.js"></script>
     <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const daysContainer = document.querySelector(".days");
+            const selectedDateDisplay = document.querySelector(".selected-date");
+            const announcementContainer = document.querySelector(".announcement-items");
+        
+            // Generate calendar dynamically
+            function generateCalendar(year, month) {
+                daysContainer.innerHTML = ""; // Clear previous days
+                const firstDay = new Date(year, month, 1).getDay();
+                const lastDate = new Date(year, month + 1, 0).getDate();
+                
+                for (let i = 0; i < firstDay; i++) {
+                    const emptyDiv = document.createElement("div");
+                    emptyDiv.classList.add("empty-day");
+                    daysContainer.appendChild(emptyDiv);
+                }
+        
+                for (let day = 1; day <= lastDate; day++) {
+                    const dayElement = document.createElement("div");
+                    dayElement.classList.add("day");
+                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    dayElement.dataset.date = dateStr;
+                    dayElement.textContent = day;
+                    daysContainer.appendChild(dayElement);
+                }
+            }
+        
+            // Get current month & year
+            const today = new Date();
+            let currentYear = today.getFullYear();
+            let currentMonth = today.getMonth();
+            
+            generateCalendar(currentYear, currentMonth);
+        
+            // Handle clicking on a date
+            daysContainer.addEventListener("click", function (event) {
+                if (event.target.classList.contains("day")) {
+                    const selectedDate = event.target.dataset.date;
+                    selectedDateDisplay.textContent = `Announcements for: ${selectedDate}`;
+        
+                    // Fetch announcements from the backend
+                    fetch(`/announcements_by_date/${selectedDate}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            announcementContainer.innerHTML = ""; // Clear previous announcements
+                            if (data.announcements.length === 0) {
+                                announcementContainer.innerHTML = "<li>No announcements for this date.</li>";
+                            } else {
+                                data.announcements.forEach(announcement => {
+                                    const announcementItem = `
+                                        <ul class="announcement-item">
+                                            <li><h3>${announcement.title}</h3></li>
+                                            <li><p>${announcement.content}</p></li>
+                                            <li>${announcement.image ? `<img src="/static/announcements/${announcement.image}" alt="Announcement Image">` : ""}</li>
+                                        </ul>`;
+                                    announcementContainer.innerHTML += announcementItem;
+                                });
+                            }
+                        })
+                        .catch(error => console.error("Error fetching announcements:", error));
+                }
+            });
+        });
         const ctx = document.getElementById('userActivityChart').getContext('2d');
 
         const userActivityChart = new Chart(ctx, {

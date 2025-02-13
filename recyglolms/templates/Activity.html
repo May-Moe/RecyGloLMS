@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,7 +20,6 @@
                     <i class="fas fa-bell"></i>
                     <span id="notification-count" class="notification-count">0</span>
                 </button>
-
                 <div id="notification-dropdown" class="notification-dropdown hidden">
                     <ul id="notification-list">
                         <li>New course available: "Recycling 101"</li>
@@ -36,27 +36,12 @@
                 </div>
             </div>
         </nav>
-        <nav class="sidebar">
-            <div class="logo" style="text-align: left;">
-                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
-            </div>
-            <ul>
-                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
-                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
-                <li><a href="{{ url_for('admin.Activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
-                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
-                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
-                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
-                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
-                <li><a href="#"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
-                <li><a href="#"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
-            </ul>
-        </nav>
         <div class="container">
             <div class="header">
                 <h1>User's Activities</h1>
                 <div class="header-actions">
                     <input type="text" id="searchBar" placeholder="Search">
+                    <button id="addActivityBtn">Add Activity</button>
                 </div>
             </div>
             <div class="table-container">
@@ -91,32 +76,38 @@
             </div>
         </div>
     </div>
-    <!-- Popup Overlay -->
-    <div class="overlay" id="overlay">
+    
+    <!-- Add Activity Modal -->
+    <div class="overlay hidden" id="activityOverlay">
         <div class="modal">
-            <span class="close-icon" id="close-icon"><i class="fa-solid fa-xmark"></i></span>
-            <p class="forgot">For Users, contact your adminstrator to reset your password.</p>
+            <span class="close-icon" id="closeActivityModal"><i class="fa-solid fa-xmark"></i></span>
+            <h2>Add Activity</h2>
+            <form id="activityForm">
+                <label for="activityName">Activity Name:</label>
+                <input type="text" id="activityName" name="activityName" required>
+                
+                <label for="activityImages">Upload Images:</label>
+                <input type="file" id="activityImages" name="activityImages" multiple accept="image/*">
+                
+                <button type="submit">Submit</button>
+            </form>
         </div>
     </div>
-    <script src="JS/script.js"></script>
+    
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-    // Function to toggle dropdown visibility
-    const toggleDropdown = (button) => {
-        const dropdown = button.nextElementSibling; // The dropdown next to the button
-        dropdown.classList.toggle('active');
-    };
-
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', () => {
-        viewButtons.forEach((button) => {
-            const dropdown = button.nextElementSibling;
-            dropdown.classList.remove('active'); // Remove active class for all dropdowns
+            const addActivityBtn = document.getElementById("addActivityBtn");
+            const activityOverlay = document.getElementById("activityOverlay");
+            const closeActivityModal = document.getElementById("closeActivityModal");
+            
+            addActivityBtn.addEventListener("click", () => {
+                activityOverlay.classList.remove("hidden");
+            });
+            
+            closeActivityModal.addEventListener("click", () => {
+                activityOverlay.classList.add("hidden");
+            });
         });
-    });
-});
-
-
     </script>
 </body>
 </html>
