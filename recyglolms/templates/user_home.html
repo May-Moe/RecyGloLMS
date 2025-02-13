@@ -105,19 +105,11 @@
             
                     <div class="support-card feedback-form">
                         <div class="support-icon">💬</div>
-                        <h2> Feedback Form</h2>
-                        <form id="FeedbackForm">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" name="name" placeholder="Enter Name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" placeholder="Enter Email" required>
-                            </div>
+                        <h2>Feedback Form</h2>
+                        <form id="FeedbackForm" action="{{ url_for('main.submit_feedback') }}" method="POST">
                             <div class="form-group">
                                 <label for="message">Message</label>
-                                <textarea name="message" id="message" placeholder="Enter Message"></textarea>
+                                <textarea name="message" id="message" placeholder="Enter your feedback" required></textarea>
                             </div>
                             <button class="submit-button" type="submit">Submit</button>
                         </form>

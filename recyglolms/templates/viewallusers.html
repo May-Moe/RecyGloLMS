@@ -66,6 +66,12 @@
                         <option value="15" id="inactivity_filter1" {% if request.form.get('inactivity_filter') == '15' %}selected{% endif %}>More than 15 days</option>
                         <option value="30" id="inactivity_filter1" {% if request.form.get('inactivity_filter') == '30' %}selected{% endif %}>More than 30 days</option>
                     </select>
+                     <!-- Sort by Last Login -->
+                    <select id="sort_order" name="sort_order" class="form-control">
+                        <option value="desc" {% if request.form.get('sort_order') == 'desc' %}selected{% endif %}>Sort by Last Login (Descending)</option>
+                        <option value="asc" {% if request.form.get('sort_order') == 'asc' %}selected{% endif %}>Sort by Last Login (Ascending)</option>
+                    </select>
+
                     <!-- Submit Button -->
                     <button type="submit" class="filter">Filter</button>
                 

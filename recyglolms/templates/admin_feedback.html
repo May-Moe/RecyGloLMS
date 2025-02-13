@@ -54,35 +54,17 @@
         </nav>
         <div class="container">
         <h2 style="margin-bottom: 15px;">Feedback <span class="count">2</span></h2>
+        {% for feedback, user in feedbacks %}
         <div class="feedback-card">
             <div class="user-info">
-                <img src="static/img/may.jpg" alt="User" class="avatar">
-                <span class="username">Kamisato Ayato</span>
-                <span class="time">2 hours ago</span>
+                <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="User" class="avatar">
+                <span class="username">{{ user.name }}</span>
+                <span class="time">{{ feedback.submit_date.strftime('%d %b %Y') }}</span>
             </div>
-            <div class="tags">
-                <span class="tag">Shirt</span>
-                <span class="tag">Product</span>
-                <span class="tag satisfied">Very Satisfied</span>
-            </div>
-            <h3>User-Friendly App Enhances Shopping Experience</h3>
-            <p>I'm very impressed with the ease of use of this app. From intuitive navigation to speedy checkout, everything makes my shopping experience much more enjoyable.</p>
+            <h3>User Feedback</h3>
+            <p>{{ feedback.feedback }}</p>
         </div>
-
-        <div class="feedback-card">
-            <div class="user-info">
-                <img src="static/img/may.jpg" alt="User" class="avatar">
-                <span class="username">Kamisato Ayaka</span>
-                <span class="time">2 hours ago</span>
-            </div>
-            <div class="tags">
-                <span class="tag">Shirt</span>
-                <span class="tag">Product</span>
-                <span class="tag neutral">Neutral</span>
-            </div>
-            <h3>Product Quality Meets Expectations, Worth Buying Again</h3>
-            <p>The product I received is exactly as advertised. The quality is excellent and meets my expectations. I will definitely buy again from this store in the future.</p>
-        </div>
+        {% endfor %}
         </div>
 
     </main>

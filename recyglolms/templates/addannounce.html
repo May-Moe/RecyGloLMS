@@ -63,6 +63,8 @@
                 <div class="form-group">
                     <label for="content">Content</label>
                     <input type="text" id="content" name="content" required>
+                    <label for="event_date">Event Date:</label>
+                    <input type="date" name="event_date" required>
                 </div>
                 <div class="form-group">
                     <label for="announcement_img" style="color: white; background-color: #A9C9A4; padding: 14px 5px; border-radius: 5px; font-size: 14px;">Click to Choose file</label>
@@ -85,6 +87,8 @@
         fileUpload.addEventListener('change', function(){
             fileChosen.textContent = this.files[0].name;
         });
+
+        
     </script>
 </body>
 </html>
