@@ -131,15 +131,10 @@ input[type="file"] {
 
 @media (max-width: 768px) {
     .container {
-        width: 100%;
-        margin-left: 60px;
-        margin-top: 120px; /* Adjust top margin for smaller screens */
-        padding: 20px;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto; 
+        margin-top: 100px;
     }
-
-    .buttons {
-        flex-direction: column; /* Stack buttons vertically on small screens */
-        align-items: stretch; /* Stretch buttons to full width */
-        gap: 15px; /* Add spacing between stacked buttons */
-    }
+    
 }

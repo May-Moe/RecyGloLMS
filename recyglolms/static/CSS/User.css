@@ -13,7 +13,7 @@ body {
     margin-left: 300px; /* Offset for sidebar */
     margin-top: 100px;
     margin-right: 60px;
-    margin-bottom: 600px;
+    margin-bottom: 60px;
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
@@ -62,7 +62,7 @@ h1 {
     padding: 10px 20px;
     font-size: 13px;
     color: #fff;
-    background-color: #16a159;
+    background-color: #A9C9A4;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -76,7 +76,7 @@ h1 {
     padding: 10px 20px;
     font-size: 13px;
     color: #fff;
-    background-color: #16a159;
+    background-color: #A9C9A4;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -190,10 +190,9 @@ th {
 /* Responsive styles */
 @media (max-width: 768px) {
     .container {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 100px;
-        margin-bottom: 600px;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
     }
     .header {
         flex-direction: column;
@@ -206,50 +205,8 @@ th {
         justify-content: space-between;
     }
 
-    #searchBar {
-        width: calc(100% - 130px); /* Adjust width based on button size */
-        margin-right: 0;
-    }
-
-    #addUserButton {
-        width: 120px;
-        justify-content: center;
-    }
     .table-container {
         overflow-x: auto;
     }
 }
 
-@media (max-width: 480px) {
-    .container {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 100px;
-        
-        
-    }
-    .header-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    #searchBar {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    #addUserButton {
-        width: 100%;
-    }
-    .table-container {
-        overflow-x: auto;
-    }
-
-    table {
-        width: 100%;
-    }
-
-    th, td {
-        padding: 8px;
-    }
-}

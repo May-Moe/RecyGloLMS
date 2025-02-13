@@ -277,7 +277,8 @@ body {
     }
 
     .sidebar ul li a:hover {
-        background-color: #094124;
+        background-color: #9f9f9f;
+        padding-right: 10px;
     }
 
     .toggle-button {

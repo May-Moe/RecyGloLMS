@@ -78,7 +78,7 @@
                         <p>No image uploaded</p>
                     {% endif %}
                     <div class="form-group">
-                        <label for="announcement_img" style="color: green;">Click to Choose file</label>
+                        <label for="announcement_img" style="color: white; background-color: #A9C9A4; padding: 14px 5px; border-radius: 5px; font-size: 14px;">Click to Choose file</label>
                         <input id="announcement_img" type="file" name="announcement_img" required>
                         <span id="file-chosen">No file chosen</span>
                         <!-- <input type="file" name="file" id="file" required> -->
@@ -89,7 +89,7 @@
                     <input type="date" id="date" name="date" class="form-control" value="{{ announcement.date}}" disabled>
                 </div>
                 <div class="buttons">
-                    <button type="submit">Save Changes</button>
+                    <button type="submit" class="submit-button">Save Changes</button>
                     <a href="{{ url_for('announcement.view_all_announcements') }}"><button type="button" class="cancel-button">Cancel</button></a>
                 </div>
             </form>
