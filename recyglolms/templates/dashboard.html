@@ -21,19 +21,32 @@
             </button>
             <div class="profile-right">
                 <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+        
+                <!-- Language Selection Dropdown -->
+                <div class="language-selector">
+                    <select id="language-dropdown" onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="es">Thailand</option>
+                        <option value="fr">Myanmar</option>
+                        <option value="de">South Korea</option>
+                        <option value="mm">Vietnam</option>
+                        <option value="mm">Indonesia</option>
+                    </select>
+                </div>
+        
                 <button class="notification-button" id="notification-button">
                     <i class="fas fa-bell"></i>
                     <span id="notification-count" class="notification-count">0</span>
                 </button>
-
+        
                 <div id="notification-dropdown" class="notification-dropdown hidden">
                     <ul id="notification-list">
                         <li>New course available: "Recycling 101"</li>
                         <li>Your activity submission is pending review.</li>
                     </ul>
                 </div>
+        
                 <div class="dropdown">
-                    
                     <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
                         <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
@@ -43,6 +56,7 @@
                 </div>
             </div>
         </nav>
+        
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
                 <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
@@ -55,8 +69,9 @@
                 <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
                 <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
-                <li><a href="#"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
-                <li><a href="#"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
             </ul>
         </nav>
         <!-- nav end -->
@@ -177,14 +192,13 @@
             <!-- fourth row first card -->
             <div class="card3">
                 <div class="card3-title">Feedback Box</div>
-                <h2>User Feedbacks</h2>
                 <div class="feedback-container">
-                    {% for feedback, user in feedbacks %}
+                    {% for feedback, user in feedbacks[:3] %}
                     <div class="card3-value">
                         <div class="card3-profile">
                             <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="User Profile">
                         </div>
-                        <p>{{ user.name }}</p>
+                        <h4>{{ user.name }}</h4>
                         <div class="feedback-content">{{ feedback.feedback }}</div> 
                         <div class="feedback-date">
                             <p>{{ feedback.submit_date.strftime('%d %b %Y') }}</p>
@@ -194,7 +208,7 @@
                 </div>
 
                 <div class="view-all">
-                    <a href="{{ url_for('admin.view_feedbacks') }}">View All Feedback <i class="fas fa-arrow-right"></i></a>
+                    <a href="{{ url_for('admin.admin_feedback') }}">View All Feedback <i class="fas fa-arrow-right"></i></a>
                   </div>
             </div>
             <!-- fourth row first card end -->
@@ -369,6 +383,36 @@
             },
             plugins: [ChartDataLabels]
         });
+
+        function changeLanguage(selectedLanguage) {
+    // Store selected language in localStorage for persistence
+    localStorage.setItem("selectedLanguage", selectedLanguage);
+    
+    // You can redirect or reload page based on the selected language
+    console.log("Language changed to:", selectedLanguage);
+    
+    // Optionally, send the selected language to the backend if needed
+    fetch('/change-language', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ language: selectedLanguage })
+    }).then(response => response.json())
+    .then(data => {
+        console.log("Language updated:", data);
+        location.reload();  // Reload to apply changes
+    }).catch(error => console.error("Error changing language:", error));
+}
+
+// Preserve selected language on page load
+document.addEventListener("DOMContentLoaded", function () {
+    const savedLanguage = localStorage.getItem("selectedLanguage");
+    if (savedLanguage) {
+        document.getElementById("language-dropdown").value = savedLanguage;
+    }
+});
+
     </script>
 </body>
 </html>

@@ -32,7 +32,9 @@ def view_all_announcements():
         return redirect(url_for('auth.login'))
     
     announcements = Announcement.query.all()
-    return render_template('viewallannouncement.html', announcements=announcements)
+    return render_template('viewallannouncement.html', announcements=announcements,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @announcement_bp.route('/announcements_by_date/<string:date>', methods=['GET'])
 @login_required
@@ -95,7 +97,9 @@ def add_announcement():
         flash("Announcement scheduled successfully!", "success")
         return redirect(url_for('announcement.view_all_announcements'))
 
-    return render_template('addannounce.html')
+    return render_template('addannounce.html',
+    current_user_name = current_user.name,
+    current_user_email = current_user.email)
 
 
 @announcement_bp.route('/edit_announcement/<int:announcement_id>', methods=['GET', 'POST'])
@@ -131,6 +135,7 @@ def edit_announcement(announcement_id):
         # Update the announcement
         announcement.title = title
         announcement.content = content
+        announcement.img = filename
         announcement.event_date = event_date
         announcement.date = datetime.utcnow()
 
@@ -139,7 +144,10 @@ def edit_announcement(announcement_id):
         flash("Announcement updated successfully!", "success")
         return redirect(url_for('announcement.view_all_announcements'))
 
-    return render_template('editannouncement.html', announcement=announcement)
+    return render_template('editannouncement.html',
+                            announcement=announcement,
+                            current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 # Route to delete an announcement

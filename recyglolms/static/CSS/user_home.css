@@ -85,7 +85,7 @@ h1 {
 .about-us {
     position: relative;
     width: 100%;
-    height: 520px; 
+    height: 600px; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,7 +123,8 @@ h1 {
     text-align: center;
     color: white;
     width: 50%;
-    height: 60%;
+    height: auto;
+    max-width: 90%;
 }
 
 .text-box h2 {
@@ -377,26 +378,34 @@ h1 {
 }
 
 /* Individual Image Cards */
-.ann-text1, .ann-text2 {
+.announcement-item {
     flex: 1; /* Ensures both containers take equal space */
     max-width: 600px; /* Set a fixed width */
-    height: 350px; /* Set a fixed height */
+    height: auto; /* Set a fixed height */
     overflow: hidden; /* Prevents overflow */
     border-radius: 10px; /* Optional: rounded corners */
 }
 
 /* Make images same size */
-.ann-text1 img, .ann-text2 img{
+.ann-img{
     width: 100%;
     height: 100%;
     object-fit: cover; /* Ensures images fit properly */
     border-radius: 10px;
+    border: 1px solid rgb(220, 220, 220);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ann-img:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Contact Us Section */
 .contact-us {
     text-align: center;
     padding: 50px 20px;
+    background-color: #f4f4f4;
 }
 
 /* Heading */
@@ -547,20 +556,6 @@ h3{
     background-color: #45a049;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .contact-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .card {
-        width: 100%;
-        max-width: 420px;
-    }
-}
-
-
 footer {
     text-align: center;
     padding: 20px;
@@ -576,6 +571,20 @@ footer p{
     color: white;
     margin-bottom: 10px;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contact-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 420px;
+    }
+}
+
 
 @media (max-width: 768px) {
     .container {
@@ -606,6 +615,19 @@ footer p{
     .about-image img {
         margin-left: 0;
         margin-top: 15px;
+    }
+
+    .text-box {
+        width: 70%;
+        padding: 40px;
+    }
+
+    .text-box h2 {
+        font-size: 20px;
+    }
+
+    .text-box p {
+        font-size: 14px;
     }
 
     .card {

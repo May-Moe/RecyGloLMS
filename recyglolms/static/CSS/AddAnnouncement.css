@@ -40,7 +40,9 @@ label {
 }
 
 input[type="text"],
-input[type="file"] {
+input[type="file"],
+input[type="date"]
+{
     width: 100%;
     padding: 15px;
     border: 1px solid #ccc;

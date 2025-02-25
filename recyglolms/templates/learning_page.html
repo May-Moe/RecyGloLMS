@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="static/CSS/style.css">
     <link rel="stylesheet" href="static/CSS/user_course.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Upload Files</title>
+    <title>Learning Page</title>
 </head>
 <body>
     <div class="dashboard">
@@ -29,9 +29,9 @@
                 <div class="dropdown">
                     <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
-                        <p id="profile-email">may@gmail.com</p>
-                        <button id="logout-button">Logout</button>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                 <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
-                <li><a href="Alumni-network.html"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
             </ul>
         </nav>
         <div class="container">
@@ -54,20 +54,15 @@
                 <h2 style="color: #A9C9A4;">Course Overviews</h2>
              </div>
             <div class="filters">
-                <div class="filter-label">Filter/order my course list:</div>
-                <select class="filter-select">
-                    <option value="">Show all Years</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                 <option value="2024">2024</option>
-                </select>
+                <!-- <div class="filter-label">Filter/order my course list:</div> -->
     
-                <select class="filter-select">
-                    <option value="">Show all Categories</option>
-                    <option value="web-development">Web Development</option>
-                    <option value="data-science">Data Science</option>
-                    <option value="design">Design</option>
+                <select class="filter-select" id="courseFilter">
+                    <option value="all">Show all Courses</option>
+                    {% for course in courses %}
+                        <option value="{{ course.name|lower|replace(' ', '-') }}">{{ course.name }}</option>
+                    {% endfor %}
                 </select>
+                <input type="text" id="searchBar" placeholder="Search By Courses">
             </div>
             {% for course in courses %}
             <div class="course-list">
@@ -82,27 +77,37 @@
         </div>
     <script src="static/JS/script.js"></script>
     <script>
-        const filterSelects = document.querySelectorAll('.filter-select');
-        const courseItems = document.querySelectorAll('.course-item');
-        filterSelects.forEach(select => {
-    select.addEventListener('change', () => {
-        const yearFilter = filterSelects[0].value;
-        const categoryFilter = filterSelects[1].value;
-        courseItems.forEach(item => {
-            const itemYear = item.getAttribute('data-year');
-            const itemCategory = item.getAttribute('data-category');
-            const yearMatch = yearFilter === '' || itemYear === yearFilter;
-            const categoryMatch = categoryFilter === '' || itemCategory === categoryFilter;
-            if (yearMatch && categoryMatch) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
+        // Filter Courses by Course Name
+        document.getElementById("courseFilter").addEventListener("change", function () {
+            const selectedValue = this.value;
+            const courseItems = document.querySelectorAll(".course-item");
+    
+            courseItems.forEach((item) => {
+                const courseName = item.querySelector(".course-title").innerText.toLowerCase();
+                // Filter by the selected course or show all courses
+                if (selectedValue === "all" || courseName.toLowerCase().replace(' ', '-') === selectedValue) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
         });
-    });
-});
+    
+        // Search Functionality for Course Name
+        document.getElementById("searchBar").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let courseItems = document.querySelectorAll(".course-item");
+    
+            courseItems.forEach(item => {
+                let courseName = item.querySelector(".course-title").innerText.toLowerCase();
+                if (courseName.includes(filter)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
     </script>
-
-    </script>
+    
 </body>
 </html>

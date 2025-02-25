@@ -3,163 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Quiz</title>
+    <title>Quiz Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <script>
-        // This function toggles the edit mode for a specific question
-        function toggleEditQuestion(questionId) {
-            let textElement = document.getElementById(`question-text-${questionId}`);
-            let textareaElement = document.getElementById(`question-textarea-${questionId}`);
-
-            if (textElement.style.display === "none") {
-                textElement.style.display = "block"; // Show text
-                textareaElement.style.display = "none"; // Hide textarea
-            } else {
-                textElement.style.display = "none"; // Hide text
-                textareaElement.style.display = "block"; // Show textarea
+    <link rel="stylesheet" href="../static/CSS/style.css">
+    <link rel="stylesheet" href="../static/CSS/view_quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="../static/JS/script.js"></script>
+    
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="../static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="../static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo">
+                <img src="../static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+                <li><a href="{{ url_for('quiz.user_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+            </ul>
+        </nav>
+        <script>
+            // This function toggles the edit mode for a specific question
+            function toggleEditQuestion(questionId) {
+                let textElement = document.getElementById(`question-text-${questionId}`);
+                let textareaElement = document.getElementById(`question-textarea-${questionId}`);
+    
+                if (textElement.style.display === "none") {
+                    textElement.style.display = "block"; // Show text
+                    textareaElement.style.display = "none"; // Hide textarea
+                } else {
+                    textElement.style.display = "none"; // Hide text
+                    textareaElement.style.display = "block"; // Show textarea
+                }
             }
-        }
-
-        // This function toggles the edit mode for a specific answer
-        function toggleEditAnswer(questionId, answerIndex) {
-            let answerTextElement = document.getElementById(`answer-span-${questionId}-${answerIndex}`);
-            let answerInputElement = document.getElementById(`answer-input-${questionId}-${answerIndex}`);
-            let radioButtons = document.getElementsByName(`correct-answer-${questionId}`);
-
-            if (answerTextElement.style.display === "none") {
-                answerTextElement.style.display = "block"; // Show answer text
-                answerInputElement.style.display = "none"; // Hide input for editing
-                // Hide the radio buttons when editing ends
-                radioButtons.forEach(radio => radio.style.display = "none");
-            } else {
-                answerTextElement.style.display = "none"; // Hide answer text
-                answerInputElement.style.display = "block"; // Show input for editing
-                // Show the radio buttons when editing starts
-                radioButtons.forEach(radio => radio.style.display = "inline-block");
+    
+            // This function toggles the edit mode for a specific answer
+            function toggleEditAnswer(questionId, answerIndex) {
+                let answerTextElement = document.getElementById(`answer-span-${questionId}-${answerIndex}`);
+                let answerInputElement = document.getElementById(`answer-input-${questionId}-${answerIndex}`);
+                let radioButtons = document.getElementsByName(`correct-answer-${questionId}`);
+    
+                if (answerTextElement.style.display === "none") {
+                    answerTextElement.style.display = "block"; // Show answer text
+                    answerInputElement.style.display = "none"; // Hide input for editing
+                    // Hide the radio buttons when editing ends
+                    radioButtons.forEach(radio => radio.style.display = "none");
+                } else {
+                    answerTextElement.style.display = "none"; // Hide answer text
+                    answerInputElement.style.display = "block"; // Show input for editing
+                    // Show the radio buttons when editing starts
+                    radioButtons.forEach(radio => radio.style.display = "inline-block");
+                }
             }
-        }
-
-        // This function saves the changes made to a question and its answers
-        function saveQuestionChanges(questionId) {
+    
+            function saveQuestionChanges(questionId) {
             let questionText = document.getElementById(`question-textarea-${questionId}`).value;
             let answers = [];
             let correctAnswer = document.querySelector(`input[name='correct-answer-${questionId}']:checked`).value;
+    
+    // Collect the answers for this question
+    document.querySelectorAll(`input[name^='answer_text_${questionId}']`).forEach((answerInput, index) => {
+        let isCorrect = (answerInput.value === correctAnswer);
+        let answerId = answerInput.getAttribute("data-answer-id"); // Get answer ID
+        answers.push({
+            answer_id: answerId,  // Send answer ID along with the text
+            text: answerInput.value,
+            is_correct: isCorrect
+        });
+    });
 
-            // Collect the answers for this question
-            document.querySelectorAll(`input[name^='answer_text_${questionId}']`).forEach((answerInput, index) => {
-                let isCorrect = (answerInput.value === correctAnswer);
-                answers.push({
-                    answer_id: answerInput.getAttribute("data-answer-id"),
-                    text: answerInput.value,
-                    is_correct: isCorrect
-                });
-            });
+    // Send request to backend to save changes
+    fetch("/update_question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            question_id: questionId,
+            text: questionText,
+            answers: answers  // Send the answers with their IDs and correctness status
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
 
-            // Send request to backend to save changes
-            fetch("/update_question", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    question_id: questionId,
-                    text: questionText,
-                    answers: answers
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
+        // After saving, hide textarea and show the updated question text
+        let textElement = document.getElementById(`question-text-${questionId}`);
+        let textareaElement = document.getElementById(`question-textarea-${questionId}`);
+        textElement.innerText = questionText;  // Update the displayed question text
+        textElement.style.display = "block";   // Show the updated text
+        textareaElement.style.display = "none"; // Hide the textarea
 
-                // After saving, hide textarea and show the updated question text
-                let textElement = document.getElementById(`question-text-${questionId}`);
-                let textareaElement = document.getElementById(`question-textarea-${questionId}`);
-                textElement.innerText = questionText;  // Update the displayed question text
-                textElement.style.display = "block";   // Show the updated text
-                textareaElement.style.display = "none"; // Hide the textarea
+        // Update answers
+        answers.forEach((answer, index) => {
+            let answerTextElement = document.getElementById(`answer-span-${questionId}-${index}`);
+            let answerInputElement = document.getElementById(`answer-input-${questionId}-${index}`);
 
-                // Update answers
-                answers.forEach((answer, index) => {
+            answerTextElement.innerText = answer.text;  // Update the answer text
+            answerTextElement.style.display = "block"; // Show the updated answer text
+            answerInputElement.style.display = "none"; // Hide the input
+
+            //Mark correct answer
+            if (answer.is_correct) {
+                document.querySelector(`#correct-answer-${questionId}-${index}`).checked = true;
+                // Highlight correct answer in green
+                answerTextElement.style.color = 'green';
+                answerTextElement.style.fontWeight = 'bold';
+            } else {
+                answerTextElement.style.color = ''; // Reset to default color
+            }
+        });
+          // This function updates the correct answer when the user selects a different radio button
+          function updateCorrectAnswer(questionId) {
+                let answers = document.querySelectorAll(`input[name='correct-answer-${questionId}']`);
+                answers.forEach((radioButton, index) => {
                     let answerTextElement = document.getElementById(`answer-span-${questionId}-${index}`);
-                    let answerInputElement = document.getElementById(`answer-input-${questionId}-${index}`);
-
-                    answerTextElement.innerText = answer.text;  // Update the answer text
-                    answerTextElement.style.display = "block"; // Show the updated answer text
-                    answerInputElement.style.display = "none"; // Hide the input
-
-                    // Mark correct answer
-                    if (answer.is_correct) {
-                        document.querySelector(`#correct-answer-${questionId}-${index}`).checked = true;
-                        // Highlight correct answer in green
+                    if (radioButton.checked) {
                         answerTextElement.style.color = 'green';
                         answerTextElement.style.fontWeight = 'bold';
                     } else {
                         answerTextElement.style.color = ''; // Reset to default color
                     }
                 });
-                // Reload the page after saving the changes
-             location.reload();
-            })
-            .catch(error => console.error("Error:", error));
-        }
-
-        // This function updates the correct answer when the user selects a different radio button
-        function updateCorrectAnswer(questionId) {
-            let answers = document.querySelectorAll(`input[name='correct-answer-${questionId}']`);
-            answers.forEach((radioButton, index) => {
-                let answerTextElement = document.getElementById(`answer-span-${questionId}-${index}`);
-                if (radioButton.checked) {
-                    answerTextElement.style.color = 'green';
-                    answerTextElement.style.fontWeight = 'bold';
-                } else {
-                    answerTextElement.style.color = ''; // Reset to default color
-                }
-            });
-        }
-    </script>
-</head>
-<body>
-
-<h2>Quiz: <span id="quiz-title" contenteditable="true">{{ quiz.title }}</span></h2>
-<p><strong>Description:</strong> <span id="quiz-description" contenteditable="true">{{ quiz.description }}</span></p>
-
-{% if quiz_data %}
-    <input type="hidden" name="quiz_id" value="{{ quiz.id if quiz.id else '' }}" required>
-
-    <div id="questions-container">
-        {% for item in quiz_data %}
-        <div class="question" id="question-container-{{ item.question.questionid }}">
-            <h3>Question {{ loop.index }}:</h3>
-            <p id="question-text-{{ item.question.questionid }}" style="display:block;">{{ item.question.text }}</p>
-            <textarea id="question-textarea-{{ item.question.questionid }}" name="question_text_{{ item.question.questionid }}" style="display:none;">{{ item.question.text }}</textarea>
-
-            <ul>
-                {% for answer in item.answers %}
-                <li>
-                    <!-- Answer text, initially displayed -->
-                    <span id="answer-span-{{ item.question.questionid }}-{{ loop.index0 }}" {% if answer.is_correct %} style="color: green; font-weight: bold;" {% endif %}>{{ answer.text }}</span>
-
-                    <!-- Answer input for editing -->
-                    <input type="text" id="answer-input-{{ item.question.questionid }}-{{ loop.index0 }}" name="answer_text_{{ item.question.questionid }}_{{ loop.index0 }}" value="{{ answer.text }}" style="display:none;" data-answer-id="{{ answer.answerid }}">
-
-                    <!-- Radio buttons for defining correct answer -->
-                    <label>
-                        <input type="radio" name="correct-answer-{{ item.question.questionid }}" id="correct-answer-{{ item.question.questionid }}-{{ loop.index0 }}" value="{{ answer.text }}" {% if answer.is_correct %} checked {% endif %} onclick="updateCorrectAnswer({{ item.question.questionid }})">
-                        Correct Answer
-                    </label>
-
-                    <!-- Edit answer button -->
-                    <button type="button" onclick="toggleEditAnswer({{ item.question.questionid }}, {{ loop.index0 }})">Edit Answer</button>
-                </li>
-                {% endfor %}
-            </ul>
-
-            <!-- Simple Edit button for question -->
-            <button type="button" onclick="toggleEditQuestion({{ item.question.questionid }})">Edit Question</button>
-            <button type="button" onclick="saveQuestionChanges({{ item.question.questionid }})">Save Changes</button>
+            }
+        // Reload the page after saving the changes
+        location.reload();
+    })
+    .catch(error => console.error("Error:", error));
+}    
+        </script>
+        <div class="container">
+            <a href="{{ url_for('quiz.view_all_quizzes') }}"  class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
+            <div class="cards-header">
+                <h2 style="color: #A9C9A4;">Quiz Name: <span id="quiz-title" contenteditable="true">{{ quiz.title }}</span></h2>
+                <p style="color: gray;"><strong>Description:</strong> <span id="quiz-description" contenteditable="true">{{ quiz.description }}</span></p>
+             </div>
+            {% if quiz_data %}
+                <div id="questions-container">
+                    {% for item in quiz_data %}
+                    <div class="question" id="question-container-{{ item.question.questionid }}">
+                        <h3>Question{{ loop.index }}</h3>
+                        <p id="question-text-{{ item.question.questionid }}" style="margin-bottom: 10px;">{{ item.question.text }}</p>
+                        <textarea id="question-textarea-{{ item.question.questionid }}" style="display:none;">{{ item.question.text }}</textarea>
+                        <!-- <ul class="answer-list">
+                            {% for answer in item.answers %}
+                            <li class="answer-list2">
+                                <span id="answer-span-{{ item.question.questionid }}-{{ loop.index0 }}" {% if answer.is_correct %} style="color: green; font-weight: bold;" {% endif %}>{{ answer.text }}</span>
+                                <input type="text" id="answer-input-{{ item.question.questionid }}-{{ loop.index0 }}" value="{{ answer.text }}" style="display:none;">
+                                <label>
+                                    <input type="radio" name="correct-answer-{{ item.question.questionid }}" 
+                                    value="{{ answer.text }}" 
+                                    {% if answer.is_correct %} checked {% endif %} 
+                                    id="correct-answer-{{ item.question.questionid }}-{{ loop.index0 }}"
+                                    onclick="updateCorrectAnswer({{ item.question.questionid }})">
+                                        Correct Answer
+                                </label>
+                                <button type="button" class="edit_answer" onclick="toggleEditAnswer({{ item.question.questionid }}, {{ loop.index0 }})"> <i class="fas fa-edit"></i></button>
+                            </li>
+                            {% endfor %}
+                        </ul> -->
+                        <ul class="answer-list">
+                            {% for answer in item.answers %}
+                            <li class="answer-list2">
+                                <!-- Answer text, initially displayed -->
+                                <span id="answer-span-{{ item.question.questionid }}-{{ loop.index0 }}" {% if answer.is_correct %} style="color: green; font-weight: bold;" {% endif %}>{{ answer.text }}</span>
+            
+                                <!-- Answer input for editing -->
+                                <input type="text" id="answer-input-{{ item.question.questionid }}-{{ loop.index0 }}" name="answer_text_{{ item.question.questionid }}_{{ loop.index0 }}" value="{{ answer.text }}" style="display:none;" data-answer-id="{{ answer.answerid }}">
+            
+                                <!-- Radio buttons for defining correct answer -->
+                                <label>
+                                    <input type="radio" name="correct-answer-{{ item.question.questionid }}" id="correct-answer-{{ item.question.questionid }}-{{ loop.index0 }}" value="{{ answer.text }}" {% if answer.is_correct %} checked {% endif %} onclick="updateCorrectAnswer({{ item.question.questionid }})">
+                                    Correct Answer
+                                </label>
+            
+                                <!-- Edit answer button -->
+                                <button type="button" onclick="toggleEditAnswer({{ item.question.questionid }}, {{ loop.index0 }})"><i class="fas fa-edit"></i></button>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="edit_question" onclick="toggleEditQuestion({{ item.question.questionid }})">Edit Question</button>
+                        <button type="button" class="edit_question" onclick="saveQuestionChanges({{ item.question.questionid }})">Save Changes</button>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
-        {% endfor %}
     </div>
 
-{% endif %}
+    <!-- <script>
+        function toggleEditQuestion(questionId) {
+            let textElement = document.getElementById(`question-text-${questionId}`);
+            let textareaElement = document.getElementById(`question-textarea-${questionId}`);
+            textElement.style.display = textElement.style.display === "none" ? "block" : "none";
+            textareaElement.style.display = textareaElement.style.display === "none" ? "block" : "none";
+        }
+        function toggleEditAnswer(questionId, answerIndex) {
+            let answerTextElement = document.getElementById(`answer-span-${questionId}-${answerIndex}`);
+            let answerInputElement = document.getElementById(`answer-input-${questionId}-${answerIndex}`);
+            answerTextElement.style.display = answerTextElement.style.display === "none" ? "block" : "none";
+            answerInputElement.style.display = answerInputElement.style.display === "none" ? "block" : "none";
+        }
 
+        function toggleEditAnswer(questionId, answerIndex) {
+    let answerSpan = document.getElementById(`answer-span-${questionId}-${answerIndex}`);
+    let answerInput = document.getElementById(`answer-input-${questionId}-${answerIndex}`);
+    let editButton = document.querySelector(`#question-container-${questionId} li:nth-child(${answerIndex + 1}) .edit_answer`);
+
+    if (answerInput.style.display === "none") {
+        // Switch to input mode
+        answerSpan.style.display = "none";
+        answerInput.style.display = "block";
+        answerInput.focus();
+        editButton.innerHTML = `<i class="fas fa-save"></i>`; // Change to save icon
+    } else {
+        // Save and switch back to text mode
+        answerSpan.textContent = answerInput.value;
+        answerSpan.style.display = "block";
+        answerInput.style.display = "none";
+        editButton.innerHTML = `<i class="fas fa-edit"></i>`; // Change back to edit icon
+    }
+
+
+    
+}
+
+    </script> -->
+
+   
 </body>
 </html>

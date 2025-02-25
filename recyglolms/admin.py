@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import db, bcrypt, app
-from recyglolms.models import User, Course, Module, Video, Feedback
+from recyglolms.models import User, Course, Module, Video, Feedback, Announcement
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -18,11 +18,15 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-#Admin home page
 @admin_bp.route('/admin_home')
 @login_required
 def admin_home():
-    return render_template('admin_home.html')
+    # Fetch only the latest two announcements from the database
+    announcements = Announcement.query.order_by(Announcement.date.desc()).limit(2).all()
+    return render_template('admin_home.html', 
+                           announcements=announcements,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 # Admin Dashboard Route
 @admin_bp.route('/dashboard')
@@ -220,7 +224,10 @@ def edit_user(user_id):
         flash("User updated successfully!", "success")
         return redirect(url_for('admin.view_users'))
 
-    return render_template('edituser.html', user=user)
+    return render_template('edituser.html', 
+                           user=user,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 # Route to delete a user
 @admin_bp.route('/delete_user/<int:user_id>', methods=['POST'])
@@ -250,7 +257,10 @@ def manage_course():
     modules = Module.query.all()
     videos = Video.query.all()
 
-    return render_template('managecourse.html', courses=courses, modules=modules, videos=videos)
+    return render_template('managecourse.html', 
+                           courses=courses, modules=modules, videos=videos,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 # Route to add a new course
@@ -274,7 +284,9 @@ def add_course():
             flash("Course added successfully!", "success")
             return redirect(url_for('admin.view_all'))
 
-    return render_template('add_courses.html')
+    return render_template('add_courses.html',
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 # Route to add a new module
@@ -300,7 +312,10 @@ def add_module():
             return redirect(url_for('admin.view_all'))
 
     courses = Course.query.all()  # Needed for module association
-    return render_template('add_modules.html', courses=courses)
+    return render_template('add_modules.html', 
+                           courses=courses,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 # Route to add a new video
@@ -327,7 +342,9 @@ def add_video():
             return redirect(url_for('admin.view_all'))
 
     modules = Module.query.all()  # Needed for video association
-    return render_template('add_videos.html', modules=modules)
+    return render_template('add_videos.html', modules=modules,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 # Admin dashboard to view all user progress
 @admin_bp.route('/view_all_progress', methods=['GET'])
@@ -335,18 +352,19 @@ def add_video():
 def view_all_progress():
     if not current_user.role:  # Ensure user is admin
         flash("Unauthorized access", "danger")
-        return redirect(url_for('main.home'))
+        return redirect(url_for('main.home',))
 
     # Fetch all users
-    users = User.query.all()
+    users = User.query.filter_by(role=0).all()
+
 
     # Create a dictionary to store progress for each user
     user_progress_data = {}
-
     for user in users:
         # For each user, get all courses and calculate progress
         courses = Course.query.all()
         progress_data = {}
+
 
         # Iterate through courses to get progress data for each course
         for course in courses:
@@ -360,7 +378,9 @@ def view_all_progress():
         }
 
     # Pass all users' progress to the template
-    return render_template('view_all_progress.html', user_progress_data=user_progress_data, courses=courses)
+    return render_template('view_all_progress.html', user_progress_data=user_progress_data, courses=courses,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 # View progress of a specific user
 @admin_bp.route('/user_progress/<int:userid>', methods=['GET'])
@@ -379,15 +399,41 @@ def user_progress(userid):
 
     return render_template('each_user_progress.html', user=user, progress_data=progress_data)
 
-@admin_bp.route('/admin_feedback')
+@admin_bp.route('/dashboard')
 @login_required
 def view_feedbacks():
-    feedbacks = db.session.query(Feedback, User).join(User).all()  # Fetch feedback with user details
-    return render_template('admin_feedback.html', feedbacks=feedbacks)
+    # feedbacks = db.session.query(Feedback, User).join(User).all()  # Fetch feedback with user details
+    feedbacks = db.session.query(Feedback, User).join(User).order_by(Feedback.submit_date.desc()).limit(3).all()
+    return render_template('dashboard.html', feedbacks=feedbacks)
 
+@admin_bp.route('/admin_feedback')
+@login_required
+def admin_feedback():
+    feedbacks = db.session.query(Feedback, User).join(User).all()  # Fetch feedback with user details
+    # feedbacks = db.session.query(Feedback, User).join(User).order_by(Feedback.submit_date.desc()).limit(3).all()
+    return render_template('admin_feedback.html', 
+                           feedbacks=feedbacks,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 #Admin Activity page
 @admin_bp.route('/Activity')
 @login_required
 def Activity():
-    return render_template('Activity.html')
+    users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+    current_user_name = current_user.name,
+    current_user_email = current_user.email
+    return render_template('Activity.html', 
+                           users=users,
+                           current_user_name=current_user_name,
+                           current_user_email=current_user_email)
+
+#Admin Alumni page
+@admin_bp.route('/Alumni_admin')
+@login_required
+def Alumni_admin():
+    users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+    return render_template('Alumni_admin.html', 
+                           users=users,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
