@@ -1,0 +1,382 @@
+can you find that error that add activity button is not working and fix it for me in this code? <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="/static/CSS/user_activity.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Upload Files</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="/static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+                <div class="dropdown">
+                    <img src="/static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
+                        <p id="profile-email">may@gmail.com</p>
+                        <button id="logout-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="/static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="user_home.html"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="user_dashboard.html"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="user_course.html"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="user_account.html"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="Alumni-network_user.html"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="cards-header">
+                <h2 style="color: #A9C9A4;">Activity Board</h2>
+             </div>
+            <div class="header-actions">
+                <input type="text" id="searchBar" placeholder="Search">
+                <button class="add-activity" onclick="showPopup()"><i class="fas fa-plus"></i> Add Activity</button>
+            </div>
+            <div id="card-container" class="grid">
+                <div class="popup-overlay hidden" id="popup-overlay"></div>
+                <div class="popup-form hidden" id="popup-form">
+                    <button class="close-popup" onclick="hidePopup()">✖</button>
+                    <h3>Add New Activity</h3>
+                    <input type="text" id="activity_name" placeholder="Title">
+                    <input type="file" id="activity_images" placeholder="Image URL" multiple>
+                    <textarea id="activity_description" placeholder="Description" rows="10" cols="50"></textarea>
+                    <button class="submit-popup" onclick="addCard()">Submit</button>
+                </div>
+                <div class="view-popup-overlay hidden" id="view-popup-overlay"></div>
+                <div class="view-popup-form hidden" id="view-popup-form">
+                    <button class="close-popup" onclick="hideViewPopup()">✖</button>
+                    <h3 id="view-title"></h3>
+                    <div id="view-image"></div>
+                    <p id="view-description"></p>
+                </div>
+                <div class="edit-popup-overlay hidden" id="edit-popup-overlay"></div>
+                <div class="edit-popup-form hidden" id="edit-popup-form">
+                    <button class="close-popup" onclick="hideEditPopup()">✖</button>
+                    <h3>Edit Activity</h3>
+                    <input type="text" id="edit-title" placeholder="Title">
+                    <textarea id="edit-description" placeholder="Description" rows="5"></textarea>
+                    <button class="submit-popup" onclick="updateCard()">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            loadCards(); // Load cards from backend on page load
+        });
+        
+        // Show Add Activity Popup
+    function showPopup() {
+        // Check if the popup exists, create if not
+        let popupForm = document.getElementById("popup-form");
+        if (!popupForm) {
+            popupForm = document.createElement("div");
+            popupForm.id = "popup-form";
+            popupForm.classList.add("popup-form", "hidden");
+            popupForm.innerHTML = `
+                <button class="close-popup" onclick="hidePopup()">✖</button>
+                <h3>Add New Activity</h3>
+                <input type="text" id="activity_name" placeholder="Title">
+                <input type="file" id="activity_images" placeholder="Image URL" multiple>
+                <textarea id="activity_description" placeholder="Description" rows="10" cols="50"></textarea>
+                <button class="submit-popup" onclick="addCard()">Submit</button>
+            `;
+            document.body.appendChild(popupForm);
+        }
+
+        // Check if the overlay exists, create if not
+        let popupOverlay = document.getElementById("popup-overlay");
+        if (!popupOverlay) {
+            popupOverlay = document.createElement("div");
+            popupOverlay.id = "popup-overlay";
+            popupOverlay.classList.add("popup-overlay", "hidden");
+            document.body.appendChild(popupOverlay);
+        }
+
+        // Show the popup and overlay
+        popupForm.classList.remove("hidden");
+        popupOverlay.classList.remove("hidden");
+    }
+
+    // Hide Add Activity Popup
+    function hidePopup() {
+        let popupForm = document.getElementById("popup-form");
+        let popupOverlay = document.getElementById("popup-overlay");
+
+        // Hide the popup and overlay
+        if (popupForm) popupForm.classList.add("hidden");
+        if (popupOverlay) popupOverlay.classList.add("hidden");
+    }
+
+        // Add new activity card
+        function addCard() {
+            const title = document.getElementById("activity_name").value;
+            const description = document.getElementById("activity_description").value;
+            const imageFiles = document.getElementById("activity_images").files; // Get all selected files
+
+            if (!title || !description || imageFiles.length === 0) {
+                alert("Please fill all fields and select at least one image.");
+                return;
+            }
+        
+            if (title && description && imageFiles.length > 0) {
+                const formData = new FormData();
+                formData.append("activity_name", title); // Backend expects 'activity_name'
+                formData.append("activity_description", description); // Backend expects 'activity_description'
+        
+                // Append each selected image file to the form data
+                for (let i = 0; i < imageFiles.length; i++) {
+                    formData.append("activity_images", imageFiles[i]); // Backend expects 'activity_images'
+                }
+        
+                // Send a POST request to the backend
+                fetch('/user_activity', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.activityid) {
+                        // Success - create the card in the UI
+                        createCard(data);
+                        resetForm();
+                        hidePopup();
+                    } else {
+                        alert("Failed to save the activity. Please try again.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error saving activity:", error);
+                    alert("An error occurred. Please try again.");
+                });
+            } else {
+                alert("Please fill all fields and select at least one image.");
+            }
+        }
+        
+        // Create a card dynamically
+        function createCard(cardData) {
+            const cardContainer = document.getElementById("card-container");
+        
+            const newCard = document.createElement("div");
+            newCard.classList.add("card");
+            newCard.setAttribute("data-id", cardData.activityid); // Use 'activityid' from the response
+        
+            const showNavButtons = cardData.images.length > 1;
+        
+            const imagesHTML = cardData.images.length > 0
+                ? `<div class="image-slider">
+                        ${cardData.images.map((image, index) =>
+                            `<img class="slide" src="/static/uploads/${image}" alt="${cardData.name}" style="display: ${index === 0 ? 'block' : 'none'};">`
+                        ).join("")}
+                        ${showNavButtons ? `
+                        <button class="prev-btn" onclick="prevSlide(this)">&#10094;</button>
+                        <button class="next-btn" onclick="nextSlide(this)">&#10095;</button>
+                        ` : ""}
+                   </div>`
+                : "<p>No Image Available</p>";
+        
+            newCard.innerHTML = `
+                <button class="delete-btn" onclick="deleteCard(this)">×</button>
+                <div class="card-content">
+                    ${imagesHTML}
+                    <h3>${cardData.name}</h3>
+                    <hr class="card-line">
+                    <p>${cardData.description}</p>
+                </div>
+                <div class="card-actions">
+                    <button class="view-btn" onclick="viewCard(this)">View</button>
+                    <button class="edit-btn" onclick="editCard(this)">Edit</button>
+                </div>
+            `;
+        
+            cardContainer.appendChild(newCard);
+        }
+        
+        // Load existing cards from the backend
+        async function loadCards() {
+            try {
+                const response = await fetch("/user_activity", {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json",  // Explicitly tell the server you want JSON
+                    }
+                });
+        
+                if (response.ok) {
+                    const activities = await response.json(); // Parse JSON response
+                    const cardContainer = document.getElementById("card-container");
+                    cardContainer.innerHTML = ""; // Clear existing cards
+        
+                    // Create a card for each activity
+                    activities.forEach(activity => {
+                        createCard(activity);
+                    });
+                } else {
+                    alert("Failed to load activities.");
+                }
+            } catch (error) {
+                console.error("Error loading activities:", error);
+                alert("Error loading activities.");
+            }
+        }
+        
+        // Delete an activity card
+        async function deleteCard(button) {
+            const card = button.closest(".card");
+            if (!card) return;
+        
+            const cardId = card.getAttribute("data-id");
+        
+            try {
+                const response = await fetch(`/user_activity/${cardId}`, {
+                    method: "DELETE",
+                });
+        
+                if (response.ok) {
+                    card.remove(); // Remove the card from the UI if deleted successfully
+                } else {
+                    alert("Failed to delete activity.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error deleting activity.");
+            }
+        }
+        
+        // Reset the form fields after submission
+        function resetForm() {
+            document.getElementById("activity_name").value = "";
+            document.getElementById("activity_description").value = "";
+            document.getElementById("activity_images").value = "";
+        }
+    
+        function viewCard(button) {
+            const card = button.closest(".card");
+            if (!card) return;
+    
+            const cardId = card.getAttribute("data-id");
+            const title = card.querySelector("h3").innerText;
+            const description = card.querySelector("p").innerText;
+            const images = card.querySelectorAll(".slide");
+    
+            // Create the view popup if it doesn't exist
+            let viewPopup = document.getElementById("view-popup-form");
+            if (!viewPopup) {
+                viewPopup = document.createElement("div");
+                viewPopup.id = "view-popup-form";
+                viewPopup.classList.add("popup-form", "hidden");
+                document.body.appendChild(viewPopup);
+            }
+    
+            // Generate HTML content for the popup
+            const imagesHTML = images.length > 0
+                ? `<div class="image-slider">
+                        ${Array.from(images).map((image, index) =>
+                            `<img class="slide-view" src="${image.src}" alt="${title}" style="display: ${index === 0 ? 'block' : 'none'};">`
+                        ).join("")}
+                        ${images.length > 1 ? `
+                        <button class="prev-btn" onclick="prevSlideView()">&#10094;</button>
+                        <button class="next-btn" onclick="nextSlideView()">&#10095;</button>
+                        ` : ""}
+                   </div>`
+                : "<p>No Image Available</p>";
+    
+            viewPopup.innerHTML = `
+                <button class="close-popup" onclick="hideViewPopup()">✖</button>
+                <h3>${title}</h3>
+                ${imagesHTML}
+                <p>${description}</p>
+            `;
+    
+            // Show the popup
+            viewPopup.classList.remove("hidden");
+    
+            // Create an overlay if it doesn't exist
+            let viewOverlay = document.getElementById("view-popup-overlay");
+            if (!viewOverlay) {
+                viewOverlay = document.createElement("div");
+                viewOverlay.id = "view-popup-overlay";
+                viewOverlay.classList.add("popup-overlay", "hidden");
+                document.body.appendChild(viewOverlay);
+            }
+    
+            // Show overlay
+            viewOverlay.classList.remove("hidden");
+        }
+    
+        function hideViewPopup() {
+            document.getElementById("view-popup-form").classList.add("hidden");
+            document.getElementById("view-popup-overlay").classList.add("hidden");
+        }
+    
+        // Functions for image navigation in the view popup
+        function nextSlideView() {
+            const slides = document.querySelectorAll(".slide-view");
+            let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
+            slides[currentIndex].style.display = 'none';
+            if (currentIndex < slides.length - 1) {
+                slides[currentIndex + 1].style.display = 'block';
+            } else {
+                slides[0].style.display = 'block';
+            }
+        }
+    
+        function prevSlideView() {
+            const slides = document.querySelectorAll(".slide-view");
+            let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
+            slides[currentIndex].style.display = 'none';
+            if (currentIndex > 0) {
+                slides[currentIndex - 1].style.display = 'block';
+            } else {
+                slides[slides.length - 1].style.display = 'block';
+            }
+        }
+    
+        function prevSlide(button) {
+            const card = button.closest(".card");
+            const slides = card.querySelectorAll(".slide");
+            let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
+            if (currentIndex > 0) {
+                slides[currentIndex].style.display = 'none';
+                slides[currentIndex - 1].style.display = 'block';
+            } else {
+                slides[currentIndex].style.display = 'none';
+                slides[slides.length - 1].style.display = 'block';
+            }
+        }
+    
+        function nextSlide(button) {
+            const card = button.closest(".card");
+            const slides = card.querySelectorAll(".slide");
+            let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
+            if (currentIndex < slides.length - 1) {
+                slides[currentIndex].style.display = 'none';
+                slides[currentIndex + 1].style.display = 'block';
+            } else {
+                slides[currentIndex].style.display = 'none';
+                slides[0].style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

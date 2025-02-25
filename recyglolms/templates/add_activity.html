@@ -4,25 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Activity</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Add a New Activity</h1>
+
+    <h2>Add a New Activity</h2>
 
     <form action="{{ url_for('main.add_activity') }}" method="POST" enctype="multipart/form-data">
         <label for="activity_name">Activity Name:</label>
-        <input type="text" id="activity_name" name="activity_name" required><br><br>
-    
+        <input type="text" name="activity_name" id="activity_name" required>
+
         <label for="activity_description">Activity Description:</label>
-        <textarea id="activity_description" name="activity_description" required></textarea><br><br>
-    
+        <textarea name="activity_description" id="activity_description" required></textarea>
+
         <label for="activity_images">Upload Images:</label>
-        <!-- Changed to activity_images[] -->
-        <input type="file" id="activity_images" name="activity_images[]" multiple accept="image/*"><br><br>
-    
+        <input type="file" name="activity_images" id="activity_images" multiple accept="image/*">
+
         <button type="submit">Add Activity</button>
     </form>
 
-    <br>
-    <a href="{{ url_for('main.home') }}">Back to Dashboard</a>
+    <script>
+        document.getElementById("activity_images").addEventListener("change", function() {
+            let files = this.files;
+            if (files.length > 5) {
+                alert("You can upload a maximum of 5 images.");
+                this.value = "";
+            }
+        });
+    </script>
+
 </body>
 </html>
