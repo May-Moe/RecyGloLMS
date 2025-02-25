@@ -1,0 +1,440 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px); 
+    margin: 10px auto;
+    margin-left: 300px; 
+    margin-top: 100px;
+    margin-right: 60px;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    transition: margin-left 0.5s, width 0.5s;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 400px; 
+    overflow: hidden; 
+    position: relative;
+    border: 1px solid #A9C9A4;
+    margin-top: 20px;
+}
+
+.cards-header{
+    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.card-content {
+    flex: 1;
+    overflow-y: auto; 
+    margin-bottom: 10px; 
+    text-align: left;
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 14px;
+    color: #555;
+    margin: 0; 
+}
+
+.card-line {
+    margin: 10px 0px;
+    color: #555;
+    font-weight: lighter;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+#searchBar {
+    padding: 10px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+#searchBar:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+.add-activity {
+    display: block;
+    padding: 10px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 150px;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    background-color: #A9C9A4;
+    color: white;
+}
+
+.popup-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 2000; /* Ensure it's above everything else */
+}
+
+.popup-form.hidden {
+    display: none;
+}
+
+.popup-form h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #A9C9A4;
+}
+
+.popup-form input, .popup-form textarea {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.submit-popup {
+    width: 100%;
+    padding: 10px;
+    background-color: #A9C9A4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.popup-overlay.hidden {
+    display: none;
+}
+
+#card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 40px;
+}
+
+.card-actions {
+    display: flex;
+    justify-content: end;
+    gap: 0px;
+    margin-top: auto; 
+}
+
+.view-btn,.edit-btn {
+    padding: 10px 40px;
+    background-color: #A9C9A4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.view-btn,.edit-btn:hover {
+    background-color: #A9C9A4;
+}
+
+.view-btn {
+    margin-right: 10px;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: #6d6d6d; 
+    cursor: pointer;
+    z-index: 10;
+}
+
+.card-actions :hover {
+    background-color: #17490b;
+}
+
+.delete-btn :hover{
+    color: #000000; 
+}
+
+.view-popup-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 2000;
+}
+
+#view-description {
+    max-height: 200px;
+    overflow-y: auto; 
+}
+
+.view-popup-form.hidden {
+    display: none;
+}
+
+.view-popup-form h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #A9C9A4;
+}
+
+.view-popup-form img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+#view-image img {
+    width: 100%;
+    height: auto;
+    max-height: 3000px;
+    /* object-fit: contain; */
+    border-radius: 10px;
+}
+
+.view-popup-form p {
+    font-size: 14px;
+    color: #555;
+}
+
+.view-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.view-popup-overlay.hidden {
+    display: none;
+}
+
+.slideshow-container, .popup-slideshow {
+    position: relative;
+    max-width: 100%;
+}
+
+.slide, .popup-slide {
+    display: none;
+    text-align: center;
+}
+
+.slide img, .popup-slide img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    font-size: 18px;
+}
+
+.prev-btn { left: 5px; }
+.next-btn { right: 5px; }
+
+.popup-slideshow .prev, .popup-slideshow .next {
+    font-size: 24px;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.hidden {
+    display: none;
+}
+
+.edit-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.edit-popup-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        width: 100%;
+        margin-top: 100px;
+    }
+
+    .header-actions{
+        flex-direction: column;
+    }
+
+    #searchBar {
+        width: 100%;
+    }
+
+    .add-activity{
+        /* flex-direction: column; */
+        width: 100%;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        height: auto;
+    }
+
+    .card-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card-actions .view-btn,
+    .edit-btn {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
+
+    .popup-form {
+        width: 90%;
+        max-width: 400px;
+    }
+
+    .view-popup-form {
+        width: 90%;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 10px;
+        padding: 20px;
+        margin-top: 100px;
+    }
+
+    .card img {
+        height: 100px;
+    }
+
+    #searchBar {
+        width: 100%;
+    }
+
+    .card-actions .view-btn,
+    .edit-btn {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
+}

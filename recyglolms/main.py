@@ -1,4 +1,3 @@
-from asyncio import current_task
 import os
 from flask import Blueprint, render_template, jsonify, request, redirect, url_for, flash
 from flask_login import login_required, current_user
@@ -51,69 +50,100 @@ ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@main_bp.route('/add_activity', methods=['GET', 'POST'])
+# New route to view a specific activity by its ID
+@main_bp.route('/user_activity/view/<int:activity_id>', methods=['GET'])
 @login_required
-def add_activity():
+def view_activity(activity_id):
+    # Fetch the specific activity based on the ID
+    activity = Activity.query.filter_by(activityid=activity_id, userid=current_user.userid).first()
+
+    if activity:
+        # Fetch all images related to this activity
+        images = [img.activity_image for img in ActivityImage.query.filter_by(activityid=activity.activityid).all()]
+
+        # Return the activity data as JSON (or render a template if needed)
+        return jsonify({
+            "activityid": activity.activityid,
+            "name": activity.name,
+            "description": activity.description,
+            "images": images
+        })
+    else:
+        return jsonify({"error": "Activity not found"}), 404
+
+@main_bp.route('/user_activity', methods=['GET', 'POST'])
+@login_required
+def user_activity():
     if request.method == 'POST':
-        try:
-            activity_name = request.form.get('activity_name')
-            activity_description = request.form.get('activity_description')
-            images = request.files.getlist('activity_images')  # Multiple images
+        # Handle POST requests to create a new activity
+        activity_name = request.form.get('activity_name')
+        activity_description = request.form.get('activity_description')
+        images = request.files.getlist('activity_images')
 
-            if not activity_name or not activity_description:
-                flash("Activity name and description are required!", "danger")
-                return redirect(request.url)
+        if not activity_name or not activity_description:
+            return jsonify({"error": "Activity name and description are required!"}), 400
 
-            # Step 1: Create and flush the new activity to get the activityid
-            new_activity = Activity(
-                name=activity_name,
-                description=activity_description,
-                date=datetime.utcnow(),
-                userid=current_user.userid
-            )
-            db.session.add(new_activity)
-            db.session.flush()  # Get the generated activityid before committing
+        new_activity = Activity(
+            name=activity_name,
+            description=activity_description,
+            date=datetime.utcnow(),
+            userid=current_user.userid
+        )
+        db.session.add(new_activity)
+        db.session.commit()
 
-            uploaded_images = 0
-            for file in images:
-                if not file or not allowed_file(file.filename):
-                    flash(f"Invalid file type or no file selected for {file.filename}!", "danger")
-                    continue
-
-                # Generate secure filename
+        uploaded_images = []
+        for file in images:
+            if file and allowed_file(file.filename):
                 file_extension = file.filename.rsplit('.', 1)[1].lower()
-                sanitized_name = secure_filename(file.filename.rsplit('.', 1)[0])  # Remove extension
+                sanitized_name = secure_filename(file.filename.rsplit('.', 1)[0])
                 final_filename = f"{sanitized_name}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.{file_extension}"
-
                 filepath = os.path.join(UPLOAD_FOLDER, final_filename)
-
-                # Save the file
                 file.save(filepath)
 
-                # Step 2: Save image reference in activity_image table
                 new_image = ActivityImage(activityid=new_activity.activityid, activity_image=final_filename)
                 db.session.add(new_image)
-                uploaded_images += 1
+                uploaded_images.append(final_filename)
 
-            # Step 3: Commit everything
-            db.session.commit()
+        db.session.commit()
 
-            flash(f"Activity added successfully with {uploaded_images} images!", "success")
-            return redirect(url_for('main.view_activities'))
+        return jsonify({
+            "activityid": new_activity.activityid,
+            "name": new_activity.name,
+            "description": new_activity.description,
+            "images": uploaded_images
+        }), 201
 
-        except Exception as e:
-            db.session.rollback()
-            flash(f"An error occurred: {str(e)}", "danger")
-            return redirect(request.url)
-
-    return render_template('add_activity.html')
-
-# View activities
-@main_bp.route('/view_activities')
-@login_required
-def view_activities():
+    # GET request: Fetch activities for the logged-in user
     activities = Activity.query.filter_by(userid=current_user.userid).all()
-    return render_template('view_activities.html', activities=activities)
+
+    activity_list = []
+    for activity in activities:
+        images = [img.activity_image for img in ActivityImage.query.filter_by(activityid=activity.activityid).all()]
+        activity_list.append({
+            "activityid": activity.activityid,
+            "name": activity.name,
+            "description": activity.description,
+            "images": images
+        })
+
+    # Ensure the server sends JSON when requested by AJAX
+    if 'application/json' in request.headers.get('Accept', ''):
+        return jsonify(activity_list)
+
+    # For non-AJAX requests, render the HTML template
+    return render_template('user_activity.html', activities=activity_list)
+
+
+@main_bp.route('/user_activity/<int:activity_id>', methods=['DELETE'])
+@login_required
+def delete_activity(activity_id):
+    activity = Activity.query.get_or_404(activity_id)
+    db.session.delete(activity)
+    db.session.commit()
+    return '', 204
+
+
 
 @main_bp.route('/learning')
 @login_required
