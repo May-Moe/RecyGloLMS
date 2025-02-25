@@ -3,28 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Progress</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/CSS/style.css">
+    <link rel="stylesheet" href="../static/CSS/each_user_progress.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Progress Tracking</title>
 </head>
 <body>
-    <div class="container mt-4">
-        <h1>Progress for {{ user.name }}</h1>
-        <h2>Email: {{ user.email }}</h2>
-        <h3>Progress by Course:</h3>
-        <ul class="list-group">
-            {% for course_name, progress in progress_data.items() %}
-                <li class="list-group-item">
-                    <strong>{{ course_name }}</strong>
-                    <div class="progress mt-2">
-                        <div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">
-                            {{ progress | round(2) }}%
-                        </div>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    <div class="dashboard">
+        <!-- nav -->
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="../static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="../static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="../static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+        <!-- nav end -->
+
+        <!-- body start -->
+        <div class="container">
+            <a href="{{ url_for('main.home') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
+                <!-- second row of dashboard -->
+    <div class="cards-header">
+        <h2 style="color: #A9C9A4;">My Learning</h2>
+     </div>
+    <!-- <a href="user_course.html" class="view-courses">View All Courses</a> -->
+    <div class="courses">
+        {% for course_name, progress in progress_data.items() %}
+        <div class="course-card">
+            <div class="course-header">
+                <span class="tag">{{ course_name }}</span>
+            </div>
+            <h3>{{ course_name }}</h3>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">
+                    {{ progress | round(2) }}%
+                </div>
+            </div>
+            {% set course = courses | selectattr("name", "equalto", course_name) | first %}
+            {% if course %}
+            <a href="{{ url_for('main.course_detail', courseid=course.courseid) }}" class="continue-btn">Continue</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    
+</div>
+        
+    <script src="../static/JS/script.js"></script>
 </body>
 </html>

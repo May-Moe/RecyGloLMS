@@ -3,167 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Quiz</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Quiz Management</title>
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/create_quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/lucide-react/icons/lucide.min.js"></script>
 </head>
 <body>
-
-<h2>Create Quiz</h2>
-<form method="POST" action="{{ url_for('quiz.create_quiz') }}" onsubmit="prepareSubmission()">
-    <input type="hidden" name="module_id" value="{{ module.moduleid }}">
-
-    <div>
-        <label>Course:</label>
-        <span>{{ course.name }}</span>
-    </div>
-    <div>
-        <label>Module:</label>
-        <span>{{ module.name }}</span>
-    </div>
-
-    <div>
-        <label for="quiz_title">Quiz Title:</label>
-        <input type="text" id="quiz_title" name="quiz_title" required>
-    </div>
-    <div>
-        <label for="quiz_description">Quiz Description:</label>
-        <textarea id="quiz_description" name="quiz_description"></textarea>
-    </div>
-
-    <h3>Added Questions:</h3>
-    <div id="added-questions-container">
-        <!-- Added questions will be displayed here -->
-    </div>
-
-    <!-- This hidden input will store all questions and answers in JSON format -->
-    <input type="hidden" id="questions_data" name="questions_data">
-
-    <h3>Add a Question</h3>
-    <div id="questions-container">
-        <div class="question">
-            <label>Question:</label>
-            <input type="text" class="question_text" placeholder="Enter your question" required>
-
-            <div class="answers-container">
-                <label>Answers:</label>
-                <input type="text" class="answer" placeholder="Answer 1" required>
-                <input type="text" class="answer" placeholder="Answer 2" required>
-                <input type="text" class="answer" placeholder="Answer 3" required>
-                <input type="text" class="answer" placeholder="Answer 4" required>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
             </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+                <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <a href="{{ url_for('quiz.view_all_quizzes') }}"  class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
+            <h1 style="font-size: 23px; color: #A9C9A4;margin-bottom: 15px;">Quiz Management</h1>
+            
+            <form method="POST" action="{{ url_for('quiz.create_quiz') }}" onsubmit="prepareSubmission()">
+                <input type="hidden" name="module_id" value="{{ module.moduleid }}">
 
-            <label>Correct Answer:</label>
-            <select class="correct_answer" required>
-                <option value="0">Answer 1</option>
-                <option value="1">Answer 2</option>
-                <option value="2">Answer 3</option>
-                <option value="3">Answer 4</option>
-            </select>
-
-            <button type="button" onclick="addQuestionToList(this)">Done</button>
+                <h3>Add a Question</h3>
+                <label for="quiz_title">Quiz Title:</label>
+                <input type="text" id="quiz_title" name="quiz_title" required>
+                
+                <label for="quiz_description">Quiz Description:</label>
+                <textarea id="quiz_description" name="quiz_description"></textarea>
+                
+                <div id="added-questions-container"></div>
+                
+                <input type="hidden" id="questions_data" name="questions_data">
+                
+                <h3>Add Questions:</h3>
+                <div id="questions-container"></div>
+                
+                <button type="button" class="add_quiz" onclick="addQuestion()">Add Question</button>
+                <button type="submit" class="create_quiz">Create Quiz</button>
+            </form>
         </div>
     </div>
+    
+    <script src="static/JS/script.js"></script>
+    <script>
+        let questionsArray = [];
 
-    <button type="button" onclick="addQuestion()">Add Question</button>
-    <button type="submit">Create Quiz</button>
-</form>
+        function addQuestion() {
+            const container = document.getElementById('questions-container');
+            const newQuestion = document.createElement('div');
+            newQuestion.className = 'question';
 
-<script>
-    let questionsArray = []; // Stores all added questions
-
-    // Function to add a new blank question input section
-    function addQuestion() {
-        const container = document.getElementById('questions-container');
-        const newQuestion = document.createElement('div');
-        newQuestion.className = 'question';
-
-        newQuestion.innerHTML = `
-            <label>Question:</label>
-            <input type="text" class="question_text" placeholder="Enter your question" required>
-
-            <div class="answers-container">
-                <label>Answers:</label>
-                <input type="text" class="answer" placeholder="Answer 1" required>
-                <input type="text" class="answer" placeholder="Answer 2" required>
-                <input type="text" class="answer" placeholder="Answer 3" required>
-                <input type="text" class="answer" placeholder="Answer 4" required>
-            </div>
-
-            <label>Correct Answer:</label>
-            <select class="correct_answer" required>
-                <option value="0">Answer 1</option>
-                <option value="1">Answer 2</option>
-                <option value="2">Answer 3</option>
-                <option value="3">Answer 4</option>
-            </select>
-
-            <button type="button" onclick="addQuestionToList(this)">Done</button>
-        `;
-
-        container.appendChild(newQuestion);
-    }
-
-    // Function to move question from input section to "Added Questions" section
-    function addQuestionToList(button) {
-        const questionDiv = button.parentElement;
-        const questionText = questionDiv.querySelector('.question_text').value;
-        const answerInputs = questionDiv.querySelectorAll('.answer');
-        const correctAnswerSelect = questionDiv.querySelector('.correct_answer');
-
-        // Validate question and answers
-        if (!questionText.trim()) {
-            alert("Please enter a question.");
-            return;
+            newQuestion.innerHTML = `
+                <label>Question:</label>
+                <input type="text" class="question_text" placeholder="Enter your question" required>
+                <div class="answers-container">
+                    <label>Answers:</label>
+                    <input type="text" class="answer" placeholder="Answer 1" required>
+                    <input type="text" class="answer" placeholder="Answer 2" required>
+                    <input type="text" class="answer" placeholder="Answer 3" required>
+                    <input type="text" class="answer" placeholder="Answer 4" required>
+                </div>
+                <label>Correct Answer:</label>
+                <select class="correct_answer" required>
+                    <option value="0">Answer 1</option>
+                    <option value="1">Answer 2</option>
+                    <option value="2">Answer 3</option>
+                    <option value="3">Answer 4</option>
+                </select>
+                <button type="button" class="done" onclick="addQuestionToList(this)">Done</button>
+            `;
+            container.appendChild(newQuestion);
         }
-        const answers = Array.from(answerInputs).map(input => input.value.trim());
-        if (answers.some(answer => answer === "")) {
-            alert("All answer fields must be filled.");
-            return;
+
+        function addQuestionToList(button) {
+            const questionDiv = button.parentElement;
+            const questionText = questionDiv.querySelector('.question_text').value;
+            const answers = Array.from(questionDiv.querySelectorAll('.answer')).map(input => input.value.trim());
+            const correctAnswerIndex = questionDiv.querySelector('.correct_answer').value;
+
+            if (!questionText.trim() || answers.some(answer => answer === "")) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            const questionObject = { question: questionText, answers, correct_answer: correctAnswerIndex };
+            questionsArray.push(questionObject);
+
+            const addedQuestionDiv = document.createElement('div');
+            addedQuestionDiv.classList.add('added-question');
+            addedQuestionDiv.innerHTML = `
+                <h4>${questionText}</h4>
+                <ul>${answers.map((answer, index) => `<li ${index == correctAnswerIndex ? 'style="color: green; font-weight: bold;"' : ''}>${answer}</li>`).join('')}</ul>
+                <button type="button" onclick="removeAddedQuestion(this, '${questionText}')">Remove</button>
+            `;
+            document.getElementById('added-questions-container').appendChild(addedQuestionDiv);
+            questionDiv.remove();
         }
-        const correctAnswerIndex = correctAnswerSelect.value;
 
-        // Create question object
-        const questionObject = {
-            question: questionText,
-            answers: answers,
-            correct_answer: correctAnswerIndex
-        };
+        function removeAddedQuestion(button, questionText) {
+            button.parentElement.remove();
+            questionsArray = questionsArray.filter(q => q.question !== questionText);
+        }
 
-        // Store in array
-        questionsArray.push(questionObject);
-
-        // Display in "Added Questions" section
-        const addedQuestionDiv = document.createElement('div');
-        addedQuestionDiv.classList.add('added-question');
-
-        addedQuestionDiv.innerHTML = `
-            <h4>${questionText}</h4>
-            <ul>
-                ${answers.map((answer, index) => 
-                    `<li ${index == correctAnswerIndex ? 'style="color: green; font-weight: bold;"' : ''}>
-                        ${answer}
-                    </li>`).join('')}
-            </ul>
-            <button type="button" onclick="removeAddedQuestion(this, '${questionText}')">Remove</button>
-        `;
-
-        document.getElementById('added-questions-container').insertBefore(addedQuestionDiv, document.getElementById('added-questions-container').firstChild);
-
-        // Remove input section after moving question
-        questionDiv.remove();
-    }
-
-    // Function to remove a question from the "Added Questions" section and array
-    function removeAddedQuestion(button, questionText) {
-        button.parentElement.remove();
-        questionsArray = questionsArray.filter(q => q.question !== questionText);
-    }
-
-    // Prepare data for submission
-    function prepareSubmission() {
-        document.getElementById('questions_data').value = JSON.stringify(questionsArray);
-    }
-</script>
-
+        function prepareSubmission() {
+            document.getElementById('questions_data').value = JSON.stringify(questionsArray);
+        }
+    </script>
 </body>
 </html>

@@ -85,7 +85,7 @@ h4, p {
     margin-bottom: 20px;
 }
 
-.filter-label {
+/* .filter-label {
     font-size: 16px;
     color: #333;
 }
@@ -101,6 +101,23 @@ h4, p {
 
 .filter-select:focus {
     border-color: #1a6e1b;
+    outline: none;
+} */
+
+
+#searchBar, #courseFilter {
+    padding: 10px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+#searchBar,#courseFilter:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     outline: none;
 }
 

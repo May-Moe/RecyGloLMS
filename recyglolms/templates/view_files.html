@@ -49,8 +49,9 @@
                 <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
                 <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
-                <li><a href="#"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
-                <li><a href="#"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
             </ul>
         </nav>
         <div class="container">
@@ -58,7 +59,8 @@
                 <h1>Upload Files</h1>
                 <div class="header-actions">
                     <form method="POST" id="search-form" class="mb-4">
-                    <input type="text" id="search_query" placeholder="Search by Name" name="search_query">
+                    <!-- <input type="text" id="search_query" placeholder="Search by FileName" name="search_query"> -->
+                    <input type="text" id="searchBar" placeholder="Search By Title">
                     </form>
                     <a href="{{ url_for('upload.upload_file') }}" id="addUploadLink">
                         <button id="addUserButton"><i class="fas fa-plus"></i>Add New Files</button>
@@ -74,6 +76,7 @@
                             <th>File Type</th>
                             <!-- <th>Course Name</th> -->
                             <th>Upload Date</th>
+                            <th>Uploaded By</th>
                             <th>Action</th>
                             <th>Preview</th>
                         </tr>
@@ -85,6 +88,7 @@
                             <td>{{ file.filename }}</td>
                             <td>{{ file.filetype }}</td>
                             <td>{{ file.uploaddate }}</td>
+                            <td>{{ file.userid }}</td>
                             <td>
                                 <a href="{{ url_for('upload.edit_file', uploadid=file.uploadid) }}" class="editAction"><i class="fas fa-edit"></i></a>
                                 <form action="{{ url_for('upload.delete_file', uploadid=file.uploadid) }}" method="POST" style="display:inline;">
@@ -114,22 +118,19 @@
     </div>
     <script src="static/JS/script.js"></script>
     <script>
-        // Debounce function to wait before submitting after typing stops
-        let typingTimer;
-        const doneTypingInterval = 1000; // 1 second
-        const searchBox = $('#search_query');
-
-        // Trigger form submission when the user stops typing
-        searchBox.on('input', function() {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(function() {
-                $('#search-form').submit();
-            }, doneTypingInterval);
-        });
-
-        // Clear timer on keydown
-        searchBox.on('keydown', function() {
-            clearTimeout(typingTimer);
+        // Search Functionality
+        document.getElementById("searchBar").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let tableRows = document.querySelectorAll("#userTableBody tr");
+    
+            tableRows.forEach(row => {
+                let title = row.querySelector("td:nth-child(1)").innerText.toLowerCase(); // Title is in the first column
+                if (title.includes(filter)) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            });
         });
     </script>
 

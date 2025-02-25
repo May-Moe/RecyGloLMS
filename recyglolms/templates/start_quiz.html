@@ -27,11 +27,11 @@
                     </ul>
                 </div>
                 <div class="dropdown">
-                    <img src="../static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
-                        <p id="profile-email">may@gmail.com</p>
-                        <button id="logout-button">Logout</button>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                 <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
-                <li><a href="Alumni-network.html"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
             </ul>
         </nav>
         <div class="container">
@@ -79,6 +79,17 @@
         </div>
     </form>
     </div>
-    <script src="../script/JS/script.js"></script>
+    <script src="{{ url_for('static', filename='/JS/script.js') }}"></script>
+    <script>
+        function toggleReview(id) {
+    let reviewSection = document.getElementById(id);
+    if (reviewSection) {
+        reviewSection.classList.toggle('hidden');
+    } else {
+        console.error(`Element with id ${id} not found`);
+    }
+}
+
+    </script>
 </body>
 </html>

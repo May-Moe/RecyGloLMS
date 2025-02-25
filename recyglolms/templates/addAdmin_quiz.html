@@ -30,9 +30,9 @@
                 <div class="dropdown">
                     <img src="img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
-                        <p id="profile-email">may@gmail.com</p>
-                        <button id="logout-button">Logout</button>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
                 </div>
             </div>
@@ -42,14 +42,16 @@
                 <img src="img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
             </div>
             <ul>
-                <li><a href="Home.html"><i class="fa-solid fa-house icon"></i> Home</a></li>
-                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
-                <li><a href="Activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
-                <li><a href="Announcement.html"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
-                <li><a href="Courses.html"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
-                <li><a href="Upload.html"><i class="fas fa-upload icon"></i> Upload</a></li>
-                <li><a href="user.html"><i class="fas fa-user icon"></i> User</a></li>
-                <li><a href="addAdmin_quiz.html"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+                <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
             </ul>
         </nav>
         <div class="container">

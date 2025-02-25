@@ -1,0 +1,147 @@
+/* General Reset */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+    color: #333;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 300px); /* Adjust width for sidebar */
+    margin: 100px auto 60px 300px; /* Account for sidebar and spacing */
+    margin-right: 60px;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
+    
+}
+
+/* Quiz Header */
+.quiz-header {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    padding: 15px 0;
+    border-bottom: 3px solid #ddd;
+    color: #333;
+}
+
+.question {
+    margin: 10px 20px;
+    margin-bottom: 20px;
+}
+
+.cards-header{
+    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2C3E50;
+}
+
+p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.answer-list {
+    list-style: none;
+    padding: 0;
+}
+
+.answer-list2 {
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.answer-list2 span {
+    flex-grow: 1;
+    font-size: 16px;
+}
+
+label {
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+input[type="radio"] {
+    margin-right: 5px;
+}
+
+.edit_answer {
+    background: #A9C9A4;
+    color: white;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.edit_answer:hover {
+    background: #45a049;
+}
+
+.edit_answer i {
+    color: #333;
+    cursor: pointer;
+}
+
+.edit_question {
+    background: #A9C9A4;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    justify-content: end;
+}
+
+textarea, input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.back-icon {
+    font-size: 24px;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+.back-icon:hover {
+    color: #007BFF;
+}
+
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 90%; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

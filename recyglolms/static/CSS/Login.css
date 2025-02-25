@@ -198,3 +198,19 @@ footer{
     font-size: 10px;
     margin-top: 5px;
 }
+
+@media (max-width: 768px) {
+    .left-side {
+        display: none; /* Hide the left-side image section */
+    }
+
+    .right-side {
+        width: 100%; /* Make the form take full width */
+        padding: 20px; /* Reduce padding for smaller screens */
+    }
+
+    .container {
+        max-width: 400px; /* Limit the form width on small screens */
+        height: auto; /* Adjust height for better fit */
+    }
+}

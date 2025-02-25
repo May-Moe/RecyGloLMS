@@ -65,7 +65,9 @@ def upload_file():
         flash("File uploaded successfully!", "success")
         return redirect(url_for('upload.view_files'))
 
-    return render_template('upload_file.html')
+    return render_template('upload_file.html',
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 # Route to edit file metadata and replace file
@@ -101,7 +103,10 @@ def edit_file(uploadid):
         flash("File information updated successfully!", "success")
         return redirect(url_for('upload.view_files'))
 
-    return render_template('editfile.html', file=file)
+    return render_template('editfile.html', 
+                           file=file,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 # Route to delete a file
 @upload_bp.route('/delete/<int:uploadid>', methods=['POST'])
@@ -142,7 +147,9 @@ def view_files():
     for file in files:
         file.preview_url = url_for('upload.uploaded_file', filename=file.filename)
 
-    return render_template('view_files.html', files=files)
+    return render_template('view_files.html', files=files,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @upload_bp.route('/uploads/<filename>')
 def uploaded_file(filename):

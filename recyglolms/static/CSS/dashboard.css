@@ -57,34 +57,45 @@ body {
     margin-top: 20px;
 }
 
-.card {
+/* .card {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     flex: 1 1 calc(50% - 10px);
     min-width: 230px;
-    max-width: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover{
-    transform: translateY(-5px);
-    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
-  }
+} */
 
 
-  .cards-container a{
+
+.cards-container a{
     text-decoration: none;
     color: black;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex: 1 1 calc(20% - 10px);
+    min-width: 230px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+.cards-container a:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
   }
 .cards-header{
     background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
     padding: 20px;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .card-title {
@@ -111,8 +122,9 @@ body {
 .cards-container {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap; /* Optional: allows wrapping to the next line if there are too many cards */
-    gap: 10px; /* Optional: adds space between the cards */
+    flex-wrap: wrap; 
+    margin-top: 10px;
+    gap: 10px;
 }
 
 .card-content {
@@ -215,23 +227,9 @@ body {
     flex: 1;
 }
 
-/* .piechart {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background-image: conic-gradient(
-        rgb(230, 153, 153) 70deg,
-        rgb(127, 171, 233) 0 235deg,
-        rgb(127, 224, 118) 0
-    );
-} */
-
-
-/* third row start */
-
 .chart3 {
     display: flex;
-   margin-top: 20px;
+    margin-top: 5px;
     gap: 10px;
 }
 
@@ -249,31 +247,42 @@ body {
 }
 
 .card3-profile img{
-    width: 40px; /* Adjust size of image */
-    height: 40px; /* Adjust size of image */
-    border-radius: 50%; /* Make the image round */
-    margin-right: 15px; /* Add some space between the image and title */
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    margin-right: 15px; 
 }
 
 .card3-title{
     font-size: 16px;
     font-weight: bold;
-    display: inline-block; /* Ensures title is beside content */
-    margin-right: 10px; /* Adds spacing between the title and content */
+    display: inline-block; 
+    margin-right: 10px;
     margin-bottom: 20px;
 
 }
 
 .card3-value {
     display: flex;
-    align-items: center; /* Ensures the feedback content aligns vertically with the title */
-    justify-content: flex-start; /* Aligns content to the left */
-    margin-bottom: 10px;
+    align-items: center; 
+    justify-content: flex-start; 
+    margin: 10px 0px;
+    background-color: #f4f4f4;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* gap: 10px; */
 }
 
-.feedback-title {
+.card3-value:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
+}
+
+.feedback-content {
     font-size: 13px;
-    margin-right: 10px;
+    margin-right: 20px;
+    margin-left: 15px;
+
 }
 
 .feedback-date {
@@ -310,8 +319,8 @@ body {
 }
 
 .announcements {
-    display: flex; /* Use flexbox to align content */
-    flex-direction: column; /* Keep the announcements stacked */
+    display: flex; 
+    flex-direction: column; 
     /* justify-content: space-between; */
     /* height: 150vh; */
     background: white;
@@ -319,6 +328,14 @@ body {
     padding: 20px;
     margin-top: 30px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.announcement-list {
+    margin-top: 20px;
+}
+
+.selected-date{
+    color: #A9C9A4;
 }
 
 .announcements h2 {
@@ -330,12 +347,13 @@ body {
 
 .announcements ul {
     display: flex;
-    flex-direction: column; /* Stack announcements vertically */
-    gap: 10px; /* Add spacing between rows */
-    list-style: none; /* Remove bullet points */
-    flex-grow: 1; /* Make the list stretch */
+    flex-direction: column; 
+    gap: 10px; 
+    list-style: none; 
+    flex-grow: 1; 
     padding: 0;
     margin: 0;
+    margin-top: 15px;
 }
 
 .announcements li {
@@ -346,11 +364,13 @@ body {
 }
 
 .announcements li img {
-    width: 100%; /* Adjust image to occupy full width */
+    width: 100%; 
     height: auto;
-    border-radius: 8px; /* Keep rounded corners */
-    max-height: 150px; /* Maintain consistent height */
-    object-fit: cover; /* Ensure images scale properly */
+    border-radius: 8px; 
+    max-height: 150px; 
+    object-fit: cover;
+    box-shadow: 0 6px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid black;
 }
 
 .calender-container {
@@ -427,95 +447,23 @@ body {
     text-align: center;
   }
 
-/* @media (max-width: 768px) {
-    .container {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 80px;
-    }
-
-    .card {
-        width: 100%;
-    }
-
-    .card2 {
-        width: 100%;
-    }
-
-    .card-title, .card2-title {
-        font-size: 0.875rem;
-
-    }
-
-    .card-value, .card2-value {
-        font-size: 0.75rem;
-
-    }
-
-    .announcements {
-        width: 70%;
-        margin-left: 0;
-        margin-top: 50px;
-    }
-
-    .announcements h2 {
-        font-size: 10px;
-
-    }
-
-    .announcements li {
-        font-size: 10px;
-
-    }
-    .calendar-container {
-        width: 250px;
-    }
-
-    .calendar-container {
-        max-width: 100%;
-        padding: 10px;
-    }
-
-    .header-display p {
-        font-size: 0.875rem;
-    }
-
-    .days div,
-    .week div {
-        height: 1.5rem;
-        width: 1.5rem;
-        font-size: 10px;
-    }
-
-} */
-
-@media (max-width: 768px) {
-    /* Container adjustments */
-    .container {
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto; 
-        
-    }
-    .cards-container {
-        flex-direction: column;
-    }
-
-    .card {
-        flex: 1 1 100%; /* Make each card full width */
-        width: 100%;
-    }
-
-    .card2 {
-        width: 100%;
-    }
-
-    .chart3 {
-        flex-direction: column;
-    }
-
-    .card3 {
-        width: 100%;
-    }
-
+  .language-selector {
+    display: inline-block;
+    margin-right: 15px;
 }
+
+.language-selector select {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+  @media screen and (max-width: 768px) {
+    .container {
+        width: 90%; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+  }

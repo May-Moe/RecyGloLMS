@@ -30,9 +30,9 @@
                 <div class="dropdown">
                     <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
-                        <p id="profile-email">may@gmail.com</p>
-                        <button id="logout-button">Logout</button>
+                        <h4 class="profile-header">Hello, <span id="user-name"> {{current_user_name}}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
                 </div>
                 
@@ -48,7 +48,7 @@
                 <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
-                <li><a href="Alumni-network.html"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
             </ul>
         </nav>
         <div class="container">
@@ -119,16 +119,28 @@
             
 
             <div class="Announcement">
-                <h2 style="text-align: center; margin-bottom: 20px;">Announcements</h2>
+                <h2 style="text-align: center; margin-bottom: 20px;">Announcement</h2>
                 <div class="ann-container">
-                    <div class="ann-text1">
-                        <img src="static/img/1.jpg" alt="ann-img1">
-                    </div>
-                    <div class="ann-text2">
-                        <img src="static/img/2.jpg" alt="ann-img2">
-                    </div>
+                    
+                        {% for announcement in announcements %}
+                        <ul class="announcement-item">
+                            {% if announcement.announcement_img %}
+                                <li>
+                                    <!-- <p>Image Path: {{ url_for('static', filename='announcements/' + announcement.announcement_img) }}</p> -->
+                                    <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" 
+                                         alt="Announcement Image" class="ann-img">
+                                </li>
+                                <li style="text-align: center; margin: 10px 0px;"><span style="color: #A9C9A4; font-weight: bold;">Event Date:</span> {{ announcement.event_date }}</li>
+                            {% else %}
+                                <li>No Image</li>
+                            {% endif %}
+                        </ul>
+                        
+                        {% endfor %}
+                    
+                </div>
             </div>
-            </div>
+            
 
             <!-- <div class="programs">
                 <h2>Programs Offered</h2>
@@ -195,9 +207,9 @@
     <script src="static/JS/script.js"></script>
     <script>
        const images = [
-    "static/img/home.webp",
-    "static/img/2.jpg",
-    "static/img/4.webp"
+    "static/img/1.png",
+    "static/img/9.png",
+    "static/img/3.png"
 ];
 
 let currentIndex = 0;

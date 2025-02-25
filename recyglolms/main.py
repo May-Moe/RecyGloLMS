@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, jsonify, request, redirect, url_fo
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from recyglolms.models import Course, Video, Progress, Activity, Module, User, Feedback, ActivityImage
+from recyglolms.models import Course, Video, Progress, Activity, Module, User, Feedback, ActivityImage, Announcement
 from recyglolms.__inti__ import db, app
 
 main_bp = Blueprint('main', __name__)
@@ -149,7 +149,10 @@ def delete_activity(activity_id):
 @login_required
 def learning():
     courses = Course.query.all()
-    return render_template('learning_page.html', courses=courses)
+    return render_template('learning_page.html',
+                            courses=courses,
+                            current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @main_bp.route('/course/<int:courseid>')
 @login_required
@@ -178,7 +181,10 @@ def course_detail(courseid):
             } for module in modules
         ]
     }
-    return render_template('course_detail.html', data=data)
+    return render_template('course_detail.html', 
+                           data=data,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @main_bp.route('/update_video_progress/<int:videoid>', methods=['POST'])
 @login_required
@@ -237,20 +243,32 @@ def user_progress():
     progress_data = {
         course.name: course.calculate_course_progress(current_user.userid) for course in courses
     }
-    return render_template('each_user_progress.html', user=current_user, progress_data=progress_data)
+    return render_template('each_user_progress.html', user=current_user, progress_data=progress_data, courses=courses
+                           ,current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
-#for user_home
 @main_bp.route('/user_home')
 @login_required
 def user_home():
-    return render_template('user_home.html')
+    # Fetch only the latest two announcements from the database
+    announcements = Announcement.query.order_by(Announcement.date.desc()).limit(2).all()
+    return render_template('user_home.html', announcements=announcements,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
-#for user_account
-@main_bp.route('/user_account')
+
+
+@main_bp.route('/user_account', methods=['GET', 'POST'])
 @login_required
 def user_account():
-    return render_template('user_account.html')
+    return render_template(
+        'user_account.html',
+        current_user_name=current_user.name,  
+        current_user_email=current_user.email,
+        current_user_id=current_user.userid 
+    )
+
 
 
 #for user feedback
@@ -277,3 +295,12 @@ def submit_feedback():
     flash("Thank you for your feedback!", "success")
 
     return redirect(url_for('main.user_home'))
+
+@main_bp.route('/Alumni_user')
+@login_required
+def Alumni_user():
+    users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+    return render_template('Alumni_user.html', 
+                           users=users,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)

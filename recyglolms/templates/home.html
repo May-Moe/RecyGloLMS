@@ -1,6 +1,9 @@
+<<<<<<< HEAD
+=======
 
 
 
+>>>>>>> 0eac598a33fb20821fb6bf1409b53cb1154c5655
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,9 +37,9 @@
                 <div class="dropdown">
                     <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_username}}</span></h4>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_username }}</span></h4>
                         <p id="profile-email">{{ current_useremail }}</p>
-                        <button id="logout-button">Logout</button>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
                 </div>
             </div>
@@ -51,7 +54,7 @@
                 <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
-                <li><a href="Alumni-network.html"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
             </ul>
         </nav>
         <!-- nav end -->
@@ -103,8 +106,8 @@
                         </div>
                     </div>
                 </a>
-                <a href="#">
-                    <div class="card" style="background: linear-gradient(to right, rgba(255, 255, 255, 0.8), #A9C9A4);">
+                <a href="#" style="background: linear-gradient(to right, rgba(255, 255, 255, 0.8), #A9C9A4);">
+                    <div class="card" >
                         <div class="card-content">
                             <div class="card-icon" style="color: #A9C9A4;">
                                 <i class="fa-regular fa-clock"></i>
@@ -132,24 +135,26 @@
                         <thead>
                           <tr>
                             <th>Course</th>
-                            <th>Module</th>
+                            <th>Description</th>
                             <th>Date</th>
                           </tr>
                         </thead>
+                        {% for course in courses %}
                         <tbody>
                           <tr>
-                            <td> MakeUp </td>
-                            <td> Basic Class for Makeup </td>
-                            <td> 2/8/2023</td>
+                            <td> {{ course.name }} </td>
+                            <td> {{ course.description }} </td>
+                            <td> {{ course.created_date }}</td>
                           </tr>
                         </tbody>
+                        {% endfor %}
                       </table>
                 </div>
 
                 <!-- <div class="view-all">
                     <a href="Courses.html">View All Feedback <i class="fas fa-arrow-right"></i></a>
                   </div> -->
-                  <a href="user_course.html" class="view-courses">view all courses</a>
+                  <a href="{{ url_for('main.learning') }}" class="view-courses">view all courses</a>
             </div>
             <!-- third row first card end -->
     </div>
@@ -158,54 +163,29 @@
             <!-- second row of dashboard -->
             <div class="course_header">
                 <h1>Courses In Progress</h1>
-                <a href="user_progress_tracking.html" class="view-courses">My Learning</a>
+                <a href="{{ url_for('main.user_progress') }}" class="view-courses">My Learning</a>
               </div>
-            <div class="courses">
+              
+              <div class="courses">
+                {% for course_name, progress in progress_data.items() %}
                 <div class="course-card">
                     <div class="course-header">
-                        <span class="tag">RecyGlo</span>
+                        <span class="tag">{{ course_name }}</span>
                     </div>
-                    <h3>What is Waste Management? </h3>
+                    <h3>{{ course_name }}</h3>
                     <div class="progress">
-                        <div class="progress-bar" style="width: 80%;"></div>
+                        <div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ progress | round(2) }}%
+                        </div>
                     </div>
-                    <div class="course-info">
-                        <span>2:35h of 4:30h</span>
-                        <span>80%</span>
-                    </div>
-                    <button class="continue-btn">Continue</button>
+                    {% set course = courses | selectattr("name", "equalto", course_name) | first %}
+                    {% if course %}
+                    <a href="{{ url_for('main.course_detail', courseid=course.courseid) }}" class="continue-btn">Continue</a>
+                    {% endif %}
                 </div>
-
-                <div class="course-card">
-                    <div class="course-header">
-                        <span class="tag">Crochet</span>
-                    </div>
-                    <h3>What is crocheting?</h3>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 35%;"></div>
-                    </div>
-                    <div class="course-info">
-                        <span>2:35h of 4:30h</span>
-                        <span>35%</span>
-                    </div>
-                    <button class="continue-btn">Continue</button>
-                </div>
-
-      <div class="course-card">
-        <div class="course-header">
-          <span class="tag">Languages</span>
-        </div>
-        <h3>Learning how to speak Thai</h3>
-        <div class="progress">
-          <div class="progress-bar" style="width: 80%;"></div>
-        </div>
-        <div class="course-info">
-          <span>2:35h of 4:30h</span>
-          <span>80%</span>
-        </div>
-        <button class="continue-btn">Continue</button>
-      </div>
-    </div>
+                {% endfor %}
+            </div>
+            
     <!-- second row of dashboard -->
 
         </div>

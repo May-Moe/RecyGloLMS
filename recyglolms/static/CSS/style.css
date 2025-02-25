@@ -263,6 +263,14 @@ body {
     display: flex;
 }
 
+#logout-button {
+    background-color: #A9C9A4;
+    text-decoration: none;
+    color: white;
+    padding: 0px 15px;
+    border-radius: 10px;
+}
+
 
 
 /* Responsive Design */

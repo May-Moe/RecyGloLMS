@@ -57,22 +57,24 @@ body {
   margin-top: 20px;
 }
 
-.card {
+.cards-container a{
+  text-decoration: none;
+  color: black;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  flex: 1;
+  flex: 1 1 calc(20% - 10px);
   min-width: 230px;
+  width: 100%;
   display: flex;
   align-items: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-decoration: none;
 }
 
-.card:hover{
-transform: translateY(-5px);
-box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
+.cards-container a:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
 }
 
 .cards-header{
@@ -106,8 +108,8 @@ box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
 .cards-container {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap; /* Optional: allows wrapping to the next line if there are too many cards */
-  gap: 10px; /* Optional: adds space between the cards */
+  flex-wrap: wrap; 
+  gap: 10px;
 }
 
 .cards-container a{
@@ -120,15 +122,11 @@ color: black;
   align-items: center;
 }
 
-/* upcoming course table here */
 .courses-table {
   width: 100%;
-  /* border-collapse: collapse; */
   margin: 0px 0;
-  /* background: #fff; */
   border-radius: 8px;
   overflow: hidden;
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
 .courses-table th, .courses-table td {
@@ -210,25 +208,25 @@ height: 200px !important;
 }
 
 .card3-profile img{
-  width: 40px; /* Adjust size of image */
-  height: 40px; /* Adjust size of image */
-  border-radius: 50%; /* Make the image round */
-  margin-right: 15px; /* Add some space between the image and title */
+  width: 40px; 
+  height: 40px; 
+  border-radius: 50%; 
+  margin-right: 15px;
 }
 
 .card3-title{
   font-size: 16px;
   font-weight: bold;
-  display: inline-block; /* Ensures title is beside content */
-  margin-right: 10px; /* Adds spacing between the title and content */
+  display: inline-block; 
+  margin-right: 10px;
   margin-bottom: 20px;
 
 }
 
 .card3-value {
   display: flex;
-  align-items: center; /* Ensures the feedback content aligns vertically with the title */
-  justify-content: flex-start; /* Aligns content to the left */
+  align-items: center; 
+  justify-content: flex-start;
   margin-bottom: 10px;
 }
 
@@ -281,8 +279,8 @@ font-weight: bold;
 }
 
 .announcements {
-  display: flex; /* Use flexbox to align content */
-  flex-direction: column; /* Keep the announcements stacked */
+  display: flex; 
+  flex-direction: column;
   /* justify-content: space-between; */
   /* height: 150vh; */
   background: white;
@@ -290,6 +288,14 @@ font-weight: bold;
   padding: 20px;
   margin-top: 30px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.announcement-list {
+  margin-top: 20px;
+}
+
+.selected-date{
+  color: #A9C9A4;
 }
 
 .announcements h2 {
@@ -301,27 +307,29 @@ font-weight: bold;
 
 .announcements ul {
   display: flex;
-  flex-direction: column; /* Stack announcements vertically */
-  gap: 10px; /* Add spacing between rows */
-  list-style: none; /* Remove bullet points */
-  flex-grow: 1; /* Make the list stretch */
+  flex-direction: column; 
+  gap: 10px; 
+  list-style: none; 
+  flex-grow: 1;
   padding: 0;
   margin: 0;
+  margin-top: 15px;
 }
 
 .announcements li {
-  /* Allow items to grow and fill space */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .announcements li img {
-  width: 100%; /* Adjust image to occupy full width */
+  width: 100%; 
   height: auto;
-  border-radius: 8px; /* Keep rounded corners */
-  max-height: 150px; /* Maintain consistent height */
-  object-fit: cover; /* Ensure images scale properly */
+  border-radius: 8px; 
+  max-height: 150px; 
+  object-fit: cover;
+  box-shadow: 0 6px 5px rgba(0, 0, 0, 0.1);
+  border: 1px solid black;
 }
 
 .calender-container {
@@ -405,11 +413,10 @@ h1 {
 
 .courses {
   display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    gap: 10px;
 }
 
 /* background-color: #fff;
@@ -422,12 +429,17 @@ h1 {
   align-items: center; */
 
 .course-card {
-  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align content to the top */
+  padding: 20px; /* Reduced padding */
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  width: 300px;
-  text-align: left;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  position: relative;
+  margin-bottom: 20px; /* Space between cards */
+  flex: 1;
 }
 
 .course-header {
@@ -460,11 +472,14 @@ h3 {
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 10px;
+  text-align: center;
+  color: white;
 }
 
 .progress-bar {
-  height: 8px;
+  height: 18px;
   background: #A9C9A4;
+  font-size: 14px;
 }
 
 .course-info {
@@ -483,6 +498,8 @@ h3 {
   border-radius: 5px;
   cursor: pointer;
   font-size: 13px;
+  text-decoration: none;
+  text-align: center;
 }
 
 .continue-btn:hover {
@@ -501,156 +518,11 @@ h3 {
   font-size: 16px;
 }
 
-
-
-/* @media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .container {
-      width: 100%;
-      margin-left: 0;
-      margin-top: 80px;
-  }
-
-  .card {
-      width: 100%;
-  }
-
-  .card2 {
-      width: 100%;
-  }
-
-  .card-title, .card2-title {
-      font-size: 0.875rem;
-
-  }
-
-  .card-value, .card2-value {
-      font-size: 0.75rem;
-
-  }
-
-  .announcements {
-      width: 70%;
-      margin-left: 0;
-      margin-top: 50px;
-  }
-
-  .announcements h2 {
-      font-size: 10px;
-
-  }
-
-  .announcements li {
-      font-size: 10px;
-
-  }
-  .calendar-container {
-      width: 250px;
-  }
-
-  .calendar-container {
-      max-width: 100%;
-      padding: 10px;
-  }
-
-  .header-display p {
-      font-size: 0.875rem;
-  }
-
-  .days div,
-  .week div {
-      height: 1.5rem;
-      width: 1.5rem;
-      font-size: 10px;
-  }
-
-} */
-
-
-
-@media (max-width: 768px) {
-  /* Container adjustments */
-  .container {
-      width: 100%;
-      margin-left: 0;
-      margin-top: 90px; /* Increased top margin to prevent overlap with the navbar */
-      padding: 0 10px;
-  }
-
-  /* Header adjustments */
-  .header {
-      padding: 10px 20px;
-  }
-
-  /* Card adjustments */
-  .card {
-      width: 100%;
-      margin-bottom: 10px; /* Add space between cards */
-  }
-
-  .card2 {
-      width: 100%;
-      margin-bottom: 20px; /* Add space between these cards */
-  }
-
-
-  /* Title font size adjustments */
-  .card-title, .card2-title, .card3-title, .card2-pie{
-      font-size: 1rem; /* Adjust font size */
-  }
-
-  /* Value font size adjustments */
-  .card-value, .card2-value, .card3-value, .card2-pie {
-      font-size: 0.875rem; /* Adjust font size */
-  }
-  
-
-  /* Announcements adjustments */
-  .announcements {
-      width: 100%;
-      margin-top: 30px; /* Ensure it doesn't overlap with other elements */
-      padding: 15px; /* Adjust padding for mobile */
-  }
-
-  .announcements h2 {
-      font-size: 1rem;
-      margin-top: 20px; /* Add space at the top of the announcements */
-  }
-
-  .announcements li {
-      font-size: 0.875rem;
-      margin-bottom: 15px; /* Add spacing between items */
-  }
-
-  /* Calendar adjustments */
-  .calendar-container {
-      width: 100%;
-      padding: 15px;
-      margin-top: 0px; /* Space before the calendar */
-  }
-
-  /* Adjust day and week divs */
-  .days div, .week div {
-      height: 2.2rem;
-      width: 2.2rem;
-      font-size: 12px;
-  }
-
-  /* Header display adjustments */
-  .header-display p {
-      font-size: 1rem;
-      word-spacing: 0.3rem;
-  }
-
-  /* View-all button */
-  .view-all {
-      font-size: 0.8rem;
-      bottom: 10px; /* Reduce the space from the bottom */
-  }
-
-  /* Search input adjustments */
-  .search input {
-      width: 100%; /* Make the search input take full width */
-      margin-bottom: 15px; /* Space below search bar */
+      width: 90%; 
+      margin-left: auto;
+      margin-right: auto;
   }
 }
 

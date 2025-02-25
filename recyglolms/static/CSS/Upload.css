@@ -41,7 +41,7 @@ h1 {
     margin-left: auto;
 }
 
-#search_query {
+#searchBar {
     padding: 10px;
     font-size: 13px;
     border: 1px solid #ccc;
@@ -51,7 +51,7 @@ h1 {
     margin-right: 10px;
 }
 
-#search_query:focus {
+#searchBar:focus {
     border-color: #007BFF;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     outline: none;

@@ -15,7 +15,9 @@ def view_all_quizzes():
         return redirect(url_for('auth.login'))
 
     courses = Course.query.all()
-    return render_template('viewall_quizzes.html', courses=courses)
+    return render_template('viewall_quizzes.html', courses=courses,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 # Create Quiz
 @quiz_bp.route('/create_quiz', methods=['GET', 'POST'])
@@ -81,7 +83,9 @@ def create_quiz():
         flash("Course not found!", "danger")
         return redirect(url_for('quiz.view_all_quizzes'))
 
-    return render_template('create_quiz.html', module=module, course=course)
+    return render_template('create_quiz.html', module=module, course=course,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 # View Quiz
 @quiz_bp.route('/view_quiz/<int:quiz_id>', methods=['GET'])
@@ -98,7 +102,9 @@ def view_quiz(quiz_id):
         answers = Answer.query.filter_by(questionid=question.questionid).all()
         quiz_data.append({'question': question, 'answers': answers})
 
-    return render_template('view_quiz.html', quiz=quiz, quiz_data=quiz_data)
+    return render_template('view_quiz.html', quiz=quiz, quiz_data=quiz_data,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 @quiz_bp.route('/update_question', methods=['POST'])
@@ -115,23 +121,23 @@ def update_question():
     # Update question text
     question.text = question_text
 
-    # Reset all answers to incorrect before updating
-    for answer in question.answers:
-        answer.is_correct = False
+    # Collect answer IDs that should be marked correct
+    correct_answer_ids = {answer_data.get("answer_id") for answer_data in answers if answer_data.get("is_correct")}
 
     # Update answers
     for answer_data in answers:
         answer_id = answer_data.get("answer_id")
         answer_text = answer_data.get("text")
-        is_correct = answer_data.get("is_correct", False)
 
         answer = Answer.query.get(answer_id)
         if answer:
             answer.text = answer_text
-            answer.is_correct = is_correct  # Update whether it's the correct answer
+            answer.is_correct = answer_id in correct_answer_ids  # Set correct answer
 
     db.session.commit()
-    return jsonify({"message": "Question updated successfully!"}), 200
+
+    return jsonify({"message": "Question updated successfully"}), 200
+
 
 # Delete Quiz
 @quiz_bp.route('/delete_quiz/<int:quiz_id>', methods=['POST'])
@@ -152,8 +158,7 @@ def delete_quiz(quiz_id):
     
     db.session.delete(quiz)
     db.session.commit()
-
-    return jsonify({"message": "Quiz deleted successfully!"}), 200
+    return redirect(url_for('quiz.view_all_quizzes'))
 
 # User side quiz functionalities
 
@@ -169,7 +174,9 @@ def user_quizzes():
 def start_quiz(quizid):
     """Start a quiz and display questions."""
     quiz = Quiz.query.get_or_404(quizid)
-    return render_template('start_quiz.html', quiz=quiz)
+    return render_template('start_quiz.html', quiz=quiz,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @quiz_bp.route('/quiz/<int:quizid>/submit', methods=['POST'])
 @login_required
@@ -236,18 +243,21 @@ def quiz_result(responseid):
                             user_response=user_response, 
                            user_answers=user_answers, 
                            score=user_response.score,
-                           user_quiz_results=user_quiz_results)
+                           user_quiz_results=user_quiz_results,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @quiz_bp.route('/quiz/summary')
 @login_required
 def summary_mark():
     """Display a summary of the user's quiz attempts."""
-    # Fetch all quiz attempts by the logged-in user
     user_quiz_results = UserResponse.query.filter_by(userid=current_user.userid) \
                                           .order_by(UserResponse.responseid.desc()).all()
 
     if not user_quiz_results:
-        return render_template('summary_mark.html', user_quiz_results=[])  # Ensure it's not undefined
+        return render_template('summary_mark.html', user_quiz_results=[])
 
-    return render_template('summary_mark.html', user_quiz_results=user_quiz_results)
+    return render_template('summary_mark.html', user_quiz_results=user_quiz_results,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
