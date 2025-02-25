@@ -1,0 +1,211 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    margin: 10px auto;
+    margin-left: 300px; /* Offset for sidebar */
+    margin-top: 100px;
+    margin-right: 60px;
+    margin-bottom: 600px;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    transition: margin-left 0.5s, width 0.5s;
+}
+
+.cards-header{
+  background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+  .dropdown_course {
+    margin-bottom: 15px;
+    /* border: 1px solid #ccc; */
+    border-radius: 5px;
+    background-color: #e3e3e3;
+  }
+  
+  .dropdown-toggle {
+    width: 100%;
+    text-align: left;
+    padding: 25px;
+    font-size: 16px;
+    border: none;
+    background-color: #fff;
+    color: gray;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+  
+  .dropdown-toggle:hover {
+    background-color: #e9e9e9;
+  }
+
+  .dropdown-toggle-video {
+    width: 100%;
+    text-align: left;
+    padding: 13px;
+    font-size: 16px;
+    border: none;
+    background-color: #fff;
+    color: gray;
+    cursor: pointer;
+    border-radius: 5px;
+    
+  }
+
+  .dropdown-toggle-video:hover{
+    background-color: #e9e9e9;
+  }
+
+  .dropdown-toggle-quiz {
+    width: 100%;
+    text-align: left;
+    padding: 13px;
+    font-size: 16px;
+    border: none;
+    background-color: #fff;
+    color: gray;
+    cursor: pointer;
+    border-radius: 5px;
+    
+  }
+
+  .dropdown-toggle-quiz:hover{
+    background-color: #e9e9e9;
+  }
+  
+  .dropdown-content {
+    display: none;
+    padding: 15px;
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+  }
+  
+  .tab a {
+    color: #4a6b78;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .tab p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* General Container Styles */
+#section1 {
+  padding: 2px;
+  background-color: #f9f9f9;
+}
+
+/* Tab Section Wrapper */
+.tab_section {
+  display: flex;
+  gap: 20px; /* Adds space between tabs */
+  flex-wrap: wrap; /* Ensures the tabs wrap on smaller screens */
+}
+
+/* Tab Box Styling */
+.tab {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  /* max-width: 560px; */
+  box-sizing: border-box;
+ /* Centers the content inside */
+}
+
+/* Headings */
+.tab h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Paragraph Text */
+.tab p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Video Container */
+/* .video-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.video-overlay span {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+iframe {
+    position: relative;
+    width: 100%;
+}
+
+.complete {
+  background-color: #A9C9A4;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    width: 90%; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+  .video-container{
+    width: 90%;
+  }
+}
+
+

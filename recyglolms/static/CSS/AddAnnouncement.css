@@ -78,7 +78,7 @@ input[type="file"] {
     font-size: 13px;
 }
 
-button {
+.submit-button {
     padding: 8px 20px;
     background-color: white;
     border: 1px solid #9f9f9f;
@@ -86,22 +86,30 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    min-width: 7px; /* Ensure buttons have the same size */
+    min-width: 7px;
     text-align: center;
 }
 
-button:hover {
-    background-color: #dee5e1;
-    color: #9f9f9f;
-}
+.submit-button:hover {
+    background-color: #A9C9A4;
+    color: white;
+} 
 
 .cancel-button {
+    padding: 8px 20px;
     background-color: white;
+    border: 1px solid #9f9f9f;
+    color: #9f9f9f;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 7px;
+    text-align: center;
 }
 
 .cancel-button:hover {
-    background-color: #dee5e1;
-    color: #9f9f9f;
+    background-color: #A9C9A4;
+    color: white;
 }
 
 .back-icon {
@@ -119,4 +127,13 @@ button:hover {
 
 .back-icon:hover {
     color: black;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
 }

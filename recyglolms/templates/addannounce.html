@@ -2,7 +2,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/CSS/style.css">
-    <link rel="stylesheet" href="../static/CSS/EditAnnouncement.css">
+    <link rel="stylesheet" href="../static/CSS/AddAnnouncement.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Add Announcements</title>
 </head>
@@ -67,13 +67,13 @@
                     <input type="date" name="event_date" required>
                 </div>
                 <div class="form-group">
-                    <label for="announcement_img" style="color: green;">Click to Choose file</label>
+                    <label for="announcement_img" style="color: white; background-color: #A9C9A4; padding: 14px 5px; border-radius: 5px; font-size: 14px;">Click to Choose file</label>
                     <input id="announcement_img" type="file" name="announcement_img" required>
                     <span id="file-chosen">No file chosen</span>
                     <!-- <input type="file" name="file" id="file" required> -->
                 </div>
                 <div class="buttons">
-                    <button type="submit">Add</button>
+                    <button type="submit" class="submit-button">Add</button>
                     <a href="{{ url_for('announcement.view_all_announcements') }}"><button type="button" class="cancel-button">Cancel</button></a>
                 </div>
             </form>

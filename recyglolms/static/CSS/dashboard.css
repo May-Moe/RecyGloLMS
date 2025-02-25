@@ -62,8 +62,9 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    flex: 1;
+    flex: 1 1 calc(50% - 10px);
     min-width: 230px;
+    max-width: 100%;
     display: flex;
     align-items: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -492,85 +493,29 @@ body {
     /* Container adjustments */
     .container {
         width: 100%;
-        margin-left: 0;
-        margin-top: 90px; /* Increased top margin to prevent overlap with the navbar */
-        padding: 0 10px;
+        margin-left: auto;
+        margin-right: auto; 
+        
+    }
+    .cards-container {
+        flex-direction: column;
     }
 
-    /* Header adjustments */
-    .header {
-        padding: 10px 20px;
-    }
-
-    /* Card adjustments */
     .card {
+        flex: 1 1 100%; /* Make each card full width */
         width: 100%;
-        margin-bottom: 10px; /* Add space between cards */
     }
 
     .card2 {
         width: 100%;
-        margin-bottom: 20px; /* Add space between these cards */
     }
 
-
-    /* Title font size adjustments */
-    .card-title, .card2-title, .card3-title, .card2-pie{
-        font-size: 1rem; /* Adjust font size */
+    .chart3 {
+        flex-direction: column;
     }
 
-    /* Value font size adjustments */
-    .card-value, .card2-value, .card3-value, .card2-pie {
-        font-size: 0.875rem; /* Adjust font size */
-    }
-    
-
-    /* Announcements adjustments */
-    .announcements {
+    .card3 {
         width: 100%;
-        margin-top: 30px; /* Ensure it doesn't overlap with other elements */
-        padding: 15px; /* Adjust padding for mobile */
     }
 
-    .announcements h2 {
-        font-size: 1rem;
-        margin-top: 20px; /* Add space at the top of the announcements */
-    }
-
-    .announcements li {
-        font-size: 0.875rem;
-        margin-bottom: 15px; /* Add spacing between items */
-    }
-
-    /* Calendar adjustments */
-    .calendar-container {
-        width: 100%;
-        padding: 15px;
-        margin-top: 0px; /* Space before the calendar */
-    }
-
-    /* Adjust day and week divs */
-    .days div, .week div {
-        height: 2.2rem;
-        width: 2.2rem;
-        font-size: 12px;
-    }
-
-    /* Header display adjustments */
-    .header-display p {
-        font-size: 1rem;
-        word-spacing: 0.3rem;
-    }
-
-    /* View-all button */
-    .view-all {
-        font-size: 0.8rem;
-        bottom: 10px; /* Reduce the space from the bottom */
-    }
-
-    /* Search input adjustments */
-    .search input {
-        width: 100%; /* Make the search input take full width */
-        margin-bottom: 15px; /* Space below search bar */
-    }
 }

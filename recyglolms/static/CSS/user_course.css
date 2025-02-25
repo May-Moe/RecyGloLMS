@@ -1,0 +1,121 @@
+/* Base styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fc;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+h1 {
+    font-size: 24px;
+    color: #1a6e1b;
+    margin-bottom: 20px;
+}
+
+h4, p {
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    margin: 10px auto;
+    margin-left: 300px; /* Offset for sidebar */
+    margin-top: 100px;
+    margin-right: 60px;
+    margin-bottom: 60px;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    transition: margin-left 0.5s, width 0.5s;
+}
+
+.cards-header{
+    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.course-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.course-item {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.course-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.course-details {
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-label {
+    font-size: 16px;
+    color: #333;
+}
+
+.filter-select {
+    padding: 10px;
+    font-size: 13px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    transition: border-color 0.3s ease;
+}
+
+.filter-select:focus {
+    border-color: #1a6e1b;
+    outline: none;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 90%; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .filter-select{
+        width: calc(100% - 130px); /* Adjust width based on button size */
+        margin-right: 0;
+    }
+
+}
+
+

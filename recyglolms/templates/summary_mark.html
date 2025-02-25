@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/summary_mark.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Summary Mark</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="{{ url_for('static', filename='img/Recyglo logo.png') }}" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+                <div class="dropdown">
+                    <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
+                        <p id="profile-email">may@gmail.com</p>
+                        <button id="logout-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="{{ url_for('static', filename='img/Recyglo logo.png') }}" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="Alumni-network.html"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="header">
+                <h1>Summary of Your Previous Attempts</h1>
+                <div class="header-actions">
+                    <a href="{{ url_for('quiz.start_quiz', quizid=user_quiz_results[0].quizid) }}" id="addUserLink">
+                        <button id="addUserButton">Re-attempt Quiz</button>
+                    </a>
+                </div>
+            </div>
+            <div class="table-container">
+                {% if user_quiz_results %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Attempt</th>
+                            <th>Grade</th>
+                            <th>Review</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in user_quiz_results %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ result.score }}%</td>
+                            <td>
+                                <a href="{{ url_for('quiz.quiz_result', responseid=result.responseid) }}" class="editAction">Review</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No quiz attempts found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='JS/script.js') }}"></script>
+</body>
+</html>

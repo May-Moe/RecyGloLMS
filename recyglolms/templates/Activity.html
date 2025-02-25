@@ -76,24 +76,14 @@
             </div>
         </div>
     </div>
-    
-    <!-- Add Activity Modal -->
-    <div class="overlay hidden" id="activityOverlay">
+    <!-- Popup Overlay -->
+    <div class="overlay" id="overlay">
         <div class="modal">
-            <span class="close-icon" id="closeActivityModal"><i class="fa-solid fa-xmark"></i></span>
-            <h2>Add Activity</h2>
-            <form id="activityForm">
-                <label for="activityName">Activity Name:</label>
-                <input type="text" id="activityName" name="activityName" required>
-                
-                <label for="activityImages">Upload Images:</label>
-                <input type="file" id="activityImages" name="activityImages" multiple accept="image/*">
-                
-                <button type="submit">Submit</button>
-            </form>
+            <span class="close-icon" id="close-icon"><i class="fa-solid fa-xmark"></i></span>
+            <p class="forgot">For Users, contact your adminstrator to reset your password.</p>
         </div>
     </div>
-    
+    <script src="JS/script.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const addActivityBtn = document.getElementById("addActivityBtn");

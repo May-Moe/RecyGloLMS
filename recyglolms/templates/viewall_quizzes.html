@@ -3,52 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View All Courses and Modules</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Admin Quiz Management</title>
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/viewall_quizzes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-
-    <div class="container mt-5">
-        <h2 class="text-center">View All Courses & Modules</h2>
-    
-        {% for course in courses %}
-            <div class="card mt-4">
-                <div class="card-header bg-primary text-white">
-                    <h4>{{ course.name }}</h4>
+    <div class="dashboard">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
                 </div>
-                <div class="card-body">
-                    {% if course.modules %}
-                        <ul class="list-group">
-                            {% for module in course.modules %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span>{{ module.name }}</span>
-                                    <div>
-                                        <a href="{{ url_for('quiz.create_quiz', module_id=module.moduleid) }}" class="btn btn-success btn-sm">Add New Quiz</a>
-                                        
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
+                        <p id="profile-email">may@gmail.com</p>
+                        <button id="logout-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+                <li><a href="{{ url_for('quiz.user_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                <li><a href="#"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container">
+            <h2>Manage Quizzes</h2>
+
+            <!-- Course Filter & Search -->
+            <div class="header-actions">
+                <select class="filter-select" id="courseFilter">
+                    <option value="all">Show all Courses</option>
+                    {% for course in courses %}
+                        <option value="{{ course.name|lower|replace(' ', '-') }}">{{ course.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" id="searchBar" placeholder="Search">
+            </div>
+
+            <!-- Courses & Modules -->
+            {% for course in courses %}
+                <div class="course-container" id="{{ course.name|lower|replace(' ', '-') }}">
+                    <h3>{{ course.name }}</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Modules</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for module in course.modules %}
+                                <tr>
+                                    <td>{{ module.moduleid }}</td>
+                                    <td>{{ module.name }}</td>
+                                    <td>
+                                        <a href="{{ url_for('quiz.create_quiz', module_id=module.moduleid) }}" class="btn btn-success">Add Quiz</a>
                                         {% if module.quizzes %}
                                             {% for quiz in module.quizzes %}
-                                                <a href="{{ url_for('quiz.view_quiz', quiz_id=quiz.quizid) }}" class="btn btn-info btn-sm">View Quiz</a>
+                                                <a href="{{ url_for('quiz.view_quiz', quiz_id=quiz.quizid) }}" class="btn btn-info">View Quiz</a>
                                                 <form action="{{ url_for('quiz.delete_quiz', quiz_id=quiz.quizid) }}" method="POST" style="display: inline;">
-                                                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm">Delete</button>
+                                                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</button>
                                                 </form>
                                             {% endfor %}
                                         {% else %}
                                             <span class="text-muted">No quizzes available</span>
                                         {% endif %}
-                                        
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p class="text-muted">No modules available for this course.</p>
-                    {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
-    
+            {% endfor %}
+        </div>
     </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts -->
+    <script src="static/JS/script.js"></script>
+    <script>
+        // Filter Courses
+        document.getElementById("courseFilter").addEventListener("change", function () {
+            const selectedValue = this.value;
+            const courseContainers = document.querySelectorAll(".course-container");
+
+            courseContainers.forEach((container) => {
+                if (selectedValue === "all" || container.id === selectedValue) {
+                    container.style.display = "block";
+                } else {
+                    container.style.display = "none";
+                }
+            });
+        });
+
+        // Search Functionality
+        document.getElementById("searchBar").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let courseContainers = document.querySelectorAll(".course-container");
+
+            courseContainers.forEach(container => {
+                let courseName = container.querySelector("h3").innerText.toLowerCase();
+                if (courseName.includes(filter)) {
+                    container.style.display = "block";
+                } else {
+                    container.style.display = "none";
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>

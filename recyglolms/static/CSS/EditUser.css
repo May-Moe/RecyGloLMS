@@ -65,13 +65,13 @@ input[type="text"], input[type="email"], input[type="password"], select {
 }
 
 .submit-button:hover {
-    background-color: #dee5e1;
-    color: #9f9f9f;
+    background-color: #A9C9A4;
+    color: white;
 }
 
 .cancel-button:hover {
-    background-color: #dee5e1;
-    color: #9f9f9f;
+    background-color: #A9C9A4;
+    color: white;
 }
 
 .cancel-button {
@@ -87,18 +87,12 @@ input[type="text"], input[type="email"], input[type="password"], select {
     margin-left: 10px;
 }
 
-.cancel-button:hover {
-    background-color: #dee5e1;
-    color: #9f9f9f;
-}
-
 /* Responsive styles */
 
 @media (max-width: 768px) {
     .container {
-        width: 100%;
-        margin-left: 60px;
-        margin-top: 120px; /* Adjust top margin for smaller screens */
-        padding: 20px;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto; /* Adjust top margin for smaller screens */
     }
 }

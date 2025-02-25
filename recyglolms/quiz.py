@@ -232,7 +232,22 @@ def quiz_result(responseid):
         result.answers = UserAnswer.query.filter_by(responseid=result.responseid).all()
 
     # Render the quiz result page with all user quiz results and answers
-    return render_template('quiz_result.html', 
+    return render_template('quiz_result.html',
+                            user_response=user_response, 
                            user_answers=user_answers, 
                            score=user_response.score,
                            user_quiz_results=user_quiz_results)
+
+@quiz_bp.route('/quiz/summary')
+@login_required
+def summary_mark():
+    """Display a summary of the user's quiz attempts."""
+    # Fetch all quiz attempts by the logged-in user
+    user_quiz_results = UserResponse.query.filter_by(userid=current_user.userid) \
+                                          .order_by(UserResponse.responseid.desc()).all()
+
+    if not user_quiz_results:
+        return render_template('summary_mark.html', user_quiz_results=[])  # Ensure it's not undefined
+
+    return render_template('summary_mark.html', user_quiz_results=user_quiz_results)
+
