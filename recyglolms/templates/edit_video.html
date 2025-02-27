@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Video</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Edit Video</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="video_title">Video Title</label>
+                <input type="text" class="form-control" id="video_title" name="video_title" value="{{ video.title }}" required>
+            </div>
+            <div class="form-group">
+                <label for="video_url">Video URL</label>
+                <input type="text" class="form-control" id="video_url" name="video_url" value="{{ video.url }}" required>
+            </div>
+            <div class="form-group">
+                <label for="video_duration">Video Duration (in minutes)</label>
+                <input type="number" class="form-control" id="video_duration" name="video_duration" value="{{ video.duration }}" required>
+            </div>
+            <div class="form-group">
+                <label for="course_id">Select Course</label>
+                <select class="form-control" id="course_id" name="course_id" required>
+                    <option value="">-- Select Course --</option>
+                    {% for course in courses %}
+                        <option value="{{ course.courseid }}" {% if course.courseid == selected_course_id %}selected{% endif %}>
+                            {{ course.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="module_id">Select Module</label>
+                <select class="form-control" id="module_id" name="module_id" required>
+                    <option value="">-- Select Module --</option>
+                    {% for module in modules %}
+                        <option value="{{ module.moduleid }}" {% if module.moduleid == selected_module_id %}selected{% endif %}>
+                            {{ module.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Video</button>
+            <a href="{{ url_for('admin.manage_course') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Update modules when the course is changed
+            $('#course_id').change(function () {
+                var courseId = $(this).val();
+                if (courseId) {
+                    $.ajax({
+                        url: '/get_modules/' + courseId,
+                        type: 'GET',
+                        success: function(response) {
+                            // Update the module select dropdown with the new options
+                            $('#module_id').html('<option value="">-- Select Module --</option>' + response);
+                        },
+                        error: function() {
+                            alert('Error loading modules.');
+                        }
+                    });
+                } else {
+                    // Reset module dropdown if no course is selected
+                    $('#module_id').html('<option value="">-- Select Module --</option>');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

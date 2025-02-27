@@ -83,12 +83,12 @@
                     </thead>
                     <tbody id="userTableBody">
                         <!-- User data will be populated here -->
-                        {% for file in files %}
+                        {% for file, user in files %}
                          <tr>
                             <td>{{ file.filename }}</td>
                             <td>{{ file.filetype }}</td>
                             <td>{{ file.uploaddate }}</td>
-                            <td>{{ file.userid }}</td>
+                            <td>{{ user.name }}</td>
                             <td>
                                 <a href="{{ url_for('upload.edit_file', uploadid=file.uploadid) }}" class="editAction"><i class="fas fa-edit"></i></a>
                                 <form action="{{ url_for('upload.delete_file', uploadid=file.uploadid) }}" method="POST" style="display:inline;">

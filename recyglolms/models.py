@@ -6,6 +6,7 @@ from flask_login import UserMixin
 class User(db.Model, UserMixin):
     userid = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    profile_img = db.Column(db.String(200), nullable=True, default="/static/uploads/default-profile.jpg")
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.Boolean, default=False)  # False for regular user, True for admin

@@ -27,7 +27,7 @@
                     </ul>
                 </div>
                 <div class="dropdown">
-                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='img/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
                         <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
                         <p id="profile-email">{{ current_user_email }}</p>
@@ -45,140 +45,159 @@
                 <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
                 <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
-                <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
                 <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
             </ul>
         </nav>
         <div class="container">
-            <form method="POST">
-            <div class="profile-header">
-                <div class="profile-pic">
-                    <img src="static/img/may.jpg" alt="Profile Picture" id="profile-picture">
-                    
-                    <!-- Hidden File Input -->
-                    <input type="file" id="profile-upload" accept="image/*" style="display: none;">
-                    
-                    <!-- Camera Button to Trigger File Upload -->
-                    <button type="button" class="edit-pic" onclick="document.getElementById('profile-upload').click();">
-                        <i class="fa fa-camera"></i>
-                    </button>
+            <form method="POST" enctype="multipart/form-data">
+
+                <!-- Profile Header Section -->
+                <div class="profile-header">
+                    <form method="POST" action="{{ url_for('update_profile_image') }}" enctype="multipart/form-data">
+                        <div class="profile-pic">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='img/default-profile.jpg') }}" alt="Profile Picture" id="profile-picture">
+                            
+                            <!-- Hidden File Input -->
+                        <input type="file" id="profile_image" name="profile_image" accept="image/*" style="display: none;" onchange="previewImage(event)">
+
+                        <!-- Camera Button to Trigger File Upload -->
+                        <!-- Camera Button to Open Modal -->
+                        <button type="button" class="edit-pic" onclick="openModal()">
+                            <i class="fa fa-camera"></i>
+                        </button>
+
+                        </div>
+                    </form>
+                
+                    <!-- User Name and Email Display -->
+                    <h2>{{ current_user_name }}</h2>
+                    <p class="gmail">{{ current_user_email }}</p>
                 </div>
                 
-                <h2>{{ current_user_name }}</h2>
-                <p class="gmail">{{ current_user_email }}</p>
-            </div>
-            <div class="profile-body">
-                <div class="basic-info">
-                    <h3>Basic Information</h3>
-                    <p><b>Full Name:</b> 
-                        <span class="editable" id="user-name-text">{{ current_user_name }}</span> 
-                        <input type="text" id="user-name-input" class="hidden" value="{{ current_user_name }}">
-                        <button class="edit-btn" id="edit-name-btn">✎</button>
-                        <button class="save-btn hidden" id="save-name-btn">✔</button>
-                    </p>                    
-                    <p><b>Email Address:</b> {{ current_user_email }}</p>
-                    <p><b>User ID:</b> <button class="add-btn">{{ current_user_id }}</button></p>
-                    <p><b>Password:</b> <button class="change-password-btn">Change password</button></p>
+                <!-- Profile Body Section -->
+                <div class="profile-body">
+                    <div class="basic-info">
+                        <h3>Basic Information</h3>
+                        <p><b>Full Name:</b> 
+                            <span class="editable" id="user-name-text">{{ current_user_name }}</span> 
+                            <button type="button" class="edit-btn" id="edit-name-btn">✎</button>
+                        </p>                    
+                        <p><b>Email Address:</b> {{ current_user_email }}</p>
+                        <p><b>User ID:</b> <button type="button" class="add-btn">{{ current_user_id }}</button></p>
+                        <p><b>Password:</b> <button type="button" class="change-password-btn">Change password</button></p>
+                    </div>
+                    
+                    <!-- System Settings Section -->
+                    <div class="system-settings">
+                        <h3>System Settings</h3>
+                        <p><b>Language:</b> English (United States)</p>
+                        <p><b>Privacy Settings:</b> Only administrators and other instructors can view my profile information</p>
+                    </div>
                 </div>
-                <div class="system-settings">
-                    <h3>System Settings</h3>
-                    <p><b>Language:</b> English (United States) </p>
-                    <p><b>Privacy Settings:</b> Only administrators and other instructors can view my profile information</p>
-                </div>
-            </div>
-        </form>
+            
+            </form>
         </div>
     </div>
-    <!-- Change Password Modal -->
-<div id="password-modal" class="modal hidden">
+    
+<!-- Profile Image Modal -->
+<div id="profile-image-modal" class="modal hidden">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 style="color: #A9C9A4; text-align: center; margin-bottom: 10px;">Change Password</h2>
-        <form id="change-password-form">
-            <label for="current-password" class="label-password">Current Password:</label>
-            <input type="password" id="current-password" required>
-            
-            <label for="new-password" class="label-password">New Password:</label>
-            <input type="password" id="new-password" required>
-
-            <button type="submit" class="change-btn">Change Password</button>
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Update Profile Picture</h2>
+        <form method="POST" action="{{ url_for('update_profile_image') }}" enctype="multipart/form-data">
+            <input type="file" name="profile_image" id="modal-profile-image" accept="image/*">
+            <button type="submit" class="update-btn">Upload</button>
         </form>
     </div>
 </div>
 
+    <!-- Username Modal -->
+    <div id="username-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Update Username</h2>
+            <form method="POST" action="{{ url_for('update_username') }}">
+                <input type="text" id="username" name="username" value="{{ current_user_name }}">
+                <button type="submit" class="update-btn">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="password-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Change Password</h2>
+            <form method="POST" action="{{ url_for('change_password') }}">
+                <label for="current-password">Current Password:</label>
+                <input type="password" id="current-password" name="current-password" required>
+                
+                <label for="new-password">New Password:</label>
+                <input type="password" id="new-password" name="new-password" required>
+
+                <button type="submit" class="change-btn">Change Password</button>
+            </form>
+        </div>
+    </div>
+
     <script src="static/JS/script.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-    const modal = document.getElementById("password-modal");
-    const changePasswordBtn = document.querySelector(".change-password-btn");
-    const closeBtn = document.querySelector(".close");
-    
-    // Show Modal
-    changePasswordBtn.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent form submission
-        modal.style.display = "flex";
-    });
 
-    // Close Modal
-    closeBtn.addEventListener("click", function () {
-        modal.style.display = "none";
-    });
-
-    // Hide modal when clicking outside the box
-    window.addEventListener("click", function (event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
+        // Function to open the modal
+        function openModal() {
+            document.getElementById('profile-image-modal').style.display = 'flex';
         }
-    });
 
-    // Handle Form Submission
-    document.getElementById("change-password-form").addEventListener("submit", function (event) {
-        event.preventDefault();
-        const currentPassword = document.getElementById("current-password").value;
-        const newPassword = document.getElementById("new-password").value;
-
-        if (currentPassword && newPassword) {
-            alert("Password changed successfully!");
-            modal.style.display = "none"; // Close modal after change
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('profile-image-modal').style.display = 'none';
         }
-    });
-});
 
+        // Optional: Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('profile-image-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
 
-document.addEventListener("DOMContentLoaded", function () {
-    const editBtn = document.getElementById("edit-name-btn");
-    const saveBtn = document.getElementById("save-name-btn");
-    const userNameText = document.getElementById("user-name-text");
-    const userNameInput = document.getElementById("user-name-input");
+        // Function to preview the uploaded image
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Display preview in the modal
+                const output = document.getElementById('modal-profile-image');
+                output.src = URL.createObjectURL(file);
 
-    // Prevent button clicks from submitting the form
-    editBtn.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent form submission
-        userNameText.classList.add("hidden"); // Hide text
-        userNameInput.classList.remove("hidden"); // Show input
-        editBtn.classList.add("hidden"); // Hide edit button
-        saveBtn.classList.remove("hidden"); // Show save button
-        userNameInput.focus();
-    });
-
-    saveBtn.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent form submission
-        const newName = userNameInput.value.trim();
-        if (newName) {
-            userNameText.textContent = newName; // Update displayed name
-            userNameText.classList.remove("hidden");
-            userNameInput.classList.add("hidden");
-            editBtn.classList.remove("hidden");
-            saveBtn.classList.add("hidden");
-
-            // Optional: Send updated name to backend
-            // Example: Use fetch() to send newName to the server
+                // Show modal
+                document.getElementById('profile-image-modal').style.display = 'flex';
+            }
         }
-    });
-});
 
+        // Modal and Submission for Profile Image
+        document.getElementById('edit-name-btn').addEventListener('click', function() {
+            document.getElementById('username-modal').style.display = 'flex';
+        });
 
+        // Modal and Submission for Username
+        document.querySelector('.change-password-btn').addEventListener('click', function () {
+            document.getElementById('password-modal').style.display = 'flex';
+        });
 
+        // Close modals
+        document.querySelectorAll('.close').forEach(function (closeBtn) {
+            closeBtn.addEventListener('click', function () {
+                closeBtn.closest('.modal').style.display = 'none';
+            });
+        });
+
+        // Close Modal if Click Outside
+        window.addEventListener("click", function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        });
     </script>
 </body>
 </html>

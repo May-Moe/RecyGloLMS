@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app, send_from_directory
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import app, db
-from recyglolms.models import Upload
+from recyglolms.models import Upload, User
 from flask_login import login_required, current_user
 import os
 from datetime import datetime
@@ -139,17 +139,19 @@ def view_files():
     search_query = request.form.get('search_query', '').strip()
     
     if search_query:
-        files = Upload.query.filter(Upload.filename.ilike(f"%{search_query}%")).all()
+        # Query to filter files based on search query and include associated user name
+        files = db.session.query(Upload, User).join(User).filter(Upload.filename.ilike(f"%{search_query}%")).all()
     else:
-        files = Upload.query.all()
+        # Query to get all files with associated user names
+        files = db.session.query(Upload, User).join(User).all()
 
     # Construct preview URLs
-    for file in files:
+    for file, user in files:
         file.preview_url = url_for('upload.uploaded_file', filename=file.filename)
 
     return render_template('view_files.html', files=files,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                           current_user_name=current_user.name,
+                           current_user_email=current_user.email)
 
 @upload_bp.route('/uploads/<filename>')
 def uploaded_file(filename):

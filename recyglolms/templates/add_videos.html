@@ -56,36 +56,56 @@
         <div class="container">
             <a href="{{ url_for('admin.add_module') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
             <h2>Add Videos</h2>
-            <form id="AddAnnouncementForm">
+            <form id="AddVideoForm" method="POST" action="{{ url_for('admin.add_video', course=selected_course_id) }}">
                 <div class="form-group">
-                    <label for="course">Courses</label>
-                    <select id="course" name="course">
-                        <option value="RecyGlo">RecyGlo</option>
-                        <option value="Waste">Waste</option>
+                    <label for="course">Select Course</label>
+                    <select id="course" name="course" required onchange="this.form.submit()">
+                        <option value="">-- Select Course --</option>
+                        {% for course in courses %}
+                            <option value="{{ course.courseid }}" 
+                                {% if course.courseid == selected_course_id %} selected {% endif %}>
+                                {{ course.name }}
+                            </option>
+                        {% endfor %}
                     </select>
-                    </div>
+                </div>
+            
+                {% if selected_course_id %}
                     <div class="form-group">
-                    <label for="module">Modules</label>
-                    <select id="module" name="module">
-                        <option value="ESG">ESG</option>
-                        <option value="Waste">Waste</option>
-                    </select>
+                        <label for="module">Select Module</label>
+                        <select id="module" name="module" required>
+                            <option value="">-- Select Module --</option>
+                            {% for module in modules %}
+                                <option value="{{ module.moduleid }}" 
+                                    {% if module.moduleid == selected_module_id %} selected {% endif %}>
+                                    {{ module.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+            
+                <div class="form-group">
+                    <label for="video_title">Video Title</label>
+                    <input type="text" id="video_title" name="video_title" 
+                        value="{{ request.form.video_title if request.method == 'POST' else '' }}" required>
                 </div>
-                <div class="form-group">    
-                    <label for="title">Video Title</label>
-                    <input type="text" id="title" name="title" required>
+            
+                <div class="form-group">
+                    <label for="video_url">Video URL</label>
+                    <input type="text" id="video_url" name="video_url" 
+                        value="{{ request.form.video_url if request.method == 'POST' else '' }}" required>
                 </div>
-                <div class="form-group">    
-                    <label for="title">URL</label>
-                    <input type="text" id="title" name="title" required>
+            
+                <div class="form-group">
+                    <label for="video_duration">Duration (in seconds)</label>
+                    <input type="number" id="video_duration" name="video_duration" 
+                        value="{{ request.form.video_duration if request.method == 'POST' else '' }}" required>
                 </div>
-                <div class="form-group">    
-                    <label for="title">Duration</label>
-                    <input type="time" id="title" name="title" required>
-                </div>
+            
+                <button type="submit" class="submit-button">Submit</button>
             </form>
             <div class="buttons">
-                <button type="submit" class="submit-button">Submit</button>
                 <a href="{{ url_for('admin.manage_course') }}"><button type="button" class="cancel-button">Cancel</button></a>
             </div>
         </div>

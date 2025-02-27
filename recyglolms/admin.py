@@ -282,14 +282,13 @@ def add_course():
             db.session.add(new_course)
             db.session.commit()
             flash("Course added successfully!", "success")
-            return redirect(url_for('admin.view_all'))
+            return redirect(url_for('admin.manage_course'))
 
     return render_template('add_courses.html',
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
 
 
-# Route to add a new module
 @admin_bp.route('/add_module', methods=['GET', 'POST'])
 @login_required
 def add_module():
@@ -297,28 +296,31 @@ def add_module():
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
+    courses = Course.query.all()  # Fetch all available courses
+
     if request.method == 'POST':
+        print("Form Data:", request.form)  # Debugging to see if form data is received
+
         name = request.form.get('module_name')
         description = request.form.get('module_description')
-        course_id = request.form.get('module_course_id')
+        course_id = request.form.get('module_course_id')  # Match the form input name
 
         if not name or not description or not course_id:
             flash("Module name, description, and associated course are required.", "danger")
         else:
-            new_module = Module(name=name, description=description, courseid=course_id, created_date=datetime.utcnow())
+            new_module = Module(
+                name=name,
+                description=description,
+                courseid=int(course_id),  # Ensure course_id is an integer
+                created_date=datetime.utcnow()
+            )
             db.session.add(new_module)
             db.session.commit()
             flash("Module added successfully!", "success")
-            return redirect(url_for('admin.view_all'))
+            return redirect(url_for('admin.manage_course'))
 
-    courses = Course.query.all()  # Needed for module association
-    return render_template('add_modules.html', 
-                           courses=courses,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+    return render_template('add_modules.html', courses=courses)
 
-
-# Route to add a new video
 @admin_bp.route('/add_video', methods=['GET', 'POST'])
 @login_required
 def add_video():
@@ -326,25 +328,226 @@ def add_video():
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
+    # Get courses for the dropdown
+    courses = Course.query.all()
+
+    selected_course_id = request.form.get('course') or request.args.get('course')  # Retain course selection
+    selected_module_id = request.form.get('module')
+    modules = []
+
+    if selected_course_id:
+        try:
+            selected_course_id = int(selected_course_id)  # Convert to int for correct comparison
+            modules = Module.query.filter_by(courseid=selected_course_id).all()
+        except ValueError:
+            selected_course_id = None  # Reset if invalid
+
     if request.method == 'POST':
         title = request.form.get('video_title')
         url = request.form.get('video_url')
         duration = request.form.get('video_duration')
-        module_id = request.form.get('video_module_id')
 
-        if not title or not url or not duration or not module_id:
-            flash("Video title, URL, duration, and associated module are required.", "danger")
+        if not title or not url or not duration or not selected_module_id:
+            flash("All fields are required!", "danger")
         else:
-            new_video = Video(title=title, url=url, duration=duration, moduleid=module_id)
-            db.session.add(new_video)
-            db.session.commit()
-            flash("Video added successfully!", "success")
-            return redirect(url_for('admin.view_all'))
+            try:
+                selected_module_id = int(selected_module_id)
+                module = Module.query.get(selected_module_id)
+                if not module:
+                    flash("Invalid module selected!", "danger")
+                    return redirect(url_for('admin.add_video'))
 
-    modules = Module.query.all()  # Needed for video association
-    return render_template('add_videos.html', modules=modules,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                new_video = Video(
+                    title=title,
+                    url=url,
+                    duration=int(duration),
+                    moduleid=selected_module_id
+                )
+
+                db.session.add(new_video)
+                db.session.commit()
+                flash("Video added successfully!", "success")
+                return redirect(url_for('admin.manage_course'))
+
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error adding video: {str(e)}", "danger")
+
+    return render_template(
+        'add_videos.html', 
+        courses=courses, 
+        modules=modules, 
+        selected_course_id=selected_course_id, 
+        selected_module_id=selected_module_id
+    )
+    
+# Route to delete a course and its associated modules and videos
+@admin_bp.route('/delete_course/<int:course_id>', methods=['POST'])
+@login_required
+def delete_course(course_id):
+    if not current_user.role:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    course = Course.query.get_or_404(course_id)
+
+    try:
+        # Delete all modules and videos associated with the course
+        modules = Module.query.filter_by(courseid=course.courseid).all()
+        for module in modules:
+            Video.query.filter_by(moduleid=module.moduleid).delete()  # Delete associated videos
+            db.session.delete(module)  # Delete module
+        
+        db.session.delete(course)  # Delete the course
+        db.session.commit()
+        flash("Course and its related modules and videos deleted successfully!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error deleting course: {str(e)}", "danger")
+
+    return redirect(url_for('admin.manage_course'))
+
+
+# Route to delete a module and its associated videos
+@admin_bp.route('/delete_module/<int:module_id>', methods=['POST'])
+@login_required
+def delete_module(module_id):
+    if not current_user.role:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    module = Module.query.get_or_404(module_id)
+
+    try:
+        # Delete all videos associated with the module
+        Video.query.filter_by(moduleid=module.moduleid).delete()
+        db.session.delete(module)
+        db.session.commit()
+        flash("Module and its related videos deleted successfully!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error deleting module: {str(e)}", "danger")
+
+    return redirect(url_for('admin.manage_course'))
+
+
+# Route to delete a video
+@admin_bp.route('/delete_video/<int:video_id>', methods=['POST'])
+@login_required
+def delete_video(video_id):
+    if not current_user.role:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    video = Video.query.get_or_404(video_id)
+
+    try:
+        db.session.delete(video)
+        db.session.commit()
+        flash("Video deleted successfully!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error deleting video: {str(e)}", "danger")
+
+    return redirect(url_for('admin.manage_course'))
+
+# Route to edit a course
+@admin_bp.route('/edit_course/<int:course_id>', methods=['GET', 'POST'])
+@login_required
+def edit_course(course_id):
+    if not current_user.role:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    course = Course.query.get_or_404(course_id)
+
+    if request.method == 'POST':
+        course.name = request.form.get('course_name')
+        course.description = request.form.get('course_description')
+
+        if not course.name or not course.description:
+            flash("Course name and description are required.", "danger")
+        else:
+            db.session.commit()
+            flash("Course updated successfully!", "success")
+            return redirect(url_for('admin.manage_course'))
+
+    return render_template('edit_course.html', course=course)
+
+
+# Route to edit a module
+@admin_bp.route('/edit_module/<int:module_id>', methods=['GET', 'POST'])
+@login_required
+def edit_module(module_id):
+    if not current_user.role:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    module = Module.query.get_or_404(module_id)
+    courses = Course.query.all()  # Fetch all available courses
+
+    if request.method == 'POST':
+        module.name = request.form.get('module_name')
+        module.description = request.form.get('module_description')
+        module.courseid = int(request.form.get('module_course_id'))
+
+        if not module.name or not module.description or not module.courseid:
+            flash("Module name, description, and associated course are required.", "danger")
+        else:
+            db.session.commit()
+            flash("Module updated successfully!", "success")
+            return redirect(url_for('admin.manage_course'))
+
+    return render_template('edit_module.html', module=module, courses=courses)
+
+
+# Route to get modules for a selected course (used in AJAX request)
+@admin_bp.route('/get_modules/<int:course_id>')
+@login_required
+def get_modules(course_id):
+    modules = Module.query.filter_by(courseid=course_id).all()
+    # Create the HTML options for the modules
+    module_options = ""
+    for module in modules:
+        module_options += f'<option value="{module.moduleid}">{module.name}</option>'
+    return module_options
+
+# Route to edit a video
+@admin_bp.route('/edit_video/<int:video_id>', methods=['GET', 'POST'])
+@login_required
+def edit_video(video_id):
+    if not current_user.role:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    video = Video.query.get_or_404(video_id)
+    courses = Course.query.all()
+    selected_course_id = video.module.courseid
+    selected_module_id = video.moduleid
+    modules = Module.query.filter_by(courseid=selected_course_id).all()
+
+    if request.method == 'POST':
+        selected_course_id = request.form.get('course_id')
+        selected_module_id = request.form.get('module_id')
+
+        video.title = request.form.get('video_title')
+        video.url = request.form.get('video_url')
+        video.duration = int(request.form.get('video_duration'))
+        video.moduleid = int(selected_module_id)
+
+        if not video.title or not video.url or not video.duration or not selected_module_id:
+            flash("All fields are required!", "danger")
+        else:
+            db.session.commit()
+            flash("Video updated successfully!", "success")
+            return redirect(url_for('admin.manage_course'))
+
+        # Update the modules list when the course changes
+        modules = Module.query.filter_by(courseid=selected_course_id).all()
+
+    return render_template('edit_video.html', video=video, courses=courses, modules=modules, 
+                           selected_course_id=selected_course_id, selected_module_id=selected_module_id)
+
 
 # Admin dashboard to view all user progress
 @admin_bp.route('/view_all_progress', methods=['GET'])

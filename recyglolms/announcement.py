@@ -127,15 +127,19 @@ def edit_announcement(announcement_id):
             flash("Invalid date format. Please use YYYY-MM-DD.", "danger")
             return redirect(request.url)
 
+        # If a new file is provided, update the image
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             announcement.announcement_img = filename
+        else:
+            # If no file is provided, preserve the existing image
+            filename = announcement.announcement_img
 
         # Update the announcement
         announcement.title = title
         announcement.content = content
-        announcement.img = filename
+        announcement.img = filename  # Ensure you're updating the right field
         announcement.event_date = event_date
         announcement.date = datetime.utcnow()
 
@@ -146,8 +150,8 @@ def edit_announcement(announcement_id):
 
     return render_template('editannouncement.html',
                             announcement=announcement,
-                            current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                            current_user_name=current_user.name,
+                            current_user_email=current_user.email)
 
 
 # Route to delete an announcement

@@ -180,7 +180,7 @@ input[type="password"] {
     display: none;
 }
 
-input#user-name-input {
+input#username {
     border: 1px solid #ccc;
     padding: 5px;
     font-size: 16px;
@@ -188,7 +188,7 @@ input#user-name-input {
     border-radius: 5px;
 }
 
-button.save-btn {
+button.update-btn {
     background-color: #A9C9A4;
     color: white;
     border: none;
@@ -197,7 +197,7 @@ button.save-btn {
     cursor: pointer;
 }
 
-button.save-btn:hover {
+button.update-btn:hover {
     background-color: #218838;
 }
 

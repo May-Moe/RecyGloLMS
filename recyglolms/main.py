@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from recyglolms.models import Course, Video, Progress, Activity, Module, User, Feedback, ActivityImage, Announcement
-from recyglolms.__inti__ import db, app
+from recyglolms.__inti__ import db, app, bcrypt
 
 main_bp = Blueprint('main', __name__)
 
@@ -49,6 +49,9 @@ ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+        
 
 # New route to view a specific activity by its ID
 @main_bp.route('/user_activity/view/<int:activity_id>', methods=['GET'])
@@ -259,18 +262,76 @@ def user_home():
 
 
 
-@main_bp.route('/user_account', methods=['GET', 'POST'])
+
+UPLOAD_FOLDER_PROFILE = os.path.join(app.root_path, 'static/profile_images')
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
+app.config['UPLOAD_FOLDER_PROFILE'] = UPLOAD_FOLDER_PROFILE
+
+if not os.path.exists(UPLOAD_FOLDER_PROFILE):
+    os.makedirs(UPLOAD_FOLDER_PROFILE)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/user_account', methods=['GET'])
 @login_required
 def user_account():
     return render_template(
         'user_account.html',
-        current_user_name=current_user.name,  
+        current_user_name=current_user.name,
         current_user_email=current_user.email,
-        current_user_id=current_user.userid 
+        current_user_id=current_user.userid,
+        current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
     )
 
+@app.route('/update_profile_image', methods=['POST'])
+@login_required
+def update_profile_image():
+    if 'profile_image' in request.files:
+        file = request.files['profile_image']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(UPLOAD_FOLDER_PROFILE, filename)
+            try:
+                file.save(file_path)
+                print(f"✅ File successfully saved at: {file_path}")
 
+                # Update the user's profile image in the database
+                current_user.profile_img = f'profile_images/{filename}'  # Store relative path to static
+                db.session.commit()
+                flash("Profile image updated successfully!", "success")
+            except Exception as e:
+                print(f"❌ Error saving file: {e}")
+                flash("File upload failed!", "danger")
+        else:
+            flash("Invalid file format!", "danger")
+    return redirect(url_for('user_account'))
 
+@app.route('/update_username', methods=['POST'])
+@login_required
+def update_username():
+    new_username = request.form.get('username')
+    if new_username:
+        current_user.name = new_username
+        db.session.commit()
+        flash("Username updated successfully!", "success")
+    return redirect(url_for('user_account'))
+
+@app.route('/change_password', methods=['POST'])
+@login_required
+def change_password():
+    current_password = request.form.get('current-password')
+    new_password = request.form.get('new-password')
+    if current_password and new_password:
+        if bcrypt.check_password_hash(current_user.password, current_password):
+            hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+            current_user.password = hashed_password
+            db.session.commit()
+            flash("Password updated successfully!", "success")
+        else:
+            flash("Current password is incorrect.", "danger")
+    return redirect(url_for('user_account'))
+    
 #for user feedback
 
 # Feedback Submission Route

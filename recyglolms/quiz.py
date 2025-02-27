@@ -227,6 +227,12 @@ def quiz_result(responseid):
     if user_response.userid != current_user.userid:
         return "Unauthorized", 403
 
+    # Get the quiz object using the quizid from the user_response
+    quiz = Quiz.query.get_or_404(user_response.quizid)
+
+    # Get the module associated with this quiz
+    module = Module.query.get_or_404(quiz.moduleid)
+
     # Get all attempts (user quiz results) for this quiz and order by responseid descending (latest first)
     user_quiz_results = UserResponse.query.filter_by(userid=current_user.userid, quizid=user_response.quizid) \
                                            .order_by(UserResponse.responseid.desc()).all()
@@ -240,24 +246,40 @@ def quiz_result(responseid):
 
     # Render the quiz result page with all user quiz results and answers
     return render_template('quiz_result.html',
-                            user_response=user_response, 
+                           user_response=user_response, 
                            user_answers=user_answers, 
                            score=user_response.score,
                            user_quiz_results=user_quiz_results,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                           quiz=quiz,  # Pass the quiz object to the template
+                           module=module,  # Pass the module object to the template
+                           current_user_name=current_user.name,
+                           current_user_email=current_user.email)
 
-@quiz_bp.route('/quiz/summary')
+@quiz_bp.route('/quiz/summary/<int:quiz_id>')
 @login_required
-def summary_mark():
-    """Display a summary of the user's quiz attempts."""
-    user_quiz_results = UserResponse.query.filter_by(userid=current_user.userid) \
+def summary_mark(quiz_id):
+    """Display a summary of the user's quiz attempts for a specific quiz."""
+    
+    # Fetch only the attempts for the current quiz
+    user_quiz_results = UserResponse.query.filter_by(userid=current_user.userid, quizid=quiz_id) \
                                           .order_by(UserResponse.responseid.desc()).all()
 
-    if not user_quiz_results:
-        return render_template('summary_mark.html', user_quiz_results=[])
+    # Fetch the quiz object for this quiz_id
+    quiz = Quiz.query.get_or_404(quiz_id)
 
-    return render_template('summary_mark.html', user_quiz_results=user_quiz_results,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+    # Fetch the associated module object (if necessary)
+    module = Module.query.get_or_404(quiz.moduleid)
+
+    if not user_quiz_results:
+        return render_template('summary_mark.html', user_quiz_results=[], 
+                               current_user_name=current_user.name, 
+                               current_user_email=current_user.email,
+                               quiz=quiz,  # Pass the quiz object to the template
+                               module=module)  # Pass the module object to the template
+
+    return render_template('summary_mark.html', user_quiz_results=user_quiz_results, 
+                           current_user_name=current_user.name, 
+                           current_user_email=current_user.email,
+                           quiz=quiz,  # Pass the quiz object to the template
+                           module=module)  # Pass the module object to the template
 
