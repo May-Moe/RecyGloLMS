@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import db, bcrypt, app
-from recyglolms.models import User, Course, Module, Video, Feedback, Announcement
+from recyglolms.models import User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -614,10 +614,23 @@ def view_feedbacks():
 def admin_feedback():
     feedbacks = db.session.query(Feedback, User).join(User).all()  # Fetch feedback with user details
     # feedbacks = db.session.query(Feedback, User).join(User).order_by(Feedback.submit_date.desc()).limit(3).all()
+    total_feedback = Feedback.query.count()
     return render_template('admin_feedback.html', 
                            feedbacks=feedbacks,
                            current_user_name = current_user.name,
+                            current_user_email = current_user.email,
+                            total_feedback = total_feedback)
+
+#Admin Alumni page
+@admin_bp.route('/Alumni_admin')
+@login_required
+def Alumni_admin():
+    users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+    return render_template('Alumni_admin.html', 
+                           users=users,
+                           current_user_name = current_user.name,
                             current_user_email = current_user.email)
+
 
 #Admin Activity page
 @admin_bp.route('/Activity')
@@ -631,12 +644,5 @@ def Activity():
                            current_user_name=current_user_name,
                            current_user_email=current_user_email)
 
-#Admin Alumni page
-@admin_bp.route('/Alumni_admin')
-@login_required
-def Alumni_admin():
-    users = User.query.filter_by(role=0).all()  # Fetch all users from the database
-    return render_template('Alumni_admin.html', 
-                           users=users,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+
+

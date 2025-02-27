@@ -15,6 +15,21 @@
             </button>
             <div class="profile-right">
                 <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
                 <button class="notification-button" id="notification-button">
                     <i class="fas fa-bell"></i>
                     <span id="notification-count" class="notification-count">0</span>
@@ -57,30 +72,31 @@
         <div class="container">
             <div class="header">
                 <h1>User Management</h1>
+                <!-- User Filter & Search -->
                 <div class="header-actions">
-                    <form method="POST" class="mb-4">
-                    <input type="text" id="search_query" name="search_query" placeholder="Search" value="{{ request.form.get('search_query', '') }}">
-                    <select id="inactivity_filter" name="inactivity_filter" class="form-control">
-                        <option value="" id="inactivity_filter1">Filter by inactivity</option>
-                        <option value="0" id="inactivity_filter1" {% if request.form.get('inactivity_filter') == '0' %}selected{% endif %}>View All</option>
-                        <option value="7" id="inactivity_filter1" {% if request.form.get('inactivity_filter') == '7' %}selected{% endif %}>More than 7 days</option>
-                        <option value="15" id="inactivity_filter1" {% if request.form.get('inactivity_filter') == '15' %}selected{% endif %}>More than 15 days</option>
-                        <option value="30" id="inactivity_filter1" {% if request.form.get('inactivity_filter') == '30' %}selected{% endif %}>More than 30 days</option>
-                    </select>
-                     <!-- Sort by Last Login -->
-                    <select id="sort_order" name="sort_order" class="form-control">
-                        <option value="desc" {% if request.form.get('sort_order') == 'desc' %}selected{% endif %}>Sort by Last Login (Descending)</option>
-                        <option value="asc" {% if request.form.get('sort_order') == 'asc' %}selected{% endif %}>Sort by Last Login (Ascending)</option>
-                    </select>
+                    <form method="POST" id="filterForm">
+                        <select class="filter-select" id="inactivity_filter" name="inactivity_filter" onchange="submitForm()">
+                            <option value="">Filter by inactivity</option>
+                            <option value="0" {% if request.form.get('inactivity_filter') == '0' %}selected{% endif %}>View All</option>
+                            <option value="7" {% if request.form.get('inactivity_filter') == '7' %}selected{% endif %}>More than 7 days</option>
+                            <option value="15" {% if request.form.get('inactivity_filter') == '15' %}selected{% endif %}>More than 15 days</option>
+                            <option value="30" {% if request.form.get('inactivity_filter') == '30' %}selected{% endif %}>More than 30 days</option>
+                        </select>
 
-                    <!-- Submit Button -->
-                    <button type="submit" class="filter">Filter</button>
-                
+                        <select class="filter-select" id="sort_order" name="sort_order" onchange="submitForm()">
+                            <option value="desc" {% if request.form.get('sort_order') == 'desc' %}selected{% endif %}>Sort by Last Login (Descending)</option>
+                            <option value="asc" {% if request.form.get('sort_order') == 'asc' %}selected{% endif %}>Sort by Last Login (Ascending)</option>
+                        </select>
+
+                        <input type="text" id="search_query" name="search_query" placeholder="Search By Users" value="{{ request.form.get('search_query', '') }}" oninput="submitForm()">
                     </form>
-                    <a href="{{ url_for('admin.add_user') }}"  id="addUserLink">
-                        <button id="addUserButton"><i class="fas fa-plus"></i>Add New User</button>
+
+                    <a href="{{ url_for('admin.add_user') }}" id="addUserLink">
+                        <button id="addUserButton"><i class="fas fa-plus"></i> Add New User</button>
                     </a>
                 </div>
+
+
             </div>
             <div class="table-container">
                 {% if users %}
@@ -131,5 +147,10 @@
 </div>
     </div>
     <script src="static/JS/script.js"></script>
+    <script>
+        function submitForm() {
+        document.getElementById("filterForm").submit();
+    }
+    </script>
 </body>
 </html>
