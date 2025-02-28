@@ -447,18 +447,6 @@ body {
     text-align: center;
   }
 
-  .language-selector {
-    display: inline-block;
-    margin-right: 15px;
-}
-
-.language-selector select {
-    padding: 5px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
   @media screen and (max-width: 768px) {
     .container {

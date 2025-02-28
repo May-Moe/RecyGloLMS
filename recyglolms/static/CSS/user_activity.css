@@ -236,7 +236,7 @@ body {
     color: #000000; 
 }
 
-.view-popup-form {
+#view-popup-form {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -246,8 +246,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 800px;
-    max-height: 90vh;
+    max-width: 1000px;
+    max-height: 100vh;
     overflow-y: auto;
     z-index: 2000;
 }
@@ -268,7 +268,7 @@ body {
     color: #A9C9A4;
 }
 
-.view-popup-form img {
+/* .view-popup-form img {
     width: 100%;
     height: auto;
     margin-bottom: 15px;
@@ -276,10 +276,18 @@ body {
 }
 
 #view-image img {
+    width: 50%;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 10px;
+} */
+
+.image-slider img{
     width: 100%;
     height: auto;
-    max-height: 3000px;
-    /* object-fit: contain; */
+    max-height: 8000px;
+    object-fit: contain;
     border-radius: 10px;
 }
 
@@ -312,7 +320,7 @@ body {
     text-align: center;
 }
 
-.slide img, .popup-slide img {
+.slide img {
     width: 100%;
     border-radius: 10px;
 }

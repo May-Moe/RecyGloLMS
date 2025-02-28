@@ -15,6 +15,21 @@
             </button>
             <div class="profile-right">
                 <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
                 <button class="notification-button" id="notification-button">
                     <i class="fas fa-bell"></i>
                     <span id="notification-count" class="notification-count">0</span>
@@ -83,13 +98,13 @@
                 </div>
             
                 <div class="buttons">
-                    <button type="submit" class="submit-button">Save Changes</button>
-                    <button type="button" class="cancel-button" onclick="cancelEdit()">Cancel</button>
+                    <button type="submit" class="submit-button">Add</button>
+                    <a href="{{ url_for('upload.view_files') }}"><button type="button" class="cancel-button">Cancel</button></a>
                 </div>
             </form>
         </div>
     </div>
-    <script src="../static/JS/script.js"></script>
+    <script src="static/JS/script.js"></script>
     <script>
         const fileUpload = document.getElementById('file');
         const fileChosen = document.getElementById('file-chosen');

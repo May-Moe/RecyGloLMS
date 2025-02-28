@@ -330,3 +330,32 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(error => console.error("Error:", error));
     });
 });
+
+function changeLanguage(selectedLanguage) {
+  // Store selected language in localStorage for persistence
+  localStorage.setItem("selectedLanguage", selectedLanguage);
+  
+  // You can redirect or reload page based on the selected language
+  console.log("Language changed to:", selectedLanguage);
+  
+  // Optionally, send the selected language to the backend if needed
+  fetch('/change-language', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ language: selectedLanguage })
+  }).then(response => response.json())
+  .then(data => {
+      console.log("Language updated:", data);
+      location.reload();  // Reload to apply changes
+  }).catch(error => console.error("Error changing language:", error));
+}
+
+// Preserve selected language on page load
+document.addEventListener("DOMContentLoaded", function () {
+  const savedLanguage = localStorage.getItem("selectedLanguage");
+  if (savedLanguage) {
+      document.getElementById("language-dropdown").value = savedLanguage;
+  }
+});
