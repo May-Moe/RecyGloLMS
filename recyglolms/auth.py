@@ -45,11 +45,11 @@ def login():
             login_user(user)
             flash('Login successful!', 'success')
 
-            # Redirect based on role
-            if user.role == 1:
-                return redirect(url_for('admin.dashboard'))  # Admin dashboard
+            # Redirect admins and sub-admins to the same dashboard
+            if user.role in [1, 2]:  
+                return redirect(url_for('admin.dashboard'))  # Admin & Sub-Admin Dashboard
             elif user.role == 0:
-                return redirect(url_for('main.home'))  # User dashboard
+                return redirect(url_for('main.home'))  # User Dashboard
         else:
             # Invalid email or password
             flash('Invalid email or password.', 'danger')

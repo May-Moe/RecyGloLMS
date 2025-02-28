@@ -110,7 +110,10 @@
                     <label for="role">Role</label>
                     <select id="role" name="role">
                         <option value="0">User</option>
-                        <option value="1">Admin</option>
+                        {% if current_user.role == 1 %} 
+                            <option value="1">Admin</option>  <!-- Only Admins (role=1) see this -->
+                            <option value="2">Sub-Admin</option>  <!-- Only Admins (role=1) see this -->
+                        {% endif %}
                     </select>
                 </div>
                 <div class="buttons">

@@ -105,10 +105,10 @@ def dashboard():
 @admin_bp.route('/adduser', methods=['GET', 'POST'])
 @login_required
 def add_user():
-    # Ensure only admins can access
-    if not current_user.role:  # Assuming role=1 is admin
+    # Ensure only Admins (1) and Sub-Admins (2) can access
+    if current_user.role not in [1, 2]:  
         flash("Unauthorized access!", "danger")
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('admin.dashboard'))
 
     if request.method == 'POST':
         name = request.form['name']
@@ -118,11 +118,16 @@ def add_user():
 
         try:
             role = int(role)  # Convert role to integer safely
-            if role not in [0, 1]:
+            if role not in [0, 1, 2]:  
                 raise ValueError("Invalid role value")
         except ValueError:
-            flash("Invalid role value. Must be 0 (user) or 1 (admin).", "danger")
+            flash("Invalid role value. Must be 0 (User), 1 (Admin), or 2 (Sub-Admin).", "danger")
             return render_template('adduser.html')
+
+        # Restrict Sub-Admins from creating Admins
+        if current_user.role == 2 and role == 1:  
+            flash("Sub-Admins cannot create Admin accounts.", "danger")
+            return redirect(url_for('admin.add_user'))
 
         # Check if the email already exists
         if User.query.filter_by(email=email).first():

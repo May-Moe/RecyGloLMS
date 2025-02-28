@@ -9,7 +9,7 @@ class User(db.Model, UserMixin):
     profile_img = db.Column(db.String(200), nullable=True, default="/static/uploads/default-profile.jpg")
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    role = db.Column(db.Boolean, default=False)  # False for regular user, True for admin
+    role = db.Column(db.Integer, default=0)  # 0 = User, 1 = Admin, 2 = Sub-Admin
     last_login = db.Column(db.DateTime, default=None)  # New field for last login time
 
     announcements = db.relationship('Announcement', backref='user', lazy=True)
