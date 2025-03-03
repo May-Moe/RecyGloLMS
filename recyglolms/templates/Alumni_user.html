@@ -80,7 +80,8 @@
         <div class="grid" id="team-grid">
             {% for user in users %}
             <div class="card">
-                <img src="static/img/1.jpg" alt="May">
+                <img src="{{ url_for('static', filename=user.profile_img) if user.profile_img else url_for('static', filename='/uploads/default-profile.jpg') }}" 
+             alt="{{ user.name }}">
                 <h3>{{ user.name }}</h3>
                 <p>{{ user.email }}</p>
                 <!-- <p>Course: <span>Cooking</span></p> -->

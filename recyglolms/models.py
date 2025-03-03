@@ -18,6 +18,23 @@ class User(db.Model, UserMixin):
     def get_id(self):
         """Override Flask-Login's get_id method."""
         return str(self.userid)
+    
+    
+class ActionLog(db.Model):
+    __tablename__ = 'ActionLog' # Specify table name explicitly if needed
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    username = db.Column(db.String(100), nullable=False)  # Store the username of the user performing the action
+    action_type = db.Column(db.String(50), nullable=False)  # e.g., "create", "update", "delete"
+    target_table = db.Column(db.String(50), nullable=False)  # e.g., "user"
+    target_id = db.Column(db.Integer, nullable=False)  # ID of the user being affected
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    details = db.Column(db.String(255))  # Optionally store detailed info like what fields were updated
+
+    user = db.relationship('User', backref=db.backref('action_logs', lazy=True))
+
+    def __repr__(self):
+        return f"<ActionLog {self.action_type} by {self.username} on {self.timestamp}>"
 
 
 class Announcement(db.Model):
