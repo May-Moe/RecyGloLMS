@@ -3,7 +3,7 @@ from flask_apscheduler import APScheduler
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import db, bcrypt, app
-from recyglolms.models import User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog
+from recyglolms.models import User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -788,6 +788,66 @@ def Activity():
                            users=users,
                            current_user_name=current_user_name,
                            current_user_email=current_user_email)
+    
+@admin_bp.route('/user-levels', methods=['GET', 'POST'])
+@login_required
+def user_levels():
+    if current_user.role not in [1, 2]:  # Only Admins & Sub-Admins
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('main.dashboard'))
+
+    users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+    user_level_data = {}
+
+    # Fetch the progress data for each user
+    for user in users:
+        progress_data = {}
+        courses = Course.query.all()
+        # total_activities = Activity.query.filter_by(userid=user.userid).count()
+
+        # Loop through courses to check if they are 100% completed
+        for course in courses:
+            # Calculate the course progress
+            course_progress = course.calculate_course_progress(user.userid)
+            
+            # Only add to progress data if course is 100% completed
+            if course_progress == 100:
+
+                # Calculate the latest quiz score (most recent response per quiz)
+                user_responses = UserResponse.query.filter_by(userid=user.userid).order_by(UserResponse.created_date.desc()).all()
+
+                # Dictionary to store the most recent quiz score for each quiz
+                latest_quiz_scores = {}
+                for response in user_responses:
+                    if response.quizid not in latest_quiz_scores:
+                        latest_quiz_scores[response.quizid] = response.score
+
+                # Calculate the average of the latest quiz scores
+                if latest_quiz_scores:
+                    average_quiz_score = sum(latest_quiz_scores.values()) / len(latest_quiz_scores)
+                else:
+                    average_quiz_score = 0
+
+                # Store the progress data for the user
+                progress_data[course.name] = {
+                    'course_progress': course_progress,
+                    # 'total_activities': total_activities,
+                    'average_quiz_score': average_quiz_score
+                }
+
+        user_level_data[user] = progress_data
+
+    if request.method == 'POST':
+        userid = request.form.get('userid')
+        new_level = request.form.get('level')
+
+        user = User.query.get(userid)
+        if user:
+            user.level = new_level  # Assuming 'level' field exists in the User model
+            db.session.commit()
+            flash(f"{user.name}'s level updated to {new_level}!", "success")
+
+    return render_template('user_level_set.html', users=users, user_level_data=user_level_data)
 
 
 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>User Level Set</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <h2>User Level Management</h2>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Completed Courses</th>
+                    <th>Average Quiz Marks</th>
+                    <th>Current Level</th>
+                    <th>Set Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user, progress_data in user_level_data.items() %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>
+                            {% if progress_data %}
+                                <ul>
+                                    {% for course_name in progress_data.keys() %}
+                                        <li>{{ course_name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                No completed courses
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% set quiz_scores = progress_data.values() | map(attribute='average_quiz_score') | list %}
+                            {{ (quiz_scores | sum / quiz_scores | length) | round(2) if quiz_scores else 'N/A' }}%
+                        </td>
+                        <td>{{ user.level }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin.user_levels') }}">
+                                <input type="hidden" name="userid" value="{{ user.userid }}">
+                                <select name="level" required>
+                                    <option value="Beginner" {% if user.level == 'Beginner' %}selected{% endif %}>Beginner</option>
+                                    <option value="Expert" {% if user.level == 'Expert' %}selected{% endif %}>Expert</option>
+                                    <option value="Professional" {% if user.level == 'Professional' %}selected{% endif %}>Professional</option>
+                                </select>
+                                <button type="submit">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
