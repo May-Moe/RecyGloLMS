@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
+from flask_apscheduler import APScheduler
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import db, bcrypt, app
-from recyglolms.models import User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage
+from recyglolms.models import User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -105,10 +106,10 @@ def dashboard():
 @admin_bp.route('/adduser', methods=['GET', 'POST'])
 @login_required
 def add_user():
-    # Ensure only admins can access
-    if not current_user.role:  # Assuming role=1 is admin
+    # Ensure only Admins (1) and Sub-Admins (2) can access
+    if current_user.role not in [1, 2]:  
         flash("Unauthorized access!", "danger")
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('admin.dashboard'))
 
     if request.method == 'POST':
         name = request.form['name']
@@ -118,27 +119,76 @@ def add_user():
 
         try:
             role = int(role)  # Convert role to integer safely
-            if role not in [0, 1]:
+            if role not in [0, 1, 2]:  
                 raise ValueError("Invalid role value")
         except ValueError:
-            flash("Invalid role value. Must be 0 (user) or 1 (admin).", "danger")
+            flash("Invalid role value. Must be 0 (User), 1 (Admin), or 2 (Sub-Admin).", "danger")
             return render_template('adduser.html')
+
+        # Restrict Sub-Admins from creating Admins
+        if current_user.role == 2 and role == 1:  
+            flash("Sub-Admins cannot create Admin accounts.", "danger")
+            return redirect(url_for('admin.add_user'))
 
         # Check if the email already exists
         if User.query.filter_by(email=email).first():
             flash("A user with this email already exists.", "danger")
         else:
+            
+            
+           
+            # db.session.add(Log_entry)
+            # db.session.commit()
             # Hash the password and create a new user
             hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-            new_user = User(name=name, email=email, password=hashed_password, role=role, last_login=datetime.now()) 
+            new_user = User(name=name, email=email, password=hashed_password, role=role, last_login=datetime.now())
             db.session.add(new_user)
+            db.session.commit()
+            
+             # Log the action (user creation)
+            Log_entry = ActionLog(
+                userid=current_user.userid,
+                username=current_user.name,  # Store the username of the person making the action
+                action_type="create", 
+                target_table="user", 
+                target_id=new_user.userid, 
+                timestamp=datetime.now(),  # Ensure both date and time are stored
+                details=f"Created user: {new_user.name} with email {new_user.email}"
+            )
+            db.session.add(Log_entry)
             db.session.commit()
             flash("User added successfully!", "success")
             return redirect(url_for('admin.dashboard'))
 
     return render_template('adduser.html')
 
+@app.route('/logs')
+def show_logs():
+    # Ensure only Admins (1)
+    if current_user.role not in [1]:  
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('admin.dashboard'))
+    logs = ActionLog.query.order_by(ActionLog.timestamp.desc()).all()
+    return render_template('viewlogs.html', logs=logs)
 
+#Delete old logs
+# Create an instance of the APScheduler
+scheduler = APScheduler()
+
+def delete_old_logs():
+    """Deletes logs older than 3 days."""
+    three_days_ago = datetime.now() - timedelta(days=3)
+    old_logs = ActionLog.query.filter(ActionLog.timestamp < three_days_ago).all()
+
+    if old_logs:
+        for log in old_logs:
+            db.session.delete(log)
+        db.session.commit()
+        print(f"Deleted {len(old_logs)} old logs.")  # For debugging
+
+# Schedule the task to run every day at midnight
+scheduler.add_job(id='delete_old_logs', func=delete_old_logs, trigger='interval', days=1)
+scheduler.start()
 
 @admin_bp.route('/viewallusers', methods=['GET', 'POST'])
 @login_required
@@ -221,6 +271,7 @@ def edit_user(user_id):
             user.password = hashed_password
 
         db.session.commit()
+        
         flash("User updated successfully!", "success")
         return redirect(url_for('admin.view_users'))
 
@@ -240,6 +291,18 @@ def delete_user(user_id):
 
     user = User.query.get_or_404(user_id)
     db.session.delete(user)
+    db.session.commit()
+ # Log the action (user deletion)
+    Log_entry = ActionLog(
+        userid=current_user.userid,
+        username=current_user.name,  # Store the username of the person making the action
+        action_type="Delete", 
+        target_table="user", 
+        target_id=user.userid,
+        timestamp=datetime.now(),  # Ensure both date and time are stored
+        details=f"Delete user: {user.name} with Email: {user.email}"
+        )
+    db.session.add(Log_entry)
     db.session.commit()
     flash("User deleted successfully!", "success")
     return redirect(url_for('admin.view_users'))
@@ -263,7 +326,6 @@ def manage_course():
                             current_user_email = current_user.email)
 
 
-# Route to add a new course
 @admin_bp.route('/add_course', methods=['GET', 'POST'])
 @login_required
 def add_course():
@@ -281,12 +343,26 @@ def add_course():
             new_course = Course(name=name, description=description, created_date=datetime.utcnow())
             db.session.add(new_course)
             db.session.commit()
+
+            # **Log the action**
+            log_entry = ActionLog(
+                userid=current_user.userid,
+                username=current_user.name,  
+                action_type="create",
+                target_table="course",
+                target_id=new_course.courseid,
+                timestamp=datetime.now(),
+                details=f"Added course: {new_course.name}"
+            )
+            db.session.add(log_entry)
+            db.session.commit()
+
             flash("Course added successfully!", "success")
             return redirect(url_for('admin.manage_course'))
 
     return render_template('add_courses.html',
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                           current_user_name=current_user.name,
+                           current_user_email=current_user.email)
 
 
 @admin_bp.route('/add_module', methods=['GET', 'POST'])
@@ -316,6 +392,20 @@ def add_module():
             )
             db.session.add(new_module)
             db.session.commit()
+            
+             # **Log the action**
+            log_entry = ActionLog(
+                userid=current_user.userid,
+                username=current_user.name,  
+                action_type="Create",
+                target_table="Module",
+                target_id=new_module.moduleid,
+                timestamp=datetime.now(),
+                details=f"Added Module: {new_module.name}"
+            )
+            db.session.add(log_entry)
+            db.session.commit()
+            
             flash("Module added successfully!", "success")
             return redirect(url_for('admin.manage_course'))
 
@@ -366,6 +456,18 @@ def add_video():
 
                 db.session.add(new_video)
                 db.session.commit()
+                 # **Log the action**
+                log_entry = ActionLog(
+                    userid=current_user.userid,
+                    username=current_user.name,  
+                    action_type="Create",
+                    target_table="Video",
+                    target_id=new_video.videoid,
+                    timestamp=datetime.now(),
+                    details=f"Added New Video: {new_video.title}"
+                )
+                db.session.add(log_entry)
+                db.session.commit()
                 flash("Video added successfully!", "success")
                 return redirect(url_for('admin.manage_course'))
 
@@ -400,10 +502,23 @@ def delete_course(course_id):
         
         db.session.delete(course)  # Delete the course
         db.session.commit()
+         # **Log the action**
+        log_entry = ActionLog(
+            userid=current_user.userid,
+            username=current_user.name,  
+            action_type="Delete",
+            target_table="Course",
+            target_id=course.courseid,
+            timestamp=datetime.now(),
+            details=f"Deleted Course: {course.name}"
+        )
+        db.session.add(log_entry)
+        db.session.commit()
         flash("Course and its related modules and videos deleted successfully!", "success")
     except Exception as e:
         db.session.rollback()
         flash(f"Error deleting course: {str(e)}", "danger")
+        
 
     return redirect(url_for('admin.manage_course'))
 
@@ -423,15 +538,27 @@ def delete_module(module_id):
         Video.query.filter_by(moduleid=module.moduleid).delete()
         db.session.delete(module)
         db.session.commit()
+        # **Log the action**
+        log_entry = ActionLog(
+            userid=current_user.userid,
+            username=current_user.name,  
+            action_type="Delete",
+            target_table="Course",
+            target_id=module.moduleid,
+            timestamp=datetime.now(),
+            details=f"Deleted Module: {module.name}"
+        )
+        db.session.add(log_entry)
+        db.session.commit()
         flash("Module and its related videos deleted successfully!", "success")
     except Exception as e:
         db.session.rollback()
         flash(f"Error deleting module: {str(e)}", "danger")
+    
 
     return redirect(url_for('admin.manage_course'))
 
 
-# Route to delete a video
 @admin_bp.route('/delete_video/<int:video_id>', methods=['POST'])
 @login_required
 def delete_video(video_id):
@@ -442,9 +569,27 @@ def delete_video(video_id):
     video = Video.query.get_or_404(video_id)
 
     try:
+        video_title = video.title  # Store title before deleting
+        video_id = video.videoid   # Store ID before deleting
+
         db.session.delete(video)
         db.session.commit()
+
+        # **Log the action after successful deletion**
+        log_entry = ActionLog(
+            userid=current_user.userid,
+            username=current_user.name,  
+            action_type="delete",
+            target_table="video",
+            target_id=video_id,
+            timestamp=datetime.now(),
+            details=f"Deleted video: {video_title}"
+        )
+        db.session.add(log_entry)
+        db.session.commit()
+
         flash("Video deleted successfully!", "success")
+
     except Exception as e:
         db.session.rollback()
         flash(f"Error deleting video: {str(e)}", "danger")
@@ -643,6 +788,66 @@ def Activity():
                            users=users,
                            current_user_name=current_user_name,
                            current_user_email=current_user_email)
+    
+@admin_bp.route('/user-levels', methods=['GET', 'POST'])
+@login_required
+def user_levels():
+    if current_user.role not in [1, 2]:  # Only Admins & Sub-Admins
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('main.dashboard'))
+
+    users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+    user_level_data = {}
+
+    # Fetch the progress data for each user
+    for user in users:
+        progress_data = {}
+        courses = Course.query.all()
+        # total_activities = Activity.query.filter_by(userid=user.userid).count()
+
+        # Loop through courses to check if they are 100% completed
+        for course in courses:
+            # Calculate the course progress
+            course_progress = course.calculate_course_progress(user.userid)
+            
+            # Only add to progress data if course is 100% completed
+            if course_progress == 100:
+
+                # Calculate the latest quiz score (most recent response per quiz)
+                user_responses = UserResponse.query.filter_by(userid=user.userid).order_by(UserResponse.created_date.desc()).all()
+
+                # Dictionary to store the most recent quiz score for each quiz
+                latest_quiz_scores = {}
+                for response in user_responses:
+                    if response.quizid not in latest_quiz_scores:
+                        latest_quiz_scores[response.quizid] = response.score
+
+                # Calculate the average of the latest quiz scores
+                if latest_quiz_scores:
+                    average_quiz_score = sum(latest_quiz_scores.values()) / len(latest_quiz_scores)
+                else:
+                    average_quiz_score = 0
+
+                # Store the progress data for the user
+                progress_data[course.name] = {
+                    'course_progress': course_progress,
+                    # 'total_activities': total_activities,
+                    'average_quiz_score': average_quiz_score
+                }
+
+        user_level_data[user] = progress_data
+
+    if request.method == 'POST':
+        userid = request.form.get('userid')
+        new_level = request.form.get('level')
+
+        user = User.query.get(userid)
+        if user:
+            user.level = new_level  # Assuming 'level' field exists in the User model
+            db.session.commit()
+            flash(f"{user.name}'s level updated to {new_level}!", "success")
+
+    return render_template('user_level_set.html', users=users, user_level_data=user_level_data)
 
 
 @admin_bp.route('/admin_view_activity/<int:userid>')

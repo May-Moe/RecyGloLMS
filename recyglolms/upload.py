@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app, send_from_directory
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import app, db
-from recyglolms.models import Upload, User
+from recyglolms.models import Upload, User, ActionLog
 from flask_login import login_required, current_user
 import os
 from datetime import datetime
@@ -61,6 +61,18 @@ def upload_file():
         )
         db.session.add(new_upload)
         db.session.commit()
+        # **Log the action**
+        log_entry = ActionLog(
+            userid=current_user.userid,
+            username=current_user.name,  
+            action_type="Add",
+            target_table="Upload",
+            target_id=new_upload.uploadid,
+            timestamp=datetime.now(),
+            details=f"Uploaded new file with the filename : {new_upload.filename}"
+        )
+        db.session.add(log_entry)
+        db.session.commit()
 
         flash("File uploaded successfully!", "success")
         return redirect(url_for('upload.view_files'))
@@ -70,7 +82,6 @@ def upload_file():
                             current_user_email = current_user.email)
 
 
-# Route to edit file metadata and replace file
 @upload_bp.route('/edit/<int:uploadid>', methods=['GET', 'POST'])
 @login_required
 def edit_file(uploadid):
@@ -79,36 +90,55 @@ def edit_file(uploadid):
         return redirect(url_for('auth.login'))
 
     file = Upload.query.get_or_404(uploadid)
+    original_filename = file.filename  # Store the original filename before any change
+    changes = []  # Track changes made
 
     if request.method == 'POST':
         new_filename = request.form.get('filename')
         new_file = request.files.get('file')
 
         # Update file name
-        if new_filename:
+        if new_filename and new_filename != file.filename:
             old_filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             new_filepath = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(new_filename))
             
             # Rename file on disk if the filename has changed
-            if old_filepath != new_filepath:
+            if os.path.exists(old_filepath):
                 os.rename(old_filepath, new_filepath)
                 file.filename = secure_filename(new_filename)
+                changes.append(f"Filename changed from '{original_filename}' to '{new_filename}'")
 
         # Replace file content
         if new_file and allowed_file(new_file.filename):
             new_filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             new_file.save(new_filepath)
+            changes.append(f"Replaced file contents for '{file.filename}'")
 
         db.session.commit()
+
+        # **Log the action**
+        if changes:
+            log_entry = ActionLog(
+                userid=current_user.userid,
+                username=current_user.name,  
+                action_type="Edit",
+                target_table="Upload",
+                target_id=file.uploadid,
+                timestamp=datetime.now(),
+                details="; ".join(changes)
+            )
+            db.session.add(log_entry)
+            db.session.commit()
+
         flash("File information updated successfully!", "success")
         return redirect(url_for('upload.view_files'))
 
     return render_template('editfile.html', 
                            file=file,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
-
-# Route to delete a file
+                           current_user_name=current_user.name,
+ 
+                           current_user_email=current_user.email)
+# Delete file route
 @upload_bp.route('/delete/<int:uploadid>', methods=['POST'])
 @login_required
 def delete_file(uploadid):
@@ -126,6 +156,20 @@ def delete_file(uploadid):
     # Remove file from database
     db.session.delete(file)
     db.session.commit()
+
+    # **Log the action**
+    log_entry = ActionLog(
+        userid=current_user.userid,
+        username=current_user.name,  
+        action_type="Delete",
+        target_table="Upload",
+        target_id=file.uploadid,
+        timestamp=datetime.now(),
+        details=f"Deleted file: {file.filename}"
+    )
+    db.session.add(log_entry)
+    db.session.commit()
+
     flash("File deleted successfully!", "success")
     return redirect(url_for('upload.view_files'))
 

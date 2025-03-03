@@ -9,8 +9,9 @@ class User(db.Model, UserMixin):
     profile_img = db.Column(db.String(200), nullable=True, default="/static/uploads/default-profile.jpg")
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    role = db.Column(db.Boolean, default=False)  # False for regular user, True for admin
+    role = db.Column(db.Integer, default=0)  # 0 = User, 1 = Admin, 2 = Sub-Admin
     last_login = db.Column(db.DateTime, default=None)  # New field for last login time
+    level = db.Column(db.String(20), nullable=False, default="Beginner") # New field for user level (default to Beginner)
 
     announcements = db.relationship('Announcement', backref='user', lazy=True)
     progress = db.relationship('Progress', backref='user', lazy=True)  # Tracks user progress on videos
@@ -18,6 +19,23 @@ class User(db.Model, UserMixin):
     def get_id(self):
         """Override Flask-Login's get_id method."""
         return str(self.userid)
+    
+    
+class ActionLog(db.Model):
+    __tablename__ = 'ActionLog' # Specify table name explicitly if needed
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    username = db.Column(db.String(100), nullable=False)  # Store the username of the user performing the action
+    action_type = db.Column(db.String(50), nullable=False)  # e.g., "create", "update", "delete"
+    target_table = db.Column(db.String(50), nullable=False)  # e.g., "user"
+    target_id = db.Column(db.Integer, nullable=False)  # ID of the user being affected
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    details = db.Column(db.String(255))  # Optionally store detailed info like what fields were updated
+
+    user = db.relationship('User', backref=db.backref('action_logs', lazy=True))
+
+    def __repr__(self):
+        return f"<ActionLog {self.action_type} by {self.username} on {self.timestamp}>"
 
 
 class Announcement(db.Model):
@@ -68,11 +86,18 @@ class Course(db.Model):
         total_videos = 0
         total_progress = 0
 
+        # Loop through each module in the course
         for module in self.modules:
+            # Get the progress for the current module
             module_progress = module.calculate_module_progress(userid)
+            
+            # Add the number of videos in this module
             total_videos += len(module.videos)
-            total_progress += module_progress * len(module.videos)
+            
+            # Add the total progress from this module (each video's progress is weighted)
+            total_progress += (module_progress * len(module.videos))
 
+        # Return the overall progress percentage
         return (total_progress / total_videos) if total_videos > 0 else 0
 
 
@@ -94,11 +119,15 @@ class Module(db.Model):
         total_videos = len(videos)
         completed_videos = 0
 
+        # Loop through each video in the module
         for video in videos:
             progress = Progress.query.filter_by(userid=userid, videoid=video.videoid).first()
+            
+            # If the video is completed, add to the count
             if progress and progress.completed:
                 completed_videos += 1
 
+        # Calculate the percentage of videos completed in this module
         return (completed_videos / total_videos) * 100 if total_videos > 0 else 0
 
 
