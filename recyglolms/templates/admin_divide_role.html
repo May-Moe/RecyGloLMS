@@ -1,46 +1,11 @@
-<!-- <html>
-    <body>
-    
-<h1>Add New User</h1>
-<form method="POST" action="{{ url_for('admin.add_user') }}">
-
-    <label for="name">Username:</label>
-    <input type="name" name="name" required>
-
-    <label for="email">Email:</label>
-    <input type="email" name="email" required>
-    
-    <label for="password">Password:</label>
-    <input type="password" name="password" required>
-    
-    <label for="role">Role:</label>
-    <select name="role" required>
-        <option value="0">User</option>
-        <option value="1">Admin</option>
-    </select>
-    
-    <button type="submit">Add User</button>
-</form>
-<a href="{{ url_for('admin.dashboard') }}">Back to Dashboard</a>
-{% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul>
-                {% for category, message in messages %}
-                    <li class="{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-</body>
-</html> -->
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/CSS/style.css">
-    <link rel="stylesheet" href="static/CSS/AddUser.css">
+    <link rel="stylesheet" href="static/CSS/admin_divide_role.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Add User</title>
+    <title>Divide Users</title>
 </head>
 <body>
     <div class="dashboard">
@@ -77,7 +42,6 @@
                     </ul>
                 </div>
                 <div class="dropdown">
-                    
                     <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
                         <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
@@ -94,7 +58,7 @@
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
                 <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
-                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('admin.Activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
                 <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
@@ -103,42 +67,71 @@
                 <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
                 <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
                 <li><a href="{{ url_for('admin.admin_divide_role') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+
             </ul>
         </nav>
         <div class="container">
-            <a href="{{ url_for('admin.view_users') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
+            <div class="header">
+                <h1>Divide Users</h1>
+                <div class="header-actions">
+                    <div class="header-actions">
+                        <select class="filter-select" id="courseFilter">
+                            <option value="all">Show all Roles</option>
+                            <option value="Master">Master</option>
+                            <option value="Mid">Mid</option>
+                            <option value="Beginner">Beginner</option>
+                        </select>
+                        <!-- <input type="text" id="searchBar" placeholder="Search"> -->
+                    </div>
+                    <!-- <a href="AddUser.html"  id="addUserLink">
+                        <button id="addUserButton"><i class="fas fa-plus"></i>Set User Role</button>
+                    </a> -->
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Completed videos</th>
+                            <th>Total marks</th>
+                            <th>Total Activity</th>
+                            <th>Users Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                         <tr>
+                            <td>May</td>
+                            <td>5</td>
+                            <td>80%</td>
+                            <td>6</td>
+                            <td>
+                                <select class="filter-select" id="courseFilter">
+                                    <option value="all" default>Set User Roles</option>
+                                    <option value="Master">Master</option>
+                                    <option value="Mid">Mid</option>
+                                    <option value="Beginner">Beginner</option>
+                                </select>
+                            </td>
+                            <td>
+                                <!-- <a href="EditUser.html" class="editAction"><i class="fas fa-edit"></i></a> -->
+                                <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                         </tr>
+                    </tbody>
 
-            <h2>Add User</h2>
-            <form id="AddProfileForm" method="POST" action="{{ url_for('admin.add_user') }}">
-                <div class="form-group">
-                    <label for="name">Username</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="role">Role</label>
-                    <select id="role" name="role">
-                        <option value="0">User</option>
-                        {% if current_user.role == 1 %} 
-                            <option value="1">Admin</option>  <!-- Only Admins (role=1) see this -->
-                            <option value="2">Sub-Admin</option>  <!-- Only Admins (role=1) see this -->
-                        {% endif %}
-                    </select>
-                </div>
-                <div class="buttons">
-                    <button type="submit" class="submit-button">Add</button>
-                    <button type="button" class="cancel-button" onclick="cancelEdit()">Cancel</button>
-                </div>
-            </form>
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
+            </div>
         </div>
+    </main>
+</div>
     </div>
-    <script src="static/JS/script.js"></script>
+    <script src="JS/script.js"></script>
 </body>
 </html>

@@ -784,7 +784,7 @@ def Activities():
     users = User.query.filter_by(role=0).all()  # Fetch all users from the database
     current_user_name = current_user.name,
     current_user_email = current_user.email
-    return render_template('Activity.html', 
+    return render_template('Activity.html',
                            users=users,
                            current_user_name=current_user_name,
                            current_user_email=current_user_email)
@@ -852,4 +852,23 @@ def user_levels():
     return render_template('user_level_set.html', users=users, user_level_data=user_level_data)
 
 
+@admin_bp.route('/admin_view_activity/<int:userid>')
+def admin_view_activity(userid):
+    user = User.query.get_or_404(userid)
+    activities = Activity.query.filter_by(userid=userid).all()
 
+    # Fetch activity images
+    for activity in activities:
+        activity.image = ActivityImage.query.filter_by(activityid=activity.activityid).all()
+
+    return render_template('admin_view_activity.html', user=user, activities=activities)
+
+#Admin Alumni page
+@admin_bp.route('/admin_divide_role')
+@login_required
+def admin_divide_role():
+    users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+    return render_template('admin_divide_role.html', 
+                           users=users,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)

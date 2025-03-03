@@ -68,6 +68,8 @@
                 <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
                 <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
                 <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                <li><a href="{{ url_for('admin.admin_divide_role') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+
             </ul>
         </nav>
         <div class="container">
@@ -94,7 +96,11 @@
                             <td>{{ user.userid }}</td>
                             <td>{{ user.name }}</td>
                             <td>
+<<<<<<< HEAD
                                 <a href="{{ url_for('admin.Activities', userid=user.userid) }}">View All Activity</a>
+=======
+                                <a href="{{ url_for('admin.admin_view_activity', userid=user.userid, activityid=activityid )}}">View All Activity</a>
+>>>>>>> c22bbf5c308c56e5b9675656cc30fc9712b170da
                             </td>
                             <td>
                                 <button type="submit" class="deleteAction" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>
