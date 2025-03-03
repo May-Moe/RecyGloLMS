@@ -35,6 +35,7 @@
                     <span id="notification-count" class="notification-count">0</span>
                 </button>
 
+<<<<<<< HEAD
                 <div id="notification-dropdown" class="notification-dropdown hidden">
                     <ul id="notification-list">
                         <li>New course available: "Recycling 101"</li>
@@ -147,4 +148,57 @@
     </div>
     <script src="static/JS/script.js"></script>
 </body>
+=======
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Completed Courses</th>
+                    <th>Total Activities</th>
+                    <th>Average Quiz Marks</th>
+                    <th>Current Level</th>
+                    <th>Set Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user, progress_data in user_level_data.items() %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>
+                            {% if progress_data %}
+                                <ul>
+                                    {% for course_name in progress_data.keys() %}
+                                        <li>{{ course_name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                No completed courses
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% set total_activities_list = progress_data.values() | map(attribute='total_activities') | list %}
+                            {{ total_activities_list | sum if total_activities_list else 0 }}
+                        </td>
+                        <td>
+                            {% set quiz_scores = progress_data.values() | map(attribute='average_quiz_score') | list %}
+                            {{ (quiz_scores | sum / quiz_scores | length) | round(2) if quiz_scores else 'N/A' }}%
+                        </td>
+                        <td>{{ user.level }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin.user_levels') }}">
+                                <input type="hidden" name="userid" value="{{ user.userid }}">
+                                <select name="level" required>
+                                    <option value="Beginner" {% if user.level == 'Beginner' %}selected{% endif %}>Beginner</option>
+                                    <option value="Expert" {% if user.level == 'Expert' %}selected{% endif %}>Expert</option>
+                                    <option value="Professional" {% if user.level == 'Professional' %}selected{% endif %}>Professional</option>
+                                </select>
+                                <button type="submit">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+>>>>>>> 0602b983932bfb365a5e0f69a85dcc627459b224
 </html>

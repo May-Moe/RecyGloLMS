@@ -59,6 +59,9 @@ def allowed_file(filename):
 def view_activity(activity_id):
     # Fetch the specific activity based on the ID
     activity = Activity.query.filter_by(activityid=activity_id, userid=current_user.userid).first()
+    # Pass current user info to the template
+    current_username = current_user.name
+    current_useremail = current_user.email
 
     if activity:
         # Fetch all images related to this activity
@@ -69,7 +72,10 @@ def view_activity(activity_id):
             "activityid": activity.activityid,
             "name": activity.name,
             "description": activity.description,
-            "images": images
+            "images": images,
+            "current_user_name": current_username,
+            "current_user_email": current_useremail
+            
         })
     else:
         return jsonify({"error": "Activity not found"}), 404

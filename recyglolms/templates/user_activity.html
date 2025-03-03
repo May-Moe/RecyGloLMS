@@ -1,5 +1,11 @@
+<<<<<<< HEAD
+ <html lang="en">
+<!DOCTYPE html>
+
+=======
 
 <!DOCTYPE html>
+>>>>>>> c22bbf5c308c56e5b9675656cc30fc9712b170da
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,11 +42,12 @@
                     <span id="notification-count" class="notification-count">0</span>
                 </button>
                 <div class="dropdown">
-                    <img src="/static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
-                        <p id="profile-email">may@gmail.com</p>
-                        <button id="logout-button">Logout</button>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
                 </div>
             </div>
@@ -94,7 +101,7 @@
             </div>
         </div>
     </div>
-
+    <script src="static/JS/script.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             loadCards(); // Load cards from backend on page load

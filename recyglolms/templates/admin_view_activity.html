@@ -59,7 +59,7 @@
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
                 <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
-                <li><a href="{{ url_for('admin.Activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
                 <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
@@ -73,7 +73,7 @@
         </nav>
 
         <div class="container">
-            <a href="{{ url_for('admin.Activity') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
+            <a href="{{ url_for('admin.Activities') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
             <h3 style="text-align:center; font-size: 20px; margin-bottom: 20px;">{{ user.name }}'s Activities</h3>
             <hr style="color: gray; margin-bottom: 20px;">
 

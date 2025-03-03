@@ -60,7 +60,7 @@
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
                 <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
-                <li><a href="{{ url_for('admin.Activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
                 <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
@@ -96,7 +96,11 @@
                             <td>{{ user.userid }}</td>
                             <td>{{ user.name }}</td>
                             <td>
+<<<<<<< HEAD
+                                <a href="{{ url_for('admin.Activities', userid=user.userid) }}">View All Activity</a>
+=======
                                 <a href="{{ url_for('admin.admin_view_activity', userid=user.userid, activityid=activityid )}}">View All Activity</a>
+>>>>>>> c22bbf5c308c56e5b9675656cc30fc9712b170da
                             </td>
                             <td>
                                 <button type="submit" class="deleteAction" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>
