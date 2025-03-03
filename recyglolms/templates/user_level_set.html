@@ -1,60 +1,150 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>User Level Set</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <h2>User Level Management</h2>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/admin_divide_role.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Divide Users</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
 
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Completed Courses</th>
-                    <th>Average Quiz Marks</th>
-                    <th>Current Level</th>
-                    <th>Set Level</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user, progress_data in user_level_data.items() %}
-                    <tr>
-                        <td>{{ user.name }}</td>
-                        <td>
-                            {% if progress_data %}
-                                <ul>
-                                    {% for course_name in progress_data.keys() %}
-                                        <li>{{ course_name }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% else %}
-                                No completed courses
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% set quiz_scores = progress_data.values() | map(attribute='average_quiz_score') | list %}
-                            {{ (quiz_scores | sum / quiz_scores | length) | round(2) if quiz_scores else 'N/A' }}%
-                        </td>
-                        <td>{{ user.level }}</td>
-                        <td>
-                            <form method="POST" action="{{ url_for('admin.user_levels') }}">
-                                <input type="hidden" name="userid" value="{{ user.userid }}">
-                                <select name="level" required>
-                                    <option value="Beginner" {% if user.level == 'Beginner' %}selected{% endif %}>Beginner</option>
-                                    <option value="Expert" {% if user.level == 'Expert' %}selected{% endif %}>Expert</option>
-                                    <option value="Professional" {% if user.level == 'Professional' %}selected{% endif %}>Professional</option>
-                                </select>
-                                <button type="submit">Update</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </body>
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+                <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="header">
+                <h1>Divide Users</h1>
+                <div class="header-actions">
+                    <div class="header-actions">
+                        <select class="filter-select" id="courseFilter">
+                            <option value="all">Show all Roles</option>
+                            <option value="Master">Master</option>
+                            <option value="Mid">Mid</option>
+                            <option value="Beginner">Beginner</option>
+                        </select>
+                        <!-- <input type="text" id="searchBar" placeholder="Search"> -->
+                    </div>
+                    <!-- <a href="AddUser.html"  id="addUserLink">
+                        <button id="addUserButton"><i class="fas fa-plus"></i>Set User Role</button>
+                    </a> -->
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Completed Courses</th>
+                            <th>Average Quiz Marks</th>
+                            <th>Current Level</th>
+                            <th>Set Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user, progress_data in user_level_data.items() %}
+                            <tr>
+                                <td>{{ user.name }}</td>
+                                <td>
+                                    {% if progress_data %}
+                                        <ul>
+                                            {% for course_name in progress_data.keys() %}
+                                                <li>{{ course_name }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        No completed courses
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% set quiz_scores = progress_data.values() | map(attribute='average_quiz_score') | list %}
+                                    {{ (quiz_scores | sum / quiz_scores | length) | round(2) if quiz_scores else 'N/A' }}%
+                                </td>
+                                <td>{{ user.level }}</td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('admin.user_levels') }}">
+                                        <input type="hidden" name="userid" value="{{ user.userid }}">
+                                        <select name="level" required>
+                                            <option value="Beginner" {% if user.level == 'Beginner' %}selected{% endif %}>Beginner</option>
+                                            <option value="Expert" {% if user.level == 'Expert' %}selected{% endif %}>Expert</option>
+                                            <option value="Professional" {% if user.level == 'Professional' %}selected{% endif %}>Professional</option>
+                                        </select>
+                                        <button type="submit">Update</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+        
+
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
+            </div>
+        </div>
+    </main>
+</div>
+    </div>
+    <script src="static/JS/script.js"></script>
+</body>
 </html>
