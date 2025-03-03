@@ -271,7 +271,7 @@ body {
     border-radius: 10px;
 }
 
-  /* Language Dropdown */
+
   .language-dropdown {
     position: relative;
 }
@@ -363,7 +363,7 @@ body {
     .profile-right .logo {
         display: block; /* Show the logo on small screens */
         position: absolute; /* Position it absolutely to center it */
-        left: 50%;
+        left: 25%;
         transform: translateX(-50%);
         top: 30%; /* Vertically center the logo */
         z-index: 1; /* Ensure the logo is above the profile picture */

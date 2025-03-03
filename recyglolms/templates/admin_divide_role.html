@@ -1,12 +1,11 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/CSS/style.css">
-    <link rel="stylesheet" href="../static/CSS/EditUser.css">
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/admin_divide_role.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Edit User</title>
+    <title>Divide Users</title>
 </head>
 <body>
     <div class="dashboard">
@@ -15,7 +14,7 @@
                 <span class="icon">&#9776;</span>
             </button>
             <div class="profile-right">
-                <img src="../static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
@@ -43,8 +42,7 @@
                     </ul>
                 </div>
                 <div class="dropdown">
-                    
-                    <img src="../static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
                         <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
                         <p id="profile-email">{{ current_user_email }}</p>
@@ -55,7 +53,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="../static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -69,38 +67,71 @@
                 <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
                 <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
                 <li><a href="{{ url_for('admin.admin_divide_role') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+
             </ul>
         </nav>
         <div class="container">
-            <a href="{{ url_for('admin.view_users') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
-            <h2>User Edit</h2>
-            <form id="editProfileForm" action="{{ url_for('admin.edit_user', user_id=user.userid) }}" method="POST">
-                <div class="form-group">
-                    <label for="name">Username</label>
-                    <input type="text" id="name" name="name" value="{{ user.name }}" required>
+            <div class="header">
+                <h1>Divide Users</h1>
+                <div class="header-actions">
+                    <div class="header-actions">
+                        <select class="filter-select" id="courseFilter">
+                            <option value="all">Show all Roles</option>
+                            <option value="Master">Master</option>
+                            <option value="Mid">Mid</option>
+                            <option value="Beginner">Beginner</option>
+                        </select>
+                        <!-- <input type="text" id="searchBar" placeholder="Search"> -->
+                    </div>
+                    <!-- <a href="AddUser.html"  id="addUserLink">
+                        <button id="addUserButton"><i class="fas fa-plus"></i>Set User Role</button>
+                    </a> -->
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="example@gmail.com" value="{{ user.email }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="role">Role</label>
-                    <select id="role" name="role">
-                        <option value="0" {% if user.role == 0 %}selected{% endif %}>User</option>
-                        <option value="1" {% if user.role == 1 %}selected{% endif %}>Admin</option>
-                    </select>
-                </div>
-                <div class="buttons">
-                    <button type="submit" class="submit-button">Save Changes</button>
-                    <button type="button" class="cancel-button" onclick="cancelEdit()">Cancel</button>
-                </div>
-            </form>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Completed videos</th>
+                            <th>Total marks</th>
+                            <th>Total Activity</th>
+                            <th>Users Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                         <tr>
+                            <td>May</td>
+                            <td>5</td>
+                            <td>80%</td>
+                            <td>6</td>
+                            <td>
+                                <select class="filter-select" id="courseFilter">
+                                    <option value="all" default>Set User Roles</option>
+                                    <option value="Master">Master</option>
+                                    <option value="Mid">Mid</option>
+                                    <option value="Beginner">Beginner</option>
+                                </select>
+                            </td>
+                            <td>
+                                <!-- <a href="EditUser.html" class="editAction"><i class="fas fa-edit"></i></a> -->
+                                <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                         </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
+            </div>
         </div>
+    </main>
+</div>
     </div>
-    <script src="../static/JS/script.js"></script>
+    <script src="JS/script.js"></script>
 </body>
 </html>

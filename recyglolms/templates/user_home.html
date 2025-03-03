@@ -136,25 +136,20 @@
             <div class="Announcement">
                 <h2 style="text-align: center; margin-bottom: 20px;">Announcement</h2>
                 <div class="ann-container">
-                    
-                        {% for announcement in announcements %}
-                        <ul class="announcement-item">
-                            {% if announcement.announcement_img %}
-                                <li>
-                                    <!-- <p>Image Path: {{ url_for('static', filename='announcements/' + announcement.announcement_img) }}</p> -->
-                                    <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" 
-                                         alt="Announcement Image" class="ann-img">
-                                </li>
-                                <li style="text-align: center; margin: 10px 0px;"><span style="color: #A9C9A4; font-weight: bold;">Event Date:</span> {{ announcement.event_date }}</li>
-                            {% else %}
-                                <li>No Image</li>
-                            {% endif %}
-                        </ul>
-                        
-                        {% endfor %}
-                    
+                    {% for announcement in announcements %}
+                    <div class="announcement-item">
+                        {% if announcement.announcement_img %}
+                            <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" 
+                                 alt="Announcement Image" class="ann-img">
+                        {% else %}
+                            <div class="no-img">No Image</div>
+                        {% endif %}
+                        <p class="ann-label"><span>Event Date:</span> {{ announcement.event_date }}</p>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
+            
             
 
             <!-- <div class="programs">

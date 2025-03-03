@@ -68,6 +68,7 @@
                 <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
                 <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
                 <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                <li><a href="{{ url_for('admin.admin_divide_role') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
             </ul>
         </nav>
         <div class="container">
@@ -144,18 +145,17 @@
                 </div>
             </div>
 
-            <div class="Announcement">
+            <!-- <div class="Announcement">
                 <h2 style="text-align: center; margin-bottom: 20px;">Announcement</h2>
                 <div class="ann-container">
                         {% for announcement in announcements %}
                         <ul class="announcement-item">
                             {% if announcement.announcement_img %}
                                 <li>
-                                    <!-- <p>Image Path: {{ url_for('static', filename='announcements/' + announcement.announcement_img) }}</p> -->
                                     <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" 
                                          alt="Announcement Image" class="ann-img">
                                 </li>
-                                <li style="text-align: center; margin: 10px 0px;"><span style="color: #A9C9A4; font-weight: bold;">Event Date:</span> {{ announcement.event_date }}</li>
+                                <li style="text-align: center; margin: 10px 0px;" class="ann-label"><span style="color: #A9C9A4; font-weight: bold;">Event Date:</span> {{ announcement.event_date }}</li>
                             {% else %}
                                 <li>No Image</li>
                             {% endif %}
@@ -164,7 +164,25 @@
                         {% endfor %}
                     
                 </div>
+            </div> -->
+
+            <div class="Announcement">
+                <h2 style="text-align: center; margin-bottom: 20px;">Announcement</h2>
+                <div class="ann-container">
+                    {% for announcement in announcements %}
+                    <div class="announcement-item">
+                        {% if announcement.announcement_img %}
+                            <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" 
+                                 alt="Announcement Image" class="ann-img">
+                        {% else %}
+                            <div class="no-img">No Image</div>
+                        {% endif %}
+                        <p class="ann-label"><span>Event Date:</span> {{ announcement.event_date }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
+            
 
             <!-- <div class="programs">
                 <h2>Programs Offered</h2>

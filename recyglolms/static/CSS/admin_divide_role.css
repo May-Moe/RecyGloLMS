@@ -41,7 +41,7 @@ h1 {
     margin-left: auto;
 }
 
-#searchBar {
+#searchBar, #courseFilter  {
     padding: 10px;
     font-size: 13px;
     border: 1px solid #ccc;
@@ -51,7 +51,7 @@ h1 {
     margin-right: 10px;
 }
 
-#searchBar:focus {
+#searchBar,#courseFilter:focus {
     border-color: #007BFF;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     outline: none;
@@ -63,12 +63,11 @@ h1 {
     padding: 10px 20px;
     font-size: 13px;
     color: #fff;
-    background-color: #A9C9A4;
+    background-color: #16a159;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    text-decoration: none;
 }
 
 #addUserButton i {
@@ -76,10 +75,10 @@ h1 {
 }
 
 #addUserButton:hover {
-    background-color: #65a65b;
+    background-color: #094124;
 }
 
-#addAnnLink {
+#addUserLink {
     text-decoration: none;
     color: #fff;
 }
@@ -93,6 +92,7 @@ table {
     border-collapse: collapse;
     
 }
+
 th, td {
     text-align: left;
     padding: 10px;
@@ -174,38 +174,13 @@ th {
     color: #c82333;
 }
 
-#ViewLinkButton {
-    display: flex;
-    align-items: center;
-    padding: 8px 20px;
-    font-size: 13px;
-    color: #fff;
-    background-color: #16a159;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-    border: 1px solid white;
-
-}
-
-#ViewLinkButton:hover {
-    background-color: #218838;
-}
-
-.viewuploadLink {
-    text-decoration: none;
-    color: #fff;
-}
-
 /* Responsive styles */
 @media (max-width: 768px) {
     .container {
-        width: 90%;
-        margin-left: auto;
-        margin-right: auto;
-
+        width: 100%;
+        margin-left: 0;
+        margin-top: 100px;
+        margin-bottom: 600px;
     }
     .header {
         flex-direction: column;
@@ -229,5 +204,39 @@ th {
     }
     .table-container {
         overflow-x: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 100px;
+        
+        
+    }
+    .header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #searchBar {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #addUserButton {
+        width: 100%;
+    }
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 8px;
     }
 }
