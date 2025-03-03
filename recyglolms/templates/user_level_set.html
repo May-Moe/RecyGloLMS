@@ -16,6 +16,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Completed Courses</th>
+                    <th>Total Activities</th>
                     <th>Average Quiz Marks</th>
                     <th>Current Level</th>
                     <th>Set Level</th>
@@ -35,6 +36,10 @@
                             {% else %}
                                 No completed courses
                             {% endif %}
+                        </td>
+                        <td>
+                            {% set total_activities_list = progress_data.values() | map(attribute='total_activities') | list %}
+                            {{ total_activities_list | sum if total_activities_list else 0 }}
                         </td>
                         <td>
                             {% set quiz_scores = progress_data.values() | map(attribute='average_quiz_score') | list %}

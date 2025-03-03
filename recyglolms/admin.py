@@ -780,7 +780,7 @@ def Alumni_admin():
 #Admin Activity page
 @admin_bp.route('/Activity')
 @login_required
-def Activity():
+def Activities():
     users = User.query.filter_by(role=0).all()  # Fetch all users from the database
     current_user_name = current_user.name,
     current_user_email = current_user.email
@@ -794,7 +794,7 @@ def Activity():
 def user_levels():
     if current_user.role not in [1, 2]:  # Only Admins & Sub-Admins
         flash("Unauthorized access!", "danger")
-        return redirect(url_for('main.dashboard'))
+        return redirect(url_for('admin.dashboard'))
 
     users = User.query.filter_by(role=0).all()  # Fetch all users from the database
     user_level_data = {}
@@ -827,11 +827,13 @@ def user_levels():
                     average_quiz_score = sum(latest_quiz_scores.values()) / len(latest_quiz_scores)
                 else:
                     average_quiz_score = 0
+                    
+                total_activities = Activity.query.filter_by(userid=user.userid).count()
 
                 # Store the progress data for the user
                 progress_data[course.name] = {
                     'course_progress': course_progress,
-                    # 'total_activities': total_activities,
+                    'total_activities': total_activities,
                     'average_quiz_score': average_quiz_score
                 }
 

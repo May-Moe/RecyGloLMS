@@ -1,8 +1,6 @@
-<<<<<<< HEAD
  <html lang="en">
-=======
 <!DOCTYPE html>
->>>>>>> 97bbc1e (languages section add and fix designs)
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,11 +37,12 @@
                     <span id="notification-count" class="notification-count">0</span>
                 </button>
                 <div class="dropdown">
-                    <img src="/static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">May</span></h4>
-                        <p id="profile-email">may@gmail.com</p>
-                        <button id="logout-button">Logout</button>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
                 </div>
             </div>
@@ -57,7 +56,7 @@
                 <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
                 <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
-                <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
                 <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
             </ul>
         </nav>
@@ -97,7 +96,7 @@
             </div>
         </div>
     </div>
-
+    <script src="static/JS/script.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             loadCards(); // Load cards from backend on page load
