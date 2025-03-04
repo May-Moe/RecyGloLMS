@@ -162,7 +162,7 @@ def add_user():
 
     return render_template('adduser.html')
 
-@app.route('/logs')
+@admin_bp.route('/logs')
 def show_logs():
     # Ensure only Admins (1)
     if current_user.role not in [1]:  
@@ -867,12 +867,3 @@ def admin_view_activity(userid):
 
     return render_template('admin_view_activity.html', user=user, activities=activities)
 
-#Admin Alumni page
-@admin_bp.route('/admin_divide_role')
-@login_required
-def admin_divide_role():
-    users = User.query.filter_by(role=0).all()  # Fetch all users from the database
-    return render_template('admin_divide_role.html', 
-                           users=users,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
