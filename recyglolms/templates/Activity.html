@@ -96,11 +96,7 @@
                             <td>{{ user.userid }}</td>
                             <td>{{ user.name }}</td>
                             <td>
-<<<<<<< HEAD
                                 <a href="{{ url_for('admin.Activities', userid=user.userid) }}">View All Activity</a>
-=======
-                                <a href="{{ url_for('admin.admin_view_activity', userid=user.userid, activityid=activityid )}}">View All Activity</a>
->>>>>>> c22bbf5c308c56e5b9675656cc30fc9712b170da
                             </td>
                             <td>
                                 <button type="submit" class="deleteAction" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>

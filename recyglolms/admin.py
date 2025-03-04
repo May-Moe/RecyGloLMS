@@ -777,18 +777,20 @@ def Alumni_admin():
                             current_user_email = current_user.email)
 
 
-#Admin Activity page
+# Admin Activity page
 @admin_bp.route('/Activity')
 @login_required
 def Activities():
     users = User.query.filter_by(role=0).all()  # Fetch all users from the database
-    current_user_name = current_user.name,
+    users_dict = {user.userid: user for user in users}  # Convert users list to a dictionary using userid as the key
+    current_user_name = current_user.name
     current_user_email = current_user.email
     return render_template('Activity.html',
-                           users=users,
+                           users=users_dict,  # Pass the dictionary to the template
                            current_user_name=current_user_name,
                            current_user_email=current_user_email)
     
+
 @admin_bp.route('/user-levels', methods=['GET', 'POST'])
 @login_required
 def user_levels():
@@ -797,23 +799,21 @@ def user_levels():
         return redirect(url_for('admin.dashboard'))
 
     users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+    users_dict = {user.userid: user for user in users}  # Convert users list to a dictionary using userid as the key
     user_level_data = {}
 
-    # Fetch the progress data for each user
+   # Inside user_levels function
     for user in users:
         progress_data = {}
+
+        # Fetch all courses and loop to check if they're completed
         courses = Course.query.all()
-        # total_activities = Activity.query.filter_by(userid=user.userid).count()
 
-        # Loop through courses to check if they are 100% completed
         for course in courses:
-            # Calculate the course progress
             course_progress = course.calculate_course_progress(user.userid)
-            
-            # Only add to progress data if course is 100% completed
-            if course_progress == 100:
 
-                # Calculate the latest quiz score (most recent response per quiz)
+            # Only process courses that are completed (progress == 100)
+            if course_progress == 100:
                 user_responses = UserResponse.query.filter_by(userid=user.userid).order_by(UserResponse.created_date.desc()).all()
 
                 # Dictionary to store the most recent quiz score for each quiz
@@ -822,23 +822,26 @@ def user_levels():
                     if response.quizid not in latest_quiz_scores:
                         latest_quiz_scores[response.quizid] = response.score
 
-                # Calculate the average of the latest quiz scores
-                if latest_quiz_scores:
-                    average_quiz_score = sum(latest_quiz_scores.values()) / len(latest_quiz_scores)
-                else:
-                    average_quiz_score = 0
-                    
-                total_activities = Activity.query.filter_by(userid=user.userid).count()
+                # Calculate average quiz score (if any quizzes exist)
+                average_quiz_score = sum(latest_quiz_scores.values()) / len(latest_quiz_scores) if latest_quiz_scores else 0
 
-                # Store the progress data for the user
+                # Ensure the progress_data structure is correct
                 progress_data[course.name] = {
                     'course_progress': course_progress,
-                    'total_activities': total_activities,
                     'average_quiz_score': average_quiz_score
                 }
 
-        user_level_data[user] = progress_data
+        # Add the total activities data to the user's progress
+        total_activities = db.session.query(Activity.activityid) \
+            .filter(Activity.userid == user.userid) \
+            .distinct().count()
 
+        progress_data['total_activities'] = total_activities
+
+        # Store the progress data for this user
+        user_level_data[user.userid] = progress_data
+
+    # Handle POST request to update user level
     if request.method == 'POST':
         userid = request.form.get('userid')
         new_level = request.form.get('level')
@@ -849,7 +852,8 @@ def user_levels():
             db.session.commit()
             flash(f"{user.name}'s level updated to {new_level}!", "success")
 
-    return render_template('user_level_set.html', users=users, user_level_data=user_level_data)
+    # Return to the template
+    return render_template('user_level_set.html', users=users_dict, user_level_data=user_level_data)
 
 
 @admin_bp.route('/admin_view_activity/<int:userid>')

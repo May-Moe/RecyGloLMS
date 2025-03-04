@@ -63,6 +63,17 @@ class Activity(db.Model):
     date = db.Column(db.DateTime, default=datetime.utcnow)
     userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
     image = db.relationship('ActivityImage', backref='activity_ref', lazy=True, cascade="all, delete-orphan")
+    
+    @classmethod
+    def count_distinct_activities(cls, user_id):
+        """
+        Function to count distinct activity IDs across all activities for a given user.
+        """
+        # Query distinct activity IDs based on user_id and count them
+        distinct_activity_count = db.session.query(db.func.count(db.distinct(cls.activityid))) \
+                                             .filter(cls.userid == user_id) \
+                                             .scalar()
+        return distinct_activity_count
 
 class ActivityImage(db.Model):
     __tablename__ = 'activity_image'
