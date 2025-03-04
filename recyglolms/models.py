@@ -15,6 +15,9 @@ class User(db.Model, UserMixin):
 
     announcements = db.relationship('Announcement', backref='user', lazy=True)
     progress = db.relationship('Progress', backref='user', lazy=True)  # Tracks user progress on videos
+    
+    # Relationship with classes
+    classes = db.relationship('UserClass', backref='user', lazy=True)
 
     def get_id(self):
         """Override Flask-Login's get_id method."""
@@ -87,7 +90,12 @@ class Course(db.Model):
     name = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationship to modules
     modules = db.relationship('Module', backref='course', lazy=True)
+    
+       # Relationship to classes
+    classes = db.relationship('CourseClass', backref='course', lazy=True)
 
     def calculate_course_progress(self, userid):
         """
@@ -229,3 +237,32 @@ class Feedback(db.Model):
     submit_date = db.Column(db.DateTime, default=datetime.utcnow)  # Submission timestamp
 
     user = db.relationship('User', backref='feedbacks')
+    
+    
+# New models for Classes
+class Class(db.Model):
+    
+    classid = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False, unique=True)
+    description = db.Column(db.Text, nullable=True)
+    created_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationship to link courses
+    courses = db.relationship('CourseClass', backref='class_', lazy=True)
+    users = db.relationship('UserClass', backref='class_', lazy=True)
+
+
+class CourseClass(db.Model):
+    """Link table between courses and classes"""
+    __tablename__ = 'CourseClass'  # Explicitly set the table name
+    id = db.Column(db.Integer, primary_key=True)
+    classid = db.Column(db.Integer, db.ForeignKey('class.classid'), nullable=False)
+    courseid = db.Column(db.Integer, db.ForeignKey('course.courseid'), nullable=False)
+
+
+class UserClass(db.Model):
+    """Link table between users and classes"""
+    __tablename__ = 'UserClass'  # Explicitly set the table name
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    classid = db.Column(db.Integer, db.ForeignKey('class.classid'), nullable=False)
