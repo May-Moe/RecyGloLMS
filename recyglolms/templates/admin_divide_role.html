@@ -134,5 +134,47 @@
 </div>
     </div>
     <script src="JS/script.js"></script>
+    <script>
+         //next and previous page
+    document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("userTableBody");
+        const rows = Array.from(tableBody.querySelectorAll("tr"));
+        const prevButton = document.getElementById("prevPage");
+        const nextButton = document.getElementById("nextPage");
+        let currentPage = 1;
+        const rowsPerPage = 10;
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            // Hide all rows
+            rows.forEach((row, index) => {
+                row.style.display = index >= start && index < end ? "table-row" : "none";
+            });
+
+            // Disable buttons when needed
+            prevButton.disabled = page === 1;
+            nextButton.disabled = end >= rows.length;
+        }
+
+        prevButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        nextButton.addEventListener("click", function () {
+            if ((currentPage * rowsPerPage) < rows.length) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        // Initial table setup
+        showPage(currentPage);
+    });
+    </script>
 </body>
 </html>

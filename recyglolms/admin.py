@@ -169,8 +169,9 @@ def show_logs():
         flash("Unauthorized access!", "danger")
         return redirect(url_for('admin.dashboard'))
     logs = ActionLog.query.order_by(ActionLog.timestamp.desc()).all()
-    return render_template('viewlogs.html', logs=logs)
-
+    return render_template('viewlogs.html', logs=logs,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 #Delete old logs
 # Create an instance of the APScheduler
 scheduler = APScheduler()
@@ -849,7 +850,9 @@ def user_levels():
             db.session.commit()
             flash(f"{user.name}'s level updated to {new_level}!", "success")
 
-    return render_template('user_level_set.html', users=users, user_level_data=user_level_data)
+    return render_template('user_level_set.html', users=users, user_level_data=user_level_data, 
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 @admin_bp.route('/admin_view_activity/<int:userid>')

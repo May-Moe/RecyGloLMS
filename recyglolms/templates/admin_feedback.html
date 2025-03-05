@@ -76,8 +76,9 @@
         {% for feedback, user in feedbacks %}
         <div class="feedback-card">
             <div class="user-info">
-                <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="User" class="avatar">
-                <span class="username">{{ user.name }}</span>
+                <img src="{{ url_for('static', filename=user.profile_img) if user.profile_img else url_for('static', filename='/uploads/default-profile.jpg') }}" 
+                alt="{{ user.name }}">                
+                <span class="username" style="font-weight: bold;">{{ user.name }}</span>
                 <span class="time">{{ feedback.submit_date.strftime('%d %b %Y') }}</span>
             </div>
             <p>{{ feedback.feedback }}</p>

@@ -88,8 +88,12 @@
                             <th>Title</th>
                             <th>Content</th>
                             <th>Image</th>
-                            <th>Event Date</th>
-                            <th>Date Posted</th>
+                            <th>Event Date
+                                <i class="fas fa-sort" id="sortEventDate"></i>
+                            </th>
+                            <th>Date Posted
+                                <i class="fas fa-sort" id="sortDatePost"></i>
+                            </th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -140,6 +144,100 @@
                 }
             });
         });
+
+        //next and previous page
+    document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("userTableBody");
+        const rows = Array.from(tableBody.querySelectorAll("tr"));
+        const prevButton = document.getElementById("prevPage");
+        const nextButton = document.getElementById("nextPage");
+        let currentPage = 1;
+        const rowsPerPage = 10;
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            // Hide all rows
+            rows.forEach((row, index) => {
+                row.style.display = index >= start && index < end ? "table-row" : "none";
+            });
+
+            // Disable buttons when needed
+            prevButton.disabled = page === 1;
+            nextButton.disabled = end >= rows.length;
+        }
+
+        prevButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        nextButton.addEventListener("click", function () {
+            if ((currentPage * rowsPerPage) < rows.length) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        // Initial table setup
+        showPage(currentPage);
+    });
+
+     //timestamp sorting
+     document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("userTableBody");
+        const sortButton = document.getElementById("sortEventDate");
+        let ascending = true;
+
+        sortButton.addEventListener("click", function () {
+            let rows = Array.from(tableBody.querySelectorAll("tr"));
+
+            rows.sort((a, b) => {
+                let dateA = new Date(a.cells[4].innerText); // Timestamp is in the 5th column (index 4)
+                let dateB = new Date(b.cells[4].innerText);
+
+                return ascending ? dateA - dateB : dateB - dateA;
+            });
+
+            ascending = !ascending; // Toggle sorting order
+
+            // Reorder rows in table
+            rows.forEach(row => tableBody.appendChild(row));
+
+            // Update sort icon
+            sortButton.className = ascending ? "fas fa-sort-up" : "fas fa-sort-down";
+        });
+    });
+
+     //timestamp sorting
+     document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("userTableBody");
+        const sortButton = document.getElementById("sortDatePost");
+        let ascending = true;
+
+        sortButton.addEventListener("click", function () {
+            let rows = Array.from(tableBody.querySelectorAll("tr"));
+
+            rows.sort((a, b) => {
+                let dateA = new Date(a.cells[4].innerText); // Timestamp is in the 5th column (index 4)
+                let dateB = new Date(b.cells[4].innerText);
+
+                return ascending ? dateA - dateB : dateB - dateA;
+            });
+
+            ascending = !ascending; // Toggle sorting order
+
+            // Reorder rows in table
+            rows.forEach(row => tableBody.appendChild(row));
+
+            // Update sort icon
+            sortButton.className = ascending ? "fas fa-sort-up" : "fas fa-sort-down";
+        });
+    });
+
     </script>
     
 </body>

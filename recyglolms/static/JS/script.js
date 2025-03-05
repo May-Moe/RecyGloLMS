@@ -359,3 +359,15 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("language-dropdown").value = savedLanguage;
   }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const dropdownToggles = document.querySelectorAll(".dropdown-toggle");
+
+  dropdownToggles.forEach(toggle => {
+      toggle.addEventListener("click", function (event) {
+          event.preventDefault();
+          this.parentElement.classList.toggle("active");
+      });
+  });
+});
+

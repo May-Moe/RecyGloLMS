@@ -83,22 +83,39 @@ span{
     margin-left: auto;
 }
 
-#searchBar, #courseFilter {
-    padding: 10px;
-    font-size: 13px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+/* Style the search bar */
+#searchBar {
     width: 200px;
-    transition: all 0.3s ease;
-    margin-left: 5px;
-    
+    padding: 10px;
+    border: 1px solid #16a159;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 14px;
+    background: #f8f9fa;
 }
 
-#searchBar,#courseFilter:focus {
-    border-color: #116b13;
-    box-shadow: 0 0 5px rgba(5, 114, 11, 0.5);
-    outline: none;
+#searchBar:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
+
+/* Style the filter dropdown */
+.filter-select {
+    padding: 10px;
+    border: 1px solid #16a159;
+    border-radius: 10px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-select:hover, .filter-select:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {
