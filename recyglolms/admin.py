@@ -3,7 +3,7 @@ from flask_apscheduler import APScheduler
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import db, bcrypt, app
-from recyglolms.models import User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse
+from recyglolms.models import User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse, UserClass, Class, CourseClass
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -778,18 +778,20 @@ def Alumni_admin():
                             current_user_email = current_user.email)
 
 
-#Admin Activity page
+# Admin Activity page
 @admin_bp.route('/Activity')
 @login_required
 def Activities():
     users = User.query.filter_by(role=0).all()  # Fetch all users from the database
-    current_user_name = current_user.name,
+    users_dict = {user.userid: user for user in users}  # Convert users list to a dictionary using userid as the key
+    current_user_name = current_user.name
     current_user_email = current_user.email
     return render_template('Activity.html',
-                           users=users,
+                           users=users_dict,  # Pass the dictionary to the template
                            current_user_name=current_user_name,
                            current_user_email=current_user_email)
     
+
 @admin_bp.route('/user-levels', methods=['GET', 'POST'])
 @login_required
 def user_levels():
@@ -798,23 +800,21 @@ def user_levels():
         return redirect(url_for('admin.dashboard'))
 
     users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+    users_dict = {user.userid: user for user in users}  # Convert users list to a dictionary using userid as the key
     user_level_data = {}
 
-    # Fetch the progress data for each user
+   # Inside user_levels function
     for user in users:
         progress_data = {}
+
+        # Fetch all courses and loop to check if they're completed
         courses = Course.query.all()
-        # total_activities = Activity.query.filter_by(userid=user.userid).count()
 
-        # Loop through courses to check if they are 100% completed
         for course in courses:
-            # Calculate the course progress
             course_progress = course.calculate_course_progress(user.userid)
-            
-            # Only add to progress data if course is 100% completed
-            if course_progress == 100:
 
-                # Calculate the latest quiz score (most recent response per quiz)
+            # Only process courses that are completed (progress == 100)
+            if course_progress == 100:
                 user_responses = UserResponse.query.filter_by(userid=user.userid).order_by(UserResponse.created_date.desc()).all()
 
                 # Dictionary to store the most recent quiz score for each quiz
@@ -823,23 +823,26 @@ def user_levels():
                     if response.quizid not in latest_quiz_scores:
                         latest_quiz_scores[response.quizid] = response.score
 
-                # Calculate the average of the latest quiz scores
-                if latest_quiz_scores:
-                    average_quiz_score = sum(latest_quiz_scores.values()) / len(latest_quiz_scores)
-                else:
-                    average_quiz_score = 0
-                    
-                total_activities = Activity.query.filter_by(userid=user.userid).count()
+                # Calculate average quiz score (if any quizzes exist)
+                average_quiz_score = sum(latest_quiz_scores.values()) / len(latest_quiz_scores) if latest_quiz_scores else 0
 
-                # Store the progress data for the user
+                # Ensure the progress_data structure is correct
                 progress_data[course.name] = {
                     'course_progress': course_progress,
-                    'total_activities': total_activities,
                     'average_quiz_score': average_quiz_score
                 }
 
-        user_level_data[user] = progress_data
+        # Add the total activities data to the user's progress
+        total_activities = db.session.query(Activity.activityid) \
+            .filter(Activity.userid == user.userid) \
+            .distinct().count()
 
+        progress_data['total_activities'] = total_activities
+
+        # Store the progress data for this user
+        user_level_data[user.userid] = progress_data
+
+    # Handle POST request to update user level
     if request.method == 'POST':
         userid = request.form.get('userid')
         new_level = request.form.get('level')
@@ -850,9 +853,14 @@ def user_levels():
             db.session.commit()
             flash(f"{user.name}'s level updated to {new_level}!", "success")
 
+<<<<<<< HEAD
     return render_template('user_level_set.html', users=users, user_level_data=user_level_data, 
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
+=======
+    # Return to the template
+    return render_template('user_level_set.html', users=users_dict, user_level_data=user_level_data)
+>>>>>>> a3bf73b39b6af69c2425de8cbe9d9d0ea71fe350
 
 
 @admin_bp.route('/admin_view_activity/<int:userid>')
@@ -865,4 +873,79 @@ def admin_view_activity(userid):
         activity.image = ActivityImage.query.filter_by(activityid=activity.activityid).all()
 
     return render_template('admin_view_activity.html', user=user, activities=activities)
+
+
+# Class 
+@app.route('/admin/classes', methods=['GET', 'POST'])
+@login_required
+def manage_classes():
+    if current_user.role != 1:  # Ensure only admins can access
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+
+        new_class = Class(name=name, description=description)
+        db.session.add(new_class)
+        db.session.commit()
+        flash('Class created successfully!', 'success')
+
+    classes = Class.query.all()
+    return render_template('classes.html', classes=classes)
+
+
+@app.route('/admin/classes/<int:classid>/assign-courses', methods=['GET', 'POST'])
+@login_required
+def assign_courses_to_class(classid):
+    if current_user.role != 1:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('dashboard'))
+
+    class_ = Class.query.get_or_404(classid)
+    courses = Course.query.all()
+
+    if request.method == 'POST':
+        selected_courses = request.form.getlist('courses')
+
+        # Clear previous assignments
+        CourseClass.query.filter_by(classid=classid).delete()
+
+        # Assign new courses
+        for courseid in selected_courses:
+            db.session.add(CourseClass(classid=classid, courseid=courseid))
+
+        db.session.commit()
+        flash('Courses assigned successfully!', 'success')
+
+    assigned_courses = [cc.courseid for cc in class_.courses]
+    return render_template('assign_courses.html', class_=class_, courses=courses, assigned_courses=assigned_courses)
+
+
+@app.route('/admin/classes/<int:classid>/assign-users', methods=['GET', 'POST'])
+@login_required
+def assign_users_to_class(classid):
+    if current_user.role != 1:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('dashboard'))
+
+    class_ = Class.query.get_or_404(classid)
+    users = User.query.all()
+
+    if request.method == 'POST':
+        selected_users = request.form.getlist('users')
+
+        # Clear previous assignments
+        UserClass.query.filter_by(classid=classid).delete()
+
+        # Assign new users
+        for userid in selected_users:
+            db.session.add(UserClass(classid=classid, userid=userid))
+
+        db.session.commit()
+        flash('Users assigned successfully!', 'success')
+
+    assigned_users = [uc.userid for uc in class_.users]
+    return render_template('assign_users.html', class_=class_, users=users, assigned_users=assigned_users)
 

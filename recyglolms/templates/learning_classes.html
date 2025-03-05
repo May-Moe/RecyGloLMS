@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <h2 style="color: #A9C9A4;">Select Your Class</h2>
+            <div class="class-list">
+                {% for class_ in classes %}
+                <div class="class-item">
+                    <a href="{{ url_for('main.learning_class_courses', classid=class_.classid) }}" class="class_link">
+                        <div class="class-title">{{ class_.name }}</div>
+                    </a>
+                </div>
+                {% endfor %}
+        
+        <script src="" async defer></script>
+    </body>
+</html>

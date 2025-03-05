@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, jsonify, request, redirect, url_fo
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from recyglolms.models import Course, Video, Progress, Activity, Module, User, Feedback, ActivityImage, Announcement
+from recyglolms.models import Course, Video, Progress, Activity, Module, User, Feedback, ActivityImage, Announcement, CourseClass, UserClass, Class
 from recyglolms.__inti__ import db, app, bcrypt
 
 main_bp = Blueprint('main', __name__)
@@ -152,17 +152,34 @@ def delete_activity(activity_id):
     db.session.commit()
     return '', 204
 
-
-
 @main_bp.route('/learning')
 @login_required
 def learning():
-    courses = Course.query.all()
-    return render_template('learning_page.html',
-                            courses=courses,
-                            current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+    # Fetch classes where the current user is assigned
+    user_classes = Class.query.join(UserClass).filter(UserClass.userid == current_user.userid).all()
+    
+    return render_template('learning_classes.html',
+                            classes=user_classes,  # Pass the correct classes to the template
+                            current_user_name=current_user.name,
+                            current_user_email=current_user.email)
 
+@main_bp.route('/learning/class/<int:classid>')
+@login_required
+def learning_class_courses(classid):
+    # Fetch the selected class
+    selected_class = Class.query.get_or_404(classid)
+
+    # Fetch only the unique courses associated with the selected class
+    courses = Course.query.join(CourseClass).filter(CourseClass.classid == classid).distinct().all()
+
+    # Debugging output to check for duplicates
+    print("Fetched Unique Courses:", [(course.courseid, course.name) for course in courses])
+
+    return render_template('learning_page.html',
+                            selected_class=selected_class,
+                            courses=courses,
+                            current_user_name=current_user.name,
+                            current_user_email=current_user.email)
 @main_bp.route('/course/<int:courseid>')
 @login_required
 def course_detail(courseid):

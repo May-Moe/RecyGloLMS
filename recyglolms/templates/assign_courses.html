@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <h2>Assign Courses to {{ class_.name }}</h2>
+
+        <form method="POST">
+            {% for course in courses %}
+                <label>
+                    <input type="checkbox" name="courses" value="{{ course.courseid }}" 
+                        {% if course.courseid in assigned_courses %} checked {% endif %}>
+                    {{ course.name }}
+                </label><br>
+            {% endfor %}
+            <button type="submit">Save</button>
+        </form>
+
+        <a href="{{ url_for('manage_classes') }}">Back to Classes</a>
+        
+        <script src="" async defer></script>
+    </body>
+</html>
