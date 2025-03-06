@@ -618,7 +618,7 @@ def edit_course(course_id):
             flash("Course updated successfully!", "success")
             return redirect(url_for('admin.manage_course'))
 
-    return render_template('edit_course.html', course=course)
+    return render_template('edit_course.html', course=course, current_user_name = current_user.name, current_user_email = current_user.email)
 
 
 # Route to edit a module
@@ -853,14 +853,9 @@ def user_levels():
             db.session.commit()
             flash(f"{user.name}'s level updated to {new_level}!", "success")
 
-<<<<<<< HEAD
-    return render_template('user_level_set.html', users=users, user_level_data=user_level_data, 
+    return render_template('user_level_set.html', users=users, user_level_data=user_level_data, users_dict=users_dict,
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
-=======
-    # Return to the template
-    return render_template('user_level_set.html', users=users_dict, user_level_data=user_level_data)
->>>>>>> a3bf73b39b6af69c2425de8cbe9d9d0ea71fe350
 
 
 @admin_bp.route('/admin_view_activity/<int:userid>')

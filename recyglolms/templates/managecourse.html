@@ -90,7 +90,6 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Course Name</th>
                                 <th>Description</th>
                                 <th>Actions</th>
@@ -100,7 +99,6 @@
                             <!-- User data will be populated here -->
                             {% for course in courses %}
                              <tr>
-                                <td>{{ course. courseid }}</td>
                                 <td>{{ course.name }}</td>
                                 <td>{{ course.description }}</td>
                                 <td>
@@ -137,7 +135,6 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Module Name</th>
                             <th>Description</th>
                             <th>Course Name</th>
@@ -148,7 +145,6 @@
                         <!-- User data will be populated here -->
                         {% for module in modules %}
                          <tr>
-                            <td>{{ module.moduleid }}</td>
                             <td>{{ module.name }}</td>
                             <td>{{ module.description }}</td>
                             <td>{{ module.course.name }}</td>
@@ -186,7 +182,6 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Video Title</th>
                             <th>URL</th>
                             <th>Duration</th>
@@ -198,7 +193,6 @@
                         <!-- User data will be populated here -->
                         {% for video in videos %}
                          <tr>
-                            <td>{{ video.videoid }}</td>
                             <td>{{ video.title }}</td>
                             <td>{{ video.url }}</td>
                             <td>{{ video.duration }}</td>

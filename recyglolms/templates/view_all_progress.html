@@ -71,10 +71,16 @@
             </ul>
         </nav>
         <div class="container">
-            <a href="user_quiz.html" class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
             <div class="header">
                 <h1>Users Progress</h1>
                 <div class="header-actions">
+                    <select id="courseFilter" class="filter-select">
+                        <option value="all">All Courses</option>
+                        {% for course in courses %}
+                            <option value="{{ course.name }}">{{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                    
                     <input type="text" id="searchBar" placeholder="Search by Name">
                 </div>
             </div>
@@ -164,6 +170,22 @@
         // Initial table setup
         showPage(currentPage);
     });
+
+    // Filter Courses
+    document.getElementById("courseFilter").addEventListener("change", function () {
+    let selectedCourse = this.value.toLowerCase();
+    let tableRows = document.querySelectorAll("#userTableBody tr");
+
+    tableRows.forEach(row => {
+        let courseName = row.querySelector("td:nth-child(2)").innerText.toLowerCase();
+        if (selectedCourse === "all" || courseName === selectedCourse) {
+            row.style.display = "table-row"; // Show matching row
+        } else {
+            row.style.display = "none"; // Hide others
+        }
+    });
+});
+
     </script>
     
 </body>
