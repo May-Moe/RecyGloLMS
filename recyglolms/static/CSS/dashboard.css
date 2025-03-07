@@ -1,7 +1,7 @@
 :root {
     --white: #fff;
     --main: #eaedf0;
-    --accent: #A9C9A4;
+    --accent: #16a159;
     --accent-2: #ebedf0;
 }
 
@@ -92,7 +92,7 @@ body {
     box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
   }
 .cards-header{
-    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
+    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #16a159);
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 5px;
@@ -108,7 +108,7 @@ body {
 }
 
 .card-icon {
-    color: #A9C9A4;
+    color: #16a159;
     font-size: 24px;
     margin-right: 20px;
 
@@ -188,7 +188,7 @@ body {
 .card2-table th {
     text-align: left;
     padding: 15px;
-    border-bottom: 3px solid #A9C9A4;
+    border-bottom: 3px solid #16a159;
     background-color: #f7f8fc;
   }
 
@@ -335,14 +335,14 @@ body {
 }
 
 .selected-date{
-    color: #A9C9A4;
+    color: #16a159;
 }
 
 .announcements h2 {
     font-size: 19px;
     margin-top: 50px;
     text-align: center;
-    color: #A9C9A4;
+    color: #16a159;
 }
 
 .announcements ul {

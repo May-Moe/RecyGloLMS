@@ -86,7 +86,7 @@
         <div class="container">
             <div class="cards-header">
                 <h5 class="card_header_title" style="color: gray;">Hello <span class="card_header_title">{{ current_user_name }}</span></h5>
-                <h2 style="color: #A9C9A4;">Welcome to RecyGlo!</h2>
+                <h2 style="color: #16a159;">Welcome to RecyGlo!</h2>
              </div>
             <!-- first row of dashboard -->
             <div class="cards-container">
@@ -202,7 +202,8 @@
                     {% for feedback, user in feedbacks[:3] %}
                     <div class="card3-value">
                         <div class="card3-profile">
-                            <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="User Profile">
+                            <img src="{{ url_for('static', filename=user.profile_img) if user.profile_img else url_for('static', filename='/uploads/default-profile.jpg') }}" 
+                alt="{{ user.name }}">  
                         </div>
                         <h4>{{ user.name }}</h4>
                         <div class="feedback-content">{{ feedback.feedback }}</div> 
@@ -332,9 +333,9 @@
                         {{ user_data.inactive_30_days }}
                     ],
                     backgroundColor: [
-                        '#A9C9A4', // Green
-                        '#ecdc9c', // Yellow
-                        '#ecaa9c'  // Red
+                        '#16a159', // Green
+                        '#d4ac0d ', // Yellow
+                        '#c0392b'  // Red
                     ],
                     borderWidth: 1
                     

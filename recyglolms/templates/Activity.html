@@ -84,7 +84,6 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>User Name</th>
                             <th>Preview</th>
                             <th>Action</th>
@@ -93,7 +92,6 @@
                     <tbody id="userTableBody">
                         {% for user in users %}
                         <tr>
-                            <td>{{ user.userid }}</td>
                             <td>{{ user.name }}</td>
                             <td>
                                 <a href="{{ url_for('admin.Activities', userid=user.userid) }}">View All Activity</a>
@@ -125,6 +123,62 @@
             
             closeActivityModal.addEventListener("click", () => {
                 activityOverlay.classList.add("hidden");
+            });
+        });
+
+         //next and previous page
+    document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("userTableBody");
+        const rows = Array.from(tableBody.querySelectorAll("tr"));
+        const prevButton = document.getElementById("prevPage");
+        const nextButton = document.getElementById("nextPage");
+        let currentPage = 1;
+        const rowsPerPage = 10;
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            // Hide all rows
+            rows.forEach((row, index) => {
+                row.style.display = index >= start && index < end ? "table-row" : "none";
+            });
+
+            // Disable buttons when needed
+            prevButton.disabled = page === 1;
+            nextButton.disabled = end >= rows.length;
+        }
+
+        prevButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        nextButton.addEventListener("click", function () {
+            if ((currentPage * rowsPerPage) < rows.length) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        // Initial table setup
+        showPage(currentPage);
+    });
+
+    // Search Functionality
+    document.getElementById("searchBar").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let tableRows = document.querySelectorAll("#userTableBody tr");
+    
+            tableRows.forEach(row => {
+                let title = row.querySelector("td:nth-child(1)").innerText.toLowerCase(); // Title is in the first column
+                if (title.includes(filter)) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
             });
         });
     </script>

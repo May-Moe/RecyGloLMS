@@ -39,64 +39,40 @@ h1 {
     display: flex;
     align-items: center;
     margin-left: auto;
+    gap: 15px;
 }
-
-#searchBar, #courseFilter {
-    padding: 10px;
-    font-size: 13px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+/* Style the search bar */
+#searchBar {
     width: 200px;
-    transition: all 0.3s ease;
-    margin-right: 10px;
-}
-
-#searchBar,#courseFilter:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    padding: 10px;
+    border: 1px solid #16a159;
+    border-radius: 10px;
     outline: none;
-}
-
-
-#addUserButton {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    font-size: 13px;
-    color: #fff;
-    background-color: #16a159;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#addUserButton i {
-    margin-right: 5px;
-}
-
-#addUserButton:hover {
-    background-color: #094124;
-}
-
-/* Add button style */
-.addUserButton {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+    transition: 0.3s;
     font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    background: #f8f9fa;
 }
 
-.addUserButton:hover {
-    background-color: #0056b3;
+#searchBar:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
+/* Style the filter dropdown */
+.filter-select {
+    padding: 10px;
+    border: 1px solid #16a159;
+    border-radius: 10px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-select:hover, .filter-select:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
 
 #addUserLink {
     text-decoration: none;

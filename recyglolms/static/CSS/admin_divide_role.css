@@ -127,17 +127,15 @@ th {
 .pagination button {
     margin: 0 5px;
     padding: 6px 17px;
-    border: 1px solid #9f9f9f;
-    border-radius: 3px;
-    background-color: white;
-    color: #9f9f9f;
+    background-color: #16a159;
+    color: white;
     cursor: pointer;
     font-size: 14px;
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
 .pagination button:hover {
-    background-color: #16a159;
+    background-color: #028d45;
     border-radius: 5px;
     color: white;
 }
@@ -173,6 +171,53 @@ th {
 .deleteAction:hover {
     color: #c82333;
 }
+
+/* Styling for the select dropdown */
+select[name="level"] {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 2px solid #16a159;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+select[name="level"]:focus {
+    border-color: #2e7d32;
+    outline: none;
+}
+
+/* Styling for the update button */
+button[type="submit"] {
+    padding: 8px 14px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #16a159   ;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    margin-left: 10px;
+}
+
+button[type="submit"]:hover {
+    background-color: #2e7d32;
+}
+
+button[type="submit"]:active {
+    transform: scale(0.95);
+}
+
+/* Flex container for alignment */
+td form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 
 /* Responsive styles */
 @media (max-width: 768px) {

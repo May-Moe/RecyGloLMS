@@ -15,7 +15,7 @@ body {
     margin-right: 60px;
     margin-bottom: 60px;
     background-color: #fff;
-    padding: 20px;
+    padding: 40px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
@@ -35,66 +35,64 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* Style the search bar */
+#searchBar {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #16a159;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 14px;
+    background: #f8f9fa;
+}
+
+#searchBar:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Style the filter dropdown */
+.filter-select {
+    padding: 10px;
+    border: 1px solid #16a159;
+    border-radius: 10px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-select:hover, .filter-select:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Style filter & search bar container */
 .header-actions {
     display: flex;
+    gap: 15px;
     align-items: center;
-    margin-left: auto;
+    justify-content: flex-end;
+    margin-top: 10px;
 }
 
-#search_query,select {
-    padding: 10px;
-    font-size: 13px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 200px;
-    transition: all 0.3s ease;
-    margin-right: 10px;
-}
-
-#search_query:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    outline: none;
-}
-
-.filter {
-    align-items: center;
-    padding: 10px 20px;
-    font-size: 13px;
-    color: #fff;
-    background-color: #A9C9A4;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-right: 20px;
-}
-
+/* Style the Add User button */
 #addUserButton {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    font-size: 13px;
-    color: #fff;
-    background-color: #A9C9A4;
+    background: #16a159;
+    color: white;
     border: none;
-    border-radius: 4px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#addUserButton i {
-    margin-right: 5px;
+    transition: 0.3s;
 }
 
 #addUserButton:hover {
-    background-color: #094124;
+    background: #028d45;
 }
 
-#addUserLink {
-    text-decoration: none;
-    color: #fff;
-}
 
 .table-container {
     overflow-x: auto;
@@ -140,17 +138,15 @@ th {
 .pagination button {
     margin: 0 5px;
     padding: 6px 17px;
-    border: 1px solid #9f9f9f;
-    border-radius: 3px;
-    background-color: white;
-    color: #9f9f9f;
+    background-color: #16a159;
+    color: white;
     cursor: pointer;
     font-size: 14px;
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
 .pagination button:hover {
-    background-color: #16a159;
+    background-color: #028d45;
     border-radius: 5px;
     color: white;
 }

@@ -78,21 +78,21 @@
                 <div class="header-actions">
                     <form method="POST" id="filterForm">
                         <select class="filter-select" id="inactivity_filter" name="inactivity_filter" onchange="submitForm()">
-                            <option value="">Filter by inactivity</option>
+                            <!-- <option value="">Filter by inactivity</option> -->
                             <option value="0" {% if request.form.get('inactivity_filter') == '0' %}selected{% endif %}>View All</option>
                             <option value="7" {% if request.form.get('inactivity_filter') == '7' %}selected{% endif %}>More than 7 days</option>
                             <option value="15" {% if request.form.get('inactivity_filter') == '15' %}selected{% endif %}>More than 15 days</option>
                             <option value="30" {% if request.form.get('inactivity_filter') == '30' %}selected{% endif %}>More than 30 days</option>
                         </select>
 
-                        <select class="filter-select" id="sort_order" name="sort_order" onchange="submitForm()">
+                        <!-- <select class="filter-select" id="sort_order" name="sort_order" onchange="submitForm()">
                             <option value="desc" {% if request.form.get('sort_order') == 'desc' %}selected{% endif %}>Sort by Last Login (Descending)</option>
                             <option value="asc" {% if request.form.get('sort_order') == 'asc' %}selected{% endif %}>Sort by Last Login (Ascending)</option>
-                        </select>
+                        </select> -->
 
-                        <input type="text" id="search_query" name="search_query" placeholder="Search By Users" value="{{ request.form.get('search_query', '') }}" oninput="submitForm()">
-                    </form>
-
+                        
+                        </form>
+                        <input type="text" id="searchBar" placeholder="Search By name">
                     <a href="{{ url_for('admin.add_user') }}" id="addUserLink">
                         <button id="addUserButton"><i class="fas fa-plus"></i> Add New User</button>
                     </a>
@@ -105,11 +105,12 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Last Login</th>
+                <th>Last Login
+                    <i class="fas fa-sort" id="sortLastLogin"></i>
+                </th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -119,7 +120,6 @@
                     <!-- Only show users that are not Admin or Sub-Admin for Sub-Admin users -->
                     {% if current_user.role == 2 and user.role != 1 and user.role != 2 %}
                         <tr>
-                            <td>{{ user.userid }}</td>
                             <td>{{ user.name }}</td>
                             <td>{{ user.email }}</td>
                             <td>
@@ -139,7 +139,6 @@
                         </tr>
                     {% elif current_user.role != 2 %}
                         <tr>
-                            <td>{{ user.userid }}</td>
                             <td>{{ user.name }}</td>
                             <td>{{ user.email }}</td>
                             <td>
@@ -184,6 +183,93 @@
         function submitForm() {
         document.getElementById("filterForm").submit();
     }
+
+    //last Login sorting
+    document.addEventListener("DOMContentLoaded", function () {
+    const tableBody = document.getElementById("userTableBody");
+    const sortButton = document.getElementById("sortLastLogin");
+    let ascending = true;
+
+    sortButton.addEventListener("click", function () {
+        let rows = Array.from(tableBody.querySelectorAll("tr"));
+
+        rows.sort((a, b) => {
+            let dateA = new Date(a.cells[3].innerText.trim()); // 4th column (index 3)
+            let dateB = new Date(b.cells[3].innerText.trim());
+
+            if (isNaN(dateA)) dateA = new Date(0); // Handle invalid dates
+            if (isNaN(dateB)) dateB = new Date(0);
+
+            return ascending ? dateA - dateB : dateB - dateA;
+        });
+
+        ascending = !ascending; // Toggle sorting order
+
+        // Reorder rows in table
+        rows.forEach(row => tableBody.appendChild(row));
+
+        // Update sort icon
+        sortButton.className = ascending ? "fas fa-sort-up" : "fas fa-sort-down";
+    });
+});
+
+
+    // Search Functionality
+    document.getElementById("searchBar").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let tableRows = document.querySelectorAll("#userTableBody tr");
+    
+            tableRows.forEach(row => {
+                let title = row.querySelector("td:nth-child(1)").innerText.toLowerCase(); // Title is in the first column
+                if (title.includes(filter)) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+
+        //next and previous page
+    document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("userTableBody");
+        const rows = Array.from(tableBody.querySelectorAll("tr"));
+        const prevButton = document.getElementById("prevPage");
+        const nextButton = document.getElementById("nextPage");
+        let currentPage = 1;
+        const rowsPerPage = 10;
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            // Hide all rows
+            rows.forEach((row, index) => {
+                row.style.display = index >= start && index < end ? "table-row" : "none";
+            });
+
+            // Disable buttons when needed
+            prevButton.disabled = page === 1;
+            nextButton.disabled = end >= rows.length;
+        }
+
+        prevButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        nextButton.addEventListener("click", function () {
+            if ((currentPage * rowsPerPage) < rows.length) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        // Initial table setup
+        showPage(currentPage);
+    });
+
     </script>
 </body>
 </html>

@@ -9,6 +9,148 @@
 </head>
 <body>
 
+<<<<<<< HEAD
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+                <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> User</a></li>
+                <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="header">
+                <h1>Divide Users</h1>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Completed Courses</th>
+                            <th>Average Quiz Marks</th>
+                            <th>Current Level</th>
+                            <th>Set Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user, progress_data in user_level_data.items() %}
+                            <tr>
+                                <td>{{ user.name }}</td>
+                                <td>
+                                    {% if progress_data %}
+                                        <ul>
+                                            {% for course_name in progress_data.keys() %}
+                                                <li>{{ course_name }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        No completed courses
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% set quiz_scores = progress_data.values() | map(attribute='average_quiz_score') | list %}
+                                    {{ (quiz_scores | sum / quiz_scores | length) | round(2) if quiz_scores else 'N/A' }}%
+                                </td>
+                                <td>{{ user.level }}</td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('admin.user_levels') }}">
+                                        <input type="hidden" name="userid" value="{{ user.userid }}">
+                                        <select name="level" required>
+                                            <option value="Beginner" {% if user.level == 'Beginner' %}selected{% endif %}>Beginner</option>
+                                            <option value="Expert" {% if user.level == 'Expert' %}selected{% endif %}>Expert</option>
+                                            <option value="Professional" {% if user.level == 'Professional' %}selected{% endif %}>Professional</option>
+                                        </select>
+                                        <button type="submit">Update</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+        
+
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
+            </div>
+        </div>
+    </main>
+</div>
+    </div>
+    <script src="static/JS/script.js"></script>
+    <script>
+         //next and previous page
+    document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("userTableBody");
+        const rows = Array.from(tableBody.querySelectorAll("tr"));
+        const prevButton = document.getElementById("prevPage");
+        const nextButton = document.getElementById("nextPage");
+        let currentPage = 1;
+        const rowsPerPage = 10;
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            // Hide all rows
+            rows.forEach((row, index) => {
+                row.style.display = index >= start && index < end ? "table-row" : "none";
+            });
+
+            // Disable buttons when needed
+            prevButton.disabled = page === 1;
+            nextButton.disabled = end >= rows.length;
+        }
+
+        prevButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        nextButton.addEventListener("click", function () {
+            if ((currentPage * rowsPerPage) < rows.length) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        // Initial table setup
+        showPage(currentPage);
+    });
+    </script>
+</body>
+=======
         <table>
             <thead>
                 <tr>
@@ -66,4 +208,5 @@
             </tbody>
         </table>
     </body>
+>>>>>>> a3bf73b39b6af69c2425de8cbe9d9d0ea71fe350
 </html>

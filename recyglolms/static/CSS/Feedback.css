@@ -23,7 +23,7 @@ body {
 }
 
 .feedback-card {
-    background: #fff;
+    background: #efefef;
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 15px;
@@ -39,7 +39,17 @@ body {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    gap: 10px;
 }
+
+.user-info img {
+    width: 50px;  /* Adjust to your preferred profile image size */
+    height: 50px;
+    object-fit: cover;  /* Ensures images maintain aspect ratio and fill the box */
+    border-radius: 50%;  /* Makes images circular */
+    border: 2px solid #ddd; /* Optional: Adds a subtle border */
+}
+
 .avatar {
     width: 40px;
     height: 40px;
