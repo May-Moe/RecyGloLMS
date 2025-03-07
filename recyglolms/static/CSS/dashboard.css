@@ -188,7 +188,7 @@ body {
 .card2-table th {
     text-align: left;
     padding: 15px;
-    border-bottom: 3px solid #16a159;
+    border-bottom: 2px solid #16a159;
     background-color: #f7f8fc;
   }
 
@@ -196,6 +196,7 @@ body {
     color: #333;
     padding: 15px 0px;
     text-align: left;
+    border-bottom: 1px solid #f4f4f4;
   }
   
 .card2-table td {
@@ -447,6 +448,7 @@ body {
     text-align: center;
   }
 
+  
 
   @media screen and (max-width: 768px) {
     .container {
