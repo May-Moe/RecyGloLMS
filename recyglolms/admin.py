@@ -259,7 +259,7 @@ def edit_user(user_id):
         
         try:
             role = int(role)
-            if role not in [0, 1]:
+            if role not in [0, 1, 2]:
                 raise ValueError("Invalid role value")
             user.role = role
         except ValueError:
@@ -601,20 +601,48 @@ def delete_video(video_id):
 @admin_bp.route('/edit_course/<int:course_id>', methods=['GET', 'POST'])
 @login_required
 def edit_course(course_id):
-    if not current_user.role:
+    if not current_user.role:  # Ensure only admins can access
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
     course = Course.query.get_or_404(course_id)
+    original_name = course.name  # Store original values before any change
+    original_description = course.description
+    changes = []  # Track changes
 
     if request.method == 'POST':
-        course.name = request.form.get('course_name')
-        course.description = request.form.get('course_description')
+        new_name = request.form.get('course_name')
+        new_description = request.form.get('course_description')
 
-        if not course.name or not course.description:
+        # Track changes in course name
+        if new_name and new_name != original_name:
+            changes.append(f"Course name changed from '{original_name}' to '{new_name}'")
+            course.name = new_name
+
+        # Track changes in course description
+        if new_description and new_description != original_description:
+            changes.append(f"Course description updated from '{original_description}' to '{new_description}'")
+            course.description = new_description
+
+        if not new_name or not new_description:
             flash("Course name and description are required.", "danger")
         else:
             db.session.commit()
+
+            # **Log the action**
+            if changes:
+                log_entry = ActionLog(
+                    userid=current_user.userid,
+                    username=current_user.name,  
+                    action_type="Edit",
+                    target_table="Course",
+                    target_id=course.courseid,
+                    timestamp=datetime.now(),
+                    details="; ".join(changes)
+                )
+                db.session.add(log_entry)
+                db.session.commit()
+
             flash("Course updated successfully!", "success")
             return redirect(url_for('admin.manage_course'))
 
@@ -782,6 +810,10 @@ def Alumni_admin():
 @admin_bp.route('/Activity')
 @login_required
 def Activities():
+    if current_user.role not in [1, 2]:  # Only Admins & Sub-Admins
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('admin.dashboard'))
+    
     users = User.query.filter_by(role=0).all()  # Fetch all users from the database
     users_dict = {user.userid: user for user in users}  # Convert users list to a dictionary using userid as the key
     current_user_name = current_user.name
@@ -803,13 +835,13 @@ def user_levels():
     users_dict = {user.userid: user for user in users}  # Convert users list to a dictionary using userid as the key
     user_level_data = {}
 
-   # Inside user_levels function
     for user in users:
         progress_data = {}
 
         # Fetch all courses and loop to check if they're completed
         courses = Course.query.all()
 
+        completed_courses = []  # List to store completed courses
         for course in courses:
             course_progress = course.calculate_course_progress(user.userid)
 
@@ -826,20 +858,24 @@ def user_levels():
                 # Calculate average quiz score (if any quizzes exist)
                 average_quiz_score = sum(latest_quiz_scores.values()) / len(latest_quiz_scores) if latest_quiz_scores else 0
 
-                # Ensure the progress_data structure is correct
-                progress_data[course.name] = {
+                # Add completed course to the list
+                completed_courses.append({
+                    'course_name': course.name,
                     'course_progress': course_progress,
                     'average_quiz_score': average_quiz_score
-                }
+                })
 
-        # Add the total activities data to the user's progress
+        # Add the completed courses to progress_data
+        progress_data['completed_courses'] = completed_courses
+
+        # Add total activities
         total_activities = db.session.query(Activity.activityid) \
             .filter(Activity.userid == user.userid) \
             .distinct().count()
 
         progress_data['total_activities'] = total_activities
 
-        # Store the progress data for this user
+        # Store progress_data for the user
         user_level_data[user.userid] = progress_data
 
     # Handle POST request to update user level
@@ -853,18 +889,15 @@ def user_levels():
             db.session.commit()
             flash(f"{user.name}'s level updated to {new_level}!", "success")
 
-<<<<<<< HEAD
-    return render_template('user_level_set.html', users=users, user_level_data=user_level_data, 
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
-=======
-    # Return to the template
-    return render_template('user_level_set.html', users=users_dict, user_level_data=user_level_data)
->>>>>>> a3bf73b39b6af69c2425de8cbe9d9d0ea71fe350
-
+    return render_template('user_level_set.html', users=users, user_level_data=user_level_data, users_dict=users_dict,
+                           current_user_name=current_user.name, current_user_email=current_user.email)
 
 @admin_bp.route('/admin_view_activity/<int:userid>')
 def admin_view_activity(userid):
+    if current_user.role not in [1, 2]:  # Only Admins & Sub-Admins
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('admin.dashboard'))
+    
     user = User.query.get_or_404(userid)
     activities = Activity.query.filter_by(userid=userid).all()
 

@@ -6,6 +6,8 @@ import json  # Use built-in json module
 
 quiz_bp = Blueprint('quiz', __name__)
 
+#admin-side funtionalities
+
 # View all quizzes (Admin only)
 @quiz_bp.route('/quizzes', methods=['GET'])
 @login_required
@@ -14,10 +16,26 @@ def view_all_quizzes():
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
-    courses = Course.query.all()
-    return render_template('viewall_quizzes.html', courses=courses,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+    courses = Course.query.all()  # Fetch all courses
+
+    # Create a dictionary to store modules and their quizzes per course
+    course_module_data = {}
+    for course in courses:
+        modules = Module.query.filter_by(courseid=course.courseid).all()
+        course_module_data[course.courseid] = []
+
+        for module in modules:
+            quizzes = Quiz.query.filter_by(moduleid=module.moduleid).all()
+            course_module_data[course.courseid].append({
+                "module": module,
+                "quizzes": quizzes  # Attach quizzes to the correct module
+            })
+
+    return render_template('viewall_quizzes.html', 
+                           courses=courses, 
+                           course_module_data=course_module_data,  # Pass module & quiz data
+                           current_user_name=current_user.name,
+                           current_user_email=current_user.email)
 
 # Create Quiz
 @quiz_bp.route('/create_quiz', methods=['GET', 'POST'])

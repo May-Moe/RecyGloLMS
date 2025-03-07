@@ -90,11 +90,11 @@
                         </tr>
                     </thead>
                     <tbody id="userTableBody">
-                        {% for user in users %}
+                        {% for userid, user in users.items() %}
                         <tr>
                             <td>{{ user.name }}</td>
                             <td>
-                                <a href="{{ url_for('admin.Activities', userid=user.userid) }}">View All Activity</a>
+                                <a href="{{ url_for('admin.admin_view_activity', userid=user.userid) }}">View All Activity</a>
                             </td>
                             <td>
                                 <button type="submit" class="deleteAction" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>

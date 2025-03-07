@@ -13,7 +13,9 @@ pymysql.install_as_MySQLdb()
 app = Flask(__name__)
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/recyglolms'  # Update with your MySQL credentials
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/recyglolms'  # Connecting to phpmyadmin localhost database in development
+
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:pHAZKkSTgFnPyRGElSkBpihHMfGJkulG@switchback.proxy.rlwy.net:34745/railway'  # Connecting to railway database in production
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'  # Replace with a secure secret key
 
