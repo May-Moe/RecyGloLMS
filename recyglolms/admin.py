@@ -646,7 +646,7 @@ def edit_course(course_id):
             flash("Course updated successfully!", "success")
             return redirect(url_for('admin.manage_course'))
 
-    return render_template('edit_course.html', course=course)
+    return render_template('edit_course.html', course=course, current_user_name = current_user.name, current_user_email = current_user.email)
 
 
 # Route to edit a module
@@ -890,7 +890,13 @@ def user_levels():
             flash(f"{user.name}'s level updated to {new_level}!", "success")
 
     return render_template('user_level_set.html', users=users, user_level_data=user_level_data, users_dict=users_dict,
+<<<<<<< HEAD
                            current_user_name=current_user.name, current_user_email=current_user.email)
+=======
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
+
+>>>>>>> f579c2f437eafec7c5be5bea5ac9a635f34734b3
 
 @admin_bp.route('/admin_view_activity/<int:userid>')
 def admin_view_activity(userid):
@@ -906,7 +912,7 @@ def admin_view_activity(userid):
         activity.image = ActivityImage.query.filter_by(activityid=activity.activityid).all()
 
     return render_template('admin_view_activity.html', user=user, activities=activities)
-
+ 
 
 # Class 
 @app.route('/admin/classes', methods=['GET', 'POST'])
@@ -926,8 +932,13 @@ def manage_classes():
         flash('Class created successfully!', 'success')
 
     classes = Class.query.all()
-    return render_template('classes.html', classes=classes)
+    courses = Course.query.all()
+    users = User.query.all()
+    # Fetch assigned courses and users for each class
+    assigned_courses = {class_.classid: [cc.courseid for cc in class_.courses] for class_ in classes}
+    assigned_users = {class_.classid: [uc.userid for uc in class_.users] for class_ in classes}
 
+    return render_template('classes.html', classes=classes, courses=courses, users=users, assigned_courses=assigned_courses, assigned_users=assigned_users)
 
 @app.route('/admin/classes/<int:classid>/assign-courses', methods=['GET', 'POST'])
 @login_required
@@ -937,24 +948,19 @@ def assign_courses_to_class(classid):
         return redirect(url_for('dashboard'))
 
     class_ = Class.query.get_or_404(classid)
-    courses = Course.query.all()
+    selected_courses = request.form.getlist('courses')
 
-    if request.method == 'POST':
-        selected_courses = request.form.getlist('courses')
+    # Clear previous assignments
+    CourseClass.query.filter_by(classid=classid).delete()
 
-        # Clear previous assignments
-        CourseClass.query.filter_by(classid=classid).delete()
-
-        # Assign new courses
-        for courseid in selected_courses:
-            db.session.add(CourseClass(classid=classid, courseid=courseid))
+    # Assign new courses
+    for courseid in selected_courses:
+        db.session.add(CourseClass(classid=classid, courseid=courseid))
 
         db.session.commit()
         flash('Courses assigned successfully!', 'success')
 
-    assigned_courses = [cc.courseid for cc in class_.courses]
-    return render_template('assign_courses.html', class_=class_, courses=courses, assigned_courses=assigned_courses)
-
+    return redirect(url_for('manage_classes'))
 
 @app.route('/admin/classes/<int:classid>/assign-users', methods=['GET', 'POST'])
 @login_required
@@ -964,21 +970,17 @@ def assign_users_to_class(classid):
         return redirect(url_for('dashboard'))
 
     class_ = Class.query.get_or_404(classid)
-    users = User.query.all()
+    selected_users = request.form.getlist('users')
 
-    if request.method == 'POST':
-        selected_users = request.form.getlist('users')
 
-        # Clear previous assignments
-        UserClass.query.filter_by(classid=classid).delete()
+    # Clear previous assignments
+    UserClass.query.filter_by(classid=classid).delete()
 
-        # Assign new users
-        for userid in selected_users:
-            db.session.add(UserClass(classid=classid, userid=userid))
+    # Assign new users
+    for userid in selected_users:
+        db.session.add(UserClass(classid=classid, userid=userid))
 
         db.session.commit()
         flash('Users assigned successfully!', 'success')
 
-    assigned_users = [uc.userid for uc in class_.users]
-    return render_template('assign_users.html', class_=class_, users=users, assigned_users=assigned_users)
-
+    return redirect(url_for('manage_classes'))

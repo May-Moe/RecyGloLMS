@@ -371,3 +371,22 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+  const dropdowns = [
+      { button: ".dropdown-class", container: ".dropdown-container-class" },
+      { button: ".dropdown-user", container: ".dropdown-container" }
+  ];
+
+  dropdowns.forEach(({ button, container }) => {
+      const btn = document.querySelector(button);
+      const dropContainer = document.querySelector(container);
+
+      if (btn && dropContainer) {  // Ensure elements exist
+          btn.addEventListener("click", function () {
+              dropContainer.classList.toggle("active");
+          });
+      }
+  });
+});
+
+
