@@ -2,8 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/CSS/style.css">
-    <link rel="stylesheet" href="../static/CSS/user_course.css">
+    <link rel="stylesheet" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="/static/CSS/user_course.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Learning Page</title>
 </head>
@@ -50,6 +50,7 @@
             </ul>
         </nav>
         <div class="container">
+            <a href="{{ url_for('main.learning') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
             <div class="cards-header">
                 <h2 style="color: #A9C9A4;">Course Overviews</h2>
             </div>
@@ -79,7 +80,7 @@
                 <p>No courses assigned to this class.</p>
             {% endif %}
         </div>
-    <script src="../static/JS/script.js"></script>
+    <script src="/static/JS/script.js"></script>
     <script>
         // Filter Courses by Course Name
         document.getElementById("courseFilter").addEventListener("change", function () {

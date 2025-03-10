@@ -372,6 +372,13 @@ body {
     z-index: 1000;
 }
 
+.no-activities-message {
+    text-align: center;
+    font-size: 17px;
+    color: gray;
+    margin-top: 120px;
+    margin-left: 200px;
+}
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .container {

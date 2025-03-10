@@ -1,25 +1,131 @@
-<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="/static/CSS/learning_classes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Assign Classes</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                </button>
 
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <h2 style="color: #A9C9A4;">Select Your Class</h2>
-            <div class="class-list">
-                {% for class_ in classes %}
-                <div class="class-item">
-                    <a href="{{ url_for('main.learning_class_courses', classid=class_.classid) }}" class="class_link">
-                        <div class="class-title">{{ class_.name }}</div>
-                    </a>
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list">
+                        <li>New course available: "Recycling 101"</li>
+                        <li>Your activity submission is pending review.</li>
+                    </ul>
                 </div>
+                <div class="dropdown">
+                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="cards-header">
+                <h2 style="color: #A9C9A4;">Assign Classes</h2>
+            </div>
+            <div class="filters">
+                <!-- <div class="filter-label">Filter/order my course list:</div> -->
+                <select class="filter-select" id="courseFilter">
+                    <option value="all">Show all Classes</option>
+                    {% for class_ in classes %}
+                        <option value="{{ class_.name|lower|replace(' ', '-') }}">{{ class_.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" id="searchBar" placeholder="Search By Classes">
+            </div>
+        
+            {% if classes %}
+            {% for class_ in classes %}
+                <div class="course-list">
+                    <div class="course-item">
+                        <a href="{{ url_for('main.learning_class_courses', classid=class_.classid) }}" class="class_link">
+                            <div class="class-title">{{ class_.name }}</div>                     
+                        </a>
+                    </div>
+                </div>  
                 {% endfor %}
-        
-        
-    </body>
+            {% else %}
+                <p style="text-align: center; color: gray; font-size: 17px; display: flex; justify-content: center; align-items: center; height: 40vh;">No Classes assigned For this User.</p>
+            {% endif %}
+        </div>
+    <script src="/static/JS/script.js"></script>
+    <script>
+        // Filter Courses by Course Name
+        document.getElementById("courseFilter").addEventListener("change", function () {
+            const selectedValue = this.value;
+            const courseItems = document.querySelectorAll(".course-item");
+    
+            courseItems.forEach((item) => {
+                const courseName = item.querySelector(".class-title").innerText.toLowerCase();
+                // Filter by the selected course or show all courses
+                if (selectedValue === "all" || courseName.toLowerCase().replace(' ', '-') === selectedValue) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+    
+        // Search Functionality for Course Name
+        document.getElementById("searchBar").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let courseItems = document.querySelectorAll(".course-item");
+    
+            courseItems.forEach(item => {
+                let courseName = item.querySelector(".class-title").innerText.toLowerCase();
+                if (courseName.includes(filter)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+    </script>
+    
+</body>
 </html>

@@ -916,14 +916,14 @@ def manage_classes():
         flash("Unauthorized access!", "danger")
         return redirect(url_for('dashboard'))
 
-    if request.method == 'POST':
-        name = request.form.get('name')
-        description = request.form.get('description')
+    # if request.method == 'POST':
+    #     name = request.form.get('name')
+    #     description = request.form.get('description')
 
-        new_class = Class(name=name, description=description)
-        db.session.add(new_class)
-        db.session.commit()
-        flash('Class created successfully!', 'success')
+    #     new_class = Class(name=name, description=description)
+    #     db.session.add(new_class)
+    #     db.session.commit()
+    #     flash('Class created successfully!', 'success')
 
     classes = Class.query.all()
     courses = Course.query.all()
@@ -978,3 +978,35 @@ def assign_users_to_class(classid):
         flash('Users assigned successfully!', 'success')
 
     return redirect(url_for('manage_classes'))
+
+#Add classes
+@admin_bp.route('/admin/add_classes', methods=['GET', 'POST'])
+@login_required
+def add_classes():
+    if current_user.role != 1:  # Ensure only admins can access
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('admin.dashboard'))
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+
+        new_class = Class(name=name, description=description)
+        db.session.add(new_class)
+        db.session.commit()
+        flash('Class created successfully!', 'success')
+        return redirect(url_for('manage_classes'))
+
+    return render_template('add_classes.html')
+
+from flask import request
+
+@admin_bp.route('/classes/<int:class_id>', methods=['POST'])
+@login_required
+def delete_class(class_id):
+    if request.form.get('_method') == 'DELETE':
+        class_ = Class.query.get_or_404(class_id)  # Change 'classes' to 'class_' to match the variable name
+        db.session.delete(class_)
+        db.session.commit()
+        return redirect(url_for('manage_classes'))
+    return redirect(url_for('manage_classes'))  # Or handle the error case
