@@ -4,7 +4,7 @@ from flask import jsonify, request
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import db, bcrypt, app
-from recyglolms.models import User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse, UserClass, Class, CourseClass
+from recyglolms.models import User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse, UserClass, Class, CourseClass, Notification
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -1003,22 +1003,30 @@ def assign_courses_to_class(classid):
 @app.route('/admin/classes/<int:classid>/assign-users', methods=['GET', 'POST'])
 @login_required
 def assign_users_to_class(classid):
-    if current_user.role != 1:
+    if current_user.role != 1:  # Check if the current user is an admin
         flash("Unauthorized access!", "danger")
         return redirect(url_for('dashboard'))
 
-    class_ = Class.query.get_or_404(classid)
-    selected_users = request.form.getlist('users')
+    class_ = Class.query.get_or_404(classid)  # Get the class
+    selected_users = request.form.getlist('users')  # Get the selected users from the form
 
-
-    # Clear previous assignments
+    # Clear previous assignments (if needed)
     UserClass.query.filter_by(classid=classid).delete()
 
-    # Assign new users
+    # Assign new users to the class and create notifications
     for userid in selected_users:
-        db.session.add(UserClass(classid=classid, userid=userid))
+        user = User.query.get(userid)  # Get the user object by userid
+        db.session.add(UserClass(classid=classid, userid=userid))  # Add user-class association
 
-        db.session.commit()
-        flash('Users assigned successfully!', 'success')
+        # Create a notification for each user
+        notification_message = f"You have been assigned to the class: {class_.name}"
+        notification = Notification(
+            user_id=userid,
+            message=notification_message
+        )
+        db.session.add(notification)
 
-    return redirect(url_for('manage_classes'))
+    db.session.commit()  # Commit the changes to the database
+
+    flash('Users assigned and notifications sent successfully!', 'success')
+    return redirect(url_for('manage_classes'))  # Redirect back to the manage classes page

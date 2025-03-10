@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, jsonify, request, redirect, url_fo
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from recyglolms.models import Course, Video, Progress, Activity, Module, User, Feedback, ActivityImage, Announcement, CourseClass, UserClass, Class
+from recyglolms.models import Course, Video, Progress, Activity, Module, User, Feedback, ActivityImage, Announcement, CourseClass, UserClass, Class, Notification
 from recyglolms.__inti__ import db, app, bcrypt
 
 main_bp = Blueprint('main', __name__)
@@ -16,7 +16,13 @@ def index():
 @main_bp.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
-    courses = Course.query.all()
+    # Get the user's assigned class IDs
+    user_classes = [uc.classid for uc in UserClass.query.filter_by(userid=current_user.userid).all()]
+    
+    # Get courses linked to those classes
+    courses = Course.query.join(CourseClass).filter(CourseClass.classid.in_(user_classes)).all()
+
+    # Compute progress for filtered courses
     progress_data = {
         course.name: course.calculate_course_progress(current_user.userid) for course in courses
     }
@@ -27,7 +33,7 @@ def home():
             current_user.name = new_username
             db.session.commit()  # Save the change to the database
             flash("Username updated successfully!", "success")
-            return redirect(url_for('main.home'))  # Corrected endpoint name
+            return redirect(url_for('main.home'))  # Redirect to home
 
     # Pass current user info to the template
     current_username = current_user.name
@@ -317,14 +323,14 @@ def update_profile_image():
             file_path = os.path.join(UPLOAD_FOLDER_PROFILE, filename)
             try:
                 file.save(file_path)
-                print(f"✅ File successfully saved at: {file_path}")
+                print(f"File successfully saved at: {file_path}")
 
                 # Update the user's profile image in the database
                 current_user.profile_img = f'profile_images/{filename}'  # Store relative path to static
                 db.session.commit()
                 flash("Profile image updated successfully!", "success")
             except Exception as e:
-                print(f"❌ Error saving file: {e}")
+                print(f" Error saving file: {e}")
                 flash("File upload failed!", "danger")
         else:
             flash("Invalid file format!", "danger")
@@ -388,3 +394,19 @@ def Alumni_user():
                            users=users,
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
+    
+@app.route('/notifications/mark-read', methods=['POST'])
+@login_required
+def mark_notifications_as_read():
+    Notification.query.filter_by(user_id=current_user.userid, is_read=False).update({"is_read": True})
+    db.session.commit()
+    return jsonify({"success": True})
+
+@app.route('/notifications', methods=['GET'])
+@login_required
+def get_notifications():
+    notifications = Notification.query.filter_by(user_id=current_user.userid, is_read=False).order_by(Notification.created_at.desc()).all()
+    
+    notification_list = [{"id": n.id, "message": n.message, "created_at": n.created_at.strftime("%Y-%m-%d %H:%M:%S")} for n in notifications]
+    
+    return jsonify({"notifications": notification_list, "count": len(notification_list)})

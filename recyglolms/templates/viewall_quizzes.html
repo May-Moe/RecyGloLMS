@@ -126,7 +126,6 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Modules</th>
                                 <th>Actions</th>
                             </tr>
@@ -134,7 +133,6 @@
                         <tbody>
                             {% for module_data in course_module_data[course.courseid] %}
                             <tr>
-                                <td>{{ module_data.module.moduleid }}</td>
                                 <td>{{ module_data.module.name }}</td>
                                 <td>
                                     {% if module_data.quizzes %}
