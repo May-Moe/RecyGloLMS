@@ -34,16 +34,15 @@
             </div>
             </div>
                 <button class="notification-button" id="notification-button">
-                    <i class="fas fa-bell"></i>
-                    <span id="notification-count" class="notification-count">0</span>
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
                 </button>
 
                 <div id="notification-dropdown" class="notification-dropdown hidden">
-                    <ul id="notification-list">
-                        <li>New course available: "Recycling 101"</li>
-                        <li>Your activity submission is pending review.</li>
-                    </ul>
+                    <ul id="notification-list"></ul>
                 </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+
                 <div class="dropdown">
                     <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
@@ -177,23 +176,27 @@
               </div>
               
               <div class="courses">
+                {% if progress_data %}
                 {% for course_name, progress in progress_data.items() %}
-                <div class="course-card">
-                    <div class="course-header">
-                        <span class="tag">{{ course_name }}</span>
-                    </div>
-                    <h3>{{ course_name }}</h3>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">
-                            {{ progress | round(2) }}%
+                    <div class="course-card">
+                        <div class="course-header">
+                            <span class="tag">{{ course_name }}</span>
                         </div>
+                        <h3>{{ course_name }}</h3>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ progress | round(2) }}%
+                            </div>
+                        </div>
+                        {% set course = courses | selectattr("name", "equalto", course_name) | first %}
+                        {% if course %}
+                            <a href="{{ url_for('main.course_detail', courseid=course.courseid) }}" class="continue-btn">Continue</a>
+                        {% endif %}
                     </div>
-                    {% set course = courses | selectattr("name", "equalto", course_name) | first %}
-                    {% if course %}
-                    <a href="{{ url_for('main.course_detail', courseid=course.courseid) }}" class="continue-btn">Continue</a>
-                    {% endif %}
-                </div>
                 {% endfor %}
+            {% else %}
+                <p class="no-course-message">No courses assigned to you yet.</p>
+            {% endif %}
             </div>
             
     <!-- second row of dashboard -->

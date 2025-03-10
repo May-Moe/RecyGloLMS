@@ -52,7 +52,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="../static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -119,7 +119,8 @@
                     <label for="announcement_img">Current Image</label>
                     {% if announcement.announcement_img %}
                         <div>
-                            <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" alt="Current Announcement Image" style="max-width: 200px; max-height: 200px;">
+                            <p>{{ announcement.announcement_img }}</p>
+                            <!-- <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" alt="Current Announcement Image" style="max-width: 200px; max-height: 200px;"> -->
                         </div>
                     {% else %}
                         <p>No image uploaded</p>
