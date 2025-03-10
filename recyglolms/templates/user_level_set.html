@@ -118,7 +118,6 @@
                     <tbody>
                         {% for user_id, progress_data in user_level_data.items() %}
                             <tr>
-<<<<<<< HEAD
                                 {% set user = users_dict.get(user_id) %}  {# Get the user object #}
                                 
                                 <td>{{ user.name if user else 'Unknown User' }}</td>
@@ -153,32 +152,7 @@
                                 </td>
                     
                                 <td>{{ user.level if user and user.level else 'N/A' }}</td>
-                    
-=======
-                                <td>{{ users_dict.get(user_id, {}).name or 'Unknown User' }}</td>
-                                <td>
-                                    {% if progress_data %}
-                                    <ul>
-                                        {% for course_name, course_data in progress_data.items() %}
-                                            {% if course_name != 'total_activities' %}
-                                                <li>{{ course_name }} (Progress: {{ course_data.course_progress }}%)</li>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    No completed courses
-                                {% endif %}
-                                </td>
-                                <td>
-                                {% for course_name, course_data in progress_data.items() %}
-                                    {% if course_name != 'total_activities' and 'average_quiz_score' in course_data %}
-                                        {{ course_data.average_quiz_score }}% <br>
-                                    {% endif %}
-                                {% endfor %}
-                              
-                                </td>
-                                <td>{{ user_level_data.get(user_id, {}).level or 'N/A' }}</td>
->>>>>>> f579c2f437eafec7c5be5bea5ac9a635f34734b3
+            
                                 <td>
                                     <form method="POST" action="{{ url_for('admin.user_levels') }}">
                                         <input type="hidden" name="userid" value="{{ user_id }}">

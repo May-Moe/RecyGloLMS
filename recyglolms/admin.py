@@ -908,7 +908,7 @@ def admin_view_activity(userid):
     return render_template('admin_view_activity.html', user=user, activities=activities)
  
 
-# Class 
+# Class management
 @app.route('/admin/classes', methods=['GET', 'POST'])
 @login_required
 def manage_classes():
