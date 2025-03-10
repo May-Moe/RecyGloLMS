@@ -136,60 +136,82 @@
     <div id="postModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <img id="modalImage" src="" alt="Post Image">
+            
+            <div class="image-container">
+                <img id="modalImage" src="" alt="Post Image">
+            </div>
+    
+            <button class="prev" onclick="prevImage()">&#10094;</button>
+            <button class="next" onclick="nextImage()">&#10095;</button>
+    
             <h2 id="modalTitle"></h2>
             <p id="modalText"></p>
             <p id="modalDate" class="modal-date"></p>
         </div>
     </div>
+    
+    
 
     <script src="../static/JS/script.js"></script>
 
     <script>
-        // Open Modal and Show Post Details
+        let currentImageIndex = 0;
+let imageArray = [];
+
 function openModal(postElement) {
     const title = postElement.querySelector('.post-title').textContent;
     const text = postElement.querySelector('.post-text').textContent;
     const date = postElement.querySelector('.post-date').textContent;
-    const imageSrc = postElement.querySelector('img').src;
+    
+    imageArray = Array.from(postElement.querySelectorAll('img')).map(img => img.src);
+    currentImageIndex = 0;
 
     document.getElementById('modalTitle').textContent = title;
     document.getElementById('modalText').textContent = text;
     document.getElementById('modalDate').textContent = date;
-    document.getElementById('modalImage').src = imageSrc;
 
-    document.getElementById('postModal').style.display = "flex";  // Show the modal
-}
-
-// Close Modal
-function closeModal() {
-    document.getElementById('postModal').style.display = "none";  // Hide the modal
-}
-
-// Close Modal When Clicking Outside
-window.onclick = function(event) {
-    const modal = document.getElementById('postModal');
-    if (event.target === modal) {
-        modal.style.display = "none";  // Hide the modal when clicked outside
+    if (imageArray.length > 1) {
+        document.querySelector('.prev').style.display = "block";
+        document.querySelector('.next').style.display = "block";
+    } else {
+        document.querySelector('.prev').style.display = "none";
+        document.querySelector('.next').style.display = "none";
     }
-};
-                document.addEventListener("DOMContentLoaded", function () {
-                    const dropdowns = [
-                        { button: ".dropdown-class", container: ".dropdown-container-class" },
-                        { button: ".dropdown-user", container: ".dropdown-container" }
-                    ];
 
-                    dropdowns.forEach(({ button, container }) => {
-                        const btn = document.querySelector(button);
-                        const dropContainer = document.querySelector(container);
+    updateModalImage();
 
-                        if (btn && dropContainer) {  // Ensure elements exist
-                            btn.addEventListener("click", function () {
-                                dropContainer.classList.toggle("active");
-                            });
-                        }
-                    });
-                    });
+    document.getElementById('postModal').style.display = "flex";  
+}
+
+function updateModalImage(animationDirection = "") {
+    const modalImage = document.getElementById('modalImage');
+    
+    if (animationDirection === "left") {
+        modalImage.style.transform = "translateX(100%)"; // Move image to right before displaying
+    } else if (animationDirection === "right") {
+        modalImage.style.transform = "translateX(-100%)"; // Move image to left before displaying
+    }
+
+    setTimeout(() => {
+        modalImage.src = imageArray[currentImageIndex];
+        modalImage.style.transform = "translateX(0%)"; // Move back to center
+    }, 100); // Delay to make transition smooth
+}
+
+function nextImage() {
+    currentImageIndex = (currentImageIndex + 1) % imageArray.length;
+    updateModalImage("left");
+}
+
+function prevImage() {
+    currentImageIndex = (currentImageIndex - 1 + imageArray.length) % imageArray.length;
+    updateModalImage("right");
+}
+
+function closeModal() {
+    document.getElementById('postModal').style.display = "none";
+}
+
 
     </script>
 </body>
