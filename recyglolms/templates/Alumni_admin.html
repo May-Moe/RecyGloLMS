@@ -113,13 +113,23 @@
                 </div>
             </div>
             <div class="grid" id="team-grid">
-                {% for user in users %}
+                {% for item in users_with_classes %}
                 <div class="card">
-                    <img src="{{ url_for('static', filename=user.profile_img) if user.profile_img else url_for('static', filename='/uploads/default-profile.jpg') }}" 
-                    alt="{{ user.name }}">
-                    <h3>{{ user.name }}</h3>
-                    <p>{{ user.email }}</p>
-                    <!-- <p>Course: <span>Cooking</span></p> -->
+                    <img src="{{ url_for('static', filename=item.user.profile_img) if item.user.profile_img else url_for('static', filename='/uploads/default-profile.jpg') }}" 
+                        alt="{{ item.user.name }}">
+                    <h3>{{ item.user.name }}</h3>
+                    <p>{{ item.user.email }}</p>
+
+                    {% if item.classes %}
+                    <p>Enrolled Classes:</p>
+                    <ul>
+                        {% for class_ in item.classes %}
+                            <li style="font-size: 11px;">{{ class_.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No classes enrolled</p>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>

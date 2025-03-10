@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_apscheduler import APScheduler
+from flask import jsonify, request
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import db, bcrypt, app
@@ -13,7 +14,7 @@ import os
 admin_bp = Blueprint('admin', __name__)
 # Configure upload folder and allowed file types
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')  # Absolute path
-ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip', 'rar', '7z', 'tar', 'gz', 'tgz', 'bz2', 'xz'}
+ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
@@ -134,9 +135,6 @@ def add_user():
         if User.query.filter_by(email=email).first():
             flash("A user with this email already exists.", "danger")
         else:
-            
-            
-           
             # db.session.add(Log_entry)
             # db.session.commit()
             # Hash the password and create a new user
@@ -172,24 +170,28 @@ def show_logs():
     return render_template('viewlogs.html', logs=logs,
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
-#Delete old logs
-# Create an instance of the APScheduler
+# Auto Deleting Old Logs
+# Create an instance of APScheduler
 scheduler = APScheduler()
 
 def delete_old_logs():
     """Deletes logs older than 3 days."""
-    three_days_ago = datetime.now() - timedelta(days=3)
-    old_logs = ActionLog.query.filter(ActionLog.timestamp < three_days_ago).all()
+    with app.app_context():  # Ensure function runs within Flask's app context
+        three_days_ago = datetime.utcnow() - timedelta(days=3)
+        old_logs = ActionLog.query.filter(ActionLog.timestamp < three_days_ago).all()
 
-    if old_logs:
-        for log in old_logs:
-            db.session.delete(log)
-        db.session.commit()
-        print(f"Deleted {len(old_logs)} old logs.")  # For debugging
+        print(f"Found {len(old_logs)} logs to delete.")  # Debugging
+        if old_logs:
+            for log in old_logs:
+                db.session.delete(log)
+            db.session.commit()
+            print(f"Deleted {len(old_logs)} old logs.")
 
-# Schedule the task to run every day at midnight
-scheduler.add_job(id='delete_old_logs', func=delete_old_logs, trigger='interval', days=1)
-scheduler.start()
+# Ensure scheduler is only initialized once (usually in __init__.py)
+if not scheduler.running:
+    scheduler.init_app(app)
+    scheduler.start()
+    scheduler.add_job(id='delete_old_logs', func=delete_old_logs, trigger='interval', days=1)
 
 @admin_bp.route('/viewallusers', methods=['GET', 'POST'])
 @login_required
@@ -239,47 +241,83 @@ def view_users():
     return render_template('viewallusers.html', users=users, current_user_name=current_user_name, current_user_email=current_user_email)
 
 
-# Route to edit a user
+
+
 @admin_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def edit_user(user_id):
-    # Ensure only admins can access
-    if not current_user.role:  # Assuming role=1 is admin
-        flash("Unauthorized access!", "danger")
-        return redirect(url_for('auth.login'))
+    if not current_user.role:  # Ensure only admins can access
+        return jsonify({"success": False, "error": "Unauthorized access!"}), 403
 
-    user = User.query.get_or_404(user_id)  # Fetch user or return 404
+    user = User.query.get_or_404(user_id)
+    original_name = user.name  
+    original_email = user.email
+    original_role = user.role  
+    changes = []  # Track changes
+
     if request.method == 'POST':
-        user.name = request.form['name']
-        user.email = request.form['email']
-        role = request.form.get('role', '0')
-        password = request.form['password']
-        # change
-        last_login=datetime.now(),
-        
-        try:
-            role = int(role)
-            if role not in [0, 1, 2]:
-                raise ValueError("Invalid role value")
-            user.role = role
-        except ValueError:
-            flash("Invalid role value. Must be 0 (user) or 1 (admin).", "danger")
-            return render_template('edituser.html', user=user)
+        data = request.form
 
-        # Check if the password is provided and hash it if necessary
-        if password:
-            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        # **Admin Password Verification**
+        if "verify_password" in data:
+            admin_password = data.get('admin_password', '')
+            if not bcrypt.check_password_hash(current_user.password, admin_password):
+                return jsonify({"success": False, "error": "Incorrect admin password!"})
+            return jsonify({"success": True})  # Admin password is correct
+
+        # **Only Update Fields That Have Changed**
+        if "name" in data and data["name"].strip() and data["name"].strip() != original_name:
+            user.name = data["name"].strip()
+            changes.append(f"Username changed from '{original_name}' to '{user.name}'")
+
+        if "email" in data and data["email"].strip() and data["email"].strip() != original_email:
+            user.email = data["email"].strip()
+            changes.append(f"Email changed from '{original_email}' to '{user.email}'")
+
+        if "role" in data:
+            try:
+                role = int(data["role"])
+                if role not in [0, 1, 2]:
+                    raise ValueError("Invalid role value")
+                if user.role != role:
+                    changes.append(f"Role changed from {original_role} to {role}")
+                    user.role = role
+            except ValueError:
+                flash("Invalid role value. Must be 0 (User), 1 (Admin), or 2 (Sub-Admin).", "danger")
+                return render_template('edituser.html', user=user)
+
+        # **Only Update Password If a New One Is Provided**
+        if "password" in data and data["password"].strip():
+            hashed_password = bcrypt.generate_password_hash(data["password"]).decode('utf-8')
             user.password = hashed_password
+            changes.append("Password updated")
 
-        db.session.commit()
-        
-        flash("User updated successfully!", "success")
+        # **Commit Only If There Are Changes**
+        if changes:
+            db.session.commit()
+
+            # **Log the Action**
+            log_entry = ActionLog(
+                userid=current_user.userid,
+                username=current_user.name,  
+                action_type="Edit",
+                target_table="User",
+                target_id=user.userid,
+                timestamp=datetime.now(),
+                details="; ".join(changes)
+            )
+            db.session.add(log_entry)
+            db.session.commit()
+
+            flash("User updated successfully!", "success")
+        else:
+            flash("No changes made.", "info")
+
         return redirect(url_for('admin.view_users'))
 
-    return render_template('edituser.html', 
-                           user=user,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+    return render_template('edituser.html', user=user)
+
+
 
 # Route to delete a user
 @admin_bp.route('/delete_user/<int:user_id>', methods=['POST'])
@@ -795,15 +833,21 @@ def admin_feedback():
                             current_user_email = current_user.email,
                             total_feedback = total_feedback)
 
-#Admin Alumni page
 @admin_bp.route('/Alumni_admin')
 @login_required
 def Alumni_admin():
-    users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+    users = User.query.filter_by(role=0).all()  # Fetch all users (role=0)
+
+    # Fetch users with their enrolled classes
+    users_with_classes = []
+    for user in users:
+        enrolled_classes = [uc.class_ for uc in user.classes]  # Get class objects
+        users_with_classes.append({'user': user, 'classes': enrolled_classes})
+
     return render_template('Alumni_admin.html', 
-                           users=users,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                           users_with_classes=users_with_classes,
+                           current_user_name=current_user.name,
+                           current_user_email=current_user.email)
 
 
 # Admin Activity page

@@ -3,6 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager  # Import LoginManager
+from flask_apscheduler import APScheduler # Import APScheduler
 
 import pymysql
 
@@ -28,6 +29,11 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)  # Initialize LoginManager
 login_manager.login_view = 'auth.login'  # Set the default view for login
+
+# Initialize APScheduler for auto deleting logs
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 
 # Create a user loader function for Flask-Login
 @login_manager.user_loader

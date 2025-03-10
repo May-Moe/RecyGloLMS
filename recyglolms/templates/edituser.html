@@ -19,15 +19,15 @@
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
-                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                <img src="../static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
                 </button>
             <div class="dropdown-content">
-                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
-                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
-                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
-                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
-                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
-                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                <a href="?lang=en"><img src="../static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="../static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="../static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="../static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="../static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="../static/img/kr.svg" class="flag-icon"> Korea</a>
                 
             </div>
             </div>
@@ -55,7 +55,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="../static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -113,10 +113,7 @@
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="example@gmail.com" value="{{ user.email }}" required>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
+            
                 <div class="form-group">
                     <label for="role">Role</label>
                     <select id="role" name="role">
@@ -125,32 +122,201 @@
                         <option value="2" {% if user.role == 2 %}selected{% endif %}>Sub-Admin</option>
                     </select>
                 </div>
+            
+                <!-- Change Password Button -->
+                <button type="button" class="change-password-button" onclick="askForAdminPassword()">Change Password</button>
+            
+                <!-- Admin password field -->
+                <div class="form-group" id="admin-password-group" style="display: none;">
+                    <label for="admin_password">Your Admin Password (Required for Changing User Password)</label>
+                    <input type="password" id="admin_password" name="admin_password" required>
+                    <button type="button" class="verify-password-button" onclick="verifyAdminPassword()">Verify</button>
+                </div>
+            
+                <!-- New Password field, initially hidden -->
+                <div class="form-group" id="new-password-group" style="display: none;">
+                    <label for="password">New Password</label>
+                    <input type="password" id="password" name="password">
+                </div>
+            
                 <div class="buttons">
-                    <button type="submit" class="submit-button">Save Changes</button>
+                    <button type="submit" class="submit-button" id="submit-button" style="display: none;">Save Changes</button>
                     <button type="button" class="cancel-button" onclick="cancelEdit()">Cancel</button>
                 </div>
             </form>
+            
+            <script>
+                // Show the admin password field when the "Change Password" button is clicked
+                function askForAdminPassword() {
+                    document.getElementById('admin-password-group').style.display = 'block';
+                    document.getElementById('new-password-group').style.display = 'none'; // Hide the new password field initially
+                    document.getElementById('submit-button').style.display = 'none'; // Hide the submit button
+                }
+            
+                // Verify the admin password
+                function verifyAdminPassword() {
+                    const adminPassword = document.getElementById('admin_password').value.trim();
+            
+                    if (adminPassword === "") {
+                        alert("Please enter your admin password.");
+                        return;
+                    }
+            
+                    // Send the admin password to the backend for verification using a simple form submission.
+                    const form = document.getElementById('editProfileForm');
+                    const adminPasswordInput = document.createElement('input');
+                    adminPasswordInput.type = 'hidden';
+                    adminPasswordInput.name = 'admin_password';
+                    adminPasswordInput.value = adminPassword;
+                    form.appendChild(adminPasswordInput);
+            
+                    // Add a flag to indicate password verification is requested
+                    const verifyPasswordFlag = document.createElement('input');
+                    verifyPasswordFlag.type = 'hidden';
+                    verifyPasswordFlag.name = 'verify_password';
+                    verifyPasswordFlag.value = 'true';
+                    form.appendChild(verifyPasswordFlag);
+            
+                    // Only verify admin password, do not submit yet
+                    fetch("{{ url_for('admin.edit_user', user_id=user.userid) }}", {
+                        method: "POST",
+                        body: new FormData(form)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Password verified, show new password field and the submit button
+                            document.getElementById('new-password-group').style.display = 'block';
+                            document.getElementById('submit-button').style.display = 'block'; // Show submit button
+                        } else {
+                            alert("Admin password is incorrect!");
+                            document.getElementById('admin-password-group').style.display = 'none'; // Hide admin password field
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error verifying admin password:', error);
+                    });
+                }
+            </script>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById('editProfileForm');
+            const submitButton = document.getElementById('submit-button');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const roleInput = document.getElementById('role');
+            const passwordInput = document.getElementById('password');
+            const adminPasswordGroup = document.getElementById('admin-password-group');
+            const newPasswordGroup = document.getElementById('new-password-group');
+    
+            // Get original values (stored as data attributes)
+            const originalName = form.dataset.originalName;
+            const originalEmail = form.dataset.originalEmail;
+            const originalRole = form.dataset.originalRole;
+    
+            // Function to check if any field has changed
+            function checkForChanges() {
+                if (
+                    nameInput.value.trim() !== originalName ||
+                    emailInput.value.trim() !== originalEmail ||
+                    roleInput.value !== originalRole ||
+                    passwordInput.value.trim() !== ""
+                ) {
+                    submitButton.style.display = "block"; // Show the "Save Changes" button
+                } else {
+                    submitButton.style.display = "none"; // Hide if no changes
+                }
+            }
+    
+            // Add event listeners to fields to detect changes
+            nameInput.addEventListener("input", checkForChanges);
+            emailInput.addEventListener("input", checkForChanges);
+            roleInput.addEventListener("change", checkForChanges);
+            passwordInput.addEventListener("input", checkForChanges);
+    
+            // Show admin password field only when changing password
+            function askForAdminPassword() {
+                adminPasswordGroup.style.display = 'block';
+                newPasswordGroup.style.display = 'none'; // Hide new password field initially
+                submitButton.style.display = 'none'; // Hide submit button until verified
+            }
+    
+            // Verify admin password before allowing password change
+            function verifyAdminPassword() {
+                const adminPassword = document.getElementById('admin_password').value.trim();
+    
+                if (adminPassword === "") {
+                    alert("Please enter your admin password.");
+                    return;
+                }
+    
+                const formData = new FormData();
+                formData.append("admin_password", adminPassword);
+                formData.append("verify_password", "true");
+    
+                fetch("{{ url_for('admin.edit_user', user_id=user.userid) }}", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        newPasswordGroup.style.display = 'block'; // Show password field
+                        submitButton.style.display = 'block'; // Show submit button
+                    } else {
+                        alert("Admin password is incorrect!");
+                        adminPasswordGroup.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error verifying admin password:', error);
+                    alert("An error occurred while verifying the password. Please try again.");
+                });
+            }
+    
+            // Prepare form submission (only send changed fields)
+            function prepareFormSubmission() {
+                const formData = new FormData();
+    
+                // Only add changed fields
+                if (nameInput.value.trim() !== originalName) formData.append("name", nameInput.value.trim());
+                if (emailInput.value.trim() !== originalEmail) formData.append("email", emailInput.value.trim());
+                if (roleInput.value !== originalRole) formData.append("role", roleInput.value);
+                if (passwordInput.value.trim()) formData.append("password", passwordInput.value.trim()); // Only send if changed
+    
+                if (formData.keys().next().done) {
+                    alert("No changes detected.");
+                    return;
+                }
+    
+                fetch("{{ url_for('admin.edit_user', user_id=user.userid) }}", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(() => {
+                    alert("User updated successfully!");
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error("Error updating user:", error);
+                    alert("An error occurred. Please try again.");
+                });
+            }
+    
+            // Attach event listener to the submit button
+            submitButton.addEventListener("click", function (event) {
+                event.preventDefault();
+                prepareFormSubmission();
+            });
+        });
+    </script>    
+    
         </div>
     </div>
     <script src="../static/JS/script.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-                    const dropdowns = [
-                        { button: ".dropdown-class", container: ".dropdown-container-class" },
-                        { button: ".dropdown-user", container: ".dropdown-container" }
-                    ];
-
-                    dropdowns.forEach(({ button, container }) => {
-                        const btn = document.querySelector(button);
-                        const dropContainer = document.querySelector(container);
-
-                        if (btn && dropContainer) {  // Ensure elements exist
-                            btn.addEventListener("click", function () {
-                                dropContainer.classList.toggle("active");
-                            });
-                        }
-                    });
-                    });
-    </script>
+    
 </body>
 </html>
