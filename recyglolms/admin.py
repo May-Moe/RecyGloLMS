@@ -890,13 +890,7 @@ def user_levels():
             flash(f"{user.name}'s level updated to {new_level}!", "success")
 
     return render_template('user_level_set.html', users=users, user_level_data=user_level_data, users_dict=users_dict,
-<<<<<<< HEAD
                            current_user_name=current_user.name, current_user_email=current_user.email)
-=======
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
-
->>>>>>> f579c2f437eafec7c5be5bea5ac9a635f34734b3
 
 @admin_bp.route('/admin_view_activity/<int:userid>')
 def admin_view_activity(userid):
@@ -914,7 +908,7 @@ def admin_view_activity(userid):
     return render_template('admin_view_activity.html', user=user, activities=activities)
  
 
-# Class 
+# Class management
 @app.route('/admin/classes', methods=['GET', 'POST'])
 @login_required
 def manage_classes():
