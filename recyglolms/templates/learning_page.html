@@ -14,20 +14,35 @@
                 <span class="icon">&#9776;</span>
             </button>
             <div class="profile-right">
-                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
-                <button class="notification-button" id="notification-button">
-                    <i class="fas fa-bell"></i>
-                    <span id="notification-count" class="notification-count">0</span>
-                    </button>
-    
-                    <div id="notification-dropdown" class="notification-dropdown hidden">
-                        <ul id="notification-list"></ul>
-                    </div>
-                <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+                <img src="/static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="/static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="/static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="/static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="/static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="/static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="/static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="/static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+           <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list"></ul>
+                </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
                 <div class="dropdown">
-                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='img/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_username }}</span></h5>
                         <p id="profile-email">{{ current_user_email }}</p>
                         <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
@@ -36,12 +51,12 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="/static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
                 <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
-                <li><a href="user_activity.html"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                 <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
                 <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
@@ -78,7 +93,7 @@
                 <p>No courses assigned to this class.</p>
             {% endif %}
         </div>
-    <script src="/static/JS/script.js"></script>
+    <script src="static/JS/script.js"></script>
     <script>
         // Filter Courses by Course Name
         document.getElementById("courseFilter").addEventListener("change", function () {

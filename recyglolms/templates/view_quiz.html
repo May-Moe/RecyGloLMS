@@ -34,16 +34,15 @@
                 
             </div>
             </div>
-                <button class="notification-button" id="notification-button">
-                    <i class="fas fa-bell"></i>
-                    <span id="notification-count" class="notification-count">0</span>
+            <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
                 </button>
+
                 <div id="notification-dropdown" class="notification-dropdown hidden">
-                    <ul id="notification-list">
-                        <li>New course available: "Recycling 101"</li>
-                        <li>Your activity submission is pending review.</li>
-                    </ul>
+                    <ul id="notification-list"></ul>
                 </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
                 <div class="dropdown">
                     <img src="../static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">

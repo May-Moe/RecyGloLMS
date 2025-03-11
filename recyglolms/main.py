@@ -369,7 +369,6 @@ def change_password():
     
 #for user feedback
 
-# Feedback Submission Route
 @main_bp.route('/submit_feedback', methods=['POST'])
 @login_required
 def submit_feedback():
@@ -431,3 +430,4 @@ def get_notifications():
     notification_list = [{"id": n.id, "message": n.message, "created_at": n.created_at.strftime("%Y-%m-%d %H:%M:%S")} for n in notifications]
     
     return jsonify({"notifications": notification_list, "count": len(notification_list)})
+
