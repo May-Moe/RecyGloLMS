@@ -103,7 +103,7 @@
         // Filter Courses by Course Name
         document.getElementById("courseFilter").addEventListener("change", function () {
             const selectedValue = this.value;
-            const courseItems = document.querySelectorAll(".course-item");
+            const courseItems = document.querySelectorAll(".class-card");
     
             courseItems.forEach((item) => {
                 const courseName = item.querySelector(".class-title").innerText.toLowerCase();
@@ -119,7 +119,7 @@
         // Search Functionality for Course Name
         document.getElementById("searchBar").addEventListener("keyup", function () {
             let filter = this.value.toLowerCase();
-            let courseItems = document.querySelectorAll(".course-item");
+            let courseItems = document.querySelectorAll(".class-card");
     
             courseItems.forEach(item => {
                 let courseName = item.querySelector(".class-title").innerText.toLowerCase();

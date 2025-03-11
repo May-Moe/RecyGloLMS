@@ -27,9 +27,9 @@ h4, p {
     flex-direction: column;
     width: calc(100% - 250px); /* Adjust width to account for sidebar */
     margin: 10px auto;
-    margin-left: 300px; /* Offset for sidebar */
-    margin-top: 100px;
-    margin-right: 60px;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
     margin-bottom: 30px;
     background-color: #fff;
     padding: 40px;
@@ -57,7 +57,7 @@ h4, p {
 
 .class-container {
     display: grid;
-    grid-template-columns: repeat(minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill,minmax(280px, 1fr));
     gap: 20px;
     justify-content: left;
     padding: 20px;
@@ -131,20 +131,38 @@ h4, p {
     margin-bottom: 20px;
 }
 
-#searchBar, #courseFilter {
-    padding: 10px;
-    font-size: 13px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+/* Style the search bar */
+#searchBar {
     width: 200px;
-    transition: all 0.3s ease;
-    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #16a159;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 14px;
+    background: #f8f9fa;
+    margin-left: 10px;
 }
 
-#searchBar,#courseFilter:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    outline: none;
+#searchBar:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Style the filter dropdown */
+.filter-select {
+    padding: 10px;
+    border: 1px solid #16a159;
+    border-radius: 10px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-select:hover, .filter-select:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
 @media screen and (max-width: 768px) {
@@ -152,11 +170,6 @@ h4, p {
         width: 90%; 
         margin-left: auto;
         margin-right: auto;
-    }
-
-    .filter-select{
-        width: calc(100% - 130px); /* Adjust width based on button size */
-        margin-right: 0;
     }
 
 }
