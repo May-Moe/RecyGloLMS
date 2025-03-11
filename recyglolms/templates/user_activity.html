@@ -235,33 +235,45 @@
             cardContainer.appendChild(newCard);
         }
         
-        // Load existing cards from the backend
-        async function loadCards() {
-            try {
-                const response = await fetch("/user_activity", {
-                    method: "GET",
-                    headers: {
-                        "Accept": "application/json",  // Explicitly tell the server you want JSON
-                    }
-                });
-        
-                if (response.ok) {
-                    const activities = await response.json(); // Parse JSON response
-                    const cardContainer = document.getElementById("card-container");
-                    cardContainer.innerHTML = ""; // Clear existing cards
-        
-                    // Create a card for each activity
-                    activities.forEach(activity => {
-                        createCard(activity);
-                    });
-                } else {
-                    alert("Failed to load activities.");
-                }
-            } catch (error) {
-                console.error("Error loading activities:", error);
-                alert("Error loading activities.");
+        // ...existing code...
+
+// Load existing cards from the backend
+async function loadCards() {
+    try {
+        const response = await fetch("/user_activity", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",  // Explicitly tell the server you want JSON
             }
+        });
+
+        if (response.ok) {
+            const activities = await response.json(); // Parse JSON response
+            const cardContainer = document.getElementById("card-container");
+            cardContainer.innerHTML = ""; // Clear existing cards
+
+            if (activities.length === 0) {
+                // If no activities, show a message
+                const noActivitiesMessage = document.createElement("p");
+                noActivitiesMessage.textContent = "No activities available.";
+                noActivitiesMessage.classList.add("no-activities-message");
+                cardContainer.appendChild(noActivitiesMessage);
+            } else {
+                // Create a card for each activity
+                activities.forEach(activity => {
+                    createCard(activity);
+                });
+            }
+        } else {
+            alert("Failed to load activities.");
         }
+    } catch (error) {
+        console.error("Error loading activities:", error);
+        alert("Error loading activities.");
+    }
+}
+
+// ...existing code...
         
         // Delete an activity card
         async function deleteCard(button) {

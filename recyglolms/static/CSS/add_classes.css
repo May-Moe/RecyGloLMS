@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    max-width: 800px; /* Limit the maximum width of the form */
+    margin: 10px auto;
+    margin-left: 400px; /* Offset for sidebar */
+    margin-top: 100px; /* Adjust for fixed navbar */
+    margin-right: 70px;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    transition: margin-left 0.5s, width 0.5s;
+}
+
+h2 {
+    text-align: left;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="email"], input[type="password"],textarea, select {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.submit-button {
+    padding: 8px 20px;
+    background-color: white;
+    border: 1px solid #9f9f9f;
+    color: #9f9f9f;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 70px; /* Ensure buttons have the same size */
+    text-align: center;
+}
+
+.submit-button:hover {
+    background-color: #A9C9A4;
+    color: white;
+}
+
+.cancel-button {
+    padding: 8px 20px;
+    background-color: white;
+    border: 1px solid #9f9f9f;
+    color: #9f9f9f;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 70px; /* Ensure buttons have the same size */
+    text-align: center;
+    margin-left: 10px;
+}
+
+.cancel-button:hover {
+    background-color: #A9C9A4;
+    color: white;
+}
+
+/* Responsive styles */
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto; /* Adjust top margin for smaller screens */
+    }
+}
