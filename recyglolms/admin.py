@@ -8,6 +8,7 @@ from recyglolms.models import User, Course, Module, Video, Feedback, Announcemen
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 import os
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 # Blueprint for admin functionality
@@ -170,14 +171,17 @@ def show_logs():
     return render_template('viewlogs.html', logs=logs,
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
-# Auto Deleting Old Logs
-# Create an instance of APScheduler
+
+# Auto deleting features for logs and notifications
+
+# Initialize APScheduler
 scheduler = APScheduler()
 
+# Define the function to delete old logs
 def delete_old_logs():
     """Deletes logs older than 3 days."""
     with app.app_context():  # Ensure function runs within Flask's app context
-        three_days_ago = datetime.utcnow() - timedelta(days=3)
+        three_days_ago = datetime.utcnow() - timedelta(days=1)
         old_logs = ActionLog.query.filter(ActionLog.timestamp < three_days_ago).all()
 
         print(f"Found {len(old_logs)} logs to delete.")  # Debugging
@@ -187,11 +191,29 @@ def delete_old_logs():
             db.session.commit()
             print(f"Deleted {len(old_logs)} old logs.")
 
-# Ensure scheduler is only initialized once (usually in __init__.py)
+# Define the function to delete old notifications
+def delete_old_notifications():
+    """Deletes notifications older than 7 days."""
+    with app.app_context():  # Ensure function runs within Flask's app context
+        seven_days_ago = datetime.utcnow() - timedelta(days=1)
+        old_notifications = Notification.query.filter(Notification.timestamp < seven_days_ago).all()
+
+        print(f"Found {len(old_notifications)} notifications to delete.")  # Debugging
+        if old_notifications:
+            for notification in old_notifications:
+                db.session.delete(notification)
+            db.session.commit()
+            print(f"Deleted {len(old_notifications)} old notifications.")
+
+# Initialize scheduler and add the delete_old_logs and delete_old_notifications jobs
 if not scheduler.running:
     scheduler.init_app(app)
     scheduler.start()
     scheduler.add_job(id='delete_old_logs', func=delete_old_logs, trigger='interval', days=1)
+    scheduler.add_job(id='delete_old_notifications', func=delete_old_notifications, trigger='interval', days=1)
+
+# End of auto deleting features
+    
 
 @admin_bp.route('/viewallusers', methods=['GET', 'POST'])
 @login_required
@@ -1059,3 +1081,19 @@ def delete_class(class_id):
         db.session.commit()
         return redirect(url_for('manage_classes'))
     return redirect(url_for('manage_classes'))  # Or handle the error case
+<<<<<<< HEAD
+=======
+=======
+    db.session.commit()  # Commit the changes to the database
+
+    flash('Users assigned and notifications sent successfully!', 'success')
+    return redirect(url_for('manage_classes'))  # Redirect back to the manage classes page
+<<<<<<< HEAD
+
+
+
+
+=======
+>>>>>>> 0ee1ebefa11af00d26813a628387276d87179c69
+>>>>>>> 74d116fb199b49ee73a05361958323dd1aefa329
+>>>>>>> 421b810c7bb9e1c8c86ded813bb3e7edea09a8f4

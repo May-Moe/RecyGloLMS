@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import app, db
-from recyglolms.models import Announcement
+from recyglolms.models import Announcement, Notification, User
 from flask_login import login_required, current_user
 import os
 from datetime import datetime
@@ -94,12 +94,24 @@ def add_announcement():
         db.session.add(new_announcement)
         db.session.commit()
 
-        flash("Announcement scheduled successfully!", "success")
+        # Create a notification for all users
+        notification_message = f"New announcement: {title}"
+        users = User.query.all()  # Get all users for notification
+        for user in users:
+            new_notification = Notification(
+                message=notification_message,
+                user_id=user.userid
+            )
+            db.session.add(new_notification)
+
+        db.session.commit()
+
+        flash("Announcement scheduled successfully and notifications sent!", "success")
         return redirect(url_for('announcement.view_all_announcements'))
 
     return render_template('addannounce.html',
-    current_user_name = current_user.name,
-    current_user_email = current_user.email)
+    current_user_name=current_user.name,
+    current_user_email=current_user.email)
 
 
 @announcement_bp.route('/edit_announcement/<int:announcement_id>', methods=['GET', 'POST'])

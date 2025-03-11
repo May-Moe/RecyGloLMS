@@ -44,7 +44,7 @@
             <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
 
                 <div class="dropdown">
-                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='img/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
                         <h4 class="profile-header">Hello, <span id="user-name">{{ current_username }}</span></h4>
                         <p id="profile-email">{{ current_useremail }}</p>
