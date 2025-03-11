@@ -15,7 +15,7 @@ body {
     margin-top: 100px; /* Adjust for fixed navbar */
     margin-right: 70px;
     background-color: #fff;
-    padding: 20px;
+    padding: 40px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
@@ -87,6 +87,34 @@ input[type="text"], input[type="email"], input[type="password"], select {
     margin-left: 10px;
 }
 
+.change-password-button{
+    width: 100%;
+    text-align: left;
+    padding: 15px 10px;
+    background-color: #16a159;
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+
+.change-password-button:hover{
+    background-color: #007a3b;
+}
+
+.verify-password-button{
+    width: 100%;
+    text-align: left;
+    padding: 15px 10px;
+    background-color: #16a159;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+}
+
+.verify-password-button:hover{
+    background-color: #007a3b;
+}
 /* Responsive styles */
 
 @media (max-width: 768px) {

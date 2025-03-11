@@ -60,14 +60,14 @@
                 <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
                 <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
                 <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
-                <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Classes</a></li>
                 <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
                 <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
             </ul>
         </nav>
         <div class="container">
             <div class="cards-header">
-                <h2 style="color: #A9C9A4;">Activity Board</h2>
+                <h2 style="color: #16a159;">Activity Board</h2>
              </div>
             <div class="header-actions">
                 <input type="text" id="searchBar" placeholder="Search">
@@ -253,7 +253,7 @@ async function loadCards() {
             cardContainer.innerHTML = ""; // Clear existing cards
 
             if (activities.length === 0) {
-                // If no activities, show a message
+                // If no activities, show the "No activities available" message
                 const noActivitiesMessage = document.createElement("p");
                 noActivitiesMessage.textContent = "No activities available.";
                 noActivitiesMessage.classList.add("no-activities-message");
@@ -272,6 +272,12 @@ async function loadCards() {
         alert("Error loading activities.");
     }
 }
+
+// Call loadCards when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+    loadCards();
+});
+
 
 // ...existing code...
         
@@ -412,6 +418,114 @@ async function loadCards() {
                 slides[0].style.display = 'block';
             }
         }
+
+    function editCard(button) {
+        console.log("editCard function called");
+        const card = button.closest(".card");
+        if (!card) {
+            console.log("Card not found"); // Debugging log
+            return;
+        }
+
+        const cardId = card.getAttribute("data-id");
+        const title = card.querySelector("h3").innerText;
+        const description = card.querySelector("p").innerText;
+        const imageSrc = card.querySelector(".slide").src;
+
+        console.log("Card ID:", cardId); // Debugging log
+        console.log("Title:", title); // Debugging log
+        console.log("Description:", description); // Debugging log
+        console.log("Image Src:", imageSrc); // Debugging log
+
+        // Create the edit popup if it doesn't exist
+        let editPopup = document.getElementById("edit-popup-form");
+        if (!editPopup) {
+            editPopup = document.createElement("div");
+            editPopup.id = "edit-popup-form";
+            editPopup.classList.add("popup-form", "hidden");
+            editPopup.innerHTML = `
+                <button class="close-popup" onclick="hideEditPopup()">✖</button>
+                <h3>Edit Activity</h3>
+                <input type="text" id="edit-title" placeholder="Title">
+                <textarea id="edit-description" placeholder="Description" rows="5"></textarea>
+                <input type="file" id="edit-image" placeholder="Image URL">
+                <button class="submit-popup" onclick="updateCard()">Update</button>
+            `;
+            document.body.appendChild(editPopup);
+        }
+
+        // Create the overlay if it doesn't exist
+        let editOverlay = document.getElementById("edit-popup-overlay");
+        if (!editOverlay) {
+            editOverlay = document.createElement("div");
+            editOverlay.id = "edit-popup-overlay";
+            editOverlay.classList.add("popup-overlay", "hidden");
+            document.body.appendChild(editOverlay);
+        }
+
+        // Set the values in the edit form
+        document.getElementById("edit-title").value = title;
+        document.getElementById("edit-description").value = description;
+
+        // Store cardId in the edit button for reference
+        document.querySelector(".submit-popup").setAttribute("data-id", cardId);
+
+        // Show edit popup
+        editPopup.classList.remove("hidden");
+        editOverlay.classList.remove("hidden");
+    }
+
+    function hideEditPopup() {
+        document.getElementById("edit-popup-form").classList.add("hidden");
+        document.getElementById("edit-popup-overlay").classList.add("hidden");
+    }
+
+    async function updateCard() {
+        const cardId = document.querySelector(".submit-popup").getAttribute("data-id");
+        const updatedTitle = document.getElementById("edit-title").value;
+        const updatedDescription = document.getElementById("edit-description").value;
+        const updatedImage = document.getElementById("edit-image").files[0];
+
+        if (!updatedTitle || !updatedDescription) {
+            alert("Please fill all fields.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("activity_name", updatedTitle);
+        formData.append("activity_description", updatedDescription);
+        if (updatedImage) {
+            formData.append("activity_image", updatedImage);
+        }
+
+        try {
+            const response = await fetch(`/user_activity/${cardId}`, {
+                method: "PUT",
+                body: formData,
+            });
+
+            if (response.ok) {
+                // Update the UI without reloading
+                const card = document.querySelector(`.card[data-id='${cardId}']`);
+                card.querySelector("h3").innerText = updatedTitle;
+                card.querySelector("p").innerText = updatedDescription;
+                if (updatedImage) {
+                    const imageUrl = URL.createObjectURL(updatedImage);
+                    card.querySelector(".slide").src = imageUrl;
+                }
+
+                // Close the edit popup
+                hideEditPopup();
+            } else {
+                alert("Failed to update activity.");
+            }
+        } catch (error) {
+            console.error("Error updating activity:", error);
+            alert("An error occurred.");
+        }
+    }
+
+
     </script>
 </body>
 </html>

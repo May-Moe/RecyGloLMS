@@ -1046,8 +1046,12 @@ def assign_users_to_class(classid):
             message=notification_message
         )
         db.session.add(notification)
+        db.session.commit()
 
+<<<<<<< HEAD
     db.session.commit()  # Commit the changes to the database
+=======
+>>>>>>> c3e99a5d58f9b2ad03e80121966982a24d64f4d4
     return redirect(url_for('manage_classes'))
 
 #Add classes
@@ -1083,3 +1087,8 @@ def delete_class(class_id):
     return redirect(url_for('manage_classes'))  # Or handle the error case
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c3e99a5d58f9b2ad03e80121966982a24d64f4d4
