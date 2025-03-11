@@ -39,71 +39,97 @@ h4, p {
     transition: margin-left 0.5s, width 0.5s;
 }
 
-.cards-header{
-    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-.course-list {
+.header{
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.course-item {
-    background-color: #ffffff;
-    padding: 15px;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to right, rgba(239, 251, 240, 0.8), #16a159);
+    padding: 30px;
+    color: #16a159;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.course-item:hover {
+.header-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.class-container {
+    display: grid;
+    grid-template-columns: repeat(minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: left;
+    padding: 20px;
+}
+
+.class-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.class-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.course-title {
+.class-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.class-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.class-content {
+    padding: 15px;
+}
+
+.class-title {
     font-size: 18px;
     font-weight: bold;
     color: #333;
+    text-align: left;
 }
 
-.course-details {
+.class-des {
     font-size: 14px;
     color: #666;
     margin-top: 10px;
+    text-align: left;
 }
+
+.no-classes {
+    text-align: center;
+    color: gray;
+    font-size: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+}
+
+.class-image {
+    width: 100%; /* Make sure images fill the card width */
+    height: 200px; /* Set a fixed height for uniformity */
+    object-fit: cover; /* Ensures images scale while maintaining aspect ratio */
+    border-top-left-radius: 10px; /* Match card border radius */
+    border-top-right-radius: 10px;
+}
+
 
 .filters {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
 }
-
-/* .filter-label {
-    font-size: 16px;
-    color: #333;
-}
-
-.filter-select {
-    padding: 10px;
-    font-size: 13px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f8f8f8;
-    transition: border-color 0.3s ease;
-}
-
-.filter-select:focus {
-    border-color: #1a6e1b;
-    outline: none;
-} */
-
 
 #searchBar, #courseFilter {
     padding: 10px;

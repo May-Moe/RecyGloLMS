@@ -1,7 +1,7 @@
 :root {
   --white: #fff;
   --main: #eaedf0;
-  --accent: #A9C9A4;
+  --accent: #16a159;
   --accent-2: #ebedf0;
 }
 
@@ -78,7 +78,7 @@ body {
 }
 
 .cards-header{
-  background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
+  background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #16a159);
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -94,7 +94,7 @@ body {
 }
 
 .card-icon {
-  color: #A9C9A4;
+  color: #16a159;
   font-size: 24px;
   margin-right: 20px;
 
@@ -132,7 +132,7 @@ color: black;
 .courses-table th, .courses-table td {
   text-align: left;
   padding: 15px;
-  border-bottom: 3px solid #A9C9A4;
+  border-bottom: 3px solid #16a159;
 }
 
 .courses-table th {
@@ -156,7 +156,7 @@ color: black;
 
 .view-feedback {
   text-decoration: none;
-  color: #4caf50;
+  color: #16a159;
   font-weight: bold;
 }
 
@@ -232,7 +232,7 @@ height: 200px !important;
 
 .view-courses {
 text-decoration: none;
-color: #A9C9A4;
+color: #16a159;
 text-align: right;
 }
 
@@ -295,14 +295,14 @@ font-weight: bold;
 }
 
 .selected-date{
-  color: #A9C9A4;
+  color: #16a159;
 }
 
 .announcements h2 {
   font-size: 19px;
   margin-top: 50px;
   text-align: center;
-  color: #A9C9A4;
+  color: #16a159;
 }
 
 .announcements ul {
@@ -478,7 +478,7 @@ h3 {
 
 .progress-bar {
   height: 18px;
-  background: #A9C9A4;
+  background: #16a159;
   font-size: 14px;
 }
 
@@ -491,7 +491,7 @@ h3 {
 }
 
 .continue-btn {
-  background: #A9C9A4;
+  background: #16a159;
   color: #fff;
   border: none;
   padding: 10px 10px;
@@ -503,7 +503,7 @@ h3 {
 }
 
 .continue-btn:hover {
-  background: #88c67f;
+  background: #16a159;
 }
 
 .course_header {
