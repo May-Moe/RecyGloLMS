@@ -154,7 +154,7 @@ def user_activity():
     return render_template('user_activity.html', activities=activity_list,
                            current_username=current_username,
                             current_useremail=current_useremail,
-                                                       current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
 
 
 
