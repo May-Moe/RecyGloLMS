@@ -81,7 +81,6 @@ def upload_file():
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
 
-
 @upload_bp.route('/edit/<int:uploadid>', methods=['GET', 'POST'])
 @login_required
 def edit_file(uploadid):
@@ -97,26 +96,27 @@ def edit_file(uploadid):
         new_filename = request.form.get('filename')
         new_file = request.files.get('file')
 
-        # Update file name
+        # Handle filename change first
         if new_filename and new_filename != file.filename:
             old_filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            new_filepath = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(new_filename))
-            
-            # Rename file on disk if the filename has changed
+            new_filename_secure = secure_filename(new_filename)
+            new_filepath = os.path.join(app.config['UPLOAD_FOLDER'], new_filename_secure)
+
             if os.path.exists(old_filepath):
                 os.rename(old_filepath, new_filepath)
-                file.filename = secure_filename(new_filename)
-                changes.append(f"Filename changed from '{original_filename}' to '{new_filename}'")
+                file.filename = new_filename_secure  # Update filename in DB
+                changes.append(f"Filename changed from '{original_filename}' to '{new_filename_secure}'")
 
-        # Replace file content
+        # Handle file content replacement
         if new_file and allowed_file(new_file.filename):
-            new_filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            new_file.save(new_filepath)
+            # Ensure we're saving to the correct path
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            new_file.save(file_path)
             changes.append(f"Replaced file contents for '{file.filename}'")
 
         db.session.commit()
 
-        # **Log the action**
+        # Log the action
         if changes:
             log_entry = ActionLog(
                 userid=current_user.userid,
@@ -136,7 +136,6 @@ def edit_file(uploadid):
     return render_template('editfile.html', 
                            file=file,
                            current_user_name=current_user.name,
- 
                            current_user_email=current_user.email)
 # Delete file route
 @upload_bp.route('/delete/<int:uploadid>', methods=['POST'])

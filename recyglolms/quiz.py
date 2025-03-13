@@ -35,7 +35,9 @@ def view_all_quizzes():
                            courses=courses, 
                            course_module_data=course_module_data,  # Pass module & quiz data
                            current_user_name=current_user.name,
-                           current_user_email=current_user.email)
+                           current_user_email=current_user.email,
+                        current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template
+
 
 # Create Quiz
 @quiz_bp.route('/create_quiz', methods=['GET', 'POST'])
@@ -103,7 +105,9 @@ def create_quiz():
 
     return render_template('create_quiz.html', module=module, course=course,
                            current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                            current_user_email = current_user.email,
+                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template
+
 
 # View Quiz
 @quiz_bp.route('/view_quiz/<int:quiz_id>', methods=['GET'])
@@ -122,7 +126,9 @@ def view_quiz(quiz_id):
 
     return render_template('view_quiz.html', quiz=quiz, quiz_data=quiz_data,
                            current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                            current_user_email = current_user.email,
+                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template
+
 
 
 @quiz_bp.route('/update_question', methods=['POST'])
@@ -185,7 +191,9 @@ def delete_quiz(quiz_id):
 def user_quizzes():
     """Display all available quizzes."""
     quizzes = Quiz.query.all()
-    return render_template('user_quizzes.html', quizzes=quizzes)
+    return render_template('user_quizzes.html', quizzes=quizzes,
+                                                   current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template
+
 
 @quiz_bp.route('/quiz/<int:quizid>', methods=['GET', 'POST'])
 @login_required
@@ -194,7 +202,9 @@ def start_quiz(quizid):
     quiz = Quiz.query.get_or_404(quizid)
     return render_template('start_quiz.html', quiz=quiz,
                            current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                            current_user_email = current_user.email,
+                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template
+
 
 @quiz_bp.route('/quiz/<int:quizid>/submit', methods=['POST'])
 @login_required
@@ -271,7 +281,9 @@ def quiz_result(responseid):
                            quiz=quiz,  # Pass the quiz object to the template
                            module=module,  # Pass the module object to the template
                            current_user_name=current_user.name,
-                           current_user_email=current_user.email)
+                           current_user_email=current_user.email,
+                                                   current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template
+
 
 @quiz_bp.route('/quiz/summary/<int:quiz_id>')
 @login_required
@@ -293,11 +305,14 @@ def summary_mark(quiz_id):
                                current_user_name=current_user.name, 
                                current_user_email=current_user.email,
                                quiz=quiz,  # Pass the quiz object to the template
-                               module=module)  # Pass the module object to the template
+                               module=module,
+                                       current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template
 
     return render_template('summary_mark.html', user_quiz_results=user_quiz_results, 
                            current_user_name=current_user.name, 
                            current_user_email=current_user.email,
                            quiz=quiz,  # Pass the quiz object to the template
-                           module=module)  # Pass the module object to the template
+                           module=module,
+                        current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template
+  # Pass the module object to the template
 
