@@ -157,7 +157,7 @@ def add_user():
             db.session.add(Log_entry)
             db.session.commit()
             flash("User added successfully!", "success")
-            return redirect(url_for('admin.dashboard'))
+            return redirect(url_for('admin.view_users'))
 
     return render_template('adduser.html')
 
