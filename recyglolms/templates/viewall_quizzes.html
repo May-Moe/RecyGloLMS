@@ -104,8 +104,8 @@
 
         <!-- Main Content -->
         <div class="container">
-            <h2>Manage Quizzes</h2>
-
+            <div class="header">
+                <h2>Manage Quizzes</h2>
             <!-- Course Filter & Search -->
             <div class="header-actions">
                 <select class="filter-select" id="courseFilter">
@@ -116,13 +116,13 @@
                 </select>
                 <input type="text" id="searchBar" placeholder="Search By Courses">
             </div>
-
+        </div>
             <!-- Courses & Modules -->
             {% for course in courses %}
             <div class="course-container" id="{{ course.name|lower|replace(' ', '-') }}">
                 <h3>{{ course.name }}</h3>
                 <div class="table-container">
-                    <table>
+                    <table class="styled-table">
                         <thead>
                             <tr>
                                 <th>Modules</th>
@@ -136,14 +136,14 @@
                                 <td>
                                     {% if module_data.quizzes %}
                                         {% for quiz in module_data.quizzes %}
-                                            <a href="{{ url_for('quiz.view_quiz', quiz_id=quiz.quizid) }}" class="btn btn-info">View Quiz</a>
+                                            <a href="{{ url_for('quiz.view_quiz', quiz_id=quiz.quizid) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
                                             <form action="{{ url_for('quiz.delete_quiz', quiz_id=quiz.quizid) }}" method="POST" style="display: inline;">
-                                                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</button>
+                                                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                             </form>
                                         {% endfor %}
                                     {% else %}
+                                        <a href="{{ url_for('quiz.create_quiz', module_id=module_data.module.moduleid) }}" class="btn btn-success"><i class="fas fa-plus"></i> </a>
                                         <span class="text-muted">No quizzes available</span>
-                                        <a href="{{ url_for('quiz.create_quiz', module_id=module_data.module.moduleid) }}" class="btn btn-success">Add Quiz</a>
                                     {% endif %}
                                 </td>
                             </tr>

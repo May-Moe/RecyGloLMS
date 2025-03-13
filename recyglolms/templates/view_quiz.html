@@ -22,15 +22,15 @@
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
-                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                <img src="../static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
                 </button>
             <div class="dropdown-content">
-                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
-                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
-                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
-                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
-                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
-                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                <a href="?lang=en"><img src="../static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="../static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="../static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="../static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="../static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="../static/img/kr.svg" class="flag-icon"> Korea</a>
                 
             </div>
             </div>
@@ -55,7 +55,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="../static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -229,35 +229,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
         </script>
         <div class="container">
-            <a href="{{ url_for('quiz.view_all_quizzes') }}"  class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
-            <div class="cards-header">
-                <h2 style="color: #A9C9A4;">Quiz Name: <span id="quiz-title" contenteditable="true">{{ quiz.title }}</span></h2>
-                <p style="color: gray;"><strong>Description:</strong> <span id="quiz-description" contenteditable="true">{{ quiz.description }}</span></p>
-             </div>
+             <div class="header">
+                <a href="{{ url_for('quiz.view_all_quizzes') }}"  class="back-icon" style="margin-right: 20px;"><i class="fa-solid fa-angle-left"></i></i></a>
+                <h2 style="color: #16a159">Quiz Name: <span id="quiz-title" contenteditable="true">{{ quiz.title }}</span></h2>
+               </div>
+               <!-- <p style="color: gray;"><strong>Description:</strong> <span id="quiz-description" contenteditable="true">{{ quiz.description }}</span></p> -->
             {% if quiz_data %}
                 <div id="questions-container">
                     {% for item in quiz_data %}
                     <div class="question" id="question-container-{{ item.question.questionid }}">
-                        <h3>Question{{ loop.index }}</h3>
-                        <p id="question-text-{{ item.question.questionid }}" style="margin-bottom: 10px;">{{ item.question.text }}</p>
+                        <h3 style="margin-bottom: 10px;">Question{{ loop.index }}</h3>
+                        <p id="question-text-{{ item.question.questionid }}" style="margin-bottom: 15px; font-size: 14px;">{{ item.question.text }}</p>
                         <textarea id="question-textarea-{{ item.question.questionid }}" style="display:none;">{{ item.question.text }}</textarea>
-                        <!-- <ul class="answer-list">
-                            {% for answer in item.answers %}
-                            <li class="answer-list2">
-                                <span id="answer-span-{{ item.question.questionid }}-{{ loop.index0 }}" {% if answer.is_correct %} style="color: green; font-weight: bold;" {% endif %}>{{ answer.text }}</span>
-                                <input type="text" id="answer-input-{{ item.question.questionid }}-{{ loop.index0 }}" value="{{ answer.text }}" style="display:none;">
-                                <label>
-                                    <input type="radio" name="correct-answer-{{ item.question.questionid }}" 
-                                    value="{{ answer.text }}" 
-                                    {% if answer.is_correct %} checked {% endif %} 
-                                    id="correct-answer-{{ item.question.questionid }}-{{ loop.index0 }}"
-                                    onclick="updateCorrectAnswer({{ item.question.questionid }})">
-                                        Correct Answer
-                                </label>
-                                <button type="button" class="edit_answer" onclick="toggleEditAnswer({{ item.question.questionid }}, {{ loop.index0 }})"> <i class="fas fa-edit"></i></button>
-                            </li>
-                            {% endfor %}
-                        </ul> -->
                         <ul class="answer-list">
                             {% for answer in item.answers %}
                             <li class="answer-list2">
@@ -278,54 +261,15 @@ document.addEventListener("DOMContentLoaded", function () {
                             </li>
                             {% endfor %}
                         </ul>
-                        <button type="button" class="edit_question" onclick="toggleEditQuestion({{ item.question.questionid }})">Edit Question</button>
-                        <button type="button" class="edit_question" onclick="saveQuestionChanges({{ item.question.questionid }})">Save Changes</button>
+                        <div class="button-container">
+                            <button type="button" class="edit_question" onclick="toggleEditQuestion({{ item.question.questionid }})">Edit Question</button>
+                            <button type="button" class="edit_question" onclick="saveQuestionChanges({{ item.question.questionid }})">Save Changes</button>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
             {% endif %}
         </div>
     </div>
-
-    <!-- <script>
-        function toggleEditQuestion(questionId) {
-            let textElement = document.getElementById(`question-text-${questionId}`);
-            let textareaElement = document.getElementById(`question-textarea-${questionId}`);
-            textElement.style.display = textElement.style.display === "none" ? "block" : "none";
-            textareaElement.style.display = textareaElement.style.display === "none" ? "block" : "none";
-        }
-        function toggleEditAnswer(questionId, answerIndex) {
-            let answerTextElement = document.getElementById(`answer-span-${questionId}-${answerIndex}`);
-            let answerInputElement = document.getElementById(`answer-input-${questionId}-${answerIndex}`);
-            answerTextElement.style.display = answerTextElement.style.display === "none" ? "block" : "none";
-            answerInputElement.style.display = answerInputElement.style.display === "none" ? "block" : "none";
-        }
-
-        function toggleEditAnswer(questionId, answerIndex) {
-    let answerSpan = document.getElementById(`answer-span-${questionId}-${answerIndex}`);
-    let answerInput = document.getElementById(`answer-input-${questionId}-${answerIndex}`);
-    let editButton = document.querySelector(`#question-container-${questionId} li:nth-child(${answerIndex + 1}) .edit_answer`);
-
-    if (answerInput.style.display === "none") {
-        // Switch to input mode
-        answerSpan.style.display = "none";
-        answerInput.style.display = "block";
-        answerInput.focus();
-        editButton.innerHTML = `<i class="fas fa-save"></i>`; // Change to save icon
-    } else {
-        // Save and switch back to text mode
-        answerSpan.textContent = answerInput.value;
-        answerSpan.style.display = "block";
-        answerInput.style.display = "none";
-        editButton.innerHTML = `<i class="fas fa-edit"></i>`; // Change back to edit icon
-    }
-
-
-    
-}
-
-    </script> -->
-
-   
 </body>
 </html>

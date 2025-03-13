@@ -110,50 +110,50 @@
                 </a>
             </div>
             <div class="class-grid">
-{% for class_ in classes %}
-<div class="class-card">
-    <h2>{{ class_.name }}
-        <!-- Assuming this is within a loop that iterates over classes -->
-        <form action="{{ url_for('admin.delete_class', class_id=class_.classid) }}" method="POST" style="display:inline;">
-            <!-- Hidden field to simulate DELETE method -->
-            <input type="hidden" name="_method" value="DELETE">
-            <button type="submit" class="deleteAction" onclick="return confirm('Are you sure you want to delete this class?');" style="float: right; background: none; border: none; cursor: pointer; color: red;">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-        </form>
-    </h2>
-                    <div class="class-actions">
-                        <button onclick="toggleDropdown('dropdown-{{ class_.classid }}')" style="padding: 20px 10px;">Manage</button>
-                        <div id="dropdown-{{ class_.classid }}" class="dropdown-content">
-                            <button onclick="toggleDropdown('courses-{{ class_.classid }}')" style="padding: 20px 10px; margin-bottom: 5px;">Assign Courses</button>
-                            <div id="courses-{{ class_.classid }}" class="inner-dropdown-content">
-                                <form method="POST" action="{{ url_for('assign_courses_to_class', classid=class_.classid) }}">
-                                    {% for course in courses %}
-                                        <input type="checkbox" name="courses" value="{{ course.courseid }}" 
-                                            {% if course.courseid in assigned_courses[class_.classid] %} checked {% endif %}> 
-                                            {{ course.name }}<br>
-                                    {% endfor %}
-                                    <button type="submit" style="padding: 10px 20px; margin: 20px 10px; text-align: center;">Save</button>
-                                </form>
-                            </div>
-                            
-                            <button onclick="toggleDropdown('users-{{ class_.classid }}')" style="padding: 20px 10px;">Assign Users</button>
-                            <div id="users-{{ class_.classid }}" class="inner-dropdown-content">
-                                <form method="POST" action="{{ url_for('assign_users_to_class', classid=class_.classid) }}">
-                                    {% for user in users %}
-                                        <input type="checkbox" name="users" value="{{ user.userid }}" 
-                                            {% if user.userid in assigned_users[class_.classid] %} checked {% endif %}> 
-                                            {{ user.name }} ({{ user.email }})<br>
-                                    {% endfor %}
-                                    <button type="submit" style="padding: 10px 20px; margin: 20px 10px; text-align: center;">Save</button>
-                                </form>
+    {% for class_ in classes %}
+    <div class="class-card">
+        <h2>{{ class_.name }}
+            <!-- Assuming this is within a loop that iterates over classes -->
+            <form action="{{ url_for('admin.delete_class', class_id=class_.classid) }}" method="POST" style="display:inline;">
+                <!-- Hidden field to simulate DELETE method -->
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="deleteAction" onclick="return confirm('Are you sure you want to delete this class?');" style="float: right; background: none; border: none; cursor: pointer; color: red;">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </form>
+        </h2>
+                        <div class="class-actions">
+                            <button onclick="toggleDropdown('dropdown-{{ class_.classid }}')" style="padding: 20px 10px; background-color: #ececec; color: #16a159;">Manage</button>
+                            <div id="dropdown-{{ class_.classid }}" class="dropdown-content">
+                                <button onclick="toggleDropdown('courses-{{ class_.classid }}')" style="padding: 20px 10px; margin-bottom: 5px;">Assign Courses</button>
+                                <div id="courses-{{ class_.classid }}" class="inner-dropdown-content">
+                                    <form method="POST" action="{{ url_for('assign_courses_to_class', classid=class_.classid) }}">
+                                        {% for course in courses %}
+                                            <input type="checkbox" name="courses" value="{{ course.courseid }}" 
+                                                {% if course.courseid in assigned_courses[class_.classid] %} checked {% endif %}> 
+                                                {{ course.name }}<br>
+                                        {% endfor %}
+                                        <button type="submit" style="padding: 10px 20px; margin: 20px 10px; text-align: center;">Save</button>
+                                    </form>
+                                </div>
+                                
+                                <button onclick="toggleDropdown('users-{{ class_.classid }}')" style="padding: 20px 10px;">Assign Users</button>
+                                <div id="users-{{ class_.classid }}" class="inner-dropdown-content">
+                                    <form method="POST" action="{{ url_for('assign_users_to_class', classid=class_.classid) }}">
+                                        {% for user in users %}
+                                            <input type="checkbox" name="users" value="{{ user.userid }}" 
+                                                {% if user.userid in assigned_users[class_.classid] %} checked {% endif %}> 
+                                                {{ user.name }} ({{ user.email }})<br>
+                                        {% endfor %}
+                                        <button type="submit" style="padding: 10px 20px; margin: 20px 10px; text-align: center;">Save</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
-        </div>
         
     </div>
     <script src="../static/JS/script.js"></script>

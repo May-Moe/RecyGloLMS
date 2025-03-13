@@ -31,7 +31,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 .header-actions {
@@ -85,14 +85,24 @@ h1 {
 }
 
 table {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
     
 }
 
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
 th, td {
-    text-align: center;
-    padding: 10px;
+    text-align: left;
+    padding: 20px;
     border-bottom: 1px solid #ddd;
     padding: 15px;
 }
@@ -114,46 +124,6 @@ th {
     background-color: #007bff;
     color: #fff;
     cursor: pointer;
-}
-
-.pagination {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
-
-.pagination button {
-    margin: 0 5px;
-    padding: 6px 17px;
-    border: 1px solid #9f9f9f;
-    border-radius: 3px;
-    background-color: white;
-    color: #9f9f9f;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 5px;
-}
-
-.pagination button:hover {
-    background-color: #16a159;
-    border-radius: 5px;
-    color: white;
-}
-
-.editAction, .deleteAction {
-    display: inline-flex;
-    align-items: center;
-    /* padding: 10px 10px; */
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-right: 0px;
-    text-decoration: none;
-    color: #0f48ba;
-}
-
-.editAction {
-    padding-right: 30px;
 }
 
 /* .editAction {
@@ -182,12 +152,18 @@ th {
     padding: 5px 10px;
     text-decoration: none;
     color: white;
-    border-radius: 4px;
     margin-right: 5px;
+    background-color: white;
+    border: none;
 }
-.btn-success { background: #A9C9A4; }
-.btn-info { background: rgb(65, 101, 141); }
-.btn-danger { background: rgb(157, 88, 88); }
+
+.text-muted{
+    color: #9f9f9f;
+}
+
+.btn-success { color: #16a159; }
+.btn-info { color: blue; }
+.btn-danger { color: red; }
 .btn:hover { opacity: 0.8; }
 
 /* Responsive styles */

@@ -9,34 +9,41 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 250px); /* Adjust width to account for sidebar */
-    max-width: 1000px; /* Limit the maximum width of the form */
+    width: calc(100% - 300px); /* Adjust width for sidebar */
     margin: 10px auto;
-    margin-left: 400px; /* Offset for sidebar */
-    margin-top: 100px; /* Adjust for fixed navbar */
-    margin-right: 70px;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
     background-color: #fff;
-    padding: 30px;
-    border-radius: 5px;
+    padding: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
     transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    margin-bottom: 20px;
 }
 
 h1 {
     /* text-align: center; */
     font-size: 24px;
-    color: #A9C9A4;
+    color: #16a159;
+    margin-left: 20px;
 }
 
 form {
     display: flex;
     flex-direction: column;
+    padding: 0px 25px;
 }
 
 label {
     margin: 10px 0 5px;
-    font-weight: bold;
+    
+    
 }
 
 input, textarea, select {
@@ -64,9 +71,36 @@ textarea {
     transition: background 0.3s;
 }
 
+.add_quiz:hover {
+    background: #16a159;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+/* Style the Create Quiz button */
 .create_quiz {
+    padding: 10px 20px;
+    background: #16a159;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 20%;
+}
+
+/* Hover Effect */
+.create_quiz:hover {
+    background: #16a159;
+}
+
+/* .create_quiz {
     margin-top: 10px;
-    background: #A9C9A4;
+    background: #16a159;
     color: white;
     padding: 10px;
     border: none;
@@ -75,8 +109,9 @@ textarea {
     font-size: 16px;
     transition: background 0.3s;
     width: 20%;
+    justify-content: space-between;
 
-}
+} */
 
 #questions-container {
     margin-top: 20px;
@@ -99,7 +134,7 @@ textarea {
 .added-question {
     background: #e8f5e9;
     padding: 10px;
-    border-left: 5px solid #A9C9A4;
+    border-left: 5px solid #16a159;
     margin-bottom: 10px;
 }
 
@@ -115,6 +150,10 @@ textarea {
 .added-question button {
     background: #e74c3c;
     margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    border-radius: 5px;
 }
 
 .added-question button:hover {
@@ -122,11 +161,12 @@ textarea {
 }
 
 .done{
-    background-color: #A9C9A4;
+    background-color: #16a159;
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 10px;
+    border-radius: 5px;
+    width: 20%;
 }
 
 @media screen and (max-width: 768px) {

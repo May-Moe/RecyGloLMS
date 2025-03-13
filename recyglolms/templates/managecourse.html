@@ -102,7 +102,7 @@
                 <div class="header">
                     <h1>Courses</h1>
                     <div class="header-actions">
-                        <input type="text" id="searchBar" placeholder="Search">
+                        <input type="text" id="searchBar" placeholder="Search By Name">
                         <div class="dropdown">
                             <button id="addUserButton" class="addUserButton"><i class="fas fa-plus"></i> Add</button>
                             <ul id="addCourseDropdown" class="dropdown-menu hidden">
@@ -122,7 +122,7 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="userTableBody">
+                        <tbody id="courseTableBody">
                             <!-- User data will be populated here -->
                             {% for course in courses %}
                              <tr>
@@ -168,7 +168,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="userTableBody">
+                    <tbody id="moduleTableBody">
                         <!-- User data will be populated here -->
                         {% for module in modules %}
                          <tr>
@@ -216,7 +216,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="userTableBody">
+                    <tbody id="videoTableBody">
                         <!-- User data will be populated here -->
                         {% for video in videos %}
                          <tr>
@@ -311,6 +311,68 @@
                         }
                     });
                     });
+
+                //search bar
+                document.addEventListener("DOMContentLoaded", function () {
+                    const searchBar = document.getElementById("searchBar");
+
+                    searchBar.addEventListener("input", function () {
+                        let filter = searchBar.value.toLowerCase();
+                        filterTable("courseTableBody", "moduleTableBody", "videoTableBody", filter);
+                    });
+
+                    function filterTable(courseTableId, moduleTableId, videoTableId, filter) {
+                        const courseTable = document.getElementById(courseTableId);
+                        const moduleTable = document.getElementById(moduleTableId);
+                        const videoTable = document.getElementById(videoTableId);
+
+                        if (!courseTable || !moduleTable || !videoTable) return;
+
+                        const courseRows = courseTable.getElementsByTagName("tr");
+                        const moduleRows = moduleTable.getElementsByTagName("tr");
+                        const videoRows = videoTable.getElementsByTagName("tr");
+
+                        let matchedCourses = new Set();
+                        let matchedModules = new Set();
+
+                        // Filter courses
+                        for (let row of courseRows) {
+                            let courseName = row.cells[0]?.textContent.toLowerCase();
+                            if (courseName.includes(filter)) {
+                                row.style.display = "";
+                                matchedCourses.add(courseName);
+                            } else {
+                                row.style.display = "none";
+                            }
+                        }
+
+                        // Filter modules and associate with courses
+                        for (let row of moduleRows) {
+                            let moduleName = row.cells[0]?.textContent.toLowerCase();
+                            let courseName = row.cells[2]?.textContent.toLowerCase(); // Get the course name for this module
+
+                            if (moduleName.includes(filter) || matchedCourses.has(courseName)) {
+                                row.style.display = "";
+                                matchedModules.add(moduleName);
+                            } else {
+                                row.style.display = "none";
+                            }
+                        }
+
+                        // Filter videos and associate with modules
+                        for (let row of videoRows) {
+                            let videoTitle = row.cells[0]?.textContent.toLowerCase();
+                            let moduleName = row.cells[3]?.textContent.toLowerCase(); // Get the module name for this video
+
+                            if (videoTitle.includes(filter) || matchedModules.has(moduleName)) {
+                                row.style.display = "";
+                            } else {
+                                row.style.display = "none";
+                            }
+                        }
+                    }
+                });
+
     </script>
 </body>
 </html>

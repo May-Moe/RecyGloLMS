@@ -233,6 +233,13 @@ td form {
     gap: 10px;
 }
 
+.class-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    gap: 20px; /* Space between cards */
+    justify-content: center;
+}
+
 .class-card {
     background: #fff;
     padding: 20px;

@@ -100,13 +100,15 @@
             </ul>
         </nav>
         <div class="container">
-            <a href="{{ url_for('quiz.view_all_quizzes') }}"  class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
-            <h1 style="font-size: 23px; color: #A9C9A4;margin-bottom: 15px;">Quiz Management</h1>
+           <div class="header">
+            <a href="{{ url_for('quiz.view_all_quizzes') }}"  class="back-icon" style="margin-top: 5px;"><i class="fa-solid fa-angle-left"></i></i></a>
+            <h1>Quiz Management</h1>
+           </div>
             
             <form method="POST" action="{{ url_for('quiz.create_quiz') }}" onsubmit="prepareSubmission()">
                 <input type="hidden" name="module_id" value="{{ module.moduleid }}">
 
-                <h3>Add a Question</h3>
+                <h3>Add Questions Here</h3>
                 <label for="quiz_title">Quiz Title:</label>
                 <input type="text" id="quiz_title" name="quiz_title" required>
                 
@@ -117,11 +119,12 @@
                 
                 <input type="hidden" id="questions_data" name="questions_data">
                 
-                <h3>Add Questions:</h3>
+                <p>Add Questions:</p>
                 <div id="questions-container"></div>
-                
-                <button type="button" class="add_quiz" onclick="addQuestion()">Add Question</button>
-                <button type="submit" class="create_quiz">Create Quiz</button>
+                <button type="button" class="add_quiz" onclick="addQuestion()"><i class="fas fa-plus"></i> Add Question</button>
+                <div class="button-container">
+                    <button type="submit" class="create_quiz">Create Quiz</button>
+                </div>
             </form>
         </div>
     </div>

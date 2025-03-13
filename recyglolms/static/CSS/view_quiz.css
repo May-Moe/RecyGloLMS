@@ -26,6 +26,12 @@ body {
     
 }
 
+
+.header {
+    display: flex;
+    margin-bottom: 20px;
+}
+
 /* Quiz Header */
 .quiz-header {
     font-size: 20px;
@@ -37,12 +43,20 @@ body {
 }
 
 .question {
-    margin: 10px 20px;
-    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 20px;
 }
 
+.question .button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* Space between buttons */
+    margin-top: 20px;
+}
+
+
 .cards-header{
-    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
+    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #16a159);
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 5px;
@@ -90,7 +104,7 @@ input[type="radio"] {
 }
 
 .edit_answer {
-    background: #A9C9A4;
+    background: #16a159;
     color: white;
     padding: 5px 5px;
     border: none;
@@ -108,15 +122,21 @@ input[type="radio"] {
     cursor: pointer;
 }
 
+
+/* Style for Edit and Save buttons */
 .edit_question {
-    background: #A9C9A4;
+    padding: 8px 15px;
+    background: #16a159;
     color: white;
-    padding: 8px 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s;
-    justify-content: end;
+    font-size: 14px;
+}
+
+/* Hover Effect */
+.edit_question:hover {
+    background: #16a159;
 }
 
 textarea, input[type="text"] {
