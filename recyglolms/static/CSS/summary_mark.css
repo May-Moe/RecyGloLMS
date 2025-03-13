@@ -8,18 +8,17 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    width: calc(100% - 300px); /* Adjust width for sidebar */
     margin: 10px auto;
-    margin-left: 300px; /* Offset for sidebar */
-    margin-top: 100px;
-    margin-right: 60px;
-    margin-bottom: 600px;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
     background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
+    padding: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
     transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
 }
 
 h1 {
@@ -63,7 +62,7 @@ h1 {
     padding: 10px 20px;
     font-size: 13px;
     color: #fff;
-    background-color: #A9C9A4;
+    background-color: #16a159;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -75,7 +74,7 @@ h1 {
 }
 
 #addUserButton:hover {
-    background-color: #98cd97;
+    background-color: #16a159;
 }
 
 #addUserLink {

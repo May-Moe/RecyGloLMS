@@ -8,54 +8,54 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    width: calc(100% - 300px); /* Adjust width for sidebar */
     margin: 10px auto;
-    margin-left: 300px; /* Offset for sidebar */
-    margin-top: 100px;
-    margin-right: 60px;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
     background-color: #fff;
-    padding: 15px;
-    border-radius: 5px;
+    padding: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
     transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
 }
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(to right, rgba(239, 251, 240, 0.8), #A9C9A4);
+    background: linear-gradient(to right, rgba(239, 251, 240, 0.8), #16a159);
     padding: 30px;
     /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-    color: #A9C9A4;
+    color: #16a159;
     border-radius: 10px;
 }
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 20px;
     padding: 20px;
+    justify-content: center;
 }
 .card {
     background: white;
+    border-radius: 12px;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: 0.3s ease-in-out;
+    position: relative;
 }
 
 .card:hover{
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px); /* Lift effect */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-.card h3 {
-    margin-top: 20px;
-}
 .card h3{
     font-size: 18px;
     text-align: center;
+    margin-top: 20px;
 }
 
 .card p{
@@ -68,19 +68,44 @@ span{
     font-weight: lighter;
     font-size: 10px;
 }
-
 .card img {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    display: block;
-    margin: 0 auto;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 3px solid #4CAF50; /* Accent border */
+}
+
+/* Enrolled Classes Section */
+.card .enrolled-classes {
+    margin-top: 10px;
+}
+
+/* Each Class Box */
+.class-box {
+    background: #f9f9f9;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 5px 0;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+/* Green Check Icon */
+.class-box .icon {
+    color: #4CAF50;
+    font-size: 14px;
 }
 
 .header-actions {
     display: flex;
     align-items: center;
     margin-left: auto;
+    gap: 15px;
 }
 
 /* Style the search bar */
@@ -102,6 +127,7 @@ span{
 
 /* Style the filter dropdown */
 .filter-select {
+    width: 200px;
     padding: 10px;
     border: 1px solid #16a159;
     border-radius: 10px;
@@ -116,6 +142,44 @@ span{
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
+/* Target all <li> elements inside .dynamic-class-list */
+.dynamic-class-list {
+    list-style: none; /* Remove default bullets */
+    padding: 0;
+    margin: 0;
+}
+
+.dynamic-class-list li {
+    background: #f4f4f4; /* Light grey background */
+    margin: 5px 0;
+    padding: 8px 15px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #333;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Add an icon before each item */
+.dynamic-class-list li::before {
+    content: "\f058"; /* FontAwesome check-circle icon */
+    font-family: "Font Awesome 5 Free"; 
+    font-weight: 900;
+    margin-right: 10px;
+    color: #4CAF50; /* Green checkmark */
+}
+
+/* Hover effect */
+.dynamic-class-list li:hover {
+    background: #e0e0e0; /* Slightly darker on hover */
+    transform: translateX(5px); /* Moves slightly on hover */
+}
+
+.dynamic-class-list li.removed {
+    display: none; /* Hide the removed class */
+}
 
 /* Responsive Styles */
 @media (max-width: 768px) {

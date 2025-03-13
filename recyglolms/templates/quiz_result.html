@@ -60,9 +60,9 @@
         </nav>
         <div class="container">
             <!-- <a href="{{ url_for('quiz.start_quiz', quizid=user_quiz_results[0].quizid) }}" class="button">Start Quiz Again</a> -->
-            <a href="{{ url_for('quiz.start_quiz', quizid=user_quiz_results[0].quizid) }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
-            <h2 class="quiz-header">Quiz Result</h2>
-            <h4 style="margin: 10px 0px;">Your Quiz Attempts</h4>
+            <h2 class="quiz-header"><a href="{{ url_for('quiz.start_quiz', quizid=user_quiz_results[0].quizid) }}" class="back-icon" style="font-size: 20px; color: black; margin-right: 10px;"><i class="fa-solid fa-angle-left"></i></a>
+                Quiz Result</h2>
+            <h4 style="margin: 20px 0px;">Your Quiz Attempts</h4>
             <ul class="quiz-attempts">
                 {% for result in user_quiz_results %}
                     <li>
@@ -78,7 +78,7 @@
                                             <p class="correct" style="color: blue;">✔ Correct</p>
                                         {% else %}
                                             <p class="incorrect" style="color: red;">✘ Incorrect</p>
-                                            <p><strong>Correct Answer:</strong> 
+                                            <p style="color: blue;"><strong>Correct Answer:</strong> 
                                                 {{ answer.question.answers | selectattr('is_correct', 'equalto', True) | map(attribute='text') | join(', ') }}
                                             </p>
                                         {% endif %}
@@ -90,7 +90,7 @@
                 {% endfor %}
             </ul>
             <div class="quiz-footer">
-                <a href="{{ url_for('quiz.summary_mark', quiz_id=quiz.quizid) }}">View Summary</a>
+                <a href="{{ url_for('quiz.summary_mark', quiz_id=quiz.quizid) }}"><button class="btn">View Summary</button></a>
             </div>
             <!-- <a href="{{ url_for('main.learning') }}" class="button">Back to Learning</a> -->
             <!-- <a href="{{ url_for('quiz.start_quiz', quizid=user_quiz_results[0].quizid) }}" class="button">Start Quiz Again</a> -->

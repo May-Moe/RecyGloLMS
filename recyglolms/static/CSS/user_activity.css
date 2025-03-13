@@ -8,16 +8,17 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 250px); 
+    width: calc(100% - 300px); /* Adjust width for sidebar */
     margin: 10px auto;
-    margin-left: 270px; 
-    margin-top: 100px;
-    margin-right: 60px;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
     background-color: #fff;
-    padding: 40px;
-    border-radius: 5px;
+    padding: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
 }
 
 .grid {
@@ -46,6 +47,7 @@ body {
     padding: 30px;
     border-radius: 10px;
     margin-bottom: 20px;
+    display: flex;
 }
 
 .card-content {
@@ -85,35 +87,35 @@ body {
     margin-left: auto;
 }
 
+/* Style the search bar */
 #searchBar {
-    padding: 10px;
-    font-size: 13px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
     width: 200px;
-    transition: all 0.3s ease;
-    margin-bottom: 10px;
-    margin-left: 10px;
+    padding: 13px;
+    border: 1px solid #16a159;
+    border-radius: 4px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 14px;
+    background: #f8f9fa;
 }
 
 #searchBar:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    outline: none;
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
 .add-activity {
     display: block;
-    padding: 10px;
-    font-size: 13px;
-    border: 1px solid #ccc;
+    padding: 13px;
+    font-size: 14px;
+    border: 1px solid #16a159;
     border-radius: 4px;
-    width: 150px;
+    width: 200px;
     transition: all 0.3s ease;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     margin-left: 10px;
-    background-color: #16a159;
-    color: white;
+    background-color: white;
+    color: #16a159;
 }
 
 .popup-form {
@@ -187,8 +189,8 @@ body {
 
 #card-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-    gap: 40px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
 }
 
 .card-actions {
@@ -208,7 +210,7 @@ body {
 }
 
 .view-btn,.edit-btn:hover {
-    background-color: #007e3d;
+    background-color: #16a159;
 }
 
 .view-btn {
@@ -228,7 +230,7 @@ body {
 }
 
 .card-actions :hover {
-    background-color: #17490b;
+    background-color: #16a159;
 }
 
 .delete-btn :hover{

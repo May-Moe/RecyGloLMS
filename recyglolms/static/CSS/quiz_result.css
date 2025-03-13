@@ -13,20 +13,22 @@ body {
     display: flex;
     flex-direction: column;
     width: calc(100% - 300px); /* Adjust width for sidebar */
-    margin: 100px auto 600px 300px; /* Account for sidebar and spacing */
-    margin-right: 60px;
+    margin: 10px auto;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
     background-color: #fff;
-    padding: 20px;
-    border-radius: 20px;
+    padding: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: margin-left 0.5s, width 0.5s;
     box-sizing: border-box;
 }
 
 .quiz-header {
-    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
-    color: #A9C9A4;
-    padding: 20px;
+    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #16a159);
+    color: #16a159;
+    padding: 30px;
     font-size: 1.5rem;
     margin-top: 20px;
 }
@@ -38,6 +40,7 @@ body {
 }
 
 .quiz-attempts li {
+    list-style: none;
     background-color: #ecf0f1;
     padding: 15px;
     margin-bottom: 10px;
@@ -48,7 +51,7 @@ body {
 .review-button{
     padding: 10px;
     margin-top: 10px;
-    background-color: #A9C9A4;
+    background-color: #16a159;
     border-radius: 5px;
     color: white;
     border: 1px solid white;
@@ -71,7 +74,7 @@ body {
 
 .btn {
     padding: 10px 20px;
-    background-color: #A9C9A4;
+    background-color: #16a159;
     color: white;
     border: none;
     border-radius: 5px;

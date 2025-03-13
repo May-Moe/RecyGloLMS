@@ -18,15 +18,15 @@
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
-                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                <img src="../static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
                 </button>
             <div class="dropdown-content">
-                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
-                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
-                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
-                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
-                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
-                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                <a href="?lang=en"><img src="../static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="../static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="../static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="../static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="../static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="../static/img/kr.svg" class="flag-icon"> Korea</a>
                 
             </div>
             </div>
@@ -69,9 +69,6 @@
                 {{ quiz.title }}
             </div>
             <div class="quiz-container">
-                <div class="question-header">
-                    {{ quiz.title }}
-                </div>
                 <form method="POST" action="{{ url_for('quiz.submit_quiz', quizid=quiz.quizid) }}">
                 {% for question in quiz.questions %}
                 <div class="quiz-body">
@@ -85,14 +82,15 @@
                 </div>
                 {% endfor %}
             </div>
-            <hr style="color: azure;">
+            <hr style="color: #ffffff; font-weight: lighter;">
             {% endfor %}
             <!-- <hr style="color: rgb(232, 232, 232); font-weight: lighter;"> -->
             <div class="quiz-footer">
                 <a href="user_viewmark.html"><button class="btn">Finish attempt</button></a>
             </div>
+        </form>
         </div>
-    </form>
+    
     </div>
     <script src="{{ url_for('static', filename='/JS/script.js') }}"></script>
     <script>

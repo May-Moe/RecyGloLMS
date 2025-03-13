@@ -10,20 +10,18 @@ body {
     flex-direction: column;
     width: calc(100% - 250px); /* Adjust width to account for sidebar */
     margin: 10px auto;
-    margin-left: 300px; /* Offset for sidebar */
-    margin-top: 100px;
-    margin-right: 60px;
-    margin-bottom: 60px;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 20px;
     background-color: #fff;
     padding: 40px;
-    border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
     transition: margin-left 0.5s, width 0.5s;
 }
 
 .cards-header{
-  background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
+  background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #16a159);
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -39,15 +37,16 @@ body {
   .dropdown-toggle-module {
     width: 100%;
     text-align: left;
-    padding: 25px;
+    padding: 35px;
     font-size: 16px;
     border: none;
     background-color: #fff;
-    color: gray;
+    color: black;
     cursor: pointer;
     border-radius: 5px;
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+
   }
   
   .dropdown-toggle-module:hover {
@@ -57,11 +56,11 @@ body {
   .dropdown-toggle-video {
     width: 100%;
     text-align: left;
-    padding: 13px;
+    padding: 18px 14px;
     font-size: 16px;
     border: none;
     background-color: #fff;
-    color: gray;
+    color: black;
     cursor: pointer;
     border-radius: 5px;
     
@@ -74,13 +73,14 @@ body {
   .dropdown-toggle-quiz {
     width: 100%;
     text-align: left;
-    padding: 13px;
+    padding: 18px 14px;
     font-size: 16px;
     border: none;
     background-color: #fff;
-    color: gray;
+    color: black;
     cursor: pointer;
     border-radius: 5px;
+    margin-top: 5px;
     
   }
 
@@ -89,9 +89,9 @@ body {
   }
   
   .dropdown-content-module {
-    display: none;
+    /* display: none; */
     padding: 15px;
-    background-color: #fff;
+    background-color: #f0f2f5;
     border-top: 1px solid #ccc;
   }
 
@@ -101,6 +101,7 @@ body {
     background-color: #fff;
     border-top: 1px solid #ccc;
   }
+
   
   .tab a {
     color: #4a6b78;
@@ -197,7 +198,7 @@ iframe {
 }
 
 .complete {
-  background-color: #A9C9A4;
+  background-color: #16a159;
   color: white;
   padding: 10px;
   border-radius: 10px;

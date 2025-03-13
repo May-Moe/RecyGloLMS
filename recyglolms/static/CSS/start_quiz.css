@@ -13,22 +13,25 @@ body {
     display: flex;
     flex-direction: column;
     width: calc(100% - 300px); /* Adjust width for sidebar */
-    margin: 100px auto 600px 300px; /* Account for sidebar and spacing */
-    margin-right: 60px;
+    margin: 10px auto;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
     background-color: #fff;
-    padding: 20px;
-    border-radius: 20px;
+    padding: 30px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: margin-left 0.5s, width 0.5s;
     box-sizing: border-box;
 }
 
 .quiz-header {
-    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
-    color: #A9C9A4;
-    padding: 20px;
+    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #16a159);
+    color: #16a159;
+    padding: 30px;
     font-size: 1.5rem;
     margin-top: 20px;
+    font-weight: bold;
 }
 
 .question-header {
@@ -37,33 +40,25 @@ body {
 }
 
 .quiz-body {
-    padding: 5px 20px;
+    padding: 20px 40px;
     margin: 10px 0px;
 }
 
 .quiz-container {
-    background-color: #f0f2f5;
+    /* background-color: #f0f2f5; */
     margin-bottom: 20px;
     border-radius: 5px;
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 .question {
-    font-size: 1.2rem;
+    font-size: 20px;
     margin-bottom: 10px;
 }
 
-.options {
-    list-style: none;
-    padding: 0;
-}
-
-.options li {
+.form-check {
     margin-bottom: 10px;
-}
-
-.options input {
-    margin-right: 10px;
+    font-size: 15px;
 }
 
 .quiz-footer {
@@ -78,7 +73,7 @@ body {
 
 .btn {
     padding: 10px 20px;
-    background-color: #A9C9A4;
+    background-color: #16a159;
     color: white;
     border: none;
     border-radius: 5px;

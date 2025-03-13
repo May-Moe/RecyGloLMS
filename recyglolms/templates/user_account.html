@@ -116,43 +116,47 @@
 <!-- Profile Image Modal -->
 <div id="profile-image-modal" class="modal hidden">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
+        <span class="close" onclick="closeModal('profile-image-modal')">&times;</span>
         <h2>Update Profile Picture</h2>
+        <div class="image-preview" id="image-preview">
+            <img id="preview-img" src="" alt="Preview" class="hidden">
+            <p id="upload-text">Click to Upload</p>
+        </div>
         <form method="POST" action="{{ url_for('update_profile_image') }}" enctype="multipart/form-data">
-            <input type="file" name="profile_image" id="modal-profile-image" accept="image/*">
+            <input type="file" name="profile_image" id="modal-profile-image" accept="image/*" hidden>
             <button type="submit" class="update-btn">Upload</button>
         </form>
     </div>
 </div>
 
-    <!-- Username Modal -->
-    <div id="username-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Update Username</h2>
-            <form method="POST" action="{{ url_for('update_username') }}">
-                <input type="text" id="username" name="username" value="{{ current_user_name }}">
-                <button type="submit" class="update-btn">Save</button>
-            </form>
-        </div>
+<!-- Username Modal -->
+<div id="username-modal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('username-modal')">&times;</span>
+        <h2>Update Username</h2>
+        <form method="POST" action="{{ url_for('update_username') }}">
+            <input type="text" id="username" name="username" value="{{ current_user_name }}">
+            <button type="submit" class="update-btn">Save</button>
+        </form>
     </div>
+</div>
 
-    <!-- Password Modal -->
-    <div id="password-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Change Password</h2>
-            <form method="POST" action="{{ url_for('change_password') }}">
-                <label for="current-password">Current Password:</label>
-                <input type="password" id="current-password" name="current-password" required>
-                
-                <label for="new-password">New Password:</label>
-                <input type="password" id="new-password" name="new-password" required>
+<!-- Password Modal -->
+<div id="password-modal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('password-modal')">&times;</span>
+        <h2>Change Password</h2>
+        <form method="POST" action="{{ url_for('change_password') }}">
+            <label for="current-password">Current Password:</label>
+            <input type="password" id="current-password" name="current-password" required>
+            
+            <label for="new-password">New Password:</label>
+            <input type="password" id="new-password" name="new-password" required>
 
-                <button type="submit" class="change-btn">Change Password</button>
-            </form>
-        </div>
+            <button type="submit" class="update-btn">Change Password</button>
+        </form>
     </div>
+</div>
 
     <script src="static/JS/script.js"></script>
     <script>
@@ -166,6 +170,26 @@
         function closeModal() {
             document.getElementById('profile-image-modal').style.display = 'none';
         }
+
+        // Image Preview Functionality
+            const imagePreview = document.getElementById('image-preview');
+            const uploadText = document.getElementById('upload-text');
+            const previewImg = document.getElementById('preview-img');
+            const fileInput = document.getElementById('modal-profile-image');
+
+            imagePreview.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', event => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        previewImg.src = reader.result;
+                        previewImg.classList.remove('hidden');
+                        uploadText.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
 
         // Optional: Close modal if user clicks outside of it
         window.onclick = function(event) {

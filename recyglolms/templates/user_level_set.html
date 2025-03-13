@@ -115,7 +115,7 @@
                             <th>Set Level</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="userTableBody">
                         {% for user_id, progress_data in user_level_data.items() %}
                             <tr>
                                 {% set user = users_dict.get(user_id) %}  {# Get the user object #}
@@ -170,57 +170,76 @@
                 </table>
             </div>
             <div class="pagination">
-                <button id="prevPage">Previous</button>
-                <button id="nextPage">Next</button>
-            </div>
+                <button id="prevPage" class="page-btn">Previous</button>
+                <span id="pageNumbers"></span>
+                <button id="nextPage" class="page-btn">Next</button>
+            </div>  
         </div>
     </main>
 </div>
     </div>
     <script src="static/JS/script.js"></script>
     <script>
-         //next and previous page
-    document.addEventListener("DOMContentLoaded", function () {
-        const tableBody = document.getElementById("userTableBody");
-        const rows = Array.from(tableBody.querySelectorAll("tr"));
-        const prevButton = document.getElementById("prevPage");
-        const nextButton = document.getElementById("nextPage");
-        let currentPage = 1;
-        const rowsPerPage = 10;
+         document.addEventListener("DOMContentLoaded", function () {
+                    const tableBody = document.getElementById("userTableBody");
+                    const rows = Array.from(tableBody.querySelectorAll("tr"));
+                    const prevButton = document.getElementById("prevPage");
+                    const nextButton = document.getElementById("nextPage");
+                    const pageNumbersContainer = document.getElementById("pageNumbers");
+                    let currentPage = 1;
+                    const rowsPerPage = 10;
+                    let totalPages = Math.ceil(rows.length / rowsPerPage);
 
-        function showPage(page) {
-            const start = (page - 1) * rowsPerPage;
-            const end = start + rowsPerPage;
+                    function showPage(page) {
+                        const start = (page - 1) * rowsPerPage;
+                        const end = start + rowsPerPage;
 
-            // Hide all rows
-            rows.forEach((row, index) => {
-                row.style.display = index >= start && index < end ? "table-row" : "none";
-            });
+                        rows.forEach((row, index) => {
+                            row.style.display = index >= start && index < end ? "table-row" : "none";
+                        });
 
-            // Disable buttons when needed
-            prevButton.disabled = page === 1;
-            nextButton.disabled = end >= rows.length;
-        }
+                        prevButton.disabled = page === 1;
+                        nextButton.disabled = page === totalPages;
 
-        prevButton.addEventListener("click", function () {
-            if (currentPage > 1) {
-                currentPage--;
-                showPage(currentPage);
-            }
-        });
+                        updatePageNumbers();
+                    }
 
-        nextButton.addEventListener("click", function () {
-            if ((currentPage * rowsPerPage) < rows.length) {
-                currentPage++;
-                showPage(currentPage);
-            }
-        });
+                    function updatePageNumbers() {
+                        pageNumbersContainer.innerHTML = "";
 
-        // Initial table setup
-        showPage(currentPage);
-    });
+                        for (let i = 1; i <= totalPages; i++) {
+                            let pageBtn = document.createElement("button");
+                            pageBtn.innerText = i;
+                            pageBtn.classList.add("page-number");
+                            if (i === currentPage) pageBtn.classList.add("active");
 
-    document.addEventListener("DOMContentLoaded", function () {
+                            pageBtn.addEventListener("click", function () {
+                                currentPage = i;
+                                showPage(currentPage);
+                            });
+
+                            pageNumbersContainer.appendChild(pageBtn);
+                        }
+                    }
+
+                    prevButton.addEventListener("click", function () {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            showPage(currentPage);
+                        }
+                    });
+
+                    nextButton.addEventListener("click", function () {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            showPage(currentPage);
+                        }
+                    });
+
+                    showPage(currentPage);
+                });
+
+                document.addEventListener("DOMContentLoaded", function () {
                     const dropdowns = [
                         { button: ".dropdown-class", container: ".dropdown-container-class" },
                         { button: ".dropdown-user", container: ".dropdown-container" }
@@ -237,6 +256,7 @@
                         }
                     });
                     });
+
     </script>
 </body>
 

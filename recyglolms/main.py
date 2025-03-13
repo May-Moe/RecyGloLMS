@@ -148,7 +148,7 @@ def user_activity():
         return jsonify(activity_list)
 
     # For non-AJAX requests, render the HTML template
-    return render_template('user_activity.html', activities=activity_list,  current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+    return render_template('user_activity.html', activities=activity_list)
 
 
 @main_bp.route('/user_activity/<int:activity_id>', methods=['DELETE'])
@@ -168,8 +168,7 @@ def learning():
     return render_template('learning_classes.html',
                             classes=user_classes,  # Pass the correct classes to the template
                             current_user_name=current_user.name,
-                            current_user_email=current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+                            current_user_email=current_user.email)
 
 @main_bp.route('/learning/class/<int:classid>')
 @login_required
@@ -187,8 +186,7 @@ def learning_class_courses(classid):
                             selected_class=selected_class,
                             courses=courses,
                             current_user_name=current_user.name,
-                            current_user_email=current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+                            current_user_email=current_user.email)
 @main_bp.route('/course/<int:courseid>')
 @login_required
 def course_detail(courseid):
@@ -281,8 +279,7 @@ def user_progress():
     }
     return render_template('each_user_progress.html', user=current_user, progress_data=progress_data, courses=courses
                            ,current_user_name = current_user.name,
-                            current_user_email = current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+                            current_user_email = current_user.email)
 
 
 @main_bp.route('/user_home')
@@ -292,8 +289,7 @@ def user_home():
     announcements = Announcement.query.order_by(Announcement.date.desc()).limit(2).all()
     return render_template('user_home.html', announcements=announcements,
                            current_user_name = current_user.name,
-                            current_user_email = current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+                            current_user_email = current_user.email)
 
 
 
@@ -388,20 +384,6 @@ def submit_feedback():
 
     db.session.add(new_feedback)
     db.session.commit()
-    
-    # Create a notification for all users
-    # Notify all Admins (role = 1) and Sub-Admins (role = 2)
-    admins = User.query.filter(User.role.in_([1, 2])).all()
-    
-    for admin in admins:
-        notification = Notification(
-            user_id=admin.userid,
-            message=f"New feedback received from {current_user.name}: {feedback_text[:50]}..."
-        )
-        db.session.add(notification)
-
-    db.session.commit()
-    
     flash("Thank you for your feedback!", "success")
 
     return redirect(url_for('main.user_home'))
@@ -410,8 +392,16 @@ def submit_feedback():
 @login_required
 def Alumni_user():
     users = User.query.filter_by(role=0).all()  # Fetch all users from the database
+
+    # Fetch users with their enrolled classes
+    users_with_classes = []
+    for user in users:
+        enrolled_classes = [uc.class_ for uc in user.classes]  # Get class objects
+        users_with_classes.append({'user': user, 'classes': enrolled_classes})
+
     return render_template('Alumni_user.html', 
                            users=users,
+                           users_with_classes=users_with_classes,
                            current_user_name = current_user.name,
                             current_user_email = current_user.email,
                             current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)

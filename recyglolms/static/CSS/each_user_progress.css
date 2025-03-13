@@ -13,62 +13,59 @@ body {
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 300px); /* Adjust width for sidebar */
+  margin: 10px auto;
+  margin-left: 270px; /* Offset for sidebar */
+  margin-top: 80px;
+  margin-right: 20px;
+  margin-bottom: 30px;
+  background-color: #fff;
+  padding: 50px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: margin-left 0.5s, width 0.5s;
+  box-sizing: border-box;
+}
+
+
+  
+  .courses {
     display: flex;
-    flex-direction: column;
-    width: calc(100% - 250px); /* Adjust width to account for sidebar */
-    margin: 10px auto;
-    margin-left: 300px; /* Offset for sidebar */
-    margin-top: 100px;
-    margin-right: 60px;
-    /* margin-bottom: 0px; */
-    background-color: #fff;
-    padding: 35px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
-    transition: margin-left 0.5s, width 0.5s;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;  /* Adjusts the space between the course cards */
+    margin-top: 20px;
+  }
+
+  .course-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Creates 3 equal columns */
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px; /* Limits the width for larger screens */
+}
+  
+.course-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
 .cards-header{
-  background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
-  padding: 25px;
-  border-radius: 10px;
-  margin-bottom: 0px;
-}
-
-  /* h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  } */
-  
-  .courses {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr); /* Ensures 3 columns */
-    gap: 20px;
-    justify-content: center;
-    /* flex-wrap: wrap; */
-    margin-top: 30px;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-
-  /* background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    flex: 1;
-    min-width: 200px;
-    display: flex;
-    align-items: center; */
-  
-  .course-card {
-    display: block;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 100%;
-    text-align: left;
+    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #16a159);
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 0px;
   }
   
   .course-header {
@@ -85,15 +82,12 @@ body {
     font-size: 12px;
   }
   
-  .course-header img {
-    width: 30px;
-    height: 30px;
-  }
   
   h3 {
     font-size: 18px;
     margin-bottom: 15px;
     color: #333;
+    text-align: left;
   }
   
   .progress {
@@ -106,22 +100,23 @@ body {
   
   .progress-bar {
     height: 18px;
-    background: #A9C9A4;
+    background: #16a159;
     color: white;
     font-size: 13px;
+    transition: width 0.5s ease;
     
   }
   
-  .course-info {
+  /* .course-info {
     display: flex;
     justify-content: space-between;
     font-size: 14px;
     color: #555;
     margin-bottom: 15px;
-  }
+  } */
   
   .continue-btn {
-    background: #A9C9A4;
+    background: #16a159;
     color: #fff;
     border: none;
     padding: 10px 10px;
@@ -129,37 +124,16 @@ body {
     cursor: pointer;
     font-size: 13px;
     text-decoration: none;
-    
+    width: 100%;
 
   }
   
   .continue-btn:hover {
-    background: #88c67f;
+    background: #16a159;
   }
 
-  .course_header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-  }
+
   
-  .course_header h1 {
-    margin: 0;
-    font-size: 16px;
-  }
-  
-  .view-courses {
-    text-decoration: none;
-    color: #007BFF;
-    font-size: 10px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .view-courses:hover {
-    text-decoration: underline;
-  }
  
 @media (max-width: 1024px) {
   .container {

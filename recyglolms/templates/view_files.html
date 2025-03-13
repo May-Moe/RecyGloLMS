@@ -154,9 +154,10 @@
                 </table>
             </div>
             <div class="pagination">
-                <button id="prevPage">Previous</button>
-                <button id="nextPage">Next</button>
-            </div>
+                <button id="prevPage" class="page-btn">Previous</button>
+                <span id="pageNumbers"></span>
+                <button id="nextPage" class="page-btn">Next</button>
+            </div>  
             {% else %}
         <div class="alert alert-info" role="alert">
             No files found!
@@ -182,26 +183,46 @@
         });
 
         //next and previous page
-    document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
         const tableBody = document.getElementById("userTableBody");
         const rows = Array.from(tableBody.querySelectorAll("tr"));
         const prevButton = document.getElementById("prevPage");
         const nextButton = document.getElementById("nextPage");
+        const pageNumbersContainer = document.getElementById("pageNumbers");
         let currentPage = 1;
         const rowsPerPage = 10;
+        let totalPages = Math.ceil(rows.length / rowsPerPage);
 
         function showPage(page) {
             const start = (page - 1) * rowsPerPage;
             const end = start + rowsPerPage;
 
-            // Hide all rows
             rows.forEach((row, index) => {
                 row.style.display = index >= start && index < end ? "table-row" : "none";
             });
 
-            // Disable buttons when needed
             prevButton.disabled = page === 1;
-            nextButton.disabled = end >= rows.length;
+            nextButton.disabled = page === totalPages;
+
+            updatePageNumbers();
+        }
+
+        function updatePageNumbers() {
+            pageNumbersContainer.innerHTML = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+                let pageBtn = document.createElement("button");
+                pageBtn.innerText = i;
+                pageBtn.classList.add("page-number");
+                if (i === currentPage) pageBtn.classList.add("active");
+
+                pageBtn.addEventListener("click", function () {
+                    currentPage = i;
+                    showPage(currentPage);
+                });
+
+                pageNumbersContainer.appendChild(pageBtn);
+            }
         }
 
         prevButton.addEventListener("click", function () {
@@ -212,16 +233,14 @@
         });
 
         nextButton.addEventListener("click", function () {
-            if ((currentPage * rowsPerPage) < rows.length) {
+            if (currentPage < totalPages) {
                 currentPage++;
                 showPage(currentPage);
             }
         });
 
-        // Initial table setup
         showPage(currentPage);
     });
-
     //timestamp sorting
     document.addEventListener("DOMContentLoaded", function () {
         const tableBody = document.getElementById("userTableBody");

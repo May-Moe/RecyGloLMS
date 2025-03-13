@@ -66,12 +66,12 @@
             </ul>
         </nav>
         <div class="container">
-            <a href="{{ url_for('main.learning') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
             <div class="cards-header">
-                <h2 style="margin-bottom: 10px; margin-top: 10px; font-size:35px; color: #A9C9A4">{{ data.course.name }}</h2>
+                <a href="{{ url_for('main.learning') }}" class="back-icon" style="font-size: 20px;"><i class="fa-solid fa-angle-left"></i></a>
+                <h2 style="margin-bottom: 10px; margin-top: 10px; font-size:35px; color: #16a159">{{ data.course.name }}</h2>
             <p style="margin-bottom: 20px; color: gray;">{{ data.course.description }}</p>
              </div>
-            <h3 style="margin-bottom: 10px; margin-top: 10px; font-size: 20px; color: #A9C9A4">Modules overview</h3>
+            <h3 style="margin-bottom: 10px; margin-top: 10px; font-size: 20px; color: #16a159">Modules overview</h3>
             {% for module_data in data.modules %}
             <div class="dropdown_course">
                 <button class="dropdown-toggle-module" onclick="toggleDropdown('module{{ module_data.module.moduleid }}')">
@@ -134,50 +134,59 @@
 
     
     <script src="../static/JS/script.js"></script>
-    <script>
-        function toggleDropdown(id) {
-            const section = document.getElementById(id);
-            if (section) {
-                section.style.display = section.style.display === "block" ? "none" : "block";
-            }
-        }
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Hide all dropdowns by default
+        const dropdowns = document.querySelectorAll('.dropdown-content-module, .dropdown-content-video');
+        dropdowns.forEach(dropdown => {
+            dropdown.style.display = 'none';
+        });
+    });
 
-        function startVideo(videoId, overlayElement) {
-            overlayElement.style.display = 'none';
-            updateProgress(videoId);
-            const iframe = document.getElementById(`video${videoId}`);
-            const videoUrl = iframe.src;
-            iframe.src = `${videoUrl}?autoplay=1`;
+    function toggleDropdown(id) {
+        const section = document.getElementById(id);
+        if (section) {
+            section.style.display = section.style.display === "block" ? "none" : "block";
         }
+    }
 
-        function updateProgress(videoId) {
-            fetch(`/update_video_progress/${videoId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ completed: true })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Progress updated:", data);
-            })
-            .catch(error => console.error("Error updating progress:", error));
-        }
+    function startVideo(videoId, overlayElement) {
+        overlayElement.style.display = 'none';
+        updateProgress(videoId);
+        const iframe = document.getElementById(`video${videoId}`);
+        const videoUrl = iframe.src;
+        iframe.src = `${videoUrl}?autoplay=1`;
+    }
 
-        function markComplete(videoid) {
-            fetch(`/update_video_progress/${videoid}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ increment: 1000 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Progress updated:', data);
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
+    function updateProgress(videoId) {
+        fetch(`/update_video_progress/${videoId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ completed: true })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Progress updated:", data);
+        })
+        .catch(error => console.error("Error updating progress:", error));
+    }
+
+    function markComplete(videoid) {
+        fetch(`/update_video_progress/${videoid}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ increment: 1000 })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Progress updated:', data);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+
     
 </body>
 </html>

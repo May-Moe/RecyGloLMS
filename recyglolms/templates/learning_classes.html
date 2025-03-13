@@ -66,7 +66,7 @@
         </nav>
         <div class="container">
             <div class="header">
-                <h2>Assign Classes</h2>
+                <h2>Available Classes</h2>
                 <div class="header-actions">
                     <select class="filter-select" id="courseFilter">
                         <option value="all">Show all Classes</option>
@@ -84,7 +84,7 @@
                         <div class="class-card">
                             <a href="{{ url_for('main.learning_class_courses', classid=class_.classid) }}" class="class-link">
                                 <!-- <img src="{{ class_.image_url }}" alt="{{ class_.name }}" class="class-image"> -->
-                                 <img src="static/img/1.jpg" alt="" class="class-image">
+                                 <img src="static/img/2.jpg" alt="" class="class-image">
                                 <div class="class-content">
                                     <h3 class="class-title">{{ class_.name }}</h3>
                                     <p class="class-des">{{class_.description}}</p>

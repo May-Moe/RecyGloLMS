@@ -8,18 +8,17 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    width: calc(100% - 300px); /* Adjust width for sidebar */
     margin: 10px auto;
-    margin-left: 300px; /* Offset for sidebar */
-    margin-top: 100px;
-    margin-right: 60px;
-    margin-bottom: 60px;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
     background-color: #fff;
-    padding: 40px;
-    border-radius: 5px;
+    padding: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
     transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
 }
 
 h1 {
@@ -114,27 +113,49 @@ th {
     color: #fff;
     cursor: pointer;
 }
-
+/* Pagination Container */
 .pagination {
     display: flex;
-    justify-content: flex-end;
+    justify-content: right;
+    align-items: center;
+    gap: 8px;
     margin-top: 20px;
-}
-
-.pagination button {
-    margin: 0 5px;
-    padding: 6px 17px;
-    background-color: #16a159;
-    color: white;
-    cursor: pointer;
-    font-size: 14px;
+    padding: 10px;
     border-radius: 8px;
 }
 
-.pagination button:hover {
-    background-color: #028d45;
-    border-radius: 5px;
+/* Page Buttons */
+.page-btn, .page-number {
+    background: white;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin: 2px;
+}
+
+
+/* Hover Effect */
+.page-btn:hover, .page-number:hover {
+    background: #ddd;
+}
+
+/* Active Page */
+.page-number.active {
+    background: #16a159;
     color: white;
+    border-color: #16a159;
+    font-weight: bold;
+}
+
+/* Disabled Buttons */
+.page-btn:disabled {
+    background: #eee;
+    color: #999;
+    cursor: not-allowed;
 }
 
 .editAction, .deleteAction {
