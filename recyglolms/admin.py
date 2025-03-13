@@ -1090,6 +1090,8 @@ from flask import request
 def delete_class(class_id):
     if request.form.get('_method') == 'DELETE':
         class_ = Class.query.get_or_404(class_id)  # Change 'classes' to 'class_' to match the variable name
+        CourseClass.query.filter_by(classid=class_id).delete() # Delete all course assignments
+        UserClass.query.filter_by(classid=class_id).delete() # Delete all course assignments
         db.session.delete(class_)
         db.session.commit()
         return redirect(url_for('manage_classes'))
