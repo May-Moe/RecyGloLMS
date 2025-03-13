@@ -132,6 +132,9 @@ def user_activity():
 
     # GET request: Fetch activities for the logged-in user
     activities = Activity.query.filter_by(userid=current_user.userid).all()
+    # Pass current user info to the template
+    current_username = current_user.name
+    current_useremail = current_user.email
 
     activity_list = []
     for activity in activities:
@@ -149,6 +152,8 @@ def user_activity():
 
     # For non-AJAX requests, render the HTML template
     return render_template('user_activity.html', activities=activity_list,
+                           current_username=current_username,
+                            current_useremail=current_useremail,
                                                        current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
 
 
