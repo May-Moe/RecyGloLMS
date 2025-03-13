@@ -4,7 +4,7 @@ from flask import jsonify, request
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import db, bcrypt, app
-from recyglolms.models import User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse, UserClass, Class, CourseClass, Notification
+from recyglolms.models import Progress, User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse, UserClass, Class, CourseClass, Notification
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -351,20 +351,32 @@ def delete_user(user_id):
         return redirect(url_for('auth.login'))
 
     user = User.query.get_or_404(user_id)
+
+    # Step 1: Delete all progress related to the user first
+    Progress.query.filter_by(userid=user_id).delete()
+    
+     # Step 1: Delete all related records in UserClass
+    UserClass.query.filter_by(userid=user_id).delete()
+
+    # Step 2: Then delete the user
     db.session.delete(user)
     db.session.commit()
- # Log the action (user deletion)
-    Log_entry = ActionLog(
+    
+    
+
+    # Step 3: Log the action (user deletion)
+    log_entry = ActionLog(
         userid=current_user.userid,
-        username=current_user.name,  # Store the username of the person making the action
+        username=current_user.name,  
         action_type="Delete", 
         target_table="user", 
         target_id=user.userid,
-        timestamp=datetime.now(),  # Ensure both date and time are stored
-        details=f"Delete user: {user.name} with Email: {user.email}"
-        )
-    db.session.add(Log_entry)
+        timestamp=datetime.now(),
+        details=f"Deleted user: {user.name} with Email: {user.email}"
+    )
+    db.session.add(log_entry)
     db.session.commit()
+
     flash("User deleted successfully!", "success")
     return redirect(url_for('admin.view_users'))
 
@@ -1082,8 +1094,3 @@ def delete_class(class_id):
         db.session.commit()
         return redirect(url_for('manage_classes'))
     return redirect(url_for('manage_classes'))  # Or handle the error case
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 2513352fc5e9befc4e5409ffd654244bb32c2147
