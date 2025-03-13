@@ -168,7 +168,8 @@ def learning():
     return render_template('learning_classes.html',
                             classes=user_classes,  # Pass the correct classes to the template
                             current_user_name=current_user.name,
-                            current_user_email=current_user.email)
+                            current_user_email=current_user.email,
+                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
 
 @main_bp.route('/learning/class/<int:classid>')
 @login_required
@@ -186,7 +187,8 @@ def learning_class_courses(classid):
                             selected_class=selected_class,
                             courses=courses,
                             current_user_name=current_user.name,
-                            current_user_email=current_user.email)
+                            current_user_email=current_user.email,
+                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
 @main_bp.route('/course/<int:courseid>')
 @login_required
 def course_detail(courseid):
