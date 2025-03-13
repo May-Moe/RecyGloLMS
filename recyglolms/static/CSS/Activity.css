@@ -258,6 +258,11 @@ th {
     text-decoration: underline;
 }
 
+.activity-link {
+    text-decoration: none;
+    color: blue;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
     .container {

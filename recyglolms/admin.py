@@ -1083,7 +1083,3 @@ def delete_class(class_id):
         return redirect(url_for('manage_classes'))
     return redirect(url_for('manage_classes'))  # Or handle the error case
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 2513352fc5e9befc4e5409ffd654244bb32c2147
