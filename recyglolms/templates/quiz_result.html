@@ -19,15 +19,15 @@
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
-                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                <img src="/static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
                 </button>
             <div class="dropdown-content">
-                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
-                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
-                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
-                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
-                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
-                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                <a href="?lang=en"><img src="/static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="/static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="/static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="/static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="/static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="/static/img/kr.svg" class="flag-icon"> Korea</a>
                 
             </div>
             </div>
@@ -41,7 +41,7 @@
                 </div>
             <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
                 <div class="dropdown">
-                    <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='img/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
                         <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_username }}</span></h5>
                         <p id="profile-email">{{ current_user_email }}</p>
