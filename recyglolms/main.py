@@ -148,7 +148,9 @@ def user_activity():
         return jsonify(activity_list)
 
     # For non-AJAX requests, render the HTML template
-    return render_template('user_activity.html', activities=activity_list)
+    return render_template('user_activity.html', activities=activity_list,
+                                                       current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+
 
 
 @main_bp.route('/user_activity/<int:activity_id>', methods=['DELETE'])
