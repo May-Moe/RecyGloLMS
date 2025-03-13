@@ -1,10 +1,11 @@
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/CSS/style.css">
-    <link rel="stylesheet" href="static/CSS/AddModule.css">
+    <link rel="stylesheet" href="static/CSS/admin_divide_role.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Add Modules</title>
+    <title>Divide Users</title>
 </head>
 <body>
     <div class="dashboard">
@@ -39,7 +40,6 @@
                 </div>
             <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
                 <div class="dropdown">
-                    
                     <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
                         <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
@@ -98,38 +98,111 @@
             </ul>
         </nav>
         <div class="container">
-            <a href="{{ url_for('admin.add_course') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
-            <h2>Add Modules</h2>
-            <form id="AddModuleForm" method="POST" action="{{ url_for('admin.add_module') }}">
-                <div class="form-group">
-                    <label for="module_course_id">Select Course</label>
-                    <select id="module_course_id" name="module_course_id" required>
-                        {% for course in courses %}
-                            <option value="{{ course.courseid }}">{{ course.name }}</option>
-                        {% endfor %}
-                    </select>
+            <div class="header">
+                <h1>Divide Users</h1>
+                <div class="header-actions">
+                    <div class="header-actions">
+                        <select class="filter-select" id="courseFilter">
+                            <option value="all">Show all Roles</option>
+                            <option value="Master">Master</option>
+                            <option value="Mid">Mid</option>
+                            <option value="Beginner">Beginner</option>
+                        </select>
+                        <!-- <input type="text" id="searchBar" placeholder="Search"> -->
+                    </div>
+                    <!-- <a href="AddUser.html"  id="addUserLink">
+                        <button id="addUserButton"><i class="fas fa-plus"></i>Set User Role</button>
+                    </a> -->
                 </div>
-            
-                <div class="form-group">
-                    <label for="module_name">Module Name</label>
-                    <input type="text" id="module_name" name="module_name" required>
-                </div>
-            
-                <div class="form-group">
-                    <label for="module_description">Module Description</label>
-                    <textarea id="module_description" name="module_description" required></textarea>
-                </div>
-            
-                <button type="submit" class="submit-button">Submit</button>
-            </form>
-            <div class="buttons">
-                <a href="{{ url_for('admin.manage_course') }}"><button type="button" class="cancel-button">Cancel</button></a>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Completed videos</th>
+                            <th>Total marks</th>
+                            <th>Total Activity</th>
+                            <th>Users Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- User data will be populated here -->
+                         <tr>
+                            <td>May</td>
+                            <td>5</td>
+                            <td>80%</td>
+                            <td>6</td>
+                            <td>
+                                <select class="filter-select" id="courseFilter">
+                                    <option value="all" default>Set User Roles</option>
+                                    <option value="Master">Master</option>
+                                    <option value="Mid">Mid</option>
+                                    <option value="Beginner">Beginner</option>
+                                </select>
+                            </td>
+                            <td>
+                                <!-- <a href="EditUser.html" class="editAction"><i class="fas fa-edit"></i></a> -->
+                                <a href="#" class="deleteAction"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                         </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <button id="nextPage">Next</button>
             </div>
         </div>
+    </main>
+</div>
     </div>
-    <script src="static/JS/script.js"></script>
+    <script src="JS/script.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+         //next and previous page
+    document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("userTableBody");
+        const rows = Array.from(tableBody.querySelectorAll("tr"));
+        const prevButton = document.getElementById("prevPage");
+        const nextButton = document.getElementById("nextPage");
+        let currentPage = 1;
+        const rowsPerPage = 10;
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            // Hide all rows
+            rows.forEach((row, index) => {
+                row.style.display = index >= start && index < end ? "table-row" : "none";
+            });
+
+            // Disable buttons when needed
+            prevButton.disabled = page === 1;
+            nextButton.disabled = end >= rows.length;
+        }
+
+        prevButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        nextButton.addEventListener("click", function () {
+            if ((currentPage * rowsPerPage) < rows.length) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        // Initial table setup
+        showPage(currentPage);
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
                     const dropdowns = [
                         { button: ".dropdown-class", container: ".dropdown-container-class" },
                         { button: ".dropdown-user", container: ".dropdown-container" }
@@ -147,5 +220,6 @@
                     });
                     });
     </script>
+
 </body>
 </html>

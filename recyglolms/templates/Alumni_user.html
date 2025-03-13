@@ -43,7 +43,11 @@
                 <div class="dropdown">
                     <img src="{{ current_user_image if current_user_image else url_for('static', filename='img/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
+<<<<<<< HEAD
                         <h4 class="profile-header">Hello, <span id="user-name" style="font-size: 15px;"> {{ current_user_name }}</span></h4>
+=======
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+>>>>>>> 9973da6a2f1cbc097dcf9d325d36af6f6dd3e437
                         <p id="profile-email">{{ current_user_email }}</p>
                         <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>

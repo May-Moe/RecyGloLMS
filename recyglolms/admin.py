@@ -846,14 +846,13 @@ def view_feedbacks():
 @admin_bp.route('/admin_feedback')
 @login_required
 def admin_feedback():
-    feedbacks = db.session.query(Feedback, User).join(User).all()  # Fetch feedback with user details
-    # feedbacks = db.session.query(Feedback, User).join(User).order_by(Feedback.submit_date.desc()).limit(3).all()
+    feedbacks = db.session.query(Feedback, User).join(User).order_by(Feedback.submit_date.desc()).all()  # Fetch feedback with user details, ordered by submit_date descending
     total_feedback = Feedback.query.count()
-    return render_template('admin_feedback.html', 
+    return render_template('admin_feedback.html',
                            feedbacks=feedbacks,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email,
-                            total_feedback = total_feedback)
+                           current_user_name=current_user.name,
+                           current_user_email=current_user.email,
+                           total_feedback=total_feedback)
 
 @admin_bp.route('/Alumni_admin')
 @login_required
@@ -1049,6 +1048,10 @@ def assign_users_to_class(classid):
         db.session.add(notification)
         db.session.commit()
 
+<<<<<<< HEAD
+    db.session.commit()  # Commit the changes to the database
+=======
+>>>>>>> c3e99a5d58f9b2ad03e80121966982a24d64f4d4
     return redirect(url_for('manage_classes'))
 
 #Add classes
@@ -1084,5 +1087,8 @@ def delete_class(class_id):
     return redirect(url_for('manage_classes'))  # Or handle the error case
 
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> c3e99a5d58f9b2ad03e80121966982a24d64f4d4

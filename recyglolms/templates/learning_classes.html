@@ -30,21 +30,19 @@
                 
             </div>
             </div>
-                <button class="notification-button" id="notification-button">
-                    <i class="fas fa-bell"></i>
-                    <span id="notification-count" class="notification-count">0</span>
+           <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
                 </button>
 
                 <div id="notification-dropdown" class="notification-dropdown hidden">
-                    <ul id="notification-list">
-                        <li>New course available: "Recycling 101"</li>
-                        <li>Your activity submission is pending review.</li>
-                    </ul>
+                    <ul id="notification-list"></ul>
                 </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
                 <div class="dropdown">
-                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='img/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_username }}</span></h5>
                         <p id="profile-email">{{ current_user_email }}</p>
                         <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
