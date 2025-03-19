@@ -12,12 +12,12 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 300px); /* Adjust width for sidebar */
-    margin: 10px auto;
+    /* width: calc(100% - 300px); /* Adjust width for sidebar */
+   /*  margin: 10px auto;
     margin-left: 270px; /* Offset for sidebar */
-    margin-top: 80px;
+   /*  margin-top: 80px;
     margin-right: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 30px; */
     background-color: #fff;
     padding: 30px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

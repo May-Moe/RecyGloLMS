@@ -6,68 +6,168 @@
     <link rel="stylesheet" href="../static/CSS/start_quiz.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Start Quiz</title>
+    <script>
+        let quizStarted = false;
+        let timer;
+        let remainingTime = {{ quiz.time_limit * 60 }}; // Dynamic time from backend
+
+        function startQuiz() {
+            // Hide instructions
+            document.getElementById("quiz-instruction").style.display = "none";
+            document.getElementById("start-quiz-btn").style.display = "none"; 
+            
+            document.getElementById("quiz-content").style.display = "block";
+            document.getElementById("timer").style.display = "block";
+            startTimer();
+            quizStarted = true;
+        }
+
+        function startTimer() {
+            let timerElement = document.getElementById("timer");
+            timer = setInterval(function () {
+                let minutes = Math.floor(remainingTime / 60);
+                let seconds = remainingTime % 60;
+                timerElement.innerText = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                if (remainingTime <= 0) {
+                    clearInterval(timer);
+                    alert("Time's up! Submitting quiz...");
+                    document.querySelector("form").submit();
+                }
+                remainingTime--;
+            }, 1000);
+        }
+
+        // Prevent Tab Switching
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                //alert("Tab switching is not allowed! Your quiz will be submitted.");
+                document.querySelector("form").submit();
+            }
+        });
+
+        // Prevent Screenshot
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "PrintScreen" || e.key === "F12") {
+                alert("Screenshots are disabled!");
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener("pointerdown", function (e) {
+            if (e.button === 2) {
+                alert("Right-click is disabled!");
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "PrintScreen" || event.keyCode === 44) {
+                alert("Screenshots are disabled!");
+                event.preventDefault();
+            }
+            if (event.ctrlKey && (event.key === "u" || event.key === "U")) {
+                alert("View Source is disabled!");
+                event.preventDefault();
+            }
+        });
+
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        });
+    </script>
 </head>
 <body>
-    <div class="dashboard">
-        <nav class="navbar">
-            <button id="toggle-button" class="toggle-button">
-                <span class="icon">&#9776;</span>
-            </button>
-            <div class="profile-right">
-                <img src="../static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
-                <!-- Language Selector -->
-            <div class="language-dropdown">
-                <button class="language-btn">
-                <img src="../static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
-                </button>
-            <div class="dropdown-content">
-                <a href="?lang=en"><img src="../static/img/uk.svg" class="flag-icon"> English</a>
-                <a href="?lang=th"><img src="../static/img/th.svg" class="flag-icon"> Thailand</a>
-                <a href="?lang=my"><img src="../static/img/my.svg" class="flag-icon"> Myanmar</a>
-                <a href="?lang=vi"><img src="../static/img/vi.svg" class="flag-icon"> Vietnam</a>
-                <a href="?lang=in"><img src="../static/img/id.svg" class="flag-icon"> Indonia</a>
-                <a href="?lang=ko"><img src="../static/img/kr.svg" class="flag-icon"> Korea</a>
-                
-            </div>
-            </div>
-           <button class="notification-button" id="notification-button">
-                <i class="fas fa-bell"></i>
-                <span id="notification-count" class="notification-count">0</span>
-                </button>
-
-                <div id="notification-dropdown" class="notification-dropdown hidden">
-                    <ul id="notification-list"></ul>
-                </div>
-            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
-                <div class="dropdown">
-                    <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
-                    <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
-                        <p id="profile-email">{{ current_user_email }}</p>
-                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <nav class="sidebar">
-            <div class="logo" style="text-align: left;">
-                <img src="../static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
-            </div>
-            <ul>
-                <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
-                <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
-                <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
-                <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Classes</a></li>
-                <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
-                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
-            </ul>
-        </nav>
-        <div class="container">
+    <div class="container">
+        <div class="quiz-header-container">
             <div class="quiz-header">
-                {{ quiz.title }}
+                <h2>{{ quiz.title }}</h2>
             </div>
-            <div class="quiz-container">
-                <form method="POST" action="{{ url_for('quiz.submit_quiz', quizid=quiz.quizid) }}">
+            <div class="quiz-instruction" id="quiz-instruction">
+                <p><strong>Instructions:</strong></p>
+                <ul>
+                    <li>Once you start the quiz, the <strong>timer will begin</strong> and cannot be paused.</li>
+                    <li> You have to finish the quiz in <strong>: {{ quiz.time_limit }} minutes </strong>. Once the time is up, your answers will be automatically submitted.</li>
+                    <li><strong>Do not close the window or navigate away </strong>from the quiz page.</li>
+                    <li><strong>Switching to another tab or minimizing the window is not allowed.</strong> If detected, your quiz may be automatically submitted.</li>
+                    <li><strong>Taking screenshots</strong> is strictly prohibited and may result in disqualification.</li>
+                    <li>Ensure you have a stable internet connection to avoid any interruptions.</li>
+                    <li> <strong>Do not refresh the page</strong> or click the back button during the quiz.</li>
+                    <li>**Good Luck!**</li>
+                </ul>
+            </div>
+        
+            <!-- Start Quiz Button -->
+            <button id="start-quiz-btn" class="start-quiz-btn" onclick="startQuiz()">
+                 Start Quiz
+            </button>
+        </div>
+        <style>
+            
+            .quiz-header h2 {
+                color: #333;
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+
+            .quiz-instruction {
+                background: #ffffff;
+                padding: 15px;
+                border-left: 5px solid #dc3545;
+                font-size: 16px;
+                color: #555;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                text-align: left;
+            }
+            
+            .quiz-instruction ul {
+                padding-left: 20px;
+            }
+            
+            .quiz-instruction li {
+                margin-bottom: 8px;
+            }
+            
+            .quiz-instruction {
+                background: #ffffff;
+                padding: 15px;
+                border-left: 5px solid ;
+                font-size: 16px;
+                color: #555;
+                margin-bottom: 20px;
+                border-radius: 5px;
+            }
+            
+            .start-quiz-btn {
+                background: #007bff;
+                color: white;
+                padding: 12px 20px;
+                font-size: 18px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            .start-quiz-btn:hover {
+                background: #0056b3;
+                transform: scale(1.05);
+            }
+            
+            .start-quiz-btn i {
+                font-size: 20px;
+            }
+        </style>
+
+        <!-- Timer -->
+        <div id="timer" style="display: none; font-size: 20px; color: red;"></div>
+
+        <!-- Quiz Content (Hidden by Default) -->
+        <div id="quiz-content" style="display: none;">
+            <form method="POST" action="{{ url_for('quiz.submit_quiz', quizid=quiz.quizid) }}">
                 {% for question in quiz.questions %}
                 <div class="quiz-body">
                     <div class="question">
@@ -77,30 +177,16 @@
                     <div class="form-check">
                         <input type="radio" class="form-check-input" name="question_{{ question.questionid }}" value="{{ answer.answerid }}" required>
                         <label class="form-check-label">{{ answer.text }}</label>
+                    </div>
+                    {% endfor %}
                 </div>
+                <hr>
                 {% endfor %}
-            </div>
-            <hr style="color: #ffffff; font-weight: lighter;">
-            {% endfor %}
-            <!-- <hr style="color: rgb(232, 232, 232); font-weight: lighter;"> -->
-            <div class="quiz-footer">
-                <a href="user_viewmark.html"><button class="btn">Finish attempt</button></a>
-            </div>
-        </form>
+                <div class="quiz-footer">
+                    <button type="submit" class="btn">Finish Attempt</button>
+                </div>
+            </form>
         </div>
-    
     </div>
-    <script src="{{ url_for('static', filename='/JS/script.js') }}"></script>
-    <script>
-        function toggleReview(id) {
-    let reviewSection = document.getElementById(id);
-    if (reviewSection) {
-        reviewSection.classList.toggle('hidden');
-    } else {
-        console.error(`Element with id ${id} not found`);
-    }
-}
-
-    </script>
 </body>
 </html>
