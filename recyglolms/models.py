@@ -186,6 +186,7 @@ class Quiz(db.Model):
     moduleid = db.Column(db.Integer, db.ForeignKey('module.moduleid'), nullable=False)  # Foreign key to Module
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
     questions = db.relationship('Question', backref='quiz', lazy=True,)  # Relationship with questions
+    time_limit = db.Column(db.Integer, nullable=True, default=5)  # Default 5 minutes
     
     # Define the relationship with UserResponse
     user_responses = db.relationship('UserResponse', backref='quiz', lazy=True)
@@ -276,3 +277,26 @@ class Notification(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref=db.backref('notifications', lazy=True))
+    
+    
+class Assessment(db.Model):
+    __tablename__ = 'assessment'  # Ensure correct casing
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    created_by = db.Column(db.Integer, nullable=False)  # Ensure it stores user ID
+    time_limit = db.Column(db.Integer, nullable=False)
+    classid = db.Column(db.Integer, db.ForeignKey('class.classid'), nullable=False)
+
+class Assese_Questions(db.Model):
+    __tablename__ = 'assess_questions'
+    id = db.Column(db.Integer, primary_key=True)
+    assessment_id = db.Column(db.Integer, db.ForeignKey('assessment.id'), nullable=False) 
+    question = db.Column(db.Text, nullable=False)
+    image_url = db.Column(db.String(255), nullable=True)
+
+class Assese_Response(db.Model):
+    __tablename__ = 'assese_response'
+    id = db.Column(db.Integer, primary_key=True)
+    question_id = db.Column(db.Integer, db.ForeignKey('assese_questions.id'), nullable=False)  # Fixed reference
+    user_id = db.Column(db.Integer, nullable=False)
+    answer_text = db.Column(db.Text, nullable=False)

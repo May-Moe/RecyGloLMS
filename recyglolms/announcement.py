@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
 from werkzeug.utils import secure_filename
 from recyglolms.__inti__ import app, db
-from recyglolms.models import Announcement, Notification, User
+from recyglolms.models import Announcement, Notification, User, ActionLog
 from flask_login import login_required, current_user
 import os
 from datetime import datetime

@@ -991,7 +991,7 @@ def admin_view_activity(userid):
 def manage_classes():
     if current_user.role != 1:  # Ensure only admins can access
         flash("Unauthorized access!", "danger")
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('admin.dashboard'))
 
     # if request.method == 'POST':
     #     name = request.form.get('name')

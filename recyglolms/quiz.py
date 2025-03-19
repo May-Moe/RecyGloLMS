@@ -52,12 +52,19 @@ def create_quiz():
         quiz_description = request.form.get('quiz_description')
         module_id = request.form.get('module_id')
         questions_data = request.form.get('questions_data')  # JSON from frontend
+        time_limit = request.form.get('time_limit')  # Get time limit from the form
 
-        if not (quiz_title and module_id and questions_data):
-            flash("Quiz title, module ID, and questions are required!", "danger")
+        if not (quiz_title and module_id and questions_data and time_limit):
+            flash("All fields including time limit are required!", "danger")
             return redirect(url_for('quiz.create_quiz'))
 
-        new_quiz = Quiz(title=quiz_title, description=quiz_description, moduleid=module_id)
+        try:
+            time_limit = int(time_limit)  # Ensure it's an integer
+        except ValueError:
+            flash("Invalid time limit!", "danger")
+            return redirect(url_for('quiz.create_quiz'))
+
+        new_quiz = Quiz(title=quiz_title, description=quiz_description, moduleid=module_id, time_limit=time_limit)
         db.session.add(new_quiz)
         db.session.flush()
 
@@ -85,7 +92,7 @@ def create_quiz():
                 db.session.add(new_answer)
 
         db.session.commit()
-        flash("Quiz created successfully!", "success")
+        flash("Quiz created successfully with a time limit!", "success")
         return redirect(url_for('quiz.view_all_quizzes'))
 
     module_id = request.args.get('module_id')
@@ -104,9 +111,9 @@ def create_quiz():
         return redirect(url_for('quiz.view_all_quizzes'))
 
     return render_template('create_quiz.html', module=module, course=course,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template
+                           current_user_name=current_user.name,
+                           current_user_email=current_user.email,
+                           current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
 
 
 # View Quiz
