@@ -1096,3 +1096,7 @@ def delete_class(class_id):
         db.session.commit()
         return redirect(url_for('manage_classes'))
     return redirect(url_for('manage_classes'))  # Or handle the error case
+<<<<<<< HEAD
+
+=======
+>>>>>>> 64ef8ea3e6974d8ba3e03cf433c5e8a5df7a6661

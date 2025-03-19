@@ -40,8 +40,12 @@
                 </div>
             <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
                 <div class="dropdown">
-                    <img src="static/img/profile.webp" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
                         <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
                         <p id="profile-email">{{ current_user_email }}</p>
                         <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>

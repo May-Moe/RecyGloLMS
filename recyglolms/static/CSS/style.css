@@ -272,13 +272,59 @@ body {
     display: flex;
 }
 
-#logout-button {
-    background-color: #A9C9A4;
-    text-decoration: none;
-    color: white;
-    padding: 0px 15px;
-    border-radius: 10px;
+/* Profile Image Styling */
+.profile-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
 }
+
+.dropdown-profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%; /* Circular shape */
+    object-fit: cover;
+    border: 3px solid #16a159; /* Green border */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Profile Dropdown Styling */
+#profile-dropdown {
+    text-align: center;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+#profile-email {
+    font-size: 14px;
+    color: gray;
+}
+
+#logout-button {
+    display: block;
+    text-align: center;
+    background: #16a159;
+    color: white;
+    padding: 8px 12px;
+    margin-top: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    width: 100%;
+}
+
+#logout-button:hover {
+    background: #a93226;
+}
+
 
 
   .language-dropdown {
