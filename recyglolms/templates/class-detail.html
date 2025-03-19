@@ -3,9 +3,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/CSS/style.css">
-    <link rel="stylesheet" href="static/CSS/Upload.css">
+    <link rel="stylesheet" href="static/CSS/class-detail.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Upload Files</title>
+    <title>Class details</title>
 </head>
 <body>
     <div class="dashboard">
@@ -40,7 +40,6 @@
                 </div>
             <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
                 <div class="dropdown">
-                    
                     <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
                     <div id="profile-dropdown" class="dropdown-menu hidden">
                          <!-- Profile Image -->
@@ -113,92 +112,180 @@
                         <li><a href="{{ url_for('quiz.view_all_assessment') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
                         <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li>
                     </ul>
-                </div>                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+                </div>                
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
             </ul>
         </nav>
         <div class="container">
-            <div class="header">
-                <h1>Upload Files</h1>
-                <div class="header-actions">
-                    <form method="POST" id="search-form" class="mb-4">
-                    <!-- <input type="text" id="search_query" placeholder="Search by FileName" name="search_query"> -->
-                    <input type="text" id="searchBar" placeholder="Search By Title">
-                    </form>
-                    <a href="{{ url_for('upload.upload_file') }}" id="addUploadLink">
-                        <button id="addUserButton"><i class="fas fa-plus"></i>Add New Files</button>
-                    </a>
+            <div class="course-container">
+                <div class="header">
+                        <h1>Personal Development</h1>
+                        <div class="header-actions">
+                        <input type="text" id="searchBar" placeholder="Search By Name">
+                        <div class="dropdown">
+                            <button id="addUserButton" class="addUserButton"><i class="fas fa-plus"></i> Add</button>
+                            <ul id="addCourseDropdown" class="dropdown-menu hidden">
+                                <li><a href="{{ url_for('admin.add_course') }}"><i class="fa-solid fa-file-circle-plus icon"></i>Assessment</a></li>
+                                <li><a href="{{ url_for('admin.add_module') }}">Assignment</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Assessment</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Assessment 1</td>
+                                <td>Assessment 1 Description</td>
+                                <td>
+                                    <button class="editButton"><i class="fas fa-edit"></i></button>
+                                    <button class="deleteButton"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button id="prevPage" class="page-btn">Previous</button>
+                    <span id="pageNumbers"></span>
+                    <button id="nextPage" class="page-btn">Next</button>
+                </div> 
+    
             </div>
-            <div class="table-container">
-                {% if files %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>File Name</th>
-                            <th>File Type</th>
-                            <!-- <th>Course Name</th> -->
-                            <th>Upload Date
-                                <i class="fas fa-sort" id="sortUploadDate"></i>
-                            </th>
-                            <th>Uploaded By</th>
-                            <th>Action</th>
-                            <th>Preview</th>
-                        </tr>
-                    </thead>
-                    <tbody id="userTableBody">
-                        <!-- User data will be populated here -->
-                        {% for file, user in files %}
-                         <tr>
-                            <td>{{ file.filename }}</td>
-                            <td>{{ file.filetype }}</td>
-                            <td>{{ file.uploaddate }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>
-                                <a href="{{ url_for('upload.edit_file', uploadid=file.uploadid) }}" class="editAction"><i class="fas fa-edit"></i></a>
-                                <form action="{{ url_for('upload.delete_file', uploadid=file.uploadid) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="deleteAction" onclick="return confirm('Are you sure?')"><i class="fas fa-trash-alt"></i></button>
-                                </form>
-                            </td>
-                            <td>
-                            <a href="{{ file.preview_url }}" target="_blank " class="viewuploadLink">
-                                <button id="ViewLinkButton">View Upload File</button>
-                            </a>
-                            </td>
-                         </tr>
-                         {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="pagination">
-                <button id="prevPage" class="page-btn">Previous</button>
-                <span id="pageNumbers"></span>
-                <button id="nextPage" class="page-btn">Next</button>
-            </div>  
-            {% else %}
-        <div class="alert alert-info" role="alert">
-            No files found!
-        </div>
-        {% endif %}
-        </div>
+    </main>
+</div>
     </div>
     <script src="static/JS/script.js"></script>
     <script>
-        // Search Functionality
-        document.getElementById("searchBar").addEventListener("keyup", function () {
-            let filter = this.value.toLowerCase();
-            let tableRows = document.querySelectorAll("#userTableBody tr");
-    
-            tableRows.forEach(row => {
-                let title = row.querySelector("td:nth-child(1)").innerText.toLowerCase(); // Title is in the first column
-                if (title.includes(filter)) {
-                    row.style.display = "table-row";
-                } else {
-                    row.style.display = "none";
-                }
+         //next and previous page
+    document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("userTableBody");
+        const rows = Array.from(tableBody.querySelectorAll("tr"));
+        const prevButton = document.getElementById("prevPage");
+        const nextButton = document.getElementById("nextPage");
+        let currentPage = 1;
+        const rowsPerPage = 10;
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            // Hide all rows
+            rows.forEach((row, index) => {
+                row.style.display = index >= start && index < end ? "table-row" : "none";
             });
+
+            // Disable buttons when needed
+            prevButton.disabled = page === 1;
+            nextButton.disabled = end >= rows.length;
+        }
+
+        prevButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
         });
 
-        //next and previous page
+        nextButton.addEventListener("click", function () {
+            if ((currentPage * rowsPerPage) < rows.length) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        // Initial table setup
+        showPage(currentPage);
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+                    const dropdowns = [
+                        { button: ".dropdown-class", container: ".dropdown-container-class" },
+                        { button: ".dropdown-user", container: ".dropdown-container" },
+                { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+                    ];
+
+                    dropdowns.forEach(({ button, container }) => {
+                        const btn = document.querySelector(button);
+                        const dropContainer = document.querySelector(container);
+
+                        if (btn && dropContainer) {  // Ensure elements exist
+                            btn.addEventListener("click", function () {
+                                dropContainer.classList.toggle("active");
+                            });
+                        }
+                    });
+                    });
+
+                //search bar
+                document.addEventListener("DOMContentLoaded", function () {
+                    const searchBar = document.getElementById("searchBar");
+
+                    searchBar.addEventListener("input", function () {
+                        let filter = searchBar.value.toLowerCase();
+                        filterTable("courseTableBody", "moduleTableBody", "videoTableBody", filter);
+                    });
+
+                    function filterTable(courseTableId, moduleTableId, videoTableId, filter) {
+                        const courseTable = document.getElementById(courseTableId);
+                        const moduleTable = document.getElementById(moduleTableId);
+                        const videoTable = document.getElementById(videoTableId);
+
+                        if (!courseTable || !moduleTable || !videoTable) return;
+
+                        const courseRows = courseTable.getElementsByTagName("tr");
+                        const moduleRows = moduleTable.getElementsByTagName("tr");
+                        const videoRows = videoTable.getElementsByTagName("tr");
+
+                        let matchedCourses = new Set();
+                        let matchedModules = new Set();
+
+                        // Filter courses
+                        for (let row of courseRows) {
+                            let courseName = row.cells[0]?.textContent.toLowerCase();
+                            if (courseName.includes(filter)) {
+                                row.style.display = "";
+                                matchedCourses.add(courseName);
+                            } else {
+                                row.style.display = "none";
+                            }
+                        }
+
+                        // Filter modules and associate with courses
+                        for (let row of moduleRows) {
+                            let moduleName = row.cells[0]?.textContent.toLowerCase();
+                            let courseName = row.cells[2]?.textContent.toLowerCase(); // Get the course name for this module
+
+                            if (moduleName.includes(filter) || matchedCourses.has(courseName)) {
+                                row.style.display = "";
+                                matchedModules.add(moduleName);
+                            } else {
+                                row.style.display = "none";
+                            }
+                        }
+
+                        // Filter videos and associate with modules
+                        for (let row of videoRows) {
+                            let videoTitle = row.cells[0]?.textContent.toLowerCase();
+                            let moduleName = row.cells[3]?.textContent.toLowerCase(); // Get the module name for this video
+
+                            if (videoTitle.includes(filter) || matchedModules.has(moduleName)) {
+                                row.style.display = "";
+                            } else {
+                                row.style.display = "none";
+                            }
+                        }
+                    }
+                });
+
+                //next and previous page
         document.addEventListener("DOMContentLoaded", function () {
         const tableBody = document.getElementById("userTableBody");
         const rows = Array.from(tableBody.querySelectorAll("tr"));
@@ -257,51 +344,7 @@
 
         showPage(currentPage);
     });
-    //timestamp sorting
-    document.addEventListener("DOMContentLoaded", function () {
-        const tableBody = document.getElementById("userTableBody");
-        const sortButton = document.getElementById("sortUploadDate");
-        let ascending = true;
 
-        sortButton.addEventListener("click", function () {
-            let rows = Array.from(tableBody.querySelectorAll("tr"));
-
-            rows.sort((a, b) => {
-                let dateA = new Date(a.cells[2].innerText); // Timestamp is in the 5th column (index 4)
-                let dateB = new Date(b.cells[2].innerText);
-
-                return ascending ? dateA - dateB : dateB - dateA;
-            });
-
-            ascending = !ascending; // Toggle sorting order
-
-            // Reorder rows in table
-            rows.forEach(row => tableBody.appendChild(row));
-
-            // Update sort icon
-            sortButton.className = ascending ? "fas fa-sort-up" : "fas fa-sort-down";
-        });
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-                    const dropdowns = [
-                        { button: ".dropdown-class", container: ".dropdown-container-class" },
-                        { button: ".dropdown-user", container: ".dropdown-container" },
-                { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
-                    ];
-
-                    dropdowns.forEach(({ button, container }) => {
-                        const btn = document.querySelector(button);
-                        const dropContainer = document.querySelector(container);
-
-                        if (btn && dropContainer) {  // Ensure elements exist
-                            btn.addEventListener("click", function () {
-                                dropContainer.classList.toggle("active");
-                            });
-                        }
-                    });
-                    });
     </script>
-
 </body>
 </html>

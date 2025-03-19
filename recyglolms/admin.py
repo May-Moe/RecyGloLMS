@@ -1096,7 +1096,15 @@ def delete_class(class_id):
         db.session.commit()
         return redirect(url_for('manage_classes'))
     return redirect(url_for('manage_classes'))  # Or handle the error case
-<<<<<<< HEAD
 
-=======
->>>>>>> 64ef8ea3e6974d8ba3e03cf433c5e8a5df7a6661
+
+@admin_bp.route('/class-detail', methods=['GET'])
+@login_required
+def class_detail():
+    if not current_user.role:  # Ensure only admins can access
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    return render_template('class-detail.html', 
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)

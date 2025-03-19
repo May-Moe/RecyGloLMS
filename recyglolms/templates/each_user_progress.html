@@ -20,15 +20,15 @@
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
-                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                <img src="../static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
                 </button>
             <div class="dropdown-content">
-                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
-                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
-                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
-                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
-                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
-                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                <a href="?lang=en"><img src="../static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="../static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="../static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="../static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="../static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="../static/img/kr.svg" class="flag-icon"> Korea</a>
                 
             </div>
             </div>
@@ -72,11 +72,11 @@
 
         <!-- body start -->
         <div class="container">
-            <a href="{{ url_for('main.home') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
                 <!-- second row of dashboard -->
-    <div class="cards-header">
-        <h2 style="color: #A9C9A4;">My Learning</h2>
-     </div>
+        <div class="header">
+            <a href="{{ url_for('main.home') }}" class="back-icon" style="margin-right: 20px;"><i class="fa-solid fa-angle-left"></i></a>
+            <h2 style="color: #16a159;">My Learning</h2>
+        </div>
     <!-- <a href="user_course.html" class="view-courses">View All Courses</a> -->
     <div class="courses">
         <div class="course-grid">

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
 from recyglolms.__inti__ import db  # Fixed import
-from recyglolms.models import Quiz, Question, Answer, Module, Course, UserResponse, UserAnswer
+from recyglolms.models import Quiz, Question, Answer, Module, Course, UserResponse, UserAnswer, Class
 import json  # Use built-in json module
 
 quiz_bp = Blueprint('quiz', __name__)
@@ -316,3 +316,19 @@ def summary_mark(quiz_id):
                         current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template
   # Pass the module object to the template
 
+# View all quizzes (Admin only)
+@quiz_bp.route('/manage_assessment', methods=['GET'])
+@login_required
+def view_all_assessment():
+    if not current_user.role:  # Ensure correct role validation
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    courses = Course.query.all()  # Fetch all courses
+    classes = Class.query.all()
+    return render_template('manage_assessment.html', 
+                           courses=courses, 
+                           classes=classes,
+                           current_user_name=current_user.name,
+                           current_user_email=current_user.email,
+                        current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)  # Pass the module object to the template

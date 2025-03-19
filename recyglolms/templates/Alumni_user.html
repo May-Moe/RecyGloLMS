@@ -47,7 +47,7 @@
                          <div class="profile-image-container">
                             <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
                         </div>
-                        <h4 class="profile-header">Hello, <span id="user-name" style="font-size: 15px;"> {{ current_user_name }}</span></h4>
+                        <h4 class="profile-header">Hello, <span id="user-name" style="font-size: 15px;"> {{ current_username }}</span></h4>
                         <p id="profile-email">{{ current_user_email }}</p>
                         <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
@@ -88,7 +88,7 @@
                 <img src="{{ url_for('static', filename=item.user.profile_img) if item.user.profile_img else url_for('static', filename='/uploads/default-profile.jpg') }}" 
                     alt="{{ item.user.name }}">
                 <h3>{{ item.user.name }}</h3>
-                <p>{{ item.user.email }}</p>
+                <!-- <p>{{ item.user.email }}</p> -->
 
                 {% if item.classes %}
                 <p>Enrolled Classes:</p>
@@ -98,7 +98,7 @@
                     {% endfor %}
                 </ul>     
                 {% else %}
-                <p>No classes enrolled</p>
+                <p style="color: gray;">No classes enrolled</p>
                 {% endif %}
             </div>
             {% endfor %}
