@@ -1,9 +1,10 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
 from recyglolms.__inti__ import db
-from recyglolms.models import Assese_Response, Assessment, Assese_Questions, User, Class
+from recyglolms.models import Assese_Response, Assessment, Assese_Questions, User, Class, ActionLog
 import os
 import json
+from datetime import datetime, timedelta
 import textdistance
 from werkzeug.utils import secure_filename
 
@@ -130,10 +131,41 @@ def submit_answer():
 
     new_response = Assese_Response(
         question_id=question_id, 
-        user_id=current_user.id, 
+        user_id=current_user.userid, 
         answer_text=answer_text
     )
     db.session.add(new_response)
     db.session.commit()
 
     return jsonify({"success": True, "message": "Answer submitted successfully"})
+
+
+@assessment_bp.route('/delete_assessment/<int:assessment_id>', methods=['POST'])
+@login_required
+def delete_assessment(assessment_id):
+    # Ensure only admins can access
+    if not current_user.role:  # Assuming role=1 is admin
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('auth.login'))
+
+    assessment = Assessment.query.get_or_404(assessment_id)
+
+    # Delete the assessment
+    db.session.delete(assessment)
+    db.session.commit()
+
+    # Log the deletion
+    log_entry = ActionLog(
+        userid=current_user.userid,
+        username=current_user.name,
+        action_type="Delete",
+        target_table="assessment",
+        target_id=assessment_id,
+        timestamp=datetime.now(),
+        details=f"Deleted assessment: {assessment.title}"
+    )
+    db.session.add(log_entry)
+    db.session.commit()
+
+    flash("Assessment deleted successfully!", "success")
+    return redirect(url_for('assessment.view_classes'))  # Redirect to the assessment view

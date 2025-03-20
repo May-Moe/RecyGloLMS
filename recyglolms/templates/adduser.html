@@ -145,7 +145,7 @@
                 <div class="dropdown-container-quiz">
                     <ul>
                         <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
-                        <li><a href="{{ url_for('quiz.view_all_assessment') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
+                        <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
                         <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li>
                     </ul>
                 </div>                
@@ -153,7 +153,7 @@
             </ul>
         </nav>
         <div class="container">
-            <a href="{{ url_for('admin.view_users') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
+            <a href="{{ url_for('admin.view_users') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
 
             <h2>Add User</h2>
             <form id="AddProfileForm" method="POST" action="{{ url_for('admin.add_user') }}">
@@ -181,7 +181,7 @@
                 </div>
                 <div class="buttons">
                     <button type="submit" class="submit-button">Add</button>
-                    <a href="{{ url_for('admin.view_users') }}"><button type="button" class="cancel-button">Cancel</button></a
+                    <a href="{{ url_for('admin.view_users') }}"><button type="button" class="cancel-button">Cancel</button></a>
                 </div>
             </form>
         </div>

@@ -108,10 +108,11 @@
                 <div class="dropdown-container-quiz">
                     <ul>
                         <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
-                        <li><a href="{{ url_for('quiz.view_all_assessment') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
+                        <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
                         <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li>
                     </ul>
-                </div>                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+                </div>                
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
             </ul>
         </nav>
         <div class="container">
