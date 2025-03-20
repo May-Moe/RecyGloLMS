@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Assessment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .questions-container {
+            display: none; /* Hide questions initially */
+        }
+        .question-image {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Assessment</title>
+        <script>
+            let timeLeft = {{ time_limit }} * 60; 
+            let timer;
+    
+            function startAssessment() {
+                document.getElementById("start-btn").style.display = "none";  // Hide start button
+                document.getElementById("assessment-container").style.display = "block";  // Show questions
+                startTimer();
+                preventCheating();
+            }
+    
+            function startTimer() {
+                const timerDisplay = document.getElementById("timer");
+                timer = setInterval(() => {
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        document.getElementById("submit-btn").click();
+                    } else {
+                        let minutes = Math.floor(timeLeft / 60);
+                        let seconds = timeLeft % 60;
+                        timerDisplay.innerText = `Time Left: ${minutes}m ${seconds}s`;
+                        timeLeft--;
+                    }
+                }, 1000);
+            }
+    
+            function preventCheating() {
+                document.addEventListener('copy', (event) => {
+                    event.preventDefault();
+                    alert('Copying is not allowed!');
+                });
+    
+                document.addEventListener('paste', (event) => {
+                    event.preventDefault();
+                    alert('Pasting is not allowed!');
+                });
+    
+                document.addEventListener("visibilitychange", () => {
+                    if (document.hidden) {
+                        alert("Tab switching is not allowed! Assessment will be auto-submitted.");
+                        document.getElementById("submit-btn").click();
+                    }
+                });
+            }
+        </script>
+    </head>
+    
+    <body>
+        <div class="container mt-4">
+    
+            <!-- Start Button -->
+            <button id="start-btn" class="btn btn-primary" onclick="startAssessment()">Start Assessment</button>
+    
+            <!-- Assessment Questions (Hidden Initially) -->
+            <div id="assessment-container" style="display: none;">
+                <p id="timer">Time Left: {{ time_limit }} minutes</p>
+    
+                <form method="POST" action="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index) }}">
+                    <div class="question-item">
+                        <h4>Question {{ question_index + 1 }} / {{ total_questions }}</h4>
+                        <p>{{ question.question }}</p>
+    
+                        {% if question.image_url %}
+                            <img src="{{ question.image_url }}" alt="Question Image" class="question-image">
+                        {% endif %}
+    
+                        <textarea name="answer_text" placeholder="Type your answer here..." required></textarea>
+                        <input type="hidden" name="question_id" value="{{ question.id }}">
+                    </div>
+    
+                    {% if question_index + 1 < total_questions %}
+                        <button type="submit" class="btn btn-primary mt-3">Next</button>
+                    {% else %}
+                        <button type="submit" id="submit-btn" class="btn btn-success mt-3">Submit All Answers</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </body>
+    </html>
+    
+</html>

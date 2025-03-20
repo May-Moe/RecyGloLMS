@@ -82,23 +82,41 @@
                 </div>
             </div>
         
-           <div class="course-container">
-            {% if courses %}
-            {% for course in courses %}
-                <div class="course-item">
-                    <a href="{{ url_for('main.course_detail', courseid=course.courseid) }}" class="course_link">
-                        <img src="/static/img/1.jpg" alt="" class="course-image">
-                        <div class="course-content">
-                            <h3 class="course-title">{{ course.name }}</h3>
-                            <p class="course-details">{{ course.description }}</p>
-                        </div>
-                    </a>
-                </div>  
-            {% endfor %}
-        {% else %}
-            <p>No courses assigned to this class.</p>
-        {% endif %}
-           </div>
+            <div class="course-container">
+                {% if courses %}
+                    {% for course in courses %}
+                        <div class="course-item">
+                            <a href="{{ url_for('main.course_detail', courseid=course.courseid) }}" class="course_link">
+                                <img src="/static/img/1.jpg" alt="" class="course-image">
+                                <div class="course-content">
+                                    <h3 class="course-title">{{ course.name }}</h3>
+                                    <p class="course-details">{{ course.description }}</p>
+                                </div>
+                            </a>
+                        </div>  
+                    {% endfor %}
+                {% else %}
+                    <p>No courses assigned to this class.</p>
+                {% endif %}
+            </div>
+            
+            <!-- Assessments Section -->
+            <div class="assessment-container">
+                <h3>Assessments for {{ selected_class.name }}</h3>
+                {% if assessments %}
+                    <ul class="assessment-list">
+                        {% for assessment in assessments %}
+                            <li class="assessment-item">
+                                <a href="{{ url_for('assessment.submit_answer', assessment_id=assessment.id, question_index=0) }}" class="assessment-link">                                    <h4>{{ assessment.title }}</h4>
+                                    <p>Time Limit: {{ assessment.time_limit }} min</p>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No assessments available for this class.</p>
+                {% endif %}
+            </div>
         </div>
     <script src="/static/JS/script.js"></script>
     <script>

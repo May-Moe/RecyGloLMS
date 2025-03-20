@@ -24,6 +24,17 @@ class User(db.Model, UserMixin):
         return str(self.userid)
     
     
+    # Method to get users who attempted a specific assessment
+    @classmethod
+    def get_users_for_assessment(cls, assessment_id):
+        return db.session.query(User).join(Assese_Response, User.userid == Assese_Response.user_id)\
+                                       .join(Assese_Questions, Assese_Response.question_id == Assese_Questions.id)\
+                                       .filter(Assese_Questions.assessment_id == assessment_id)\
+                                       .distinct().all()
+    
+    
+    
+    
 class ActionLog(db.Model):
     __tablename__ = 'ActionLog' # Specify table name explicitly if needed
     id = db.Column(db.Integer, primary_key=True)
@@ -279,6 +290,7 @@ class Notification(db.Model):
     user = db.relationship('User', backref=db.backref('notifications', lazy=True))
     
     
+#Assessment feature    
 class Assessment(db.Model):
     __tablename__ = 'assessment'  # Ensure correct casing
     id = db.Column(db.Integer, primary_key=True)
@@ -286,6 +298,11 @@ class Assessment(db.Model):
     created_by = db.Column(db.Integer, nullable=False)  # Ensure it stores user ID
     time_limit = db.Column(db.Integer, nullable=False)
     classid = db.Column(db.Integer, db.ForeignKey('class.classid'), nullable=False)
+    
+    # Method to get all assessments for a specific class
+    @classmethod
+    def get_assessments_for_class(cls, classid):
+        return db.session.query(cls).filter_by(classid=classid).all()
 
 class Assese_Questions(db.Model):
     __tablename__ = 'assess_questions'
@@ -295,8 +312,52 @@ class Assese_Questions(db.Model):
     image_url = db.Column(db.String(255), nullable=True)
 
 class Assese_Response(db.Model):
-    __tablename__ = 'assese_response'
+    __tablename__ = 'assess_response'
     id = db.Column(db.Integer, primary_key=True)
-    question_id = db.Column(db.Integer, db.ForeignKey('assese_questions.id'), nullable=False)  # Fixed reference
+    question_id = db.Column(db.Integer, db.ForeignKey('assess_questions.id'), nullable=False)  # Fixed reference
     user_id = db.Column(db.Integer, nullable=False)
     answer_text = db.Column(db.Text, nullable=False)
+    marks = db.Column(db.Float, nullable=True)
+    assessment_id = db.Column(db.Integer, db.ForeignKey('assessment.id'), nullable=False)  # Add this line
+    plagiarism_score = db.Column(db.Float, nullable=True)  # Store plagiarism percentage
+
+    # Relationships
+    assessment = db.relationship('Assessment', backref=db.backref('responses', lazy=True))
+    assess_question = db.relationship('Assese_Questions', backref='responses') 
+
+    # Method to get responses for a specific user and assessment
+    @classmethod
+    def get_users_for_assessment(cls, assessment_id):
+        return db.session.query(
+            User.userid, 
+            User.name, 
+            db.func.coalesce(db.func.sum(Assese_Response.marks), 0).label("marks")
+        ).join(Assese_Response, User.userid == Assese_Response.user_id)\
+        .join(Assese_Questions, Assese_Response.question_id == Assese_Questions.id)\
+        .filter(Assese_Questions.assessment_id == assessment_id)\
+        .group_by(User.userid, User.name)\
+        .all()
+        
+    # Method to calculate total marks for a specific user and assessment
+    @classmethod
+    def calculate_total_marks(cls, user_id, assessment_id):
+        total_marks = db.session.query(db.func.coalesce(db.func.sum(Assese_Response.marks), 0))\
+                                .join(Assese_Questions, Assese_Response.question_id == Assese_Questions.id)\
+                                .filter(Assese_Questions.assessment_id == assessment_id, Assese_Response.user_id == user_id)\
+                                .scalar()
+        return total_marks
+    @classmethod
+    def get_latest_responses_by_user_and_assessment(cls, user_id, assessment_id):
+        subquery = db.session.query(
+            cls.question_id, 
+            db.func.max(cls.id).label('latest_id')
+        ).filter(cls.user_id == user_id, cls.assessment_id == assessment_id).group_by(cls.question_id).subquery()
+
+        query = db.session.query(cls, Assese_Questions)\
+                        .join(subquery, cls.id == subquery.c.latest_id)\
+                        .join(Assese_Questions, cls.question_id == Assese_Questions.id)
+
+        print(str(query))  # Debugging line to check generated SQL query
+        return query.all()
+
+    

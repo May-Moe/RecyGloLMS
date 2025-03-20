@@ -24,6 +24,7 @@
                         <th>Title</th>
                         <th>Time Limit</th>
                         <th>Created By</th>
+                        <th>View Attempted Users</th>  <!-- New column for viewing attempted users -->
                     </tr>
                 </thead>
                 <tbody>
@@ -32,6 +33,12 @@
                         <td>{{ assessment.title }}</td>
                         <td>{{ assessment.time_limit }} min</td>
                         <td>{{ assessment.created_by }}</td>
+                        <td>
+                            <!-- Link to view users who attempted the assessment -->
+                            <a href="{{ url_for('assessment.view_attempted_users', assessment_id=assessment.id) }}" class="btn btn-info btn-sm">
+                                View Users
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
