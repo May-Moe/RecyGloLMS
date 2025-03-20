@@ -388,7 +388,7 @@ body {
 }
 
 /* Dropdown button styling */
-.dropdown-class, .dropdown-user {
+.dropdown-class, .dropdown-user, .dropdown-quiz {
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -398,21 +398,21 @@ body {
 }
 
 /* Hover effect */
-.dropdown-class:hover, .dropdown-user:hover {
+.dropdown-class:hover, .dropdown-user:hover ,.dropdown-quiz:hover {
     background: #e2e2e2;
 }
 
 /* Dropdown container hidden */
-.dropdown-container-class, .dropdown-container {
+.dropdown-container-class, .dropdown-container, .dropdown-container-quiz {
     display: none;
 }
 
-.dropdown-container.active, .dropdown-container-class.active {
+.dropdown-container.active, .dropdown-container-class.active, .dropdown-container-quiz.active {
     display: block; /* Show when active */
 }
 
 /* Dropdown list items */
-.dropdown-container-class ul, .dropdown-container ul {
+.dropdown-container-class ul, .dropdown-container ul ,.dropdown-container-quiz ul{
     list-style: none;
     padding: 0;
     margin: 0;
@@ -420,7 +420,8 @@ body {
 
 /* Individual dropdown links */
 .dropdown-container-class ul li a,
-.dropdown-container ul li a {
+.dropdown-container ul li a 
+,.dropdown-container-quiz ul li a{
     display: flex;
     align-items: center;
     padding: 5px;
@@ -434,14 +435,16 @@ body {
 
 /* Icon alignment */
 .dropdown-container-class ul li a i,
-.dropdown-container ul li a i {
+.dropdown-container ul li a i 
+,.dropdown-container-quiz ul li a i{
     margin-left: 20px;
     color: gray;
 }
 
 /* Hover effect */
 .dropdown-container-class ul li a:hover,
-.dropdown-container ul li a:hover {
+.dropdown-container ul li a:hover 
+.dropdown-container-quiz ul li a:hover{
     background: #e2e2e2;
     /* color: white; */
 }

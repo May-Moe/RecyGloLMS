@@ -96,7 +96,22 @@
                     <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
                 </ul>
                 </div>
-                <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+
+                <!-- dropdown quiz management -->
+                <li class="dropdown-quiz">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-lightbulb icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Assessment</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                <div class="dropdown-container-quiz">
+                    <ul>
+                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                        <li><a href="{{ url_for('quiz.view_all_assessment') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
+                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li>
+                    </ul>
+                </div>                
                 <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
             </ul>
         </nav>
@@ -162,7 +177,8 @@
         document.addEventListener("DOMContentLoaded", function () {
                     const dropdowns = [
                         { button: ".dropdown-class", container: ".dropdown-container-class" },
-                        { button: ".dropdown-user", container: ".dropdown-container" }
+                        { button: ".dropdown-user", container: ".dropdown-container" },
+                        { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
                     ];
 
                     dropdowns.forEach(({ button, container }) => {

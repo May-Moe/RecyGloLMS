@@ -1,0 +1,178 @@
+/* General Styles */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 300px); /* Adjust width for sidebar */
+    margin: 10px auto;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+h1 {
+    /* text-align: center; */
+    font-size: 24px;
+    color: #16a159;
+    margin-left: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 25px;
+}
+
+label {
+    margin: 10px 0 5px;
+    
+    
+}
+
+input, textarea, select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.add_quiz {
+    background: white;
+    color: black;
+    padding: 10px;
+    border: 2px dotted black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.add_quiz:hover {
+    background: #16a159;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+/* Style the Create Quiz button */
+.create_quiz {
+    padding: 10px 20px;
+    background: #16a159;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 20%;
+}
+
+/* Hover Effect */
+.create_quiz:hover {
+    background: #16a159;
+}
+
+/* .create_quiz {
+    margin-top: 10px;
+    background: #16a159;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+    width: 20%;
+    justify-content: space-between;
+
+} */
+
+#questions-container {
+    margin-top: 20px;
+}
+
+.question {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background: #f9f9f9;
+}
+
+.answers-container input {
+    display: block;
+    margin-top: 5px;
+    width: 95%;
+}
+
+.added-question {
+    background: #e8f5e9;
+    padding: 10px;
+    border-left: 5px solid #16a159;
+    margin-bottom: 10px;
+}
+
+.added-question h4 {
+    margin: 0 0 5px;
+}
+
+.added-question ul {
+    padding-left: 20px;
+    margin: 5px 0;
+}
+
+.added-question button {
+    background: #e74c3c;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+}
+
+.added-question button:hover {
+    background: #c0392b;
+}
+
+.done{
+    background-color: #16a159;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    width: 20%;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 90%; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
