@@ -1,0 +1,58 @@
+<body>
+    <div class="container mt-5">
+        <h2>User Answers</h2>
+        <form method="POST" action="{{ url_for('assessment.grade_user_answers', assessment_id=assessment_id, user_id=user_id) }}">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th>Plagiarism Score</th>
+                        <th>Marks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set total_marks = 0 %}
+                    {% for response, question in responses %}
+                    <tr>
+                        <td>{{ question.question }}</td>
+                        <td>{{ response.answer_text }}</td>
+                        <td>{{ response.plagiarism_score if response.plagiarism_score else 'N/A' }}%</td>
+                        <td>
+                            {% set marks = response.marks if response.marks else 0 %}
+                            <input type="number" name="marks_{{ response.id }}" class="form-control marks-input" 
+                                   min="0" step="0.1" value="{{ marks }}" required>
+                            {% set total_marks = total_marks + marks %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>Total Marks: <span id="total-marks">{{ total_marks }}</span></h3>
+            <button type="submit" class="btn btn-success">Save All Marks</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const inputs = document.querySelectorAll(".marks-input");
+            const totalMarksElement = document.getElementById("total-marks");
+
+            function updateTotalMarks() {
+                let total = 0;
+                inputs.forEach(input => {
+                    total += parseFloat(input.value) || 0; // Convert to number
+                });
+
+                totalMarksElement.textContent = total > 100 ? "100 (Max)" : total.toFixed(1);
+            }
+
+            // Update total marks on input change
+            inputs.forEach(input => {
+                input.addEventListener("input", updateTotalMarks);
+            });
+
+            updateTotalMarks(); // Initialize total marks when page loads
+        });
+    </script>
+</body>

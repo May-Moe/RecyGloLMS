@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -366,4 +367,57 @@
 
     </script>
 </body>
+=======
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <div class="container mt-4">
+            <h2 class="mb-4">Assessments for {{ selected_class.name }}</h2>
+        
+            <a href="{{ url_for('assessment.create_assessment', classid=selected_class.classid) }}" 
+               class="btn btn-primary mb-3">
+                + Create New Assessment
+            </a>
+        
+            {% if assessments %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Time Limit</th>
+                        <th>Created By</th>
+                        <th>View Attempted Users</th>  <!-- New column for viewing attempted users -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assessment in assessments %}
+                    <tr>
+                        <td>{{ assessment.title }}</td>
+                        <td>{{ assessment.time_limit }} min</td>
+                        <td>{{ assessment.created_by }}</td>
+                        <td>
+                            <!-- Link to view users who attempted the assessment -->
+                            <a href="{{ url_for('assessment.view_attempted_users', assessment_id=assessment.id) }}" class="btn btn-info btn-sm">
+                                View Users
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p>No assessments available for this class.</p>
+            {% endif %}
+        </div>
+        
+        <script src="" async defer></script>
+    </body>
+>>>>>>> 874eed0c7c68993332b7e8770bac01b1941794c0
 </html>

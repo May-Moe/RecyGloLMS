@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <form method="POST" action="{{ url_for('assessment.review_answers', assessment_id=assessment_id) }}">
+            {% for response in responses %}
+                <div class="question-item">
+                    <!-- Retrieve the question using the question_id from response -->
+                    <h4>Question: {{ assess_questions[response.question_id].question }}</h4>
+                    <p>Your Answer: {{ response.answer_text }}</p>
+                </div>
+            {% endfor %}
+    
+            <button type="submit" class="btn btn-success mt-3">Submit Assessment</button>
+        </form>
+    
+        <script src="" async defer></script>
+    </body>
+</html>

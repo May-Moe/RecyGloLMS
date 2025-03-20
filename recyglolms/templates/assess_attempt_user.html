@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <h2>Users Who Attempted the Assessment</h2>
+    
+    <!-- Check if any users have attempted the assessment -->
+    {% if users %}
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Total Marks</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.total_marks}}</td>
+                    <td>
+                        <a href="{{ url_for('assessment.view_user_answers', assessment_id=assessment_id, user_id=user.userid) }}">
+                            View Answers
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No users have attempted this assessment yet.</p>
+{% endif %}
+
+        
+        <script src="" async defer></script>
+    </body>
+</html>
