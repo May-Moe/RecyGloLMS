@@ -131,6 +131,7 @@ def view_attempted_users(assessment_id):
 
     return render_template('assess_attempt_user.html', users=users, assessment_id=assessment_id)
 
+<<<<<<< HEAD
     new_response = Assese_Response(
         question_id=question_id, 
         user_id=current_user.userid, 
@@ -142,6 +143,8 @@ def view_attempted_users(assessment_id):
     return jsonify({"success": True, "message": "Answer submitted successfully"})
 
 
+=======
+>>>>>>> 1a325829c9d151f0549b22035a48683446a9b2a7
 @assessment_bp.route('/delete_assessment/<int:assessment_id>', methods=['POST'])
 @login_required
 def delete_assessment(assessment_id):
@@ -293,6 +296,10 @@ def review_answers(assessment_id):
         flash("Assessment submitted successfully!", "success")
         return redirect(url_for('main.learning'))
 
+<<<<<<< HEAD
     return render_template('review_answers.html', responses=responses, assessment_id=assessment_id, assess_questions=assess_questions)
 
 
+=======
+    return render_template('review_answers.html', responses=responses, assessment_id=assessment_id, assess_questions=assess_questions)
+>>>>>>> 1a325829c9d151f0549b22035a48683446a9b2a7

@@ -1,5 +1,6 @@
 <html lang="en">
 <head>
+<<<<<<< HEAD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/CSS/style.css">
@@ -165,3 +166,129 @@
     
 </body>
 </html>
+=======
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Assessment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .questions-container {
+            display: none;
+        }
+        .question-image {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <button id="start-btn" class="btn btn-primary">Start Assessment</button>
+
+        <div id="assessment-container" style="display: none;">
+            <p>Question {{ question_index + 1 }} / {{ total_questions }}</p>
+            <p id="timer">Time Left: {{ time_limit }} minutes</p>
+
+            <form method="POST" action="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index) }}">
+                <div class="question-item">
+                    <h4>Question {{ question_index + 1 }} / {{ total_questions }}</h4>
+                    <p>{{ question.question }}</p>
+
+                    {% if question.image_url %}
+                        <img src="{{ question.image_url }}" alt="Question Image" class="question-image">
+                    {% endif %}
+
+                    <textarea name="answer_text" placeholder="Type your answer here..." required></textarea>
+                    <input type="hidden" name="question_id" value="{{ question.id }}">
+                </div>
+
+                {% if question_index + 1 < total_questions %}
+                    <button type="submit" class="btn btn-primary mt-3">Next</button>
+                {% else %}
+                    <button type="submit" id="submit-btn" class="btn btn-success mt-3">Submit All Answers</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let timeLeft = {{ time_limit | default(10) }} * 60; 
+            let timer;
+
+            const startBtn = document.getElementById("start-btn");
+            const assessmentContainer = document.getElementById("assessment-container");
+            const timerDisplay = document.getElementById("timer");
+
+            // Check if the assessment has already started
+            if (localStorage.getItem("assessment_started") === "true") {
+                startBtn.style.display = "none";
+                assessmentContainer.style.display = "block";
+                resumeTimer();
+            }
+
+            startBtn.addEventListener("click", function () {
+                startBtn.style.display = "none";
+                assessmentContainer.style.display = "block";
+
+                if (!localStorage.getItem("timer_started")) {
+                    startTimer();
+                    localStorage.setItem("timer_started", "true");
+                }
+
+                localStorage.setItem("assessment_started", "true");
+            });
+
+            function startTimer() {
+                let storedTime = localStorage.getItem("remaining_time");
+                if (storedTime) {
+                    timeLeft = parseInt(storedTime);
+                }
+
+                timer = setInterval(() => {
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        document.getElementById("submit-btn").click();
+                    } else {
+                        let minutes = Math.floor(timeLeft / 60);
+                        let seconds = timeLeft % 60;
+                        timerDisplay.innerText = `Time Left: ${minutes}m ${seconds}s`;
+                        timeLeft--;
+                        localStorage.setItem("remaining_time", timeLeft);
+                    }
+                }, 1000);
+            }
+
+            function resumeTimer() {
+                let storedTime = localStorage.getItem("remaining_time");
+                if (storedTime) {
+                    timeLeft = parseInt(storedTime);
+                    startTimer();
+                }
+            }
+
+            function preventCheating() {
+                document.addEventListener('copy', (event) => {
+                    event.preventDefault();
+                    alert('Copying is not allowed!');
+                });
+
+                document.addEventListener('paste', (event) => {
+                    event.preventDefault();
+                    alert('Pasting is not allowed!');
+                });
+
+                document.addEventListener("visibilitychange", () => {
+                    if (document.hidden) {
+                        alert("Tab switching is not allowed! Assessment will be auto-submitted.");
+                        document.getElementById("submit-btn").click();
+                    }
+                });
+            }
+
+            preventCheating();
+        });
+    </script>
+</body>
+</html>
+>>>>>>> 1a325829c9d151f0549b22035a48683446a9b2a7

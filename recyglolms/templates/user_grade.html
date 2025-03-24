@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-4">Your Grades</h2>
+
+        {% if user_grades[0].message %}
+    <p>{{ user_grades[0].message }}</p>
+{% else %}
+    <table>
+      <thead>
+        <tr>
+          <th>Class Name</th>
+          <th>Quiz Score</th>
+          <th>Assessment Score</th>
+          <th>Final Score</th>
+          <th>Grade</th>
+          <th>Certificate</th> <!-- New column for the certificate link -->
+        </tr>
+      </thead>
+      <tbody>
+        {% for grade in user_grades %}
+          <tr>
+            <td>{{ grade.class_name }}</td>
+            <td>{{ grade.quiz_score }}</td>
+            <td>{{ grade.assessment_score }}</td>
+            <td>{{ grade.final_score }}</td>
+            <td>{{ grade.grade }}</td>
+            <td>
+                {% if grade.is_access_granted %}
+                    <a href="{{ url_for('grading.download_certificate', class_id=grade.class_id) }}">
+                        <button>Download Certificate</button>
+                    </a>
+                {% else %}
+                    <button disabled style="background-color: gray; color: white;">Pending</button>
+                {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endif %}
+    </div>
+</body>
+</html>

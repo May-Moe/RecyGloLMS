@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <div class="certificates-section">
+            <h2>My Certificates</h2>
+            {% for class in user_classes %}
+                <h3>{{ class.name }}</h3>
+                
+                {% if class.is_access_granted %}
+                    <a href="{{ url_for('grading.download_certificate', class_id=class.classid) }}">
+                        <button>Download Certificate</button>
+                    </a>
+                {% else %}
+                    <p style="color: red;">Certificate access is pending.</p>
+                {% endif %}
+            {% endfor %}
+        </div>        
+        
+        <script src="" async defer></script>
+    </body>
+</html>

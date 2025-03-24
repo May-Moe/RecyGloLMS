@@ -278,6 +278,7 @@ class UserClass(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
     classid = db.Column(db.Integer, db.ForeignKey('class.classid'), nullable=False)
+    is_access_granted = db.Column(db.Boolean, default=False)  # To track if the admin granted access to the class for certificate generation
     
 #Notification feature
 class Notification(db.Model):
@@ -360,4 +361,11 @@ class Assese_Response(db.Model):
         print(str(query))  # Debugging line to check generated SQL query
         return query.all()
 
-    
+class Certificate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    course_name = db.Column(db.String(255), nullable=False)
+    issue_date = db.Column(db.Date, nullable=False)
+    file_path = db.Column(db.String(255), nullable=False)  # Path to certificate file
+
+    user = db.relationship('User', backref=db.backref('certificates', lazy=True))

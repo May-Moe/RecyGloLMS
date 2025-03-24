@@ -159,8 +159,12 @@
                                     <a href="{{ url_for('assessment.view_attempted_users', assessment_id=assessment.id) }}">
                                         check<i class="fa-solid fa-pen-fancy icon" style="margin-left: 5px;"></i>
                                     </a>
+<<<<<<< HEAD
                                 </td>
                                 <td> 
+=======
+                                </td>                                <td> 
+>>>>>>> 1a325829c9d151f0549b22035a48683446a9b2a7
                                     <form action="{{ url_for('assessment.delete_assessment', assessment_id=assessment.id) }}" method="POST" style="display:inline;">
                                         <button type="submit" class="deleteAction" onclick="return confirm('Are you sure you want to delete this assessment?');">
                                             <i class="fas fa-trash-alt"></i>
