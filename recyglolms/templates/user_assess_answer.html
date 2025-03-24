@@ -1,82 +1,88 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Assessment</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        .questions-container {
-            display: none; /* Hide questions initially */
-        }
-        .question-image {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Assessment</title>
-        <script>
-            let timeLeft = {{ time_limit }} * 60; 
-            let timer;
-    
-            function startAssessment() {
-                document.getElementById("start-btn").style.display = "none";  // Hide start button
-                document.getElementById("assessment-container").style.display = "block";  // Show questions
-                startTimer();
-                preventCheating();
-            }
-    
-            function startTimer() {
-                const timerDisplay = document.getElementById("timer");
-                timer = setInterval(() => {
-                    if (timeLeft <= 0) {
-                        clearInterval(timer);
-                        document.getElementById("submit-btn").click();
-                    } else {
-                        let minutes = Math.floor(timeLeft / 60);
-                        let seconds = timeLeft % 60;
-                        timerDisplay.innerText = `Time Left: ${minutes}m ${seconds}s`;
-                        timeLeft--;
-                    }
-                }, 1000);
-            }
-    
-            function preventCheating() {
-                document.addEventListener('copy', (event) => {
-                    event.preventDefault();
-                    alert('Copying is not allowed!');
-                });
-    
-                document.addEventListener('paste', (event) => {
-                    event.preventDefault();
-                    alert('Pasting is not allowed!');
-                });
-    
-                document.addEventListener("visibilitychange", () => {
-                    if (document.hidden) {
-                        alert("Tab switching is not allowed! Assessment will be auto-submitted.");
-                        document.getElementById("submit-btn").click();
-                    }
-                });
-            }
-        </script>
-    </head>
-    
-    <body>
-        <div class="container mt-4">
-    
-            <!-- Start Button -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="/static/CSS/user_assess_answer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Learning Page</title>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- nav -->
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="/static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="/static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="/static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="/static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="/static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="/static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="/static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+            <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+            </button>
+            <div id="notification-dropdown" class="notification-dropdown hidden">
+                <ul id="notification-list"></ul>
+            </div>
+            <script src="/static/JS/notification.js"></script>
+
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_username }}</span></h4>
+                        <p id="profile-email">{{ current_useremail }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="/static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+            <div id="timer">Time Left: {{ time_limit }} minutes</div>
+            <h1 id="assessment-title">Assessment for "{{ assessment.title }}"</h1>
+            <p id="intro-text1" style="margin-bottom: 8px;">You should aim to do the whole exam in one go, from start to finish. If you have a long break, Moodle may time out. This could lead to unsaved answers being lost. Answers are saved when you move to another page in the exam. 
+                DO NOT SUBMIT THE EXAM UNTIL YOU HAVE ANSWERED ALL QUESTIONS. If Moodle does time out before you are finished, you should be able to re-open the quiz with the same password as before.
+            </p>
+            <p id="intro-text2" style="margin-bottom: 8px;">The exam is a 'closed book'. This means the use of resources, notes, moodle materials, books, and published online information during the exam is prohibited.
+                You are not allowed to share your answers with other students.
+                Remember that all answers must be given IN YOUR OWN WORDS. You are not allowed to use or copy and paste from the internet, books, or similar sources.</p>
+            <h4 id="time-limit">Time limit: {{ time_limit }} minutes</h4>
+            <h4 id="grade" style="margin-bottom: 8px;">Grading method: Highest grade</h4>
+            <p id="intro-text3">Are you ready to begin your assessment? You can start when you’re ready.</p>
             <button id="start-btn" class="btn btn-primary" onclick="startAssessment()">Start Assessment</button>
     
-            <!-- Assessment Questions (Hidden Initially) -->
             <div id="assessment-container" style="display: none;">
-                <p id="timer">Time Left: {{ time_limit }} minutes</p>
-    
                 <form method="POST" action="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index) }}">
                     <div class="question-item">
                         <h4>Question {{ question_index + 1 }} / {{ total_questions }}</h4>
@@ -91,14 +97,71 @@
                     </div>
     
                     {% if question_index + 1 < total_questions %}
-                        <button type="submit" class="btn btn-primary mt-3">Next</button>
+                        <button type="submit" class="btn btn-next">Next</button>
                     {% else %}
-                        <button type="submit" id="submit-btn" class="btn btn-success mt-3">Submit All Answers</button>
+                        <button type="submit" id="submit-btn" class="btn btn-success">Submit All Answers</button>
                     {% endif %}
                 </form>
             </div>
         </div>
-    </body>
-    </html>
+    <script src="/static/JS/script.js"></script>
+    <script>
+        // Ensure that timeLeft is initialized properly. You may want to log it to check.
+        let timeLeft = {{ time_limit }} * 60;  // Assuming time_limit is in minutes, convert to seconds.
+        let timer;
+
+        function startAssessment() {
+            document.getElementById("start-btn").style.display = "none";
+            document.getElementById("assessment-container").style.display = "block";
+            document.getElementById("timer").style.display = "block"; // Show the timer when the assessment starts
+
+            // Hide the title, time limit, and introductory text
+            document.getElementById("assessment-title").style.display = "none";
+            document.getElementById("time-limit").style.display = "none";
+            document.getElementById("intro-text1").style.display = "none";
+            document.getElementById("intro-text2").style.display = "none";
+            document.getElementById("intro-text3").style.display = "none";
+            document.getElementById("grade").style.display = "none";
+            startTimer();
+            preventCheating();
+        }
+
+        function startTimer() {
+            const timerDisplay = document.getElementById("timer");
+            timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    document.getElementById("submit-btn").click();  // Automatically submit the form when time is up
+                } else {
+                    let minutes = Math.floor(timeLeft / 60);  // Convert seconds to minutes
+                    let seconds = timeLeft % 60;  // Get remaining seconds
+                    timerDisplay.innerText = `Time Left: ${minutes}m ${seconds}s`;  // Update the display
+                    timeLeft--;  // Decrease the time by 1 second
+                }
+            }, 1000);  // Set the interval to 1 second
+        }
+
+        function preventCheating() {
+            document.addEventListener('copy', (event) => {
+                event.preventDefault();
+                alert('Copying is not allowed!');
+            });
+
+            document.addEventListener('paste', (event) => {
+                event.preventDefault();
+                alert('Pasting is not allowed!');
+            });
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    alert("Tab switching is not allowed! Assessment will be auto-submitted.");
+                    document.getElementById("submit-btn").click();
+                }
+            });
+        }
+
+
+    </script>
     
+</body>
 </html>

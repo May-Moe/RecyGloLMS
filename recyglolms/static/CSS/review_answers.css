@@ -1,0 +1,115 @@
+/* Base styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fc;
+    color: #333;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* background: linear-gradient(to right, rgba(239, 251, 240, 0.8), #16a159); */
+    padding: 10px;
+    color: #16a159;
+    margin-bottom: 10px;
+    /* border-radius: 10px; */
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 300px); /* Adjust width for sidebar */
+    margin: 10px auto;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Title */
+.page-title {
+    text-align: center;
+    font-size: 25px;
+    color: #4CAF50;
+    margin-bottom: 30px;
+}
+
+/* Question Section */
+.review-questions {
+    margin-bottom: 20px;
+}
+
+.question-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 20px;
+}
+
+.question-title {
+    font-size: 1.1rem;
+    color: #4CAF50;
+}
+
+.answer-text {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* Submit Button */
+.submit-section {
+    display: flex;
+    justify-content: flex-end; /* Align the button to the right */
+    margin-top: 30px;
+}
+
+.submit-btn {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+
+.submit-btn:focus {
+    outline: none;
+}
+
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 90%; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .filter-select{
+        width: calc(100% - 130px); /* Adjust width based on button size */
+        margin-right: 0;
+    }
+
+}
+
+
