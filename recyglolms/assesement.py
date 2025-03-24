@@ -131,18 +131,6 @@ def view_attempted_users(assessment_id):
 
     return render_template('assess_attempt_user.html', users=users, assessment_id=assessment_id)
 
-<<<<<<< HEAD
-    new_response = Assese_Response(
-        question_id=question_id, 
-        user_id=current_user.userid, 
-        answer_text=answer_text
-    )
-    db.session.add(new_response)
-    db.session.commit()
-
-    return jsonify({"success": True, "message": "Answer submitted successfully"})
-
-
 @assessment_bp.route('/delete_assessment/<int:assessment_id>', methods=['POST'])
 @login_required
 def delete_assessment(assessment_id):
@@ -172,7 +160,6 @@ def delete_assessment(assessment_id):
 
     flash("Assessment deleted successfully!", "success")
     return redirect(url_for('assessment.view_classes'))  # Redirect to the assessment view
-=======
 
 @assessment_bp.route('/admin/assessment/<int:assessment_id>/answers/<int:user_id>')
 @login_required
@@ -230,22 +217,25 @@ def submit_answer(assessment_id, question_index):
         flash("Assessment not found!", "danger")
         return redirect(url_for('main.learning'))
 
-    # **Check if the user has already completed this assessment**
-    existing_responses = Assese_Response.query.filter_by(
-        user_id=current_user.userid, assessment_id=assessment_id
-    ).first()
-
-    if existing_responses:  # If any response exists, user has already attempted this assessment
-        flash("You have already completed this assessment. Redirecting to your answers.", "info")
-        return redirect(url_for('assessment.review_answers', assessment_id=assessment_id))
-    
-
-    # Fetch questions
+    # Fetch all questions for the assessment
     questions = Assese_Questions.query.filter_by(assessment_id=assessment_id).all()
-    if question_index >= len(questions):  
+    
+    # Redirect if index exceeds available questions
+    if question_index >= len(questions):
         return redirect(url_for('assessment.review_answers', assessment_id=assessment_id))
 
     current_question = questions[question_index]
+
+    # Check if the user has already completed this assessment
+    existing_responses = Assese_Response.query.filter_by(user_id=current_user.userid, assessment_id=assessment_id).all()
+
+    # **Check if the user has already answered this question**
+    answered_questions = {resp.question_id for resp in existing_responses}
+    
+    if current_question.id in answered_questions:
+        # question_index += 1
+        flash("You have already answered this question. Redirecting to the next one.", "info")
+        return redirect(url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index + 1))
 
     if request.method == 'POST':
         answer_text = request.form.get("answer_text")
@@ -267,12 +257,18 @@ def submit_answer(assessment_id, question_index):
 
         flash("Answer saved!", "success")
 
+        # Redirect to the next question
         return redirect(url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index + 1))
 
-
-    return render_template('user_assess_answer.html', assessment_id=assessment_id, question=current_question,
-                           question_index=question_index, total_questions=len(questions), assessment=assessment,
-                           existing_responses=existing_responses)
+    return render_template(
+        'user_assess_answer.html',
+        assessment_id=assessment_id, 
+        question=current_question, 
+        question_index=question_index, 
+        total_questions=len(questions), 
+        assessment=assessment, 
+        time_limit=assessment.time_limit
+    )
 
 
 @assessment_bp.route('/review_answers/<int:assessment_id>', methods=['GET', 'POST'])
@@ -288,5 +284,3 @@ def review_answers(assessment_id):
         return redirect(url_for('main.learning'))
 
     return render_template('review_answers.html', responses=responses, assessment_id=assessment_id, assess_questions=assess_questions)
-
->>>>>>> 874eed0c7c68993332b7e8770bac01b1941794c0

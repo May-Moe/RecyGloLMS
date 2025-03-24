@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Grading</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Grading Dashboard</h1>
+    </header>
+    <div class="container">
+        <h1>Admin Dashboard - User Grades</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Class</th>
+                    <th>Quiz Score</th>
+                    <th>Assessment Score</th>
+                    <th>Final Score</th>
+                    <th>Grade</th>
+                    <th>Certificate Access</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grade in all_grades %}
+                <tr>
+                    <td>{{ grade.name }}</td>
+                    <td>{{ grade.class_name }}</td>
+                    <td>{{ grade.quiz_score }}</td>
+                    <td>{{ grade.assessment_score }}</td>
+                    <td>{{ grade.final_score }}</td>
+                    <td>{{ grade.grade }}</td>
+                    <td>
+                        {% if grade.is_access_granted %}
+                            <span style="color: green;">Granted</span>
+                        {% else %}
+                            <span style="color: red;">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{{ url_for('grading.grant_certificate_access') }}" method="POST">
+                            <input type="hidden" name="user_id" value="{{ grade.user_id }}">
+                            <input type="hidden" name="class_id" value="{{ grade.class_id }}">
+                            <button type="submit">
+                                {% if grade.is_access_granted %}
+                                    Revoke Access
+                                {% else %}
+                                    Grant Access
+                                {% endif %}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

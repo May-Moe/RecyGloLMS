@@ -47,6 +47,7 @@ from recyglolms.upload import upload_bp
 from recyglolms.announcement import announcement_bp
 from recyglolms.quiz import quiz_bp
 from recyglolms.assesement import assessment_bp
+from recyglolms.certificate_grading import grading_bp
 
 app.register_blueprint(main_bp)
 app.register_blueprint(auth_bp)
@@ -55,3 +56,4 @@ app.register_blueprint(upload_bp)
 app.register_blueprint(announcement_bp)
 app.register_blueprint(quiz_bp)
 app.register_blueprint(assessment_bp)
+app.register_blueprint(grading_bp)

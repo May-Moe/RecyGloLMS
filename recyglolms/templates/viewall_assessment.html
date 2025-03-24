@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -156,8 +155,11 @@
                                 <td>{{ assessment.created_by }}</td>
                                 <td>Mar21</td>
                                 <td>Mar31</td>
-                                <td>12<a href="#"><i class="fa-solid fa-pen icon" style="margin-left: 8px; font-size: 13px;"></i></a></td>
-                                <td> 
+                                <td>
+                                    <a href="{{ url_for('assessment.view_attempted_users', assessment_id=assessment.id) }}">
+                                        check<i class="fa-solid fa-pen-fancy icon" style="margin-left: 5px;"></i>
+                                    </a>
+                                </td>                                <td> 
                                     <form action="{{ url_for('assessment.delete_assessment', assessment_id=assessment.id) }}" method="POST" style="display:inline;">
                                         <button type="submit" class="deleteAction" onclick="return confirm('Are you sure you want to delete this assessment?');">
                                             <i class="fas fa-trash-alt"></i>
@@ -367,57 +369,4 @@
 
     </script>
 </body>
-=======
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <div class="container mt-4">
-            <h2 class="mb-4">Assessments for {{ selected_class.name }}</h2>
-        
-            <a href="{{ url_for('assessment.create_assessment', classid=selected_class.classid) }}" 
-               class="btn btn-primary mb-3">
-                + Create New Assessment
-            </a>
-        
-            {% if assessments %}
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Time Limit</th>
-                        <th>Created By</th>
-                        <th>View Attempted Users</th>  <!-- New column for viewing attempted users -->
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for assessment in assessments %}
-                    <tr>
-                        <td>{{ assessment.title }}</td>
-                        <td>{{ assessment.time_limit }} min</td>
-                        <td>{{ assessment.created_by }}</td>
-                        <td>
-                            <!-- Link to view users who attempted the assessment -->
-                            <a href="{{ url_for('assessment.view_attempted_users', assessment_id=assessment.id) }}" class="btn btn-info btn-sm">
-                                View Users
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-                <p>No assessments available for this class.</p>
-            {% endif %}
-        </div>
-        
-        <script src="" async defer></script>
-    </body>
->>>>>>> 874eed0c7c68993332b7e8770bac01b1941794c0
 </html>
