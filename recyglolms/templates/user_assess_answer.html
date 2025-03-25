@@ -84,7 +84,7 @@
             <button id="start-btn" class="btn btn-primary" onclick="startAssessment()">Start Assessment</button>
     
             <div id="assessment-container" style="display: none;">
-                <form method="POST" action="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index) }}">
+                <form id="answer-form" method="POST" action="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index) }}">
                     <div class="question-item">
                         <h4>Question {{ question_index + 1 }} / {{ total_questions }}</h4>
                         <p>{{ question.question }}</p>
@@ -93,14 +93,18 @@
                             <img src="{{ question.image_url }}" alt="Question Image" class="question-image">
                         {% endif %}
     
-                        <textarea name="answer_text" placeholder="Type your answer here..." required></textarea>
+                        <textarea id="answer-text" name="answer_text" placeholder="Type your answer here..." required></textarea>
                         <input type="hidden" name="question_id" value="{{ question.id }}">
                     </div>
     
+                    {% if question_index > 0 %}
+                        <a href="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index - 1) }}" class="btn btn-secondary mt-3">Previous</a>
+                    {% endif %}
+                    
                     {% if question_index + 1 < total_questions %}
-                        <button type="submit" class="btn btn-next">Next</button>
+                        <button type="submit" class="btn btn-next mt-3">Next</button>
                     {% else %}
-                        <button type="submit" id="submit-btn" class="btn btn-success">Submit All Answers</button>
+                        <button type="submit" id="submit-btn" class="btn btn-success mt-3">Submit All Answers</button>
                     {% endif %}
                 </form>
             </div>

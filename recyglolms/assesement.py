@@ -216,25 +216,26 @@ def submit_answer(assessment_id, question_index):
         flash("Assessment not found!", "danger")
         return redirect(url_for('main.learning'))
 
-    # Fetch all questions for the assessment
     questions = Assese_Questions.query.filter_by(assessment_id=assessment_id).all()
-    
-    # Redirect if index exceeds available questions
-    if question_index >= len(questions):
+
+    if question_index < 0:
+        question_index = 0
+    elif question_index >= len(questions):
         return redirect(url_for('assessment.review_answers', assessment_id=assessment_id))
 
     current_question = questions[question_index]
 
-    # Check if the user has already completed this assessment
-    existing_responses = Assese_Response.query.filter_by(user_id=current_user.userid, assessment_id=assessment_id).all()
+    # ✅ Check if user has already submitted all answers
+    all_answers = Assese_Response.query.filter_by(
+        user_id=current_user.userid, assessment_id=assessment_id
+    ).count()
 
-    # **Check if the user has already answered this question**
-    answered_questions = {resp.question_id for resp in existing_responses}
-    
-    if current_question.id in answered_questions:
-        # question_index += 1
-        flash("You have already answered this question. Redirecting to the next one.", "info")
-        return redirect(url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index + 1))
+    if all_answers == len(questions):  
+        return redirect(url_for('assessment.review_answers', assessment_id=assessment_id))
+
+    existing_response = Assese_Response.query.filter_by(
+        user_id=current_user.userid, question_id=current_question.id, assessment_id=assessment_id
+    ).first()
 
     if request.method == 'POST':
         answer_text = request.form.get("answer_text")
@@ -243,21 +244,24 @@ def submit_answer(assessment_id, question_index):
             flash("Answer is required!", "danger")
             return redirect(url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index))
 
-        # Save the response
-        new_response = Assese_Response(
-            question_id=current_question.id, 
-            user_id=current_user.userid, 
-            answer_text=answer_text,
-            assessment_id=assessment_id,
-            marks=None
-        )
-        db.session.add(new_response)
+        if existing_response:
+            existing_response.answer_text = answer_text
+        else:
+            new_response = Assese_Response(
+                question_id=current_question.id, 
+                user_id=current_user.userid, 
+                answer_text=answer_text,
+                assessment_id=assessment_id,
+                marks=None
+            )
+            db.session.add(new_response)
+
         db.session.commit()
 
-        flash("Answer saved!", "success")
-
-        # Redirect to the next question
-        return redirect(url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index + 1))
+        next_question_index = question_index + 1
+        if next_question_index >= len(questions):
+            return redirect(url_for('assessment.review_answers', assessment_id=assessment_id))
+        return redirect(url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=next_question_index))
 
     return render_template(
         'user_assess_answer.html',
@@ -282,4 +286,8 @@ def review_answers(assessment_id):
         flash("Assessment submitted successfully!", "success")
         return redirect(url_for('main.learning'))
 
+<<<<<<< HEAD
     return render_template('review_answers.html', responses=responses, assessment_id=assessment_id, assess_questions=assess_questions)
+=======
+    return render_template('review_answers.html', responses=responses, assessment_id=assessment_id, assess_questions=assess_questions)
+>>>>>>> c393b5706dc1d5ccdbafbb77cb2c1696fbbd8424
