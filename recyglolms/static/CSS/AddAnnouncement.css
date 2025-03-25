@@ -2,17 +2,17 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color:rgb(244, 244, 244);
 }
 
 .container {
     display: flex;
     flex-direction: column;
     width: calc(100% - 250px); /* Adjust width to account for sidebar */
-    max-width: 800px; /* Limit the maximum width of the form */
+    max-width: 600px; /* Limit the maximum width of the form */
     margin: 10px auto;
-    margin-left: 400px; /* Offset for sidebar */
-    margin-top: 100px; /* Adjust for fixed navbar */
+    margin-left: 600px; /* Offset for sidebar */
+    margin-top: 70px; /* Adjust for fixed navbar */
     margin-right: 70px;
     background-color: #fff;
     padding: 20px;
@@ -26,7 +26,7 @@ body {
 h2 {
     text-align: left;
     margin-bottom: 20px;
-    color: #333;
+    color: rgb(26, 137, 9);
 }
 
 .form-group {
@@ -44,9 +44,9 @@ input[type="file"],
 input[type="date"]
 {
     width: 100%;
-    padding: 15px;
+    padding: 20px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
     box-sizing: border-box;
 }
 
@@ -93,7 +93,7 @@ input[type="file"] {
 }
 
 .submit-button:hover {
-    background-color: #A9C9A4;
+    background-color:rgb(26, 137, 9);
     color: white;
 } 
 
@@ -110,7 +110,7 @@ input[type="file"] {
 }
 
 .cancel-button:hover {
-    background-color: #A9C9A4;
+    background-color: rgb(15, 96, 3);
     color: white;
 }
 
@@ -130,6 +130,19 @@ input[type="file"] {
 .back-icon:hover {
     color: black;
 }
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* Optional, adds space between buttons */
+}
+
+.buttons .submit-button,
+.buttons .cancel-button {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
 
 @media (max-width: 768px) {
     .container {

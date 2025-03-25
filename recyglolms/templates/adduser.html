@@ -131,6 +131,7 @@
                     <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
                     <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
                     <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
                 </ul>
                 </div>
 
@@ -153,9 +154,10 @@
             </ul>
         </nav>
         <div class="container">
-            <a href="{{ url_for('admin.view_users') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
-
-            <h2>Add User</h2>
+            <div style="display:flex">
+                <a href="{{ url_for('admin.view_users') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
+                <h2>Add User</h2>
+            </div>
             <form id="AddProfileForm" method="POST" action="{{ url_for('admin.add_user') }}">
                 <div class="form-group">
                     <label for="name">Username</label>

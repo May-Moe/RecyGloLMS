@@ -9,14 +9,13 @@ body {
     display: flex;
     flex-direction: column;
     width: calc(100% - 250px); /* Adjust width to account for sidebar */
-    max-width: 800px; /* Limit the maximum width of the form */
+    max-width: 600px; /* Limit the maximum width of the form */
     margin: 10px auto;
-    margin-left: 400px; /* Offset for sidebar */
-    margin-top: 100px; /* Adjust for fixed navbar */
+    margin-left: 600px; /* Offset for sidebar */
+    margin-top: 70px; /* Adjust for fixed navbar */
     margin-right: 70px;
     background-color: #fff;
-    padding: 30px;
-    border-radius: 5px;
+    padding: 35px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
     transition: margin-left 0.5s, width 0.5s;
@@ -48,8 +47,9 @@ input[type="text"], input[type="email"], input[type="password"],textarea, select
 
 .buttons {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
+    justify-content: flex-end; /* Align buttons to the right */
+    margin-top: auto; /* Push buttons to the bottom */
+    gap: 10px; /* Add spacing between buttons */
 }
 
 .submit-button {
@@ -65,11 +65,6 @@ input[type="text"], input[type="email"], input[type="password"],textarea, select
 }
 
 .submit-button:hover {
-    background-color: #dee5e1;
-    color: #9f9f9f;
-}
-
-.cancel-button:hover {
     background-color: #dee5e1;
     color: #9f9f9f;
 }
@@ -91,6 +86,17 @@ input[type="text"], input[type="email"], input[type="password"],textarea, select
     background-color: #dee5e1;
     color: #9f9f9f;
 }
+
+.back-icon {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #9f9f9f;
+    font-size: 16px;
+    margin-bottom: 20px;
+    margin-right:10px;
+}
+
 
 /* Responsive styles */
 

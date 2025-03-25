@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: imagereader
+Version: 1.0.1
+Summary: Biblioteca para análise de imagens usando OpenAI Vision
+Author: Pedro Henrique Brito de Moraes
+Requires-Python: >=3.6
+License-File: LICENSE
+Requires-Dist: openai>=1.0.0

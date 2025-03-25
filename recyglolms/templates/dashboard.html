@@ -105,6 +105,7 @@
                     <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
                     <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
                     <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
                 </ul>
                 </div>
                 <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li> -->
@@ -300,69 +301,100 @@
     <script src="static/JS/script.js"></script>
     <script>
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const daysContainer = document.querySelector(".days");
-            const selectedDateDisplay = document.querySelector(".selected-date");
-            const announcementContainer = document.querySelector(".announcement-items");
-        
-            // Generate calendar dynamically
-            function generateCalendar(year, month) {
-                daysContainer.innerHTML = ""; // Clear previous days
-                const firstDay = new Date(year, month, 1).getDay();
-                const lastDate = new Date(year, month + 1, 0).getDate();
-                
-                for (let i = 0; i < firstDay; i++) {
-                    const emptyDiv = document.createElement("div");
-                    emptyDiv.classList.add("empty-day");
-                    daysContainer.appendChild(emptyDiv);
+document.addEventListener("DOMContentLoaded", function () {
+    const daysContainer = document.querySelector(".days");
+    const selectedDateDisplay = document.querySelector(".selected-date");
+    const announcementContainer = document.querySelector(".announcement-items");
+    const leftButton = document.querySelector(".left");
+    const rightButton = document.querySelector(".right");
+    const headerDisplay = document.querySelector(".display");
+
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth();
+
+    function updateHeader() {
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        headerDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    }
+
+    function generateCalendar(year, month) {
+        daysContainer.innerHTML = "";
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+
+        updateHeader();
+
+        for (let i = 0; i < firstDay; i++) {
+            const emptyDiv = document.createElement("div");
+            emptyDiv.classList.add("empty-day");
+            daysContainer.appendChild(emptyDiv);
+        }
+
+        for (let day = 1; day <= lastDate; day++) {
+            const dayElement = document.createElement("div");
+            dayElement.classList.add("day");
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            dayElement.dataset.date = dateStr;
+            dayElement.textContent = day;
+            daysContainer.appendChild(dayElement);
+        }
+    }
+
+    function fetchAnnouncements(selectedDate) {
+        fetch(`/announcements_by_date/${selectedDate}`)
+            .then(response => response.json())
+            .then(data => {
+                announcementContainer.innerHTML = "";
+                if (data.announcements.length === 0) {
+                    announcementContainer.innerHTML = "<li>No announcements for this date.</li>";
+                } else {
+                    data.announcements.forEach(announcement => {
+                        const announcementItem = `
+                            <ul class="announcement-item">
+                                <li><h3>${announcement.title}</h3></li>
+                                <li><p>${announcement.content}</p></li>
+                                <li>${announcement.image ? `<img src="/static/announcements/${announcement.image}" alt="Announcement Image">` : ""}</li>
+                            </ul>`;
+                        announcementContainer.innerHTML += announcementItem;
+                    });
                 }
-        
-                for (let day = 1; day <= lastDate; day++) {
-                    const dayElement = document.createElement("div");
-                    dayElement.classList.add("day");
-                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    dayElement.dataset.date = dateStr;
-                    dayElement.textContent = day;
-                    daysContainer.appendChild(dayElement);
-                }
-            }
-        
-            // Get current month & year
-            const today = new Date();
-            let currentYear = today.getFullYear();
-            let currentMonth = today.getMonth();
-            
-            generateCalendar(currentYear, currentMonth);
-        
-            // Handle clicking on a date
-            daysContainer.addEventListener("click", function (event) {
-                if (event.target.classList.contains("day")) {
-                    const selectedDate = event.target.dataset.date;
-                    selectedDateDisplay.textContent = `Announcements for: ${selectedDate}`;
-        
-                    // Fetch announcements from the backend
-                    fetch(`/announcements_by_date/${selectedDate}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            announcementContainer.innerHTML = ""; // Clear previous announcements
-                            if (data.announcements.length === 0) {
-                                announcementContainer.innerHTML = "<li>No announcements for this date.</li>";
-                            } else {
-                                data.announcements.forEach(announcement => {
-                                    const announcementItem = `
-                                        <ul class="announcement-item">
-                                            <li><h3>${announcement.title}</h3></li>
-                                            <li><p>${announcement.content}</p></li>
-                                            <li>${announcement.image ? `<img src="/static/announcements/${announcement.image}" alt="Announcement Image">` : ""}</li>
-                                        </ul>`;
-                                    announcementContainer.innerHTML += announcementItem;
-                                });
-                            }
-                        })
-                        .catch(error => console.error("Error fetching announcements:", error));
-                }
-            });
-        });
+            })
+            .catch(error => console.error("Error fetching announcements:", error));
+    }
+
+    daysContainer.addEventListener("click", function (event) {
+        if (event.target.classList.contains("day")) {
+            const selectedDate = event.target.dataset.date;
+            selectedDateDisplay.textContent = `Announcements for: ${selectedDate}`;
+            fetchAnnouncements(selectedDate);
+        }
+    });
+
+    leftButton.addEventListener("click", function () {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        generateCalendar(currentYear, currentMonth);
+    });
+
+    rightButton.addEventListener("click", function () {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        generateCalendar(currentYear, currentMonth);
+    });
+
+    generateCalendar(currentYear, currentMonth);
+});
+
+
         const ctx = document.getElementById('userActivityChart').getContext('2d');
 
         const userActivityChart = new Chart(ctx, {

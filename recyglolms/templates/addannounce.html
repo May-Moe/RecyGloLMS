@@ -95,6 +95,7 @@
                     <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
                     <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
                     <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
                 </ul>
                 </div>
 
@@ -117,8 +118,10 @@
             </ul>
         </nav>
         <div class="container">
-            <a href="{{ url_for('announcement.view_all_announcements') }}"  class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
+            <div style ="display:flex;">
+            <a href="{{ url_for('announcement.view_all_announcements') }}"  class="back-icon" style="margin-right:10px"><i class="fa-solid fa-angle-left"></i></a>
             <h2>Add Announcements</h2>
+            </div>
             <form id="AddAnnouncementForm" method="POST" enctype="multipart/form-data">
                 <div class="form-group">    
                     <label for="title">Title</label>
@@ -133,7 +136,7 @@
                     <input type="date" name="event_date" required>
                 </div>
                 <div class="form-group">
-                    <label for="announcement_img" style="color: white; background-color: #A9C9A4; padding: 14px 5px; border-radius: 5px; font-size: 14px;">Click to Choose file</label>
+                    <label for="announcement_img" style="color: white; background-color:rgb(29, 136, 13); padding: 14px 5px; border-radius: 5px; font-size: 14px;">Click to Choose file</label>
                     <input id="announcement_img" type="file" name="announcement_img" required>
                     <span id="file-chosen">No file chosen</span>
                     <!-- <input type="file" name="file" id="file" required> -->

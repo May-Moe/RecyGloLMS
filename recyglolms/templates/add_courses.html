@@ -94,6 +94,7 @@
                     <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
                     <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
                     <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
                 </ul>
                 </div>
 
@@ -116,8 +117,10 @@
             </ul>
         </nav>
         <div class="container">
+            <div style="display:flex;">
             <a href="{{ url_for('admin.manage_course') }}"  class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
             <h2>Add Courses</h2>
+            </div>
             <form id="AddCourseForm" method="POST" action="{{ url_for('admin.add_course') }}" enctype="multipart/form-data">
                 <div class="form-group">    
                     <label for="course_name">Course Name</label>
@@ -127,12 +130,12 @@
                     <label for="course_description">Description</label>
                     <textarea name="course_description" id="course_description" required></textarea>
                 </div>
+                
+            </form>
+            <div class="buttons">
                 <button type="submit" class="submit-button">
                     Submit
                 </button>
-            </form>
-            <div class="buttons">
-                
                 <a href="{{ url_for('admin.manage_course') }}"><button type="button" class="cancel-button">Cancel</button></a>
             </div>
         </div>

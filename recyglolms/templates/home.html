@@ -66,6 +66,7 @@
                 <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
                 <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
                 <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Classes</a></li>
+                <li><a href="{{ url_for('grading.user_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
                 <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
                 <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
             </ul>
@@ -238,18 +239,33 @@
         
     <script src="static/JS/script.js"></script>
     <script>
-        //For clickable days on the calendar for showing announcements
+
         document.addEventListener("DOMContentLoaded", function () {
             const daysContainer = document.querySelector(".days");
             const selectedDateDisplay = document.querySelector(".selected-date");
             const announcementContainer = document.querySelector(".announcement-items");
+            const leftButton = document.querySelector(".left");
+            const rightButton = document.querySelector(".right");
+            const headerDisplay = document.querySelector(".display");
         
-            // Generate calendar dynamically
+            let currentYear = new Date().getFullYear();
+            let currentMonth = new Date().getMonth();
+        
+            function updateHeader() {
+                const monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                headerDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            }
+        
             function generateCalendar(year, month) {
-                daysContainer.innerHTML = ""; // Clear previous days
+                daysContainer.innerHTML = "";
                 const firstDay = new Date(year, month, 1).getDay();
                 const lastDate = new Date(year, month + 1, 0).getDate();
-                
+        
+                updateHeader();
+        
                 for (let i = 0; i < firstDay; i++) {
                     const emptyDiv = document.createElement("div");
                     emptyDiv.classList.add("empty-day");
@@ -266,53 +282,137 @@
                 }
             }
         
-            // Get current month & year
-            const today = new Date();
-            let currentYear = today.getFullYear();
-            let currentMonth = today.getMonth();
-            
-            generateCalendar(currentYear, currentMonth);
+            function fetchAnnouncements(selectedDate) {
+                fetch(`/announcements_by_date/${selectedDate}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        announcementContainer.innerHTML = "";
+                        if (data.announcements.length === 0) {
+                            announcementContainer.innerHTML = "<li>No announcements for this date.</li>";
+                        } else {
+                            data.announcements.forEach(announcement => {
+                                const announcementItem = `
+                                    <ul class="announcement-item">
+                                        <li><h3>${announcement.title}</h3></li>
+                                        <li><p>${announcement.content}</p></li>
+                                        <li>${announcement.image ? `<img src="/static/announcements/${announcement.image}" alt="Announcement Image">` : ""}</li>
+                                    </ul>`;
+                                announcementContainer.innerHTML += announcementItem;
+                            });
+                        }
+                    })
+                    .catch(error => console.error("Error fetching announcements:", error));
+            }
         
-            // Handle clicking on a date
             daysContainer.addEventListener("click", function (event) {
                 if (event.target.classList.contains("day")) {
                     const selectedDate = event.target.dataset.date;
                     selectedDateDisplay.textContent = `Announcements for: ${selectedDate}`;
-        
-                    // Fetch announcements from the backend
-                    fetch(`/announcements_by_date/${selectedDate}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            announcementContainer.innerHTML = ""; // Clear previous announcements
-                            if (data.announcements.length === 0) {
-                                announcementContainer.innerHTML = "<li>No announcements for this date.</li>";
-                            } else {
-                                data.announcements.forEach(announcement => {
-                                    const announcementItem = `
-                                        <ul class="announcement-item">
-                                            <li><h3>${announcement.title}</h3></li>
-                                            <li><p>${announcement.content}</p></li>
-                                            <li>${announcement.image ? `<img src="/static/announcements/${announcement.image}" alt="Announcement Image">` : ""}</li>
-                                        </ul>`;
-                                    announcementContainer.innerHTML += announcementItem;
-                                });
-                            }
-                        })
-                        .catch(error => console.error("Error fetching announcements:", error));
+                    fetchAnnouncements(selectedDate);
                 }
             });
-        });
-
-
-
-
-        // This can handle events for the "Continue" button
-        document.querySelectorAll('.continue-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                alert('Continuing the course!');
+        
+            leftButton.addEventListener("click", function () {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentYear, currentMonth);
             });
+        
+            rightButton.addEventListener("click", function () {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentYear, currentMonth);
+            });
+        
+            generateCalendar(currentYear, currentMonth);
         });
-
-    </script>
+        
+        
+                const ctx = document.getElementById('userActivityChart').getContext('2d');
+        
+                const userActivityChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [
+                            'Active within last 7 Days',
+                            'Active within 15 last Days',
+                           
+                            'Inactive for over 30 Days'
+                        ],
+                        datasets: [{
+                            label: 'User Activity',
+                            data: [
+                                {{ user_data.active_7_days }},
+                                {{ user_data.active_15_days }},
+                                {{ user_data.inactive_30_days }}
+                            ],
+                            backgroundColor: [
+                                '#16a159', // Green
+                                '#d4ac0d ', // Yellow
+                                '#c0392b'  // Red
+                            ],
+                            borderWidth: 1
+                            
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom', // Moves the legend to the side
+                                labels: {
+                                    font: {
+                                        size: 10,
+                                        family: 'Arial, sans-serif',
+                                        weight: 'bold'
+                                    },
+                                    color: '#333' // Dark color for the legend text
+                                }
+                            },
+                            tooltip: {
+                                enabled: true, // Enable tooltips for hover interaction
+                                callbacks: {
+                                    label: function(context) {
+                                        const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                                        const percentage = ((context.raw / total) * 100).toFixed(1);
+                                        return `${context.label}: ${context.raw} users (${percentage}%)`;
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                color: '#ffffff', // White text for better contrast
+                                align: 'center', // Center the text on the segment
+                                backgroundColor: '#000000a0', // Semi-transparent black background
+                                borderColor: '#ffffff', // White border for contrast
+                                borderWidth: 1,
+                                borderRadius: 4, // Rounded corners
+                                padding: 2, // Space around the label text
+                                font: {
+                                    size: 8, // Font size
+                                    family: 'Arial, sans-serif', // Clean font family
+                                    weight: 'bold' // Bold text
+                                },
+                                formatter: (value, ctx) => {
+                                    const total = ctx.dataset.data.reduce((sum, val) => sum + val, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
+                                    const label = ctx.chart.data.labels[ctx.dataIndex]; // Get label text
+                                    return `${label}\n${percentage}%`; // Two-line label
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+        
+        
+        
+            </script>
 </body>
 </html>

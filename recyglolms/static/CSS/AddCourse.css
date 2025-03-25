@@ -8,19 +8,17 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Space out content, pushing buttons to the bottom */
     width: calc(100% - 250px); /* Adjust width to account for sidebar */
-    max-width: 800px; /* Limit the maximum width of the form */
+    max-width: 600px; /* Limit the maximum width of the form */
     margin: 10px auto;
-    margin-left: 400px; /* Offset for sidebar */
-    margin-top: 100px; /* Adjust for fixed navbar */
+    margin-left: 600px; /* Offset for sidebar */
+    margin-top: 70px; /* Adjust for fixed navbar */
     margin-right: 70px;
     background-color: #fff;
-    padding: 20px;
-    border-radius: 20px;
+    padding: 35px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
     transition: margin-left 0.5s, width 0.5s;
-    height: auto; /* Ensure height adapts to content */
 }
 
 h2 {
@@ -87,9 +85,8 @@ input[type="file"] {
 
 .buttons {
     display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
-    margin-top: auto; /* Push buttons to the bottom */
-    gap: 10px; /* Add spacing between buttons */
+    justify-content: flex-end;
+    margin-top: 20px;
 }
 
 .submit-button {
@@ -105,8 +102,8 @@ input[type="file"] {
 }
 
 .submit-button:hover {
-    background-color: #dee5e1;
-    color: #9f9f9f;
+    background-color: #A9C9A4;
+    color: white;
 }
 
 .cancel-button {
@@ -123,8 +120,18 @@ input[type="file"] {
 }
 
 .cancel-button:hover {
-    background-color: #dee5e1;
+    background-color: #A9C9A4;
+    color: white;
+}
+
+.back-icon {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
     color: #9f9f9f;
+    font-size: 16px;
+    margin-bottom: 20px;
+    margin-right:10px;
 }
 
 /* Responsive styles */

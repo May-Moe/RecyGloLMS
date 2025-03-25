@@ -9,6 +9,9 @@ from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from io import BytesIO
+from flask import send_file
+from reportlab.lib.utils import ImageReader
+from reportlab.lib.pagesizes import landscape
 
 grading_bp = Blueprint('grading', __name__)
 
@@ -144,9 +147,6 @@ def get_grade(final_score):
         return 'F'
     
 
-
-
-
 # User page to display grades
 @grading_bp.route('/my-grades', methods=['GET'])
 @login_required
@@ -199,10 +199,6 @@ def user_gradebook():
 
     return render_template('user_grade.html', user_grades=user_grades)
 
-
-
-
-
 @grading_bp.route('/admin/grant_certificate_access', methods=['POST'])
 @login_required
 def grant_certificate_access():
@@ -234,30 +230,56 @@ def generate_certificate(user_name, class_name):
     """Generate a certificate for a user."""
     
     buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=letter)
+    custom_page_size = (letter[0], letter[1] - 200)  # Reduce height by 200 units
+    c = canvas.Canvas(buffer, pagesize=custom_page_size)
+    width, height = custom_page_size
 
-    # Add text to the certificate
+    logo_path = os.path.abspath("C:/RecyGloLMS/RecyGloLMS/recyglolms/static/img/Recyglo logo.png")
+
+    # Add border
+    c.setLineWidth(4)
+    c.rect(30, 30, width - 60, height - 60)
+
+    # Add logo if provided
+    if os.path.exists(logo_path):
+        logo = ImageReader(logo_path)
+        c.drawImage(logo, width / 2 - 50, height - 150, width=100, height=100, preserveAspectRatio=True, mask='auto')
+    else:
+        print(f"Logo not found at {logo_path}")
+    
+    # Certificate title
     c.setFont("Helvetica-Bold", 36)
-    c.drawString(100, 700, f"Certificate of Completion")
+    c.drawCentredString(width / 2, height - 200, "Certificate of Completion")
     
+    # Subtitle
     c.setFont("Helvetica", 18)
-    c.drawString(100, 650, f"This is to certify that")
-    c.setFont("Helvetica-Bold", 24)
-    c.drawString(100, 620, f"{user_name}")
+    c.drawCentredString(width / 2, height - 250, "This is to certify that")
     
+    # User name
+    c.setFont("Helvetica-Bold", 24)
+    c.drawCentredString(width / 2, height - 290, user_name)
+    
+    # Course name
     c.setFont("Helvetica", 18)
-    c.drawString(100, 580, f"Has successfully completed the course:")
-    c.setFont("Helvetica-Bold", 24)
-    c.drawString(100, 550, f"{class_name}")
+    c.drawCentredString(width / 2, height - 330, "Has successfully completed the course:")
     
+    c.setFont("Helvetica-Bold", 24)
+    c.drawCentredString(width / 2, height - 370, class_name)
+    
+    # Date
     c.setFont("Helvetica", 12)
-    c.drawString(100, 460, f"Date: {date.today().strftime('%B %d, %Y')}")
-
-    # Save the PDF to the buffer
+    c.drawString(100, height - 500, f"Date: {date.today().strftime('%B %d, %Y')}")
+    
+    # Signature placeholder
+    c.line(400, height - 520, 550, height - 520)
+    c.setFont("Helvetica", 12)
+    c.drawString(420, height - 540, "Authorized Signature")
+    
+    # Save the PDF
     c.save()
-
     buffer.seek(0)
     return buffer
+
 # Download certificate route
 @grading_bp.route('/download_certificate/<int:class_id>', methods=['GET'])
 @login_required
@@ -271,7 +293,12 @@ def download_certificate(class_id):
         flash('Certificate access is not granted yet.', 'error')
         return redirect(url_for('grading.user_gradebook'))  # Redirect to user's dashboard
 
-    # Generate the certificate (assuming you have a function for this)
-    certificate_path = generate_certificate(current_user.name, class_id)
+    # Fetch class name based on class_id
+    user_class = Class.query.filter_by(classid=class_id).first()
+    if not user_class:
+        flash('Class not found!', 'error')
+        return redirect(url_for('grading.user_gradebook'))
 
-    return send_file(certificate_path, as_attachment=True, download_name="certificate.pdf")
+    certificate_buffer = generate_certificate(current_user.name, user_class.name)
+
+    return send_file(certificate_buffer, as_attachment=True, download_name="certificate.pdf", mimetype="application/pdf")
