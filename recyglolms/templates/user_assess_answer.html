@@ -19,11 +19,11 @@
     <div class="container mt-4">
         <button id="start-btn" class="btn btn-primary">Start Assessment</button>
 
-        <div id="assessment-container" style="display: none;">
+        <div id="assessment-container" class="questions-container">
             <p>Question {{ question_index + 1 }} / {{ total_questions }}</p>
-            <p id="timer">Time Left: {{ time_limit }} minutes</p>
+            <p id="timer">Time Left: <span id="time-left"></span></p>
 
-            <form method="POST" action="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index) }}">
+            <form id="answer-form" method="POST" action="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index) }}">
                 <div class="question-item">
                     <h4>Question {{ question_index + 1 }} / {{ total_questions }}</h4>
                     <p>{{ question.question }}</p>
@@ -32,10 +32,14 @@
                         <img src="{{ question.image_url }}" alt="Question Image" class="question-image">
                     {% endif %}
 
-                    <textarea name="answer_text" placeholder="Type your answer here..." required></textarea>
+                    <textarea id="answer-text" name="answer_text" placeholder="Type your answer here..." required></textarea>
                     <input type="hidden" name="question_id" value="{{ question.id }}">
                 </div>
 
+                {% if question_index > 0 %}
+                    <a href="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index - 1) }}" class="btn btn-secondary mt-3">Previous</a>
+                {% endif %}
+                
                 {% if question_index + 1 < total_questions %}
                     <button type="submit" class="btn btn-primary mt-3">Next</button>
                 {% else %}
@@ -47,81 +51,72 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            let timeLeft = {{ time_limit | default(10) }} * 60; 
-            let timer;
-
             const startBtn = document.getElementById("start-btn");
             const assessmentContainer = document.getElementById("assessment-container");
-            const timerDisplay = document.getElementById("timer");
-
-            // Check if the assessment has already started
-            if (localStorage.getItem("assessment_started") === "true") {
+            const answerInput = document.getElementById("answer-text");
+            const timerDisplay = document.getElementById("time-left");
+            const form = document.getElementById("answer-form");
+            const submitBtn = document.getElementById("submit-btn");
+    
+            const questionIndex = {{ question_index }};
+            const assessmentId = {{ assessment_id }};
+            const totalTime = {{ time_limit | default(10) }} * 60; // Convert minutes to seconds
+    
+            // Restore previous answer if available
+            const savedAnswer = sessionStorage.getItem(`answer_${assessmentId}_${questionIndex}`);
+            if (savedAnswer) {
+                answerInput.value = savedAnswer;
+            }
+    
+            answerInput.addEventListener("input", function () {
+                sessionStorage.setItem(`answer_${assessmentId}_${questionIndex}`, answerInput.value);
+            });
+    
+            // Handle assessment start
+            if (localStorage.getItem("assessmentStarted") === "true") {
                 startBtn.style.display = "none";
                 assessmentContainer.style.display = "block";
-                resumeTimer();
+                startTimer();
             }
-
+    
             startBtn.addEventListener("click", function () {
                 startBtn.style.display = "none";
                 assessmentContainer.style.display = "block";
-
-                if (!localStorage.getItem("timer_started")) {
-                    startTimer();
-                    localStorage.setItem("timer_started", "true");
-                }
-
-                localStorage.setItem("assessment_started", "true");
+                localStorage.setItem("assessmentStarted", "true");
+                startTimer();
             });
-
+    
             function startTimer() {
-                let storedTime = localStorage.getItem("remaining_time");
-                if (storedTime) {
-                    timeLeft = parseInt(storedTime);
-                }
-
-                timer = setInterval(() => {
+                let timeLeft = localStorage.getItem("timeRemaining") ? parseInt(localStorage.getItem("timeRemaining")) : totalTime;
+                
+                function updateTimer() {
                     if (timeLeft <= 0) {
-                        clearInterval(timer);
+                        clearInterval(timerInterval);
                         document.getElementById("submit-btn").click();
                     } else {
                         let minutes = Math.floor(timeLeft / 60);
                         let seconds = timeLeft % 60;
-                        timerDisplay.innerText = `Time Left: ${minutes}m ${seconds}s`;
+                        timerDisplay.innerText = `${minutes}m ${seconds}s`;
+                        localStorage.setItem("timeRemaining", timeLeft);
                         timeLeft--;
-                        localStorage.setItem("remaining_time", timeLeft);
                     }
-                }, 1000);
-            }
-
-            function resumeTimer() {
-                let storedTime = localStorage.getItem("remaining_time");
-                if (storedTime) {
-                    timeLeft = parseInt(storedTime);
-                    startTimer();
                 }
+    
+                updateTimer();
+                var timerInterval = setInterval(updateTimer, 1000);
             }
-
-            function preventCheating() {
-                document.addEventListener('copy', (event) => {
-                    event.preventDefault();
-                    alert('Copying is not allowed!');
-                });
-
-                document.addEventListener('paste', (event) => {
-                    event.preventDefault();
-                    alert('Pasting is not allowed!');
-                });
-
-                document.addEventListener("visibilitychange", () => {
-                    if (document.hidden) {
-                        alert("Tab switching is not allowed! Assessment will be auto-submitted.");
-                        document.getElementById("submit-btn").click();
-                    }
+    
+            // ✅ Clear Storage on Final Submit
+            if (submitBtn) {
+                submitBtn.addEventListener("click", function () {
+                    localStorage.removeItem("assessmentStarted");
+                    localStorage.removeItem("timeRemaining");
+                    sessionStorage.clear();
                 });
             }
-
-            preventCheating();
+    
         });
     </script>
+    
 </body>
 </html>

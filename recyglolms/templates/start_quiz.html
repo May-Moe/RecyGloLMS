@@ -7,19 +7,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Start Quiz</title>
     <script>
-        let quizStarted = false;
         let timer;
-        let remainingTime = {{ quiz.time_limit * 60 }}; // Dynamic time from backend
+        let remainingTime = {{ quiz.time_limit * 60 }}; // Convert minutes to seconds
 
         function startQuiz() {
-            // Hide instructions
+            // Hide instructions and start button
             document.getElementById("quiz-instruction").style.display = "none";
             document.getElementById("start-quiz-btn").style.display = "none"; 
             
+            // Show quiz content and timer
             document.getElementById("quiz-content").style.display = "block";
             document.getElementById("timer").style.display = "block";
+
+            // Start countdown
             startTimer();
-            quizStarted = true;
         }
 
         function startTimer() {
@@ -28,6 +29,7 @@
                 let minutes = Math.floor(remainingTime / 60);
                 let seconds = remainingTime % 60;
                 timerElement.innerText = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
                 if (remainingTime <= 0) {
                     clearInterval(timer);
                     alert("Time's up! Submitting quiz...");
@@ -36,137 +38,32 @@
                 remainingTime--;
             }, 1000);
         }
-
-        // Prevent Tab Switching
-        document.addEventListener("visibilitychange", function () {
-            if (document.hidden) {
-                //alert("Tab switching is not allowed! Your quiz will be submitted.");
-                document.querySelector("form").submit();
-            }
-        });
-
-        // Prevent Screenshot
-        document.addEventListener("keydown", function (e) {
-            if (e.key === "PrintScreen" || e.key === "F12") {
-                alert("Screenshots are disabled!");
-                e.preventDefault();
-            }
-        });
-
-        document.addEventListener("pointerdown", function (e) {
-            if (e.button === 2) {
-                alert("Right-click is disabled!");
-                e.preventDefault();
-            }
-        });
-
-        document.addEventListener("keydown", function(event) {
-            if (event.key === "PrintScreen" || event.keyCode === 44) {
-                alert("Screenshots are disabled!");
-                event.preventDefault();
-            }
-            if (event.ctrlKey && (event.key === "u" || event.key === "U")) {
-                alert("View Source is disabled!");
-                event.preventDefault();
-            }
-        });
-
-        document.addEventListener("contextmenu", function (e) {
-            e.preventDefault();
-        });
     </script>
 </head>
 <body>
     <div class="container">
-
-        <div class="quiz-header-container">
-            <div class="quiz-header">
-                <h2>{{ quiz.title }}</h2>
-            </div>
-            <div class="quiz-instruction" id="quiz-instruction">
-                <p><strong>Instructions:</strong></p>
-                <ul>
-                    <li>Once you start the quiz, the <strong>timer will begin</strong> and cannot be paused.</li>
-                    <li> You have to finish the quiz in <strong>: {{ quiz.time_limit }} minutes </strong>. Once the time is up, your answers will be automatically submitted.</li>
-                    <li><strong>Do not close the window or navigate away </strong>from the quiz page.</li>
-                    <li><strong>Switching to another tab or minimizing the window is not allowed.</strong> If detected, your quiz may be automatically submitted.</li>
-                    <li><strong>Taking screenshots</strong> is strictly prohibited and may result in disqualification.</li>
-                    <li>Ensure you have a stable internet connection to avoid any interruptions.</li>
-                    <li> <strong>Do not refresh the page</strong> or click the back button during the quiz.</li>
-                    <li>**Good Luck!**</li>
-                </ul>
-            </div>
-        
-            <!-- Start Quiz Button -->
-            <button id="start-quiz-btn" class="start-quiz-btn" onclick="startQuiz()">
-                 Start Quiz
-            </button>
+        <div class="quiz-header">
+            <h2>{{ quiz.title }}</h2>
         </div>
-        <style>
-            
-            .quiz-header h2 {
-                color: #333;
-                font-size: 24px;
-                margin-bottom: 10px;
-            }
 
-            .quiz-instruction {
-                background: #ffffff;
-                padding: 15px;
-                border-left: 5px solid #dc3545;
-                font-size: 16px;
-                color: #555;
-                margin-bottom: 20px;
-                border-radius: 5px;
-                text-align: left;
-            }
-            
-            .quiz-instruction ul {
-                padding-left: 20px;
-            }
-            
-            .quiz-instruction li {
-                margin-bottom: 8px;
-            }
-            
-            .quiz-instruction {
-                background: #ffffff;
-                padding: 15px;
-                border-left: 5px solid ;
-                font-size: 16px;
-                color: #555;
-                margin-bottom: 20px;
-                border-radius: 5px;
-            }
-            
-            .start-quiz-btn {
-                background: #007bff;
-                color: white;
-                padding: 12px 20px;
-                font-size: 18px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: all 0.3s ease-in-out;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-            }
-            
-            .start-quiz-btn:hover {
-                background: #0056b3;
-                transform: scale(1.05);
-            }
-            
-            .start-quiz-btn i {
-                font-size: 20px;
-            }
-        </style>
+        <div id="quiz-instruction">
+            <p><strong>Instructions:</strong></p>
+            <ul>
+                <li>Once you start the quiz, the <strong>timer will begin</strong> and cannot be paused.</li>
+                <li>You have <strong>{{ quiz.time_limit }} minutes</strong> to complete the quiz.</li>
+                <li>Do not switch tabs, minimize the window, or refresh the page.</li>
+                <li><strong>No screenshots allowed.</strong></li>
+                <li>Good luck!</li>
+            </ul>
+        </div>
 
-        <!-- Timer -->
+        <!-- Start Quiz Button -->
+        <button id="start-quiz-btn" class="start-quiz-btn" onclick="startQuiz()">Start Quiz</button>
+
+        <!-- Timer (Hidden Initially) -->
         <div id="timer" style="display: none; font-size: 20px; color: red;"></div>
 
-        <!-- Quiz Content (Hidden by Default) -->
+        <!-- Quiz Content (Hidden Initially) -->
         <div id="quiz-content" style="display: none;">
             <form method="POST" action="{{ url_for('quiz.submit_quiz', quizid=quiz.quizid) }}">
                 {% for question in quiz.questions %}

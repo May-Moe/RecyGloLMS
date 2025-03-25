@@ -161,6 +161,7 @@ def add_user():
 
     return render_template('adduser.html')
 
+#Logs tracking
 @admin_bp.route('/logs')
 def show_logs():
     # Ensure only Admins (1)
@@ -171,49 +172,6 @@ def show_logs():
     return render_template('viewlogs.html', logs=logs,
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
-
-# Auto deleting features for logs and notifications
-
-# Initialize APScheduler
-scheduler = APScheduler()
-
-# Define the function to delete old logs
-def delete_old_logs():
-    """Deletes logs older than 3 days."""
-    with app.app_context():  # Ensure function runs within Flask's app context
-        three_days_ago = datetime.utcnow() - timedelta(days=1)
-        old_logs = ActionLog.query.filter(ActionLog.timestamp < three_days_ago).all()
-
-        print(f"Found {len(old_logs)} logs to delete.")  # Debugging
-        if old_logs:
-            for log in old_logs:
-                db.session.delete(log)
-            db.session.commit()
-            print(f"Deleted {len(old_logs)} old logs.")
-
-# Define the function to delete old notifications
-def delete_old_notifications():
-    """Deletes notifications older than 7 days."""
-    with app.app_context():  # Ensure function runs within Flask's app context
-        seven_days_ago = datetime.utcnow() - timedelta(days=1)
-        old_notifications = Notification.query.filter(Notification.timestamp < seven_days_ago).all()
-
-        print(f"Found {len(old_notifications)} notifications to delete.")  # Debugging
-        if old_notifications:
-            for notification in old_notifications:
-                db.session.delete(notification)
-            db.session.commit()
-            print(f"Deleted {len(old_notifications)} old notifications.")
-
-# Initialize scheduler and add the delete_old_logs and delete_old_notifications jobs
-if not scheduler.running:
-    scheduler.init_app(app)
-    scheduler.start()
-    scheduler.add_job(id='delete_old_logs', func=delete_old_logs, trigger='interval', days=1)
-    scheduler.add_job(id='delete_old_notifications', func=delete_old_notifications, trigger='interval', days=1)
-
-# End of auto deleting features
-    
 
 @admin_bp.route('/viewallusers', methods=['GET', 'POST'])
 @login_required
