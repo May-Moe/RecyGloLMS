@@ -208,7 +208,6 @@ def grade_user_answers(assessment_id, user_id):
     return redirect(url_for('assessment.view_attempted_users', assessment_id=assessment_id))
 
 
-
 @assessment_bp.route('/submit_answer/<int:assessment_id>/<int:question_index>', methods=['GET', 'POST'])
 @login_required
 def submit_answer(assessment_id, question_index):

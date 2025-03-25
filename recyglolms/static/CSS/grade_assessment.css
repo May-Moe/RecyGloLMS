@@ -1,0 +1,378 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 300px); /* Adjust width for sidebar */
+    margin: 10px auto;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
+}
+
+h1 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 25px;
+}
+
+.header {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 15px;
+}
+
+/* Style the search bar */
+#searchBar {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #16a159;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 14px;
+    background: #f8f9fa;
+}
+
+#searchBar:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+
+/* Style the Add User button */
+#addUserButton {
+    background: #16a159;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#addUserButton:hover {
+    background: #028d45;
+}
+
+/* Dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%; /* Position it below the button */
+    right: 0px;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px 0;
+    z-index: 1000;
+    min-width: 200px; /* Ensure enough width */
+    list-style: none;
+}
+
+.dropdown-menu li {
+    padding: 10px 20px;
+    text-align: left;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: black;
+    display: block;
+}
+
+/* Show dropdown when active */
+.dropdown-menu.active {
+    display: block;
+}
+
+/* Add button style */
+.addUserButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.addUserButton:hover {
+    background-color: #0056b3;
+}
+
+
+#addUserLink {
+    text-decoration: none;
+    color: #fff;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    
+}
+
+th, td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Pagination Container */
+.pagination {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* Page Buttons */
+.page-btn, .page-number {
+    background: white;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin: 2px;
+}
+
+
+/* Hover Effect */
+.page-btn:hover, .page-number:hover {
+    background: #ddd;
+}
+
+/* Active Page */
+.page-number.active {
+    background: #16a159;
+    color: white;
+    border-color: #16a159;
+    font-weight: bold;
+}
+
+/* Disabled Buttons */
+.page-btn:disabled {
+    background: #eee;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.editAction, .deleteAction {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 5px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.editAction {
+    color: #007bff;
+}
+
+.deleteAction {
+    color: #dc3545;
+}
+
+.editAction i, .deleteAction i {
+    margin-right: auto;
+}
+
+.editAction:hover {
+    color: #0056b3;
+}
+
+.deleteAction:hover {
+    color: #c82333;
+}
+
+
+/* Styling the container */
+.responses-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Styling each response card */
+.response-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+/* Title of the question */
+.question-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Answer text styling */
+.answer-text {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 10px;
+}
+
+/* Plagiarism score styling */
+.plagiarism-score {
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+/* Marks input styling */
+.marks-container {
+    margin-top: 15px;
+}
+
+.marks-input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.3s;
+}
+
+.marks-input:focus {
+    border-color: #007bff;
+}
+
+/* Total and button container */
+.total-and-button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Total Marks styling */
+.total-marks {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Button styling */
+.btn {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.btn:focus {
+    outline: none;
+}
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    #searchBar {
+        width: calc(100% - 130px); /* Adjust width based on button size */
+        margin-right: 0;
+    }
+
+    #addUserButton {
+        width: 120px;
+        justify-content: center;
+    }
+    .table-container {
+        overflow-x: auto;
+    }
+}

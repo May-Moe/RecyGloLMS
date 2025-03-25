@@ -26,10 +26,10 @@ h4, p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(to right, rgba(239, 251, 240, 0.8), #16a159);
-    padding: 30px;
+    /* background: linear-gradient(to right, rgba(239, 251, 240, 0.8), #16a159); */
+    padding: 10px;
     color: #16a159;
-    margin-top: 20px;
+    margin-bottom: 10px;
     /* border-radius: 10px; */
 }
 
@@ -42,18 +42,17 @@ h4, p {
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    width: calc(100% - 300px); /* Adjust width for sidebar */
     margin: 10px auto;
     margin-left: 270px; /* Offset for sidebar */
     margin-top: 80px;
     margin-right: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     background-color: #fff;
-    padding: 40px;
-    border-radius: 5px;
+    padding: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
     transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
 }
 
 .cards-header{
@@ -138,25 +137,6 @@ h4, p {
     margin-bottom: 20px;
 }
 
-/* .filter-label {
-    font-size: 16px;
-    color: #333;
-}
-
-.filter-select {
-    padding: 10px;
-    font-size: 13px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f8f8f8;
-    transition: border-color 0.3s ease;
-}
-
-.filter-select:focus {
-    border-color: #1a6e1b;
-    outline: none;
-} */
-
 /* Style the search bar */
 #searchBar {
     width: 200px;
@@ -189,6 +169,67 @@ h4, p {
 .filter-select:hover, .filter-select:focus {
     border-color: #2c3e50;
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Flex container for title and button */
+.assessment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: #16a159;
+    color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* Title styling */
+.assessment-header p {
+    margin: 0;
+    font-size: 15px;
+}
+
+/* Dropdown button styling */
+.dropdown-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 5px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    gap: 10px;
+}
+
+.dropdown-btn:hover {
+    color: #e0e0e0;
+}
+
+/* Hidden dropdown content */
+.dropdown-content {
+    display: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f8f9fa;
+    margin-top: 5px;
+    width: 73%;
+}
+
+/* Assessment cards */
+.assessment-card {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.assessment-card:hover {
+    background: #e0e0e0;
 }
 
 

@@ -18,10 +18,6 @@ h1 {
     margin-bottom: 20px;
 }
 
-h4, p {
-    margin: 0;
-}
-
 .container {
     display: flex;
     flex-direction: column;
@@ -32,7 +28,7 @@ h4, p {
     margin-right: 20px;
     margin-bottom: 20px;
     background-color: #fff;
-    padding: 40px;
+    padding: 50px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     /* border-radius: 20px; */
@@ -43,8 +39,7 @@ h4, p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(to right, rgba(239, 251, 240, 0.8), #16a159);
-    padding: 30px;
+    padding: 20px 10px;
     color: #16a159;
     /* border-radius: 10px; */
 }
@@ -110,7 +105,6 @@ h4, p {
 }
 
 .no-classes {
-    text-align: center;
     color: gray;
     font-size: 17px;
     display: flex;

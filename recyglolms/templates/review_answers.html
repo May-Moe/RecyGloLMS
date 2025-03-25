@@ -1,27 +1,93 @@
-<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="/static/CSS/review_answers.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Learning Page</title>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- nav -->
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="/static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="/static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="/static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="/static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="/static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="/static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="/static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="/static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+            <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+            </button>
+            <div id="notification-dropdown" class="notification-dropdown hidden">
+                <ul id="notification-list"></ul>
+            </div>
+            <script src="/static/JS/notification.js"></script>
 
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <form method="POST" action="{{ url_for('assessment.review_answers', assessment_id=assessment_id) }}">
-            {% for response in responses %}
-                <div class="question-item">
-                    <!-- Retrieve the question using the question_id from response -->
-                    <h4>Question: {{ assess_questions[response.question_id].question }}</h4>
-                    <p>Your Answer: {{ response.answer_text }}</p>
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_username }}</span></h4>
+                        <p id="profile-email">{{ current_useremail }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
                 </div>
-            {% endfor %}
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="/static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+            <h2 class="page-title">Assessment Review</h2>
+            <form method="POST" action="{{ url_for('assessment.review_answers', assessment_id=assessment_id) }}">
+                <div class="review-questions">
+                    {% for response in responses %}
+                        <div class="question-item">
+                            <h4 class="question-title">Question: {{ assess_questions[response.question_id].question }}</h4>
+                            <p class="answer-text"><strong>Your Answer:</strong> {{ response.answer_text }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="submit-section">
+                    <button type="submit" class="btn btn-success submit-btn">Submit Assessment</button>
+                </div>
+            </form>
+        </div>
+
+    <script src="/static/JS/script.js"></script>
+    <script>
+    </script>
     
-            <button type="submit" class="btn btn-success mt-3">Submit Assessment</button>
-        </form>
-    
-        <script src="" async defer></script>
-    </body>
+</body>
 </html>

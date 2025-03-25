@@ -1055,8 +1055,6 @@ def delete_class(class_id):
         return redirect(url_for('manage_classes'))
     return redirect(url_for('manage_classes'))  # Or handle the error case
 
-
-
 @admin_bp.route('/class-detail', methods=['GET'])
 @login_required
 def class_detail():
@@ -1067,4 +1065,3 @@ def class_detail():
     return render_template('class-detail.html', 
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
-
