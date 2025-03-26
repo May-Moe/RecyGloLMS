@@ -8,7 +8,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message
 import pytz
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # Create Blueprint for authentication
 auth_bp = Blueprint('auth', __name__)
@@ -84,8 +84,16 @@ def forgot_password():
             # Generate a one-time password (OTP)
             otp = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             
+            # Set OTP expiration time (e.g., 10 minutes)
+            expiration_time = datetime.now(timezone.utc) + timedelta(minutes=1)
+
             # Save the OTP to the PasswordReset model
-            password_reset = PasswordReset(user_id=user.userid, otp=otp, created_at=datetime.utcnow())  
+            password_reset = PasswordReset(
+                user_id=user.userid, 
+                otp=otp, 
+                created_at=datetime.now(timezone.utc), 
+                expiration_time=expiration_time
+            )
             db.session.add(password_reset)
             db.session.commit()
 
@@ -106,10 +114,6 @@ def forgot_password():
     return render_template('forgot_password.html')
 
 
-
-from datetime import datetime
-import pytz
-
 @auth_bp.route('/verify_otp', methods=['GET', 'POST'])
 def verify_otp():
     if request.method == 'POST':
@@ -123,7 +127,7 @@ def verify_otp():
         # Debugging: Print the received form data
         print("Received form data:", request.form)
 
-        # Fetch the password reset record
+        # Fetch the most recent password reset record for the given OTP
         password_reset = PasswordReset.query.filter_by(otp=otp).order_by(PasswordReset.created_at.desc()).first()
 
         if password_reset:
@@ -132,19 +136,21 @@ def verify_otp():
                 # If naive, make it UTC-aware
                 password_reset.created_at = pytz.utc.localize(password_reset.created_at)
 
+            # Ensure expiration_time is in UTC and offset-aware
+            if password_reset.expiration_time.tzinfo is None:
+                # If naive, make it UTC-aware
+                password_reset.expiration_time = pytz.utc.localize(password_reset.expiration_time)
+
             # Debugging: Print the created_at and current time (in UTC)
             print(f"OTP created at (UTC): {password_reset.created_at}")
-            print(f"Current time (UTC): {datetime.now(pytz.utc)}")
+            print(f"Current time (UTC): {datetime.now(timezone.utc)}")
 
-            # Check if OTP is within 10 minutes (600 seconds)
-            time_diff = (datetime.now(pytz.utc) - password_reset.created_at).total_seconds()
-            print(f"Time difference in seconds: {time_diff}")
-
-            if time_diff < 600:
+            # Check if OTP is within the valid timeframe (e.g., 10 minutes)
+            if datetime.now(timezone.utc) < password_reset.expiration_time:
                 user = User.query.get(password_reset.user_id)
                 
                 if user:
-                    # Update the password
+                    # Update the user's password after successful OTP verification
                     user.password = bcrypt.generate_password_hash(new_password)
                     db.session.commit()
                     
@@ -157,6 +163,9 @@ def verify_otp():
                 else:
                     flash('User not found.', 'danger')
             else:
+                # OTP has expired, delete expired OTP record
+                db.session.delete(password_reset)
+                db.session.commit()
                 flash('OTP has expired. Please request a new one.', 'danger')
         else:
             flash('Invalid OTP. Please try again.', 'danger')

@@ -33,15 +33,21 @@ class User(db.Model, UserMixin):
                                        .distinct().all()
     
 class PasswordReset(db.Model):
-    __tablename__ = 'Reset'  # Specify table name explicitly if needed
+    __tablename__ = 'Reset'
+    
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
-    otp = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now)
+    otp = db.Column(db.String(6), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
+    expiration_time = db.Column(db.DateTime, nullable=False)  # Add expiration_time field
     
-
-    def is_expired(self):
-        return datetime.now() > self.created_at + timedelta(minutes=10)
+    user = db.relationship('User', backref=db.backref('password_resets', lazy=True))
+    
+    def __init__(self, user_id, otp, created_at, expiration_time):
+        self.user_id = user_id
+        self.otp = otp
+        self.created_at = created_at
+        self.expiration_time = expiration_time
     
     
 class ActionLog(db.Model):
