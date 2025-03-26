@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <!-- Bootstrap CSS (optional for styling) -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Reset Your Password</h2>
+        
+
+        <form method="POST" action="{{ url_for('auth.verify_otp') }}" class="mt-4">
+            <!-- OTP Field -->
+            <div class="form-group">
+                <label for="otp">Enter OTP</label>
+                <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" required>
+            </div>
+
+            <!-- New Password Field -->
+            <div class="form-group position-relative">
+                <label for="new_password">Enter New Password</label>
+                <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Enter New Password" required>
+                <input type="checkbox" class="password-toggle" id="toggleNewPassword" onclick="togglePassword('new_password')">
+                <label for="show-password">Show Password</label>
+
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="form-group position-relative">
+                <label for="confirm_password">Confirm New Password</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm New Password" required>
+                <input type="checkbox" class="password-toggle" id="toggleConfirmPassword" onclick="togglePassword('confirm_password')">
+                <label for="show-password">Show Password</label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS (optional for styling) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        function togglePassword(fieldId) {
+            var passwordField = document.getElementById(fieldId);
+            var fieldType = passwordField.type;
+
+            if (fieldType === "password") {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        }
+    </script>
+</body>
+</html>

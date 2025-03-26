@@ -3,11 +3,13 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager  # Import LoginManager
-from flask_apscheduler import APScheduler  # Import APScheduler
+from flask_login import LoginManager
+from flask_apscheduler import APScheduler
+from flask_mail import Mail  # Import Flask-Mail
 import pymysql
 import logging
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
+from config import MAIL_SERVER, MAIL_PORT, MAIL_USE_TLS, MAIL_USERNAME, MAIL_PASSWORD, MAIL_DEFAULT_SENDER
 
 # Install pymysql to replace MySQLdb
 pymysql.install_as_MySQLdb()
@@ -16,26 +18,33 @@ pymysql.install_as_MySQLdb()
 app = Flask(__name__)
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/recyglolms'  # Connecting to phpmyadmin localhost database in development
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:pHAZKkSTgFnPyRGElSkBpihHMfGJkulG@switchback.proxy.rlwy.net:34745/railway'  # Connecting to railway database in production
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/recyglolms'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'your_secret_key'  # Replace with a secure secret key
+app.secret_key = 'your_secret_key'
 
 # File upload configuration
 app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
-app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # Set maximum file size to 100 MB
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB max file size
+
+# Mail configuration
+app.config['MAIL_SERVER'] = MAIL_SERVER
+app.config['MAIL_PORT'] = MAIL_PORT
+app.config['MAIL_USE_TLS'] = MAIL_USE_TLS
+app.config['MAIL_USERNAME'] = MAIL_USERNAME
+app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
+app.config['MAIL_DEFAULT_SENDER'] = MAIL_DEFAULT_SENDER
 
 # Initialize extensions
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
-login_manager = LoginManager(app)  # Initialize LoginManager
-login_manager.login_view = 'auth.login'  # Set the default view for login
+mail = Mail(app)  # Initialize Flask-Mail
+login_manager = LoginManager(app)
+login_manager.login_view = 'auth.login'
 
-# Create a user loader function for Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
-    from recyglolms.models import User  # Import User here to avoid circular import
-    return User.query.get(int(user_id))  # Ensure User model is imported
+    from recyglolms.models import User
+    return User.query.get(int(user_id))
 
 # Import and register blueprints after extensions are initialized
 from recyglolms.main import main_bp
@@ -68,40 +77,27 @@ from recyglolms.models import ActionLog, Notification
 
 # Define the function to delete old logs
 def delete_old_logs():
-    """Deletes logs older than 3 days."""
     with app.app_context():
         three_days_ago = datetime.datetime.utcnow() - datetime.timedelta(days=3)
-        print(f"Checking for logs older than {three_days_ago}")  # Log when the job runs
         old_logs = ActionLog.query.filter(ActionLog.timestamp < three_days_ago).all()
-
-        print(f"Found {len(old_logs)} logs to delete.")  # Debugging
         if old_logs:
             for log in old_logs:
                 db.session.delete(log)
             db.session.commit()
-            print(f"Deleted {len(old_logs)} old logs.")
 
 # Define the function to delete old notifications
 def delete_old_notifications():
-    """Deletes notifications older than 7 days."""
     with app.app_context():
         seven_days_ago = datetime.datetime.utcnow() - datetime.timedelta(days=7)
-        print(f"Checking for notifications older than {seven_days_ago}")  # Log when the job runs
         old_notifications = Notification.query.filter(Notification.created_at < seven_days_ago).all()
-
-        print(f"Found {len(old_notifications)} notifications to delete.")  # Debugging
         if old_notifications:
             for notification in old_notifications:
                 db.session.delete(notification)
             db.session.commit()
-            print(f"Deleted {len(old_notifications)} old notifications.")
 
-# Initialize scheduler and add the delete_old_logs and delete_old_notifications jobs
+# Initialize scheduler and add jobs
 if not scheduler.running:
     scheduler.init_app(app)
     scheduler.start()
-    print("Scheduler started!")  # Log that scheduler started
     scheduler.add_job(id='delete_old_logs', func=delete_old_logs, trigger='interval', minutes=1)
     scheduler.add_job(id='delete_old_notifications', func=delete_old_notifications, trigger='interval', minutes=1)
-
-# End of auto deleting features

@@ -40,18 +40,18 @@
             </div>
             <script src="/static/JS/notification.js"></script>
 
-                <div class="dropdown">
-                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
-                    <div id="profile-dropdown" class="dropdown-menu hidden">
-                         <!-- Profile Image -->
-                         <div class="profile-image-container">
-                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
-                        </div>
-                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_username }}</span></h4>
-                        <p id="profile-email">{{ current_useremail }}</p>
-                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+            <div class="dropdown">
+                <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                <div id="profile-dropdown" class="dropdown-menu hidden">
+                     <!-- Profile Image -->
+                     <div class="profile-image-container">
+                        <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
                     </div>
+                    <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_username }}</span></h5>
+                    <p id="profile-email">{{ current_user_email }}</p>
+                    <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                 </div>
+            </div>
             </div>
         </nav>
         <nav class="sidebar">
@@ -80,7 +80,7 @@
                     {% endfor %}
                 </div>
                 <div class="submit-section">
-                    <button type="submit" class="btn btn-success submit-btn">Submit Assessment</button>
+                    <button type="submit" class="btn btn-success submit-btn">Go back</button>
                 </div>
             </form>
         </div>

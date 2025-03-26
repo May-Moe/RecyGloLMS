@@ -81,32 +81,6 @@
                     <input type="text" id="searchBar" placeholder="Search By Courses">
                 </div>
             </div>
-
-            <!-- Assessment Section -->
-            <div class="assessment-container">
-                <div class="assessment-header"> 
-                    <button class="dropdown-btn" onclick="toggleAssessments()">
-                        <p>Assessments for {{ selected_class.name }}</p>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                
-                <div class="dropdown-content" id="assessmentList">
-                    {% if assessments %}
-                        {% for assessment in assessments %}
-                            <div class="assessment-card">
-                                <a href="{{ url_for('assessment.submit_answer', assessment_id=assessment.id, question_index=0) }}">
-                                    <h4>{{ assessment.title }}</h4>
-                                    <p>Time Limit: {{ assessment.time_limit }} min</p>
-                                </a>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <p>No assessments available for this class.</p>
-                    {% endif %}
-                </div>
-            </div>
-            
         
             <div class="course-container">
                 {% if courses %}
@@ -127,7 +101,7 @@
             </div>
             
             <!-- Assessments Section -->
-            <!-- <div class="assessment-container">
+            <div class="assessment-container">
                 <h3>Assessments for {{ selected_class.name }}</h3>
                 {% if assessments %}
                     <ul class="assessment-list">
@@ -142,8 +116,7 @@
                 {% else %}
                     <p>No assessments available for this class.</p>
                 {% endif %}
-            </div> -->
-            
+            </div>
         </div>
     <script src="/static/JS/script.js"></script>
     <script>
@@ -177,23 +150,6 @@
                 }
             });
         });
-        
-        
-        function toggleAssessments() {
-            let assessmentList = document.getElementById("assessmentList");
-            let button = document.querySelector(".dropdown-btn i");
-
-            if (assessmentList.style.display === "block") {
-                assessmentList.style.display = "none";
-                button.classList.remove("fa-chevron-up");
-                button.classList.add("fa-chevron-down");
-            } else {
-                assessmentList.style.display = "block";
-                button.classList.remove("fa-chevron-down");
-                button.classList.add("fa-chevron-up");
-            }
-        }
-
     </script>
     
 </body>

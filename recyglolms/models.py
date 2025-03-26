@@ -1,5 +1,5 @@
 from recyglolms.__inti__ import db  # Import db from __init__.py
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_login import UserMixin
 
 
@@ -32,7 +32,16 @@ class User(db.Model, UserMixin):
                                        .filter(Assese_Questions.assessment_id == assessment_id)\
                                        .distinct().all()
     
+class PasswordReset(db.Model):
+    __tablename__ = 'Reset'  # Specify table name explicitly if needed
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    otp = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
     
+
+    def is_expired(self):
+        return datetime.now() > self.created_at + timedelta(minutes=10)
     
     
 class ActionLog(db.Model):
