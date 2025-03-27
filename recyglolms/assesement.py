@@ -28,7 +28,10 @@ def view_classes():
         return redirect(url_for('auth.login'))
 
     classes = Class.query.all()  # Assuming you have a Class model
-    return render_template('admin_assessments.html', classes=classes)
+    return render_template('admin_assessments.html', 
+                           classes=classes,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @assessment_bp.route('/admin/assessments/<int:classid>', methods=['GET'])
 @login_required
@@ -40,7 +43,10 @@ def view_assessments(classid):
     selected_class = Class.query.get_or_404(classid)
     assessments = Assessment.query.filter_by(classid=classid).all()
     
-    return render_template('viewall_assessment.html', assessments=assessments, selected_class=selected_class)
+    return render_template('viewall_assessment.html', 
+                           assessments=assessments, selected_class=selected_class,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @assessment_bp.route('/admin/assessments/<int:classid>/create', methods=['GET', 'POST'])
 @login_required
@@ -58,13 +64,15 @@ def create_assessment(classid):  #  Change parameter to classid
 
         if not (title and time_limit and questions_data):
             flash("All fields are required!", "danger")
-            return redirect(url_for('assessment.create_assessment', classid=classid))  #  Use classid
+            return redirect(url_for('assessment.create_assessment', classid=classid,current_user_name = current_user.name,
+                            current_user_email = current_user.email))  #  Use classid
 
         try:
             time_limit = int(time_limit)
         except ValueError:
             flash("Invalid time limit!", "danger")
-            return redirect(url_for('assessment.create_assessment', classid=classid))  # Use classid
+            return redirect(url_for('assessment.create_assessment', classid=classid,current_user_name = current_user.name,
+                            current_user_email = current_user.email))  # Use classid
 
         new_assessment = Assessment(
             title=title, 
@@ -79,7 +87,8 @@ def create_assessment(classid):  #  Change parameter to classid
             questions_list = json.loads(questions_data)
         except json.JSONDecodeError:
             flash("Invalid question data!", "danger")
-            return redirect(url_for('assessment.create_assessment', classid=classid))  #  Use classid
+            return redirect(url_for('assessment.create_assessment', classid=classid,current_user_name = current_user.name,
+                            current_user_email = current_user.email))  #  Use classid
 
         for question in questions_list:
             question_text = question.get('question', '').strip()
@@ -109,7 +118,8 @@ def create_assessment(classid):  #  Change parameter to classid
         flash("Assessment created successfully!", "success")
         return redirect(url_for('assessment.view_assessments', classid=classid))  # Use classid
 
-    return render_template('create_assessment.html', selected_class=selected_class)
+    return render_template('create_assessment.html', selected_class=selected_class,current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @assessment_bp.route('/admin/assessment/<int:assessment_id>/answers')
 @login_required
@@ -129,7 +139,8 @@ def view_attempted_users(assessment_id):
     .group_by(User.userid, User.name)\
     .all()
 
-    return render_template('assess_attempt_user.html', users=users, assessment_id=assessment_id)
+    return render_template('assess_attempt_user.html', users=users, assessment_id=assessment_id,current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @assessment_bp.route('/delete_assessment/<int:assessment_id>', methods=['POST'])
 @login_required
@@ -174,7 +185,8 @@ def view_user_answers(assessment_id, user_id):
     # Calculate total marks **from stored values**
     total_marks = sum(response.marks or 0 for response, _ in responses)
 
-    return render_template('grade_assessment.html', responses=responses, assessment_id=assessment_id, user_id=user_id, total_marks=total_marks)
+    return render_template('grade_assessment.html', responses=responses, assessment_id=assessment_id, user_id=user_id, total_marks=total_marks,current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 @assessment_bp.route('/admin/assessment/<int:assessment_id>/answers/<int:user_id>/grade', methods=['POST'])
@@ -286,8 +298,5 @@ def review_answers(assessment_id):
         flash("Assessment submitted successfully!", "success")
         return redirect(url_for('main.learning'))
 
-<<<<<<< HEAD
-    return render_template('review_answers.html', responses=responses, assessment_id=assessment_id, assess_questions=assess_questions)
-=======
-    return render_template('review_answers.html', responses=responses, assessment_id=assessment_id, assess_questions=assess_questions)
->>>>>>> c393b5706dc1d5ccdbafbb77cb2c1696fbbd8424
+    return render_template('review_answers.html', responses=responses, assessment_id=assessment_id, assess_questions=assess_questions,current_user_name = current_user.name,
+                            current_user_email = current_user.email)

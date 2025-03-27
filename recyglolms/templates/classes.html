@@ -15,7 +15,7 @@
                 <span class="icon">&#9776;</span>
             </button>
             <div class="profile-right">
-                <img src="../static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <img src="../static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
 
                 <!-- Language Selector -->
                 <div class="language-dropdown">
@@ -57,7 +57,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="../static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="../static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -113,22 +113,27 @@
                     <ul>
                         <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
                         <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
-                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
                     </ul>
-                </div>                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+                </div>                
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
             </ul>
         </nav>
         <div class="container">
             <div class="header">
                 <h1>Manage Classes</h1>
                 <div class="header-actions">
-                    <input type="text" id="searchBar" placeholder="Search By Class Name">
+                    <div class="search-container">
+                        <input type="text" id="searchBar" placeholder="Search   ">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <a href="{{ url_for('admin.add_classes') }}" id="addUserLink" style="text-decoration: none;">
+                        <button id="addUserButton"><i class="fas fa-plus" style="margin-right: 10px;"></i> Add New Class</button>
+                    </a>
                 </div>
-                <a href="{{ url_for('admin.add_classes') }}" id="addUserLink">
-                    <button id="addUserButton"><i class="fas fa-plus"></i> Add New Class</button>
-                </a>
             </div>
-            <div class="class-grid">
+
+    <div class="class-grid">
     {% for class_ in classes %}
     <div class="class-card">
         <h2>{{ class_.name }}
@@ -142,7 +147,7 @@
             </form>
         </h2>
                         <div class="class-actions">
-                            <button onclick="toggleDropdown('dropdown-{{ class_.classid }}')" style="padding: 20px 10px; background-color: #ececec; color: #16a159;">Manage</button>
+                            <button onclick="toggleDropdown('dropdown-{{ class_.classid }}')" style="padding: 20px 10px; background-color: #ececec; font-size: 14px; font-weight: bold; color: #FF6699; text-align: center;">Manage</button>
                             <div id="dropdown-{{ class_.classid }}" class="dropdown-content">
                                 <button onclick="toggleDropdown('courses-{{ class_.classid }}')" style="padding: 20px 10px; margin-bottom: 5px;">Assign Courses</button>
                                 <div id="courses-{{ class_.classid }}" class="inner-dropdown-content">

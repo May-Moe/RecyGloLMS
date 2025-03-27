@@ -1,3 +1,11 @@
+/* General Reset */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+}
+
 /* Base styles */
 body {
     font-family: 'Roboto', sans-serif;
@@ -14,7 +22,7 @@ a {
 
 h1 {
     font-size: 24px;
-    color: #1a6e1b;
+    color: #FF6699; /* Rose Pink color */
     margin-bottom: 20px;
 }
 
@@ -22,42 +30,100 @@ h4, p {
     margin: 0;
 }
 
+/* Main Container */
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    width: calc(100% - 300px); /* Adjust width to account for sidebar */
     margin: 10px auto;
     margin-left: 270px; /* Offset for sidebar */
     margin-top: 80px;
     margin-right: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     background-color: #fff;
-    padding: 40px;
-    border-radius: 5px;
+    padding: 50px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* border-radius: 20px; */
+    border-radius: 0px;
+    box-sizing: border-box;
     transition: margin-left 0.5s, width 0.5s;
 }
 
-.header{
+/* HEADER */
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background: linear-gradient(to right, rgba(239, 251, 240, 0.8), #16a159); */
-    padding: 30px;
-    color: #16a159;
-    /* border-radius: 10px; */
+    background: #0A1931; /* Navy Blue */
+    padding: 20px 20px;
+    border-radius: 8px;
+    color: white;
 }
 
+/* HEADER TITLE */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* HEADER ACTIONS */
 .header-actions {
     display: flex;
     align-items: center;
-    margin-left: auto;
+    gap: 15px;
 }
 
+/* Search Bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #FF6699;
+    transition: 0.3s;
+}
+
+.search-container:focus-within {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+}
+
+.search-icon {
+    color: #FF6699;
+    font-size: 16px;
+}
+
+#searchBar {
+    width: 200px;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+/* Add Activity Button */
+#addActivityBtn {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: white;
+    background-color: #FF6699;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+#addActivityBtn:hover {
+    background-color: #e65c85;
+}
+
+/* CLASS CARDS */
 .class-container {
     display: block;
-    /* grid-template-columns: repeat(auto-fill,minmax(240px, 1fr)); */
     gap: 20px;
     justify-content: left;
     padding: 5px 0px;
@@ -125,41 +191,17 @@ h4, p {
     height: 40vh;
 }
 
-.class-image {
-    width: 100%; /* Make sure images fill the card width */
-    height: 180px; /* Set a fixed height for uniformity */
-    object-fit: cover; /* Ensures images scale while maintaining aspect ratio */
-}
-
-
+/* FILTERS */
 .filters {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
 }
 
-/* Style the search bar */
-#searchBar {
-    width: 200px;
-    padding: 10px;
-    border: 1px solid #16a159;
-    border-radius: 10px;
-    outline: none;
-    transition: 0.3s;
-    font-size: 14px;
-    background: #f8f9fa;
-    margin-left: 10px;
-}
-
-#searchBar:focus {
-    border-color: #2c3e50;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-}
-
 /* Style the filter dropdown */
 .filter-select {
-    padding: 10px;
-    border: 1px solid #16a159;
+    padding: 14px;
+    border: 1px solid #FF6699;
     border-radius: 10px;
     font-size: 14px;
     background: white;
@@ -172,13 +214,95 @@ h4, p {
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
-@media screen and (max-width: 768px) {
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.page-btn, .page-number {
+    background: white;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin: 2px;
+}
+
+.page-btn:hover, .page-number:hover {
+    background: #ddd;
+}
+
+.page-number.active {
+    background: #FF6699;
+    color: white;
+    border-color: #FF6699;
+    font-weight: bold;
+}
+
+.page-btn:disabled {
+    background: #eee;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
     .container {
-        width: 90%; 
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
         margin-left: auto;
         margin-right: auto;
     }
 
+    .header {
+        padding: 10px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-container {
+        width: 100%;
+        justify-content: center;
+    }
+
+    #searchBar {
+        width: 100%;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
 }
-
-

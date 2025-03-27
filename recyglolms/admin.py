@@ -1053,9 +1053,6 @@ def delete_class(class_id):
         db.session.delete(class_)
         db.session.commit()
         return redirect(url_for('manage_classes'))
-<<<<<<< HEAD
-    return redirect(url_for('manage_classes'))  # Or handle the error case
-=======
     return redirect(url_for('manage_classes'))  # Or handle the error case
 
 @admin_bp.route('/class-detail', methods=['GET'])
@@ -1068,4 +1065,3 @@ def class_detail():
     return render_template('class-detail.html', 
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
->>>>>>> c393b5706dc1d5ccdbafbb77cb2c1696fbbd8424

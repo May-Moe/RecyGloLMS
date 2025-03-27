@@ -15,7 +15,7 @@
                 <span class="icon">&#9776;</span>
             </button>
             <div class="profile-right">
-                <img src="/static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <img src="/static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
@@ -56,7 +56,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="/static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="/static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -112,7 +112,7 @@
                     <ul>
                         <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
                         <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
-                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
                     </ul>
                 </div>                
                 <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
@@ -121,10 +121,13 @@
         <div class="container">
             <div class="course-container">
                 <div class="header">
-                    <a href="{{ url_for('assessment.view_classes') }}" class="back-icon" style="margin-right: 13px; margin-bottom: 15px; font-size: 17px;"><i class="fa-solid fa-angle-left"></i></i></a>
+                    <a href="{{ url_for('assessment.view_classes') }}" class="back-icon" style="color: white;"><i class="fa-solid fa-angle-left"></i></a>
                         <h1>Assessments for {{ selected_class.name }}</h1>
                         <div class="header-actions">
-                        <input type="text" id="searchBar" placeholder="Search By Name">
+                            <div class="search-container">
+                                <input type="text" id="searchBar" placeholder="Search   ">
+                                <i class="fas fa-search search-icon"></i>
+                            </div>
                         <div class="dropdown">
                             <button id="addUserButton" class="addUserButton"><i class="fas fa-plus"></i> Add</button>
                             <ul id="addCourseDropdown" class="dropdown-menu hidden">
@@ -148,7 +151,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="userTableBody">
                             {% for assessment in assessments %}
                             <tr>
                                 <td>{{ assessment.title }}</td>
@@ -157,8 +160,8 @@
                                 <td>Mar21</td>
                                 <td>Mar31</td>
                                 <td>
-                                    <a href="{{ url_for('assessment.view_attempted_users', assessment_id=assessment.id) }}">
-                                        check<i class="fa-solid fa-pen-fancy icon" style="margin-left: 5px;"></i>
+                                    <a href="{{ url_for('assessment.view_attempted_users', assessment_id=assessment.id) }}" style="text-decoration: none; color:#FF6699">
+                                        check<i class="fa-solid fa-pen-fancy icon" style="margin-left: 5px; color:#FF6699"></i>
                                     </a>
                                 </td>                                
                                 <td> 
@@ -248,68 +251,22 @@
                     });
                     });
 
-                //search bar
-                document.addEventListener("DOMContentLoaded", function () {
-                    const searchBar = document.getElementById("searchBar");
-
-                    searchBar.addEventListener("input", function () {
-                        let filter = searchBar.value.toLowerCase();
-                        filterTable("courseTableBody", "moduleTableBody", "videoTableBody", filter);
-                    });
-
-                    function filterTable(courseTableId, moduleTableId, videoTableId, filter) {
-                        const courseTable = document.getElementById(courseTableId);
-                        const moduleTable = document.getElementById(moduleTableId);
-                        const videoTable = document.getElementById(videoTableId);
-
-                        if (!courseTable || !moduleTable || !videoTable) return;
-
-                        const courseRows = courseTable.getElementsByTagName("tr");
-                        const moduleRows = moduleTable.getElementsByTagName("tr");
-                        const videoRows = videoTable.getElementsByTagName("tr");
-
-                        let matchedCourses = new Set();
-                        let matchedModules = new Set();
-
-                        // Filter courses
-                        for (let row of courseRows) {
-                            let courseName = row.cells[0]?.textContent.toLowerCase();
-                            if (courseName.includes(filter)) {
-                                row.style.display = "";
-                                matchedCourses.add(courseName);
-                            } else {
-                                row.style.display = "none";
-                            }
-                        }
-
-                        // Filter modules and associate with courses
-                        for (let row of moduleRows) {
-                            let moduleName = row.cells[0]?.textContent.toLowerCase();
-                            let courseName = row.cells[2]?.textContent.toLowerCase(); // Get the course name for this module
-
-                            if (moduleName.includes(filter) || matchedCourses.has(courseName)) {
-                                row.style.display = "";
-                                matchedModules.add(moduleName);
-                            } else {
-                                row.style.display = "none";
-                            }
-                        }
-
-                        // Filter videos and associate with modules
-                        for (let row of videoRows) {
-                            let videoTitle = row.cells[0]?.textContent.toLowerCase();
-                            let moduleName = row.cells[3]?.textContent.toLowerCase(); // Get the module name for this video
-
-                            if (videoTitle.includes(filter) || matchedModules.has(moduleName)) {
-                                row.style.display = "";
-                            } else {
-                                row.style.display = "none";
-                            }
-                        }
+        // Search Functionality
+        document.getElementById("searchBar").addEventListener("keyup", function () {
+                let filter = this.value.toLowerCase();
+                let tableRows = document.querySelectorAll("#userTableBody tr");
+        
+                tableRows.forEach(row => {
+                    let title = row.querySelector("td:nth-child(1)").innerText.toLowerCase(); // Title is in the first column
+                    if (title.includes(filter)) {
+                        row.style.display = "table-row";
+                    } else {
+                        row.style.display = "none";
                     }
                 });
+            });
 
-                //next and previous page
+        //next and previous page
         document.addEventListener("DOMContentLoaded", function () {
         const tableBody = document.getElementById("userTableBody");
         const rows = Array.from(tableBody.querySelectorAll("tr"));

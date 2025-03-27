@@ -1,15 +1,15 @@
 :root {
     --white: #fff;
-    --main: #eaedf0;
-    --accent: #16a159;
-    --accent-2: #ebedf0;
+    --main: #F5F5F5; /* Light Gray as main background */
+    --accent: #FF6699; /* Rose Pink */
+    --accent-2: #0A1931; /* Navy Blue */
 }
 
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: var(--main); /* Light Gray background */
 }
 
 .container {
@@ -23,13 +23,12 @@ body {
     transition: margin-left 0.5s, width 0.5s;
 }
 
-
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #333;
-    color: #fff;
+    background: var(--accent-2); /* Navy Blue background */
+    color: var(--white); /* White text */
     padding: 10px 20px;
 }
 
@@ -40,7 +39,7 @@ body {
 }
 
 .options a {
-    color: #fff;
+    color: var(--white); /* White text */
     margin-left: 20px;
     text-decoration: none;
 }
@@ -57,25 +56,11 @@ body {
     margin-top: 20px;
 }
 
-/* .card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    flex: 1 1 calc(50% - 10px);
-    min-width: 230px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-} */
-
-
-
-.cards-container a{
+/* Cards container styling */
+.cards-container a {
     text-decoration: none;
-    color: black;
-    background-color: #fff;
+    color: #333; /* Dark text for content */
+    background-color: var(--white);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -85,14 +70,15 @@ body {
     display: flex;
     align-items: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
+}
 
-.cards-container a:hover{
+.cards-container a:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
-  }
-.cards-header{
-    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #16a159);
+}
+
+.cards-header {
+    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), var(--accent-2)); /* Rose Pink gradient */
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 5px;
@@ -108,10 +94,9 @@ body {
 }
 
 .card-icon {
-    color: #16a159;
+    color: var(--accent); /* Rose Pink */
     font-size: 24px;
     margin-right: 20px;
-
 }
 
 .card-text {
@@ -140,25 +125,24 @@ body {
     gap: 10px;
 }
 
-  .card2 {
+.card2 {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Align content to the top */
-    padding: 20px; /* Reduced padding */
+    justify-content: flex-start; 
+    padding: 20px;
     border-radius: 8px;
-    background-color: #ffffff;
+    background-color: var(--white);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 100%;
     position: relative;
-    margin-bottom: 20px; /* Space between cards */
+    margin-bottom: 10px;
     flex: 1;
 }
 
-.card2-title{
+.card2-title {
     font-size: 16px;
     font-weight: bold;
-    margin-bottom: 10px; 
-
+    margin-bottom: 10px;
 }
 
 .card2-value {
@@ -171,13 +155,9 @@ body {
 /* Table styles */
 .card2-table {
     width: 100%;
-    /* border-collapse: collapse; */
     margin: 0px 0;
-    /* background: #fff; */
     border-radius: 8px;
     overflow: hidden;
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-   
 }
 
 .card2-pie canvas {
@@ -188,24 +168,22 @@ body {
 .card2-table th {
     text-align: left;
     padding: 15px;
-    border-bottom: 2px solid #16a159;
+    border-bottom: 2px solid var(--accent); /* Rose Pink border */
     background-color: #f7f8fc;
-  }
+}
 
 .card2-table td {
     color: #333;
     padding: 15px 0px;
     text-align: left;
     border-bottom: 1px solid #f4f4f4;
-  }
-  
-.card2-table td {
-    color: #555;
-  }
-  
+    font-size: 14px;
+    padding-left: 12px;
+}
+
 .card2-table tr:last-child td {
     border-bottom: none;
-  }
+}
 
 .course-title {
     font-size: 13px;
@@ -219,8 +197,8 @@ body {
     margin-top: 10px;
 }
 
-/* piechart */
-.card2-pie{
+/* Piechart */
+.card2-pie {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -234,33 +212,32 @@ body {
     gap: 10px;
 }
 
-  .card3 {
+.card3 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 40px;
     border-radius: 8px;
-    background-color: #ffffff;
+    background-color: var(--white);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 100%;
     height: auto;
     position: relative;
 }
 
-.card3-profile img{
-    width: 40px; 
-    height: 40px; 
-    border-radius: 50%; 
-    margin-right: 15px; 
+.card3-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
 }
 
-.card3-title{
+.card3-title {
     font-size: 16px;
     font-weight: bold;
-    display: inline-block; 
+    display: inline-block;
     margin-right: 10px;
     margin-bottom: 20px;
-
 }
 
 .card3-value {
@@ -271,10 +248,9 @@ body {
     background-color: #f4f4f4;
     padding: 20px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    /* gap: 10px; */
 }
 
-.card3-value:hover{
+.card3-value:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
 }
@@ -283,7 +259,6 @@ body {
     font-size: 13px;
     margin-right: 20px;
     margin-left: 15px;
-
 }
 
 .feedback-date {
@@ -291,8 +266,6 @@ body {
     color: #555;
     text-align: right;
 }
-
-/* third row end */
 
 .view-all {
     position: absolute;
@@ -314,17 +287,15 @@ body {
     text-decoration: underline;
 }
 
-.announcement-title{
-        font-size: 13px;
-        margin-right: 10px;
+.announcement-title {
+    font-size: 13px;
+    margin-right: 10px;
 }
 
 .announcements {
     display: flex; 
-    flex-direction: column; 
-    /* justify-content: space-between; */
-    /* height: 150vh; */
-    background: white;
+    flex-direction: column;
+    background: var(--white);
     border-radius: 8px;
     padding: 20px;
     margin-top: 30px;
@@ -335,15 +306,15 @@ body {
     margin-top: 20px;
 }
 
-.selected-date{
-    color: #16a159;
+.selected-date {
+    color: var(--accent-2);
 }
 
 .announcements h2 {
     font-size: 19px;
     margin-top: 50px;
     text-align: center;
-    color: #16a159;
+    color: var(--accent-2);
 }
 
 .announcements ul {
@@ -358,7 +329,6 @@ body {
 }
 
 .announcements li {
-    /* Allow items to grow and fill space */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -380,8 +350,8 @@ body {
     border-radius: 35px;
     padding: 0 1em;
     margin-top: 0px;
-  }
-  
+}
+
 .calendar header {
     margin: 20px;
     display: flex;
@@ -390,71 +360,72 @@ body {
     padding: 10px;
     font-size: 10px;
     cursor: pointer;
-  }
+}
 
-  .header-display {
+.header-display {
     display: flex;
     align-items: center;
-  }
-  
-  .header-display p {
-    color: var(--accent);
+}
+
+.header-display p {
+    color: var(--accent-2);
     margin: 5px;
-    font-size: 5px;
-    word-spacing: 0.5rem;
     font-size: 15px;
-  }
-  
-  pre {
+}
+
+pre {
     padding: 10px;
     margin: 0;
     cursor: pointer;
     font-size: 13px;
     color: var(--accent);
-  }
-  
-  .days,
-  .week {
+}
+
+.days,
+.week {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     margin: auto;
     padding: 0 20px;
     justify-content: space-between;
     font-size: 12px;
-  }
-  .week div,
-  .days div {
+}
+
+.week div,
+.days div {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 2.5rem;
     width: 2.5em;
     border-radius: 100%;
-  }
-  .days div:hover {
+}
+
+.days div:hover {
     background: var(--accent-2);
-    color: rgb(25, 25, 201);
+    color: rgb(255, 255, 255);
     cursor: pointer;
-  }
-  .week div {
+}
+
+.week div {
     opacity: 0.5;
-  }
-  .current-date {
+}
+
+.current-date {
     background-color: var(--accent);
     color: var(--white);
-  }
-  .display-selected {
+}
+
+.display-selected {
     margin-bottom: 10px;
     padding: 20px 20px;
     text-align: center;
-  }
+}
 
-  
-
-  @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
     .container {
         width: 90%; 
         margin-left: auto;
         margin-right: auto;
     }
-  }
+}

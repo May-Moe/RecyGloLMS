@@ -20,7 +20,7 @@
                 <span class="icon">&#9776;</span>
             </button>
             <div class="profile-right">
-                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <img src="static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
         
             <!-- Language Selector -->
             <div class="language-dropdown">
@@ -65,7 +65,7 @@
         <!-- sidebar -->
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -122,7 +122,7 @@
                     <ul>
                         <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
                         <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
-                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
                     </ul>
                 </div>
                 <li><a href="{{ url_for('admin.show_logs') }}"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
@@ -134,7 +134,7 @@
         <div class="container">
             <div class="cards-header">
                 <h5 class="card_header_title" style="color: gray;">Hello <span class="card_header_title">{{ current_user_name }}</span></h5>
-                <h2 style="color: #16a159;">Welcome to RecyGlo!</h2>
+                <h2 style="color: #0A1931">Welcome to RecyGlo!</h2>
              </div>
             <!-- first row of dashboard -->
             <div class="cards-container">
@@ -222,7 +222,7 @@
                     
 
                     <div class="view-all">
-                        <a href="{{ url_for('admin.manage_course') }}">View All Courses <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ url_for('admin.manage_course') }}" style="color: #0A1931;">View All Courses <i class="fas fa-arrow-right"></i></a>
                       </div>
                 </div>
                 <!-- second row first card end -->
@@ -234,7 +234,7 @@
                         <canvas id="userActivityChart" class="piechart"></canvas>
                     </div>
                     <div class="view-all">
-                        <a href="{{ url_for('admin.view_users') }}">View All Users <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ url_for('admin.view_users') }}" style="color: #0A1931;">View All Users <i class="fas fa-arrow-right"></i></a>
                       </div>
                 </div>
                 <!-- second row second card end-->
@@ -265,7 +265,7 @@
                 </div>
 
                 <div class="view-all">
-                    <a href="{{ url_for('admin.admin_feedback') }}">View All Feedback <i class="fas fa-arrow-right"></i></a>
+                    <a href="{{ url_for('admin.admin_feedback') }}" style="color: #0A1931;">View All Feedback <i class="fas fa-arrow-right"></i></a>
                   </div>
             </div>
             <!-- fourth row first card end -->

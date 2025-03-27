@@ -1,3 +1,4 @@
+/* General Reset */
 body {
     font-family: sans-serif;
     margin: 0;
@@ -5,12 +6,13 @@ body {
     background-color: #f0f2f5;
 }
 
+/* Main Container */
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 300px); /* Adjust width for sidebar */
+    width: calc(100% - 300px);
     margin: 10px auto;
-    margin-left: 270px; /* Offset for sidebar */
+    margin-left: 270px;
     margin-top: 80px;
     margin-right: 20px;
     margin-bottom: 30px;
@@ -19,127 +21,83 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: margin-left 0.5s, width 0.5s;
     box-sizing: border-box;
+    border-radius: 0px;
 }
 
-h1 {
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 25px;
-}
-
+/* HEADER */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    background: #0A1931;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
 }
 
+/* HEADER TITLE */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* HEADER ACTIONS */
 .header-actions {
     display: flex;
     align-items: center;
-    margin-left: auto;
     gap: 15px;
 }
 
-/* Style the search bar */
-#searchBar {
-    width: 200px;
-    padding: 10px;
-    border: 1px solid #16a159;
-    border-radius: 10px;
-    outline: none;
-    transition: 0.3s;
-    font-size: 14px;
-    background: #f8f9fa;
-}
-
-#searchBar:focus {
-    border-color: #2c3e50;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-}
-
-
-/* Style the Add User button */
-#addUserButton {
-    background: #16a159;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#addUserButton:hover {
-    background: #028d45;
-}
-
-/* Dropdown container */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-/* Dropdown menu */
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%; /* Position it below the button */
-    right: 0px;
-    background-color: white;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    padding: 10px 0;
-    z-index: 1000;
-    min-width: 200px; /* Ensure enough width */
-    list-style: none;
-}
-
-.dropdown-menu li {
-    padding: 10px 20px;
-    text-align: left;
-}
-
-.dropdown-menu li:hover {
-    background-color: #f0f0f0;
-}
-
-.dropdown-menu li a {
-    text-decoration: none;
-    color: black;
-    display: block;
-}
-
-/* Show dropdown when active */
-.dropdown-menu.active {
-    display: block;
-}
-
-/* Add button style */
-.addUserButton {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
+/* SEARCH BAR */
+.search-container {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #FF6699;
+    transition: 0.3s;
 }
 
-.addUserButton:hover {
-    background-color: #0056b3;
+.search-container:focus-within {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
 }
 
-
-#addUserLink {
-    text-decoration: none;
-    color: #fff;
+.search-icon {
+    color: #FF6699;
+    font-size: 16px;
 }
 
+#searchBar {
+    width: 200px;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+/* ADD BUTTON */
+#addActivityBtn {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: white;
+    background-color: #FF6699;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+#addActivityBtn:hover {
+    background-color: #e65c85;
+}
+
+/* TABLE */
 .table-container {
     overflow-x: auto;
 }
@@ -147,7 +105,6 @@ h1 {
 table {
     width: 100%;
     border-collapse: collapse;
-    
 }
 
 th, td {
@@ -157,25 +114,11 @@ th, td {
 }
 
 th {
-    background-color: #f8f9fa;
+    background-color: #F5F5F5;
     font-weight: bold;
 }
 
-.actions {
-    display: flex;
-    gap: 10px;
-}
-
-.action-button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-}
-
-/* Pagination Container */
+/* PAGINATION */
 .pagination {
     display: flex;
     justify-content: right;
@@ -186,7 +129,7 @@ th {
     border-radius: 8px;
 }
 
-/* Page Buttons */
+/* PAGE BUTTONS */
 .page-btn, .page-number {
     background: white;
     color: #333;
@@ -199,87 +142,102 @@ th {
     margin: 2px;
 }
 
-
-/* Hover Effect */
 .page-btn:hover, .page-number:hover {
     background: #ddd;
 }
 
-/* Active Page */
 .page-number.active {
-    background: #16a159;
+    background: #FF6699;
     color: white;
-    border-color: #16a159;
+    border-color: #FF6699;
     font-weight: bold;
 }
 
-/* Disabled Buttons */
 .page-btn:disabled {
     background: #eee;
     color: #999;
     cursor: not-allowed;
 }
 
-.editAction, .deleteAction {
-    display: inline-flex;
-    align-items: center;
+/* BUTTONS */
+.action-button {
     padding: 5px 10px;
     border: none;
     border-radius: 3px;
+    background-color: #007bff;
+    color: white;
     cursor: pointer;
-    margin-right: 5px;
+}
+
+/* VIEW LINK BUTTON */
+#ViewLinkButton {
+    display: flex;
+    align-items: center;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: white;
+    background-color: #FF6699;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s ease;
     text-decoration: none;
-    color: #fff;
+    border: 1px solid white;
 }
 
-.editAction {
-    color: #007bff;
+#ViewLinkButton:hover {
+    background-color: #e65c85;
 }
 
-.deleteAction {
-    color: #dc3545;
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
-.editAction i, .deleteAction i {
-    margin-right: auto;
-}
-
-.editAction:hover {
-    color: #0056b3;
-}
-
-.deleteAction:hover {
-    color: #c82333;
-}
-
-/* Responsive styles */
 @media (max-width: 768px) {
     .container {
         width: 90%;
         margin-left: auto;
         margin-right: auto;
     }
+
     .header {
+        padding: 10px;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
     }
 
     .header-actions {
-        margin-top: 10px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-container {
         width: 100%;
-        justify-content: space-between;
+        justify-content: center;
     }
 
     #searchBar {
-        width: calc(100% - 130px); /* Adjust width based on button size */
-        margin-right: 0;
+        width: 100%;
     }
 
-    #addUserButton {
-        width: 120px;
+    .pagination {
         justify-content: center;
-    }
-    .table-container {
-        overflow-x: auto;
     }
 }

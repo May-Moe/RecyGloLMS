@@ -1,3 +1,4 @@
+/* General Reset */
 body {
     font-family: sans-serif;
     margin: 0;
@@ -5,6 +6,7 @@ body {
     background-color: #f0f2f5;
 }
 
+/* Main Container */
 .container {
     display: flex;
     flex-direction: column;
@@ -19,127 +21,150 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: margin-left 0.5s, width 0.5s;
     box-sizing: border-box;
+    border-radius: 0px;
 }
 
-h1 {
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 25px;
-}
-
+/* HEADER */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    background: #0A1931;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
 }
 
+/* HEADER TITLE */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* HEADER ACTIONS */
 .header-actions {
     display: flex;
     align-items: center;
-    margin-left: auto;
     gap: 15px;
 }
 
-/* Style the search bar */
+/* SEARCH BAR */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #FF6699;
+    transition: 0.3s;
+}
+
+.search-container:focus-within {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+}
+
+.search-icon {
+    color: #FF6699;
+    font-size: 16px;
+}
+
 #searchBar {
     width: 200px;
-    padding: 10px;
-    border: 1px solid #16a159;
-    border-radius: 10px;
+    padding: 5px;
+    border: none;
     outline: none;
-    transition: 0.3s;
     font-size: 14px;
-    background: #f8f9fa;
+    background: transparent;
 }
-
-#searchBar:focus {
-    border-color: #2c3e50;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-}
-
-
-/* Style the Add User button */
-#addUserButton {
-    background: #16a159;
+/* Basic button styling */
+.addUserButton {
+    background-color: #FF6699; /* Navy Blue */
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 10px;
+    padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-#addUserButton:hover {
-    background: #028d45;
-}
-
-/* Dropdown container */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-/* Dropdown menu */
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%; /* Position it below the button */
-    right: 0px;
-    background-color: white;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
     border-radius: 5px;
-    padding: 10px 0;
-    z-index: 1000;
-    min-width: 200px; /* Ensure enough width */
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for the button */
+.addUserButton:hover {
+    background-color: #FF6699; /* Rose Pink */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dropdown Menu Styling */
+.dropdown-menu {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 45px;
+    right: 10px;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px 10px;
+    width: 300px;
     list-style: none;
+    z-index: 10;
 }
 
-.dropdown-menu li {
-    padding: 10px 20px;
-    text-align: left;
-}
-
-.dropdown-menu li:hover {
-    background-color: #f0f0f0;
-}
-
-.dropdown-menu li a {
-    text-decoration: none;
-    color: black;
-    display: block;
-}
-
-/* Show dropdown when active */
+/* Show the dropdown menu when active */
 .dropdown-menu.active {
     display: block;
 }
 
-/* Add button style */
-.addUserButton {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+/* Dropdown items */
+.dropdown-menu li {
+    padding: 12px 20px;
+    color: #333;
     font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for the items */
+.dropdown-menu li:hover {
+    background-color: #FF6699; /* Rose Pink */
+    color: white;
+}
+
+/* Add icons to the dropdown items */
+.dropdown-menu li a {
+    text-decoration: none;
+    color: inherit;
     display: flex;
     align-items: center;
-    gap: 5px;
 }
 
-.addUserButton:hover {
-    background-color: #0056b3;
+.dropdown-menu li a i {
+    margin-right: 10px;
+}
+
+/* Add smooth transition when clicking the dropdown button */
+.addUserButton i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+/* Add an arrow to indicate dropdown direction */
+.addUserButton::after {
+    content: '\f0d7'; /* Unicode for the down arrow */
+    font-family: 'Font Awesome 5 Free';
+    margin-left: 10px;
+    font-weight: 900;
+}
+
+.addUserButton:hover::after {
+    content: '\f0de'; /* Unicode for up arrow */
 }
 
 
-#addUserLink {
-    text-decoration: none;
-    color: #fff;
-}
-
+/* TABLE */
 .table-container {
     overflow-x: auto;
 }
@@ -147,7 +172,6 @@ h1 {
 table {
     width: 100%;
     border-collapse: collapse;
-    
 }
 
 th, td {
@@ -157,56 +181,104 @@ th, td {
 }
 
 th {
-    background-color: #f8f9fa;
+    background-color: #F5F5F5;
     font-weight: bold;
 }
 
-.actions {
+/* Basic styling for the pagination container */
+.pagination {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
 }
 
+/* Styling for the pagination buttons */
+.pagination-btn {
+    background-color: #0A1931; /* Navy Blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+/* Hover effect for buttons */
+.pagination-btn:hover {
+    background-color: #FF6699; /* Rose Pink */
+}
+
+/* Page number styling */
+.page-number {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+/* Add icons to prev/next buttons using Font Awesome */
+.pagination-btn.prev::before {
+    content: '\f053'; /* FontAwesome left arrow */
+    font-family: 'Font Awesome 5 Free';
+    margin-right: 5px;
+}
+
+.pagination-btn.next::before {
+    content: '\f054'; /* FontAwesome right arrow */
+    font-family: 'Font Awesome 5 Free';
+    margin-left: 5px;
+}
+
+/* Adjust styles when buttons are disabled */
+.pagination-btn:disabled {
+    background-color: #f5f5f5;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+
+/* BUTTONS */
 .action-button {
     padding: 5px 10px;
     border: none;
     border-radius: 3px;
     background-color: #007bff;
-    color: #fff;
+    color: white;
     cursor: pointer;
 }
 
-.pagination {
+/* VIEW LINK BUTTON */
+#ViewLinkButton {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
-
-.pagination button {
-    margin: 0 5px;
-    padding: 6px 17px;
-    background-color: #16a159;
+    align-items: center;
+    padding: 8px 20px;
+    font-size: 13px;
     color: white;
+    background-color: #FF6699;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
-    border-radius: 8px;
+    transition: 0.3s ease;
+    text-decoration: none;
+    border: 1px solid white;
 }
 
-.pagination button:hover {
-    background-color: #028d45;
-    border-radius: 5px;
-    color: white;
+#ViewLinkButton:hover {
+    background-color: #e65c85;
 }
 
 .editAction, .deleteAction {
     display: inline-flex;
     align-items: center;
-    padding: 5px 10px;
     border: none;
-    border-radius: 3px;
     cursor: pointer;
     margin-right: 5px;
     text-decoration: none;
-    color: #fff;
 }
 
 .editAction {
@@ -215,6 +287,7 @@ th {
 
 .deleteAction {
     color: #dc3545;
+    border: none;
 }
 
 .editAction i, .deleteAction i {
@@ -229,34 +302,66 @@ th {
     color: #c82333;
 }
 
-/* Responsive styles */
+/* Hide dropdown by default */
+.hidden {
+    display: none;
+}
+
+/* Show dropdown when active */
+.active {
+    display: block;
+}
+
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         width: 90%;
         margin-left: auto;
         margin-right: auto;
     }
+
     .header {
+        padding: 10px;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
     }
 
     .header-actions {
-        margin-top: 10px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-container {
         width: 100%;
-        justify-content: space-between;
+        justify-content: center;
     }
 
     #searchBar {
-        width: calc(100% - 130px); /* Adjust width based on button size */
-        margin-right: 0;
+        width: 100%;
     }
 
-    #addUserButton {
-        width: 120px;
+    .pagination {
         justify-content: center;
-    }
-    .table-container {
-        overflow-x: auto;
     }
 }

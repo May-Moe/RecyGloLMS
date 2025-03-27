@@ -23,28 +23,48 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: margin-left 0.5s, width 0.5s;
     box-sizing: border-box;
-    
 }
 
-
+/* Header Styling */
 .header {
     display: flex;
-    margin-bottom: 20px;
+    align-items: center;
+    background: #0A1931; /* Dark blue background */
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+/* Header Title */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* Header Actions (like buttons) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 /* Quiz Header */
 .quiz-header {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 700;
     text-align: center;
-    padding: 15px 0;
+    padding: 20px;
     border-bottom: 3px solid #ddd;
     color: #333;
+    margin-bottom: 30px;
 }
 
+/* Question Section */
 .question {
     position: relative;
     padding-bottom: 20px;
+    padding: 10px 30px;
 }
 
 .question .button-container {
@@ -54,26 +74,7 @@ body {
     margin-top: 20px;
 }
 
-
-.cards-header{
-    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #16a159);
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 5px;
-}
-
-h2 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #2C3E50;
-}
-
-p {
-    font-size: 16px;
-    color: #555;
-    line-height: 1.5;
-}
-
+/* Answer List Styling */
 .answer-list {
     list-style: none;
     padding: 0;
@@ -81,9 +82,9 @@ p {
 
 .answer-list2 {
     background: #f9f9f9;
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -94,27 +95,20 @@ p {
     font-size: 16px;
 }
 
-label {
-    font-size: 14px;
-    margin-right: 10px;
-}
-
-input[type="radio"] {
-    margin-right: 5px;
-}
-
+/* Edit Answer Button */
 .edit_answer {
-    background: #16a159;
+    background: #FF6699;
     color: white;
-    padding: 5px 5px;
+    padding: 10px 20px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     transition: 0.3s;
+    font-size: 14px;
 }
 
 .edit_answer:hover {
-    background: #45a049;
+    background: #0A1931;
 }
 
 .edit_answer i {
@@ -122,48 +116,89 @@ input[type="radio"] {
     cursor: pointer;
 }
 
-
-/* Style for Edit and Save buttons */
+/* Edit Question Button */
 .edit_question {
-    padding: 8px 15px;
-    background: #16a159;
+    padding: 13px 15px;
+    background: #0A1931;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
 }
 
-/* Hover Effect */
+/* Hover Effect for Edit Question Button */
 .edit_question:hover {
-    background: #16a159;
+    background: #050d1a;
 }
 
+/* Textarea and Input Styling */
 textarea, input[type="text"] {
     width: 100%;
-    padding: 10px;
-    margin-top: 5px;
+    padding: 12px;
+    margin-top: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 14px;
 }
 
+/* Back Icon Styling */
 .back-icon {
-    font-size: 24px;
-    color: #333;
+    font-size: 18px;
+    color: white;
     text-decoration: none;
-    margin-bottom: 20px;
 }
 
 .back-icon:hover {
-    color: #007BFF;
+    color: #FF6699;
 }
 
+/* Button Style */
+.edit-btn {
+    padding: 10px 10px;
+    background: #FF6699;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+}
 
+.edit-btn:hover {
+    background: #071327;
+}
+
+/* Responsive Styles */
 @media screen and (max-width: 768px) {
     .container {
-        width: 90%; 
+        width: 90%;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    #searchBar {
+        width: calc(100% - 130px); /* Adjust width based on button size */
+        margin-right: 0;
+    }
+
+    #addUserButton {
+        width: 120px;
+        justify-content: center;
+    }
+
+    .table-container {
+        overflow-x: auto;
     }
 }

@@ -22,16 +22,46 @@ body {
     box-sizing: border-box;
 }
 
+/* Header Styling */
 .header {
     display: flex;
-    margin-bottom: 20px;
+    align-items: center;
+    background: #0A1931; /* Dark blue background */
+    padding: 20px 20px;
+    border-radius: 8px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+/* Header Title */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* Header Actions (like buttons) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Back Icon Styling */
+.back-icon {
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.back-icon:hover {
+    color: #FF6699;
 }
 
 h1 {
     /* text-align: center; */
     font-size: 24px;
-    color: #16a159;
-    margin-left: 20px;
+    color: white;
 }
 
 form {
@@ -47,7 +77,7 @@ label {
 }
 
 input, textarea, select {
-    padding: 10px;
+    padding: 15px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -62,8 +92,8 @@ textarea {
 
 .add_quiz {
     background: white;
-    color: black;
-    padding: 10px;
+    color: hsl(0, 0%, 0%);
+    padding: 15px;
     border: 2px dotted black;
     border-radius: 5px;
     cursor: pointer;
@@ -72,7 +102,7 @@ textarea {
 }
 
 .add_quiz:hover {
-    background: #16a159;
+    background: #FF6699;
 }
 
 .button-container {
@@ -83,8 +113,8 @@ textarea {
 
 /* Style the Create Quiz button */
 .create_quiz {
-    padding: 10px 20px;
-    background: #16a159;
+    padding: 15px 20px;
+    background: #0A1931;
     color: white;
     border: none;
     border-radius: 5px;
@@ -95,26 +125,12 @@ textarea {
 
 /* Hover Effect */
 .create_quiz:hover {
-    background: #16a159;
+    background: #061123;
 }
 
-/* .create_quiz {
-    margin-top: 10px;
-    background: #16a159;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
-    width: 20%;
-    justify-content: space-between;
-
-} */
-
 #questions-container {
-    margin-top: 20px;
+    margin-top: 0px;
+    padding: 15px;
 }
 
 .question {
@@ -128,14 +144,17 @@ textarea {
 .answers-container input {
     display: block;
     margin-top: 5px;
-    width: 95%;
+    width: 100%;
+    padding: 15px;
 }
 
 .added-question {
     background: #e8f5e9;
-    padding: 10px;
-    border-left: 5px solid #16a159;
+    padding: 20px;
+    border-left: 5px solid #FF6699;
     margin-bottom: 10px;
+    background-color: #0A1931;
+    color: white;
 }
 
 .added-question h4 {
@@ -161,7 +180,7 @@ textarea {
 }
 
 .done{
-    background-color: #16a159;
+    background-color: #0A1931;
     color: white;
     border: none;
     padding: 10px 20px;

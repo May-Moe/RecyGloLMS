@@ -18,7 +18,7 @@
                 <span class="icon">&#9776;</span>
             </button>
             <div class="profile-right">
-                <img src="../static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <img src="../static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
@@ -59,7 +59,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="../static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="../static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -115,7 +115,7 @@
                     <ul>
                         <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
                         <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
-                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
                     </ul>
                 </div>                
                 <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
@@ -251,8 +251,8 @@ document.addEventListener("DOMContentLoaded", function () {
         </script>
         <div class="container">
              <div class="header">
-                <a href="{{ url_for('quiz.view_all_quizzes') }}"  class="back-icon" style="margin-right: 20px;"><i class="fa-solid fa-angle-left"></i></i></a>
-                <h2 style="color: #16a159">Quiz Name: <span id="quiz-title" contenteditable="true">{{ quiz.title }}</span></h2>
+                <a href="{{ url_for('quiz.view_all_quizzes') }}"  class="back-icon" style="margin-right: 20px;"><i class="fa-solid fa-angle-left"></i></a>
+                <h2 style="color: white">Quiz Name: <span id="quiz-title" contenteditable="true">{{ quiz.title }}</span></h2>
                </div>
                <!-- <p style="color: gray;"><strong>Description:</strong> <span id="quiz-description" contenteditable="true">{{ quiz.description }}</span></p> -->
             {% if quiz_data %}
@@ -260,13 +260,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     {% for item in quiz_data %}
                     <div class="question" id="question-container-{{ item.question.questionid }}">
                         <h3 style="margin-bottom: 10px;">Question{{ loop.index }}</h3>
-                        <p id="question-text-{{ item.question.questionid }}" style="margin-bottom: 15px; font-size: 14px;">{{ item.question.text }}</p>
+                        <p id="question-text-{{ item.question.questionid }}" style="margin-bottom: 15px; font-size: 15px;">Question: {{ item.question.text }}</p>
                         <textarea id="question-textarea-{{ item.question.questionid }}" style="display:none;">{{ item.question.text }}</textarea>
                         <ul class="answer-list">
                             {% for answer in item.answers %}
                             <li class="answer-list2">
                                 <!-- Answer text, initially displayed -->
-                                <span id="answer-span-{{ item.question.questionid }}-{{ loop.index0 }}" {% if answer.is_correct %} style="color: green; font-weight: bold;" {% endif %}>{{ answer.text }}</span>
+                                <span id="answer-span-{{ item.question.questionid }}-{{ loop.index0 }}" {% if answer.is_correct %} style="color: #FF6699; font-weight: bold;" {% endif %}>{{ answer.text }}</span>
             
                                 <!-- Answer input for editing -->
                                 <input type="text" id="answer-input-{{ item.question.questionid }}-{{ loop.index0 }}" name="answer_text_{{ item.question.questionid }}_{{ loop.index0 }}" value="{{ answer.text }}" style="display:none;" data-answer-id="{{ answer.answerid }}">
@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 </label>
             
                                 <!-- Edit answer button -->
-                                <button type="button" onclick="toggleEditAnswer({{ item.question.questionid }}, {{ loop.index0 }})"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="edit-btn" onclick="toggleEditAnswer({{ item.question.questionid }}, {{ loop.index0 }})"><i class="fas fa-edit"></i></button>
                             </li>
                             {% endfor %}
                         </ul>

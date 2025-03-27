@@ -1,3 +1,4 @@
+/* General Reset */
 body {
     font-family: sans-serif;
     margin: 0;
@@ -5,6 +6,7 @@ body {
     background-color: #f0f2f5;
 }
 
+/* Main Container */
 .container {
     display: flex;
     flex-direction: column;
@@ -21,46 +23,75 @@ body {
     box-sizing: border-box;
 }
 
-h1 {
-    margin-bottom: 15px;
-    color: #0d5a0d;
-    font-size: 25px;
+h3{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0A1931;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
 }
-
+/* HEADER */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
+    background: #0A1931;
+    padding: 20px 20px;
+    border-radius: 8px;
+    color: white;
+    margin-bottom: 10px;
 }
 
+/* HEADER TITLE */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* HEADER ACTIONS */
 .header-actions {
     display: flex;
     align-items: center;
-    margin-left: auto;
     gap: 15px;
 }
-/* Style the search bar */
+
+/* SEARCH BAR */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #FF6699;
+    transition: 0.3s;
+}
+
+.search-container:focus-within {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+}
+
+.search-icon {
+    color: #FF6699;
+    font-size: 16px;
+}
+
 #searchBar {
     width: 200px;
-    padding: 10px;
-    border: 1px solid #16a159;
-    border-radius: 10px;
+    padding: 5px;
+    border: none;
     outline: none;
-    transition: 0.3s;
     font-size: 14px;
-    background: #f8f9fa;
+    background: transparent;
 }
 
-#searchBar:focus {
-    border-color: #2c3e50;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-}
-
-/* Style the filter dropdown */
+/* Filter Dropdown */
 .filter-select {
-    padding: 10px;
-    border: 1px solid #16a159;
+    padding: 13px;
+    border: 1px solid #FF6699;
     border-radius: 10px;
     font-size: 14px;
     background: white;
@@ -73,11 +104,85 @@ h1 {
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
-#addUserLink {
-    text-decoration: none;
-    color: #fff;
+/* Add User Button */
+.addUserButton {
+    background-color: #FF6699;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    transition: all 0.3s ease;
 }
 
+.addUserButton:hover {
+    background-color: #FF6699;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dropdown Menu Styling */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 10px;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px 10px;
+    width: 300px;
+    list-style: none;
+    z-index: 10;
+}
+
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-menu li {
+    padding: 12px 20px;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dropdown-menu li:hover {
+    background-color: #FF6699;
+    color: white;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu li a i {
+    margin-right: 10px;
+}
+
+.addUserButton i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.addUserButton::after {
+    content: '\f0d7';
+    font-family: 'Font Awesome 5 Free';
+    margin-left: 10px;
+    font-weight: 900;
+}
+
+.addUserButton:hover::after {
+    content: '\f0de';
+}
+
+/* TABLE */
 .table-container {
     overflow-x: auto;
     margin: 20px 0px;
@@ -87,7 +192,6 @@ h1 {
 table {
     width: 80%;
     border-collapse: collapse;
-    
 }
 
 .styled-table {
@@ -99,12 +203,10 @@ table {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-
 th, td {
     text-align: left;
     padding: 20px;
     border-bottom: 1px solid #ddd;
-    padding: 15px;
 }
 
 th {
@@ -122,25 +224,14 @@ th {
     border: none;
     border-radius: 3px;
     background-color: #007bff;
-    color: #fff;
+    color: white;
     cursor: pointer;
 }
 
-/* .editAction {
-    color: #007bff;
-}
-
-.deleteAction {
-    color: #dc3545;
-} */
-
-/* .editAction i, .deleteAction i {
-    margin-right: auto;
-} */
-
+/* Edit and Delete Actions */
 .editAction:hover {
-   color: #0b0b35;
-   text-decoration: underline;
+    color: #0b0b35;
+    text-decoration: underline;
 }
 
 .deleteAction:hover {
@@ -148,6 +239,7 @@ th {
     text-decoration: underline;
 }
 
+/* BUTTONS */
 .btn {
     padding: 5px 10px;
     text-decoration: none;
@@ -157,23 +249,34 @@ th {
     border: none;
 }
 
-.text-muted{
+.text-muted {
     color: #9f9f9f;
 }
 
-.btn-success { color: #16a159; }
-.btn-info { color: blue; }
-.btn-danger { color: red; }
-.btn:hover { opacity: 0.8; }
+.btn-success {
+    color: #16a159;
+}
 
-/* Responsive styles */
+.btn-info {
+    color: blue;
+}
+
+.btn-danger {
+    color: red;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-
     .container {
-            width: 90%; 
-            margin-left: auto;
-            margin-right: auto;
-        }
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     .header {
         flex-direction: column;
         align-items: flex-start;
@@ -186,7 +289,7 @@ th {
     }
 
     #searchBar {
-        width: calc(100% - 130px); /* Adjust width based on button size */
+        width: calc(100% - 130px);
         margin-right: 0;
     }
 
@@ -194,17 +297,19 @@ th {
         width: 120px;
         justify-content: center;
     }
+
     .table-container {
         overflow-x: auto;
     }
 }
 
 @media (max-width: 480px) {
-        .container {
-            width: 90%; 
-            margin-left: auto;
-            margin-right: auto;
-        }
+    .container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     .header-actions {
         flex-direction: column;
         align-items: stretch;
@@ -218,6 +323,7 @@ th {
     #addUserButton {
         width: 100%;
     }
+
     .table-container {
         overflow-x: auto;
     }

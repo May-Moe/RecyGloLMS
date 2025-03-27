@@ -37,7 +37,7 @@ label {
     font-weight: bold;
 }
 
-input[type="text"], input[type="file"], input[type="time"], select, textarea {
+input[type="text"], input[type="file"], input[type="time"],input[type="number"], select, textarea {
     width: 100%;
     padding: 15px;
     border: 1px solid #ccc;

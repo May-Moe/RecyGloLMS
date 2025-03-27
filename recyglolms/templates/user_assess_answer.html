@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Learning Page</title>
 </head>
+<style>
+    .questions-container{
+        display: none;
+    }
+</style>
 <body>
     <div class="dashboard">
         <!-- nav -->
@@ -15,7 +20,7 @@
                 <span class="icon">&#9776;</span>
             </button>
             <div class="profile-right">
-                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <img src="/static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
@@ -56,7 +61,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="/static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="/static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -70,7 +75,7 @@
         </nav>
 
         <div class="container">
-            <div id="timer">Time Left: {{ time_limit }} minutes</div>
+            <!-- <p id="timer">Time Left: <span id="time-left"></span></p> -->
             <h1 id="assessment-title">Assessment for "{{ assessment.title }}"</h1>
             <p id="intro-text1" style="margin-bottom: 8px;">You should aim to do the whole exam in one go, from start to finish. If you have a long break, Moodle may time out. This could lead to unsaved answers being lost. Answers are saved when you move to another page in the exam. 
                 DO NOT SUBMIT THE EXAM UNTIL YOU HAVE ANSWERED ALL QUESTIONS. If Moodle does time out before you are finished, you should be able to re-open the quiz with the same password as before.
@@ -81,9 +86,9 @@
             <h4 id="time-limit">Time limit: {{ time_limit }} minutes</h4>
             <h4 id="grade" style="margin-bottom: 8px;">Grading method: Highest grade</h4>
             <p id="intro-text3">Are you ready to begin your assessment? You can start when you’re ready.</p>
-            <button id="start-btn" class="btn btn-primary" onclick="startAssessment()">Start Assessment</button>
+            <button id="start-btn" class="btn btn-primary">Start Assessment</button>
     
-            <div id="assessment-container" style="display: none;">
+            <div id="assessment-container" class="questions-container">
                 <form id="answer-form" method="POST" action="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index) }}">
                     <div class="question-item">
                         <h4>Question {{ question_index + 1 }} / {{ total_questions }}</h4>
@@ -98,9 +103,9 @@
                     </div>
     
                     {% if question_index > 0 %}
-                        <a href="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index - 1) }}" class="btn btn-secondary mt-3">Previous</a>
+                    <a href="{{ url_for('assessment.submit_answer', assessment_id=assessment_id, question_index=question_index - 1) }}" class="btn btn-secondary mt-3">Previous</a> 
                     {% endif %}
-                    
+                              
                     {% if question_index + 1 < total_questions %}
                         <button type="submit" class="btn btn-next mt-3">Next</button>
                     {% else %}
@@ -111,62 +116,74 @@
         </div>
     <script src="/static/JS/script.js"></script>
     <script>
-        // Ensure that timeLeft is initialized properly. You may want to log it to check.
-        let timeLeft = {{ time_limit }} * 60;  // Assuming time_limit is in minutes, convert to seconds.
-        let timer;
-
-        function startAssessment() {
-            document.getElementById("start-btn").style.display = "none";
-            document.getElementById("assessment-container").style.display = "block";
-            document.getElementById("timer").style.display = "block"; // Show the timer when the assessment starts
-
-            // Hide the title, time limit, and introductory text
-            document.getElementById("assessment-title").style.display = "none";
-            document.getElementById("time-limit").style.display = "none";
-            document.getElementById("intro-text1").style.display = "none";
-            document.getElementById("intro-text2").style.display = "none";
-            document.getElementById("intro-text3").style.display = "none";
-            document.getElementById("grade").style.display = "none";
-            startTimer();
-            preventCheating();
-        }
-
-        function startTimer() {
-            const timerDisplay = document.getElementById("timer");
-            timer = setInterval(() => {
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    document.getElementById("submit-btn").click();  // Automatically submit the form when time is up
-                } else {
-                    let minutes = Math.floor(timeLeft / 60);  // Convert seconds to minutes
-                    let seconds = timeLeft % 60;  // Get remaining seconds
-                    timerDisplay.innerText = `Time Left: ${minutes}m ${seconds}s`;  // Update the display
-                    timeLeft--;  // Decrease the time by 1 second
+        document.addEventListener("DOMContentLoaded", function () {
+            const startBtn = document.getElementById("start-btn");
+            const assessmentContainer = document.getElementById("assessment-container");
+            const answerInput = document.getElementById("answer-text");
+            const timerDisplay = document.getElementById("time-left");
+            const form = document.getElementById("answer-form");
+            const submitBtn = document.getElementById("submit-btn");
+    
+            const questionIndex = {{ question_index }};
+            const assessmentId = {{ assessment_id }};
+            const totalTime = {{ time_limit | default(10) }} * 60; // Convert minutes to seconds
+    
+            // Restore previous answer if available
+            const savedAnswer = sessionStorage.getItem(`answer_${assessmentId}_${questionIndex}`);
+            if (savedAnswer) {
+                answerInput.value = savedAnswer;
+            }
+    
+            answerInput.addEventListener("input", function () {
+                sessionStorage.setItem(`answer_${assessmentId}_${questionIndex}`, answerInput.value);
+            });
+    
+            // Handle assessment start
+            if (localStorage.getItem("assessmentStarted") === "true") {
+                startBtn.style.display = "none";
+                assessmentContainer.style.display = "block";
+                startTimer();
+            }
+    
+            startBtn.addEventListener("click", function () {
+                startBtn.style.display = "none";
+                assessmentContainer.style.display = "block";
+                localStorage.setItem("assessmentStarted", "true");
+                startTimer();
+            });
+    
+            function startTimer() {
+                let timeLeft = localStorage.getItem("timeRemaining") ? parseInt(localStorage.getItem("timeRemaining")) : totalTime;
+                
+                function updateTimer() {
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        document.getElementById("submit-btn").click();
+                    } else {
+                        let minutes = Math.floor(timeLeft / 60);
+                        let seconds = timeLeft % 60;
+                        timerDisplay.innerText = `${minutes}m ${seconds}s`;
+                        localStorage.setItem("timeRemaining", timeLeft);
+                        timeLeft--;
+                    }
                 }
-            }, 1000);  // Set the interval to 1 second
-        }
-
-        function preventCheating() {
-            document.addEventListener('copy', (event) => {
-                event.preventDefault();
-                alert('Copying is not allowed!');
-            });
-
-            document.addEventListener('paste', (event) => {
-                event.preventDefault();
-                alert('Pasting is not allowed!');
-            });
-
-            document.addEventListener("visibilitychange", () => {
-                if (document.hidden) {
-                    alert("Tab switching is not allowed! Assessment will be auto-submitted.");
-                    document.getElementById("submit-btn").click();
-                }
-            });
-        }
-
-
+    
+                updateTimer();
+                var timerInterval = setInterval(updateTimer, 1000);
+            }
+    
+            // ✅ Clear Storage on Final Submit
+            if (submitBtn) {
+                submitBtn.addEventListener("click", function () {
+                    localStorage.removeItem("assessmentStarted");
+                    localStorage.removeItem("timeRemaining");
+                    sessionStorage.clear();
+                });
+            }
+    
+        });
     </script>
+    
     
 </body>
 </html>

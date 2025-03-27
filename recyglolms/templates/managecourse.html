@@ -14,7 +14,7 @@
                 <span class="icon">&#9776;</span>
             </button>
             <div class="profile-right">
-                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <img src="static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
@@ -55,7 +55,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -111,7 +111,7 @@
                     <ul>
                         <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
                         <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
-                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
                     </ul>
                 </div>               
                 <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
@@ -122,7 +122,10 @@
                 <div class="header">
                     <h1>Courses</h1>
                     <div class="header-actions">
-                        <input type="text" id="searchBar" placeholder="Search By Name">
+                        <div class="search-container">
+                            <input type="text" id="searchBar" placeholder="Search   ">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
                         <div class="dropdown">
                             <button id="addUserButton" class="addUserButton"><i class="fas fa-plus"></i> Add</button>
                             <ul id="addCourseDropdown" class="dropdown-menu hidden">
@@ -132,6 +135,7 @@
                             </ul>
                         </div>
                     </div>
+
                 </div>
                 <div class="table-container">
                     <table>
@@ -167,10 +171,11 @@
                     </table>
                 </div>
                 <div class="pagination">
-                    <button id="prevPage">Previous</button>
-                    <button id="nextPage">Next</button>
+                    <button id="prevPageCourses" class="pagination-btn">Prev</button>
+                    <span id="pageNumberCourses" class="page-number">1</span> <!-- Page number display -->
+                    <button id="nextPageCourses" class="pagination-btn">Next</button>
                 </div>
-    
+                
             </div>
 
             <!-- module -->
@@ -214,9 +219,10 @@
                 </table>
             </div>
             <div class="pagination">
-                <button id="prevPage">Previous</button>
-                <button id="nextPage">Next</button>
-            </div>
+                <button id="prevPageModules" class="pagination-btn">Prev</button>
+                <span id="pageNumberModules" class="page-number">1</span>
+                <button id="nextPageModules" class="pagination-btn">Next</button>
+            </div>            
 
             </div>
 
@@ -262,8 +268,9 @@
                 </table>
             </div>
             <div class="pagination">
-                <button id="prevPage">Previous</button>
-                <button id="nextPage">Next</button>
+                <button id="prevPageVideos" class="pagination-btn">Prev</button>
+                <span id="pageNumberVideos" class="page-number">1</span>
+                <button id="nextPageVideos" class="pagination-btn">Next</button>
             </div>
             </div>
         </div>
@@ -273,126 +280,202 @@
     </div>
     <script src="static/JS/script.js"></script>
     <script>
-         //next and previous page
-    document.addEventListener("DOMContentLoaded", function () {
-        const tableBody = document.getElementById("userTableBody");
-        const rows = Array.from(tableBody.querySelectorAll("tr"));
-        const prevButton = document.getElementById("prevPage");
-        const nextButton = document.getElementById("nextPage");
-        let currentPage = 1;
-        const rowsPerPage = 10;
+        document.addEventListener("DOMContentLoaded", function () {
+        const prevButtonCourses = document.getElementById("prevPageCourses");
+        const nextButtonCourses = document.getElementById("nextPageCourses");
+        const prevButtonModules = document.getElementById("prevPageModules");
+        const nextButtonModules = document.getElementById("nextPageModules");
+        const prevButtonVideos = document.getElementById("prevPageVideos");
+        const nextButtonVideos = document.getElementById("nextPageVideos");
 
-        function showPage(page) {
-            const start = (page - 1) * rowsPerPage;
+        const pageNumberCourses = document.getElementById("pageNumberCourses");
+        const pageNumberModules = document.getElementById("pageNumberModules");
+        const pageNumberVideos = document.getElementById("pageNumberVideos");
+
+        const rowsPerPage = 5;
+
+        const courseRows = Array.from(document.getElementById("courseTableBody").querySelectorAll("tr"));
+        const moduleRows = Array.from(document.getElementById("moduleTableBody").querySelectorAll("tr"));
+        const videoRows = Array.from(document.getElementById("videoTableBody").querySelectorAll("tr"));
+
+        let currentPageCourses = 1;
+        let currentPageModules = 1;
+        let currentPageVideos = 1;
+
+        function showPage(rows, currentPage, prevButton, nextButton, pageNumberElement) {
+            const start = (currentPage - 1) * rowsPerPage;
             const end = start + rowsPerPage;
 
-            // Hide all rows
             rows.forEach((row, index) => {
                 row.style.display = index >= start && index < end ? "table-row" : "none";
             });
 
-            // Disable buttons when needed
-            prevButton.disabled = page === 1;
+            prevButton.disabled = currentPage === 1;
             nextButton.disabled = end >= rows.length;
+
+            pageNumberElement.textContent = `${currentPage}`;
         }
 
-        prevButton.addEventListener("click", function () {
-            if (currentPage > 1) {
-                currentPage--;
-                showPage(currentPage);
+        prevButtonCourses.addEventListener("click", function () {
+            if (currentPageCourses > 1) {
+                currentPageCourses--;
+                showPage(courseRows, currentPageCourses, prevButtonCourses, nextButtonCourses, pageNumberCourses);
             }
         });
 
-        nextButton.addEventListener("click", function () {
-            if ((currentPage * rowsPerPage) < rows.length) {
-                currentPage++;
-                showPage(currentPage);
+        nextButtonCourses.addEventListener("click", function () {
+            if ((currentPageCourses * rowsPerPage) < courseRows.length) {
+                currentPageCourses++;
+                showPage(courseRows, currentPageCourses, prevButtonCourses, nextButtonCourses, pageNumberCourses);
+            }
+        });
+
+        prevButtonModules.addEventListener("click", function () {
+            if (currentPageModules > 1) {
+                currentPageModules--;
+                showPage(moduleRows, currentPageModules, prevButtonModules, nextButtonModules, pageNumberModules);
+            }
+        });
+
+        nextButtonModules.addEventListener("click", function () {
+            if ((currentPageModules * rowsPerPage) < moduleRows.length) {
+                currentPageModules++;
+                showPage(moduleRows, currentPageModules, prevButtonModules, nextButtonModules, pageNumberModules);
+            }
+        });
+
+        prevButtonVideos.addEventListener("click", function () {
+            if (currentPageVideos > 1) {
+                currentPageVideos--;
+                showPage(videoRows, currentPageVideos, prevButtonVideos, nextButtonVideos, pageNumberVideos);
+            }
+        });
+
+        nextButtonVideos.addEventListener("click", function () {
+            if ((currentPageVideos * rowsPerPage) < videoRows.length) {
+                currentPageVideos++;
+                showPage(videoRows, currentPageVideos, prevButtonVideos, nextButtonVideos, pageNumberVideos);
             }
         });
 
         // Initial table setup
-        showPage(currentPage);
+        showPage(courseRows, currentPageCourses, prevButtonCourses, nextButtonCourses, pageNumberCourses);
+        showPage(moduleRows, currentPageModules, prevButtonModules, nextButtonModules, pageNumberModules);
+        showPage(videoRows, currentPageVideos, prevButtonVideos, nextButtonVideos, pageNumberVideos);
+    });
+
+
+    // Dropdown functionality
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = [
+            { button: ".dropdown-class", container: ".dropdown-container-class" },
+            { button: ".dropdown-user", container: ".dropdown-container" },
+            { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+        ];
+
+        dropdowns.forEach(({ button, container }) => {
+            const btn = document.querySelector(button);
+            const dropContainer = document.querySelector(container);
+
+            if (btn && dropContainer) {  // Ensure elements exist
+                btn.addEventListener("click", function () {
+                    dropContainer.classList.toggle("active");
+                });
+            }
+        });
+    });
+
+    // Search functionality
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchBar = document.getElementById("searchBar");
+
+        searchBar.addEventListener("input", function () {
+            let filter = searchBar.value.toLowerCase();
+            filterTable("courseTableBody", "moduleTableBody", "videoTableBody", filter);
+        });
+
+        function filterTable(courseTableId, moduleTableId, videoTableId, filter) {
+            const courseTable = document.getElementById(courseTableId);
+            const moduleTable = document.getElementById(moduleTableId);
+            const videoTable = document.getElementById(videoTableId);
+
+            if (!courseTable || !moduleTable || !videoTable) return;
+
+            const courseRows = courseTable.getElementsByTagName("tr");
+            const moduleRows = moduleTable.getElementsByTagName("tr");
+            const videoRows = videoTable.getElementsByTagName("tr");
+
+            let matchedCourses = new Set();
+            let matchedModules = new Set();
+
+            // Filter courses
+            for (let row of courseRows) {
+                let courseName = row.cells[0]?.textContent.toLowerCase();
+                if (courseName.includes(filter)) {
+                    row.style.display = "";
+                    matchedCourses.add(courseName);
+                } else {
+                    row.style.display = "none";
+                }
+            }
+
+            // Filter modules and associate with courses
+            for (let row of moduleRows) {
+                let moduleName = row.cells[0]?.textContent.toLowerCase();
+                let courseName = row.cells[2]?.textContent.toLowerCase(); // Get the course name for this module
+
+                if (moduleName.includes(filter) || matchedCourses.has(courseName)) {
+                    row.style.display = "";
+                    matchedModules.add(moduleName);
+                } else {
+                    row.style.display = "none";
+                }
+            }
+
+            // Filter videos and associate with modules
+            for (let row of videoRows) {
+                let videoTitle = row.cells[0]?.textContent.toLowerCase();
+                let moduleName = row.cells[3]?.textContent.toLowerCase(); // Get the module name for this video
+
+                if (videoTitle.includes(filter) || matchedModules.has(moduleName)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+        }
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-                    const dropdowns = [
-                        { button: ".dropdown-class", container: ".dropdown-container-class" },
-                        { button: ".dropdown-user", container: ".dropdown-container" },
-                { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
-                    ];
+    // Toggling functionality for Add button dropdown
+    const addUserButton = document.getElementById("addUserButton");
+    const addCourseDropdown = document.getElementById("addCourseDropdown");
 
-                    dropdowns.forEach(({ button, container }) => {
-                        const btn = document.querySelector(button);
-                        const dropContainer = document.querySelector(container);
+    if (addUserButton && addCourseDropdown) {
+        addUserButton.addEventListener("click", function () {
+            addCourseDropdown.classList.toggle("hidden");
+        });
+    }
 
-                        if (btn && dropContainer) {  // Ensure elements exist
-                            btn.addEventListener("click", function () {
-                                dropContainer.classList.toggle("active");
-                            });
-                        }
-                    });
-                    });
+    // Dropdown functionality for other menus (Class, User, Quiz)
+    const dropdowns = [
+        { button: ".dropdown-class", container: ".dropdown-container-class" },
+        { button: ".dropdown-user", container: ".dropdown-container" },
+        { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+    ];
 
-                //search bar
-                document.addEventListener("DOMContentLoaded", function () {
-                    const searchBar = document.getElementById("searchBar");
+    dropdowns.forEach(({ button, container }) => {
+        const btn = document.querySelector(button);
+        const dropContainer = document.querySelector(container);
 
-                    searchBar.addEventListener("input", function () {
-                        let filter = searchBar.value.toLowerCase();
-                        filterTable("courseTableBody", "moduleTableBody", "videoTableBody", filter);
-                    });
+        if (btn && dropContainer) {
+            btn.addEventListener("click", function () {
+                dropContainer.classList.toggle("active");
+            });
+        }
+    });
+});
 
-                    function filterTable(courseTableId, moduleTableId, videoTableId, filter) {
-                        const courseTable = document.getElementById(courseTableId);
-                        const moduleTable = document.getElementById(moduleTableId);
-                        const videoTable = document.getElementById(videoTableId);
-
-                        if (!courseTable || !moduleTable || !videoTable) return;
-
-                        const courseRows = courseTable.getElementsByTagName("tr");
-                        const moduleRows = moduleTable.getElementsByTagName("tr");
-                        const videoRows = videoTable.getElementsByTagName("tr");
-
-                        let matchedCourses = new Set();
-                        let matchedModules = new Set();
-
-                        // Filter courses
-                        for (let row of courseRows) {
-                            let courseName = row.cells[0]?.textContent.toLowerCase();
-                            if (courseName.includes(filter)) {
-                                row.style.display = "";
-                                matchedCourses.add(courseName);
-                            } else {
-                                row.style.display = "none";
-                            }
-                        }
-
-                        // Filter modules and associate with courses
-                        for (let row of moduleRows) {
-                            let moduleName = row.cells[0]?.textContent.toLowerCase();
-                            let courseName = row.cells[2]?.textContent.toLowerCase(); // Get the course name for this module
-
-                            if (moduleName.includes(filter) || matchedCourses.has(courseName)) {
-                                row.style.display = "";
-                                matchedModules.add(moduleName);
-                            } else {
-                                row.style.display = "none";
-                            }
-                        }
-
-                        // Filter videos and associate with modules
-                        for (let row of videoRows) {
-                            let videoTitle = row.cells[0]?.textContent.toLowerCase();
-                            let moduleName = row.cells[3]?.textContent.toLowerCase(); // Get the module name for this video
-
-                            if (videoTitle.includes(filter) || matchedModules.has(moduleName)) {
-                                row.style.display = "";
-                            } else {
-                                row.style.display = "none";
-                            }
-                        }
-                    }
-                });
 
     </script>
 </body>

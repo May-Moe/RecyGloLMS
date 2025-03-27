@@ -148,6 +148,9 @@ textarea:focus {
     margin: 20px 0px;
 }
 
+.questions-container{
+    display: none;
+}
 
 @media screen and (max-width: 768px) {
     .container {

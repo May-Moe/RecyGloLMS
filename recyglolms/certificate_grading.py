@@ -234,7 +234,7 @@ def generate_certificate(user_name, class_name):
     c = canvas.Canvas(buffer, pagesize=custom_page_size)
     width, height = custom_page_size
 
-    logo_path = os.path.abspath("C:/RecyGloLMS/RecyGloLMS/recyglolms/static/img/Recyglo logo.png")
+    logo_path = os.path.abspath("C:/RecyGloLMS/RecyGloLMS/recyglolms/static/img/shework.png")
 
     # Add border
     c.setLineWidth(4)

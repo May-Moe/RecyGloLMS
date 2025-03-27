@@ -21,222 +21,81 @@ body {
     box-sizing: border-box;
 }
 
-h1 {
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 25px;
-}
-
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    background: #0A1931; /* Navy Blue */
+    padding: 20px 20px;
+    border-radius: 8px;
+    color: white;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 22px;
 }
 
 .header-actions {
     display: flex;
     align-items: center;
-    margin-left: auto;
+    gap: 15px;
 }
 
-#searchBar, #courseFilter  {
-    padding: 10px;
-    font-size: 13px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #FF6699;
+    transition: 0.3s;
+}
+
+.search-container:focus-within {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+}
+
+.search-icon {
+    color: #FF6699;
+    font-size: 16px;
+}
+
+#searchBar {
     width: 200px;
-    transition: all 0.3s ease;
-    margin-right: 10px;
-}
-
-#searchBar,#courseFilter:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    padding: 5px;
+    border: none;
     outline: none;
+    font-size: 14px;
+    background: transparent;
 }
 
 #addUserButton {
     display: flex;
     align-items: center;
-    padding: 10px 20px;
-    font-size: 13px;
-    color: #fff;
-    background-color: #16a159;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#addUserButton i {
-    margin-right: 5px;
-}
-
-#addUserButton:hover {
-    background-color: #094124;
-}
-
-#addUserLink {
-    text-decoration: none;
-    color: #fff;
-}
-
-.table-container {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    
-}
-
-th, td {
-    text-align: left;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #f8f9fa;
-    font-weight: bold;
-}
-
-.actions {
-    display: flex;
-    gap: 10px;
-}
-
-.action-button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    background-color: #16a159;
-    color: #fff;
-    cursor: pointer;
-}
-
-.pagination {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
-
-.pagination button {
-    margin: 0 5px;
-    padding: 6px 17px;
-    background-color: #16a159;
-    color: white;
-    cursor: pointer;
+    padding: 14px 20px;
     font-size: 14px;
-    border-radius: 8px;
-}
-
-.pagination button:hover {
-    background-color: #028d45;
-    border-radius: 5px;
     color: white;
-}
-
-.editAction, .deleteAction {
-    display: inline-flex;
-    align-items: center;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-right: 5px;
-    text-decoration: none;
-    color: #fff;
-}
-
-.editAction {
-    color: #007bff;
-}
-
-.deleteAction {
-    color: #dc3545;
-}
-
-.editAction i, .deleteAction i {
-    margin-right: auto;
-}
-
-.editAction:hover {
-    color: #0056b3;
-}
-
-.deleteAction:hover {
-    color: #c82333;
-}
-
-/* Style for the select dropdown */
-select {
-    width: 100%; /* Full width */
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #333;
-    cursor: pointer;
-    outline: none;
-    appearance: none; /* Removes default dropdown arrow */
-}
-
-/* Style for multi-select dropdown */
-select[multiple] {
-    height: auto;
-    min-height: 100px; /* Adjust height */
-    background-image: none; /* Remove arrow */
-    overflow-y: auto; /* Enable scrolling if needed */
-}
-
-/* Style for selected options */
-select option {
-    padding: 8px;
-}
-
-/* Hover effect for options */
-select option:hover {
-    background-color: #f0f0f0;
-}
-
-/* Styling for the update button */
-button[type="submit"] {
-    padding: 8px 14px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: #16a159   ;
+    background-color: #FF6699;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
-    margin-left: 10px;
+    transition: 0.3s ease;
+    text-decoration: none;
+    width: 100%;
 }
 
-button[type="submit"]:hover {
-    background-color: #2e7d32;
-}
-
-button[type="submit"]:active {
-    transform: scale(0.95);
-}
-
-
-/* Flex container for alignment */
-td form {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+#addUserButton:hover {
+    background-color: #e65c85;
 }
 
 .class-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two columns */
-    gap: 20px; /* Space between cards */
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 10px; /* Space between cards */
+    padding-top: 5px;
     justify-content: center;
 }
 
@@ -264,7 +123,7 @@ td form {
 }
 
 .class-actions button {
-    background: #16a159;
+    background: #0A1931;
     color: white;
     border: none;
     padding: 10px;
@@ -275,7 +134,7 @@ td form {
 }
 
 .class-actions button:hover {
-    background: #006c34;
+    background: #040e1d;
 }
 
 .dropdown-content {
@@ -287,6 +146,7 @@ td form {
     z-index: 1;
     width: 100%; /* Ensure dropdown takes the full width of the card */
     margin-bottom: 10px;
+    font-size: 14px;
 }
 
 .inner-dropdown-content {
@@ -309,49 +169,50 @@ td form {
     display: none;
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .container {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 100px;
-        margin-bottom: 600px;
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
     }
     .header {
         flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .header-actions {
-        margin-top: 10px;
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    #searchBar {
-        width: calc(100% - 130px); /* Adjust width based on button size */
-        margin-right: 0;
-    }
-
-    #addUserButton {
-        width: 120px;
-        justify-content: center;
-    }
-    .table-container {
-        overflow-x: auto;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 100px;
-        
-        
+        gap: 10px;
+        text-align: center;
     }
     .header-actions {
         flex-direction: column;
-        align-items: stretch;
+        gap: 10px;
     }
 }
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .header {
+        padding: 10px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .search-container {
+        width: 100%;
+        justify-content: center;
+    }
+    #searchBar {
+        width: 100%;
+    }
+    .pagination {
+        justify-content: center;
+    }
+}
+
+
+   

@@ -2,82 +2,94 @@ body {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f2f5;
+    background-color: #F5F5F5; /* Light Gray from color palette */
 }
 
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 300px); /* Adjust width for sidebar */
+    width: calc(100% - 300px);
     margin: 10px auto;
-    margin-left: 270px; /* Offset for sidebar */
+    margin-left: 270px;
     margin-top: 80px;
     margin-right: 20px;
     margin-bottom: 30px;
     background-color: #fff;
     padding: 50px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: margin-left 0.5s, width 0.5s;
     box-sizing: border-box;
-}
-
-h1 {
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 25px;
+    border-radius: 0px;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    background: #0A1931; /* Navy Blue */
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 22px;
 }
 
 .header-actions {
     display: flex;
     align-items: center;
-    margin-left: auto;
     gap: 15px;
 }
 
-/* Style the search bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #FF6699;
+    transition: 0.3s;
+}
+
+.search-container:focus-within {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+}
+
+.search-icon {
+    color: #FF6699;
+    font-size: 16px;
+}
+
 #searchBar {
     width: 200px;
-    padding: 10px;
-    border: 1px solid #16a159;
-    border-radius: 10px;
-    outline: none;
-    transition: 0.3s;
-    font-size: 14px;
-    background: #f8f9fa;
-}
-
-#searchBar:focus {
-    border-color: #2c3e50;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-}
-
-
-/* Style the Add User button */
-#addUserButton {
-    background: #16a159;
-    color: white;
+    padding: 5px;
     border: none;
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 16px;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+#addUserButton {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    font-size: 14px;
+    color: white;
+    background-color: #FF6699;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.3s ease;
+    text-decoration: none;
+    width: 100%;
 }
 
 #addUserButton:hover {
-    background: #028d45;
-}
-
-#addAnnLink {
-    text-decoration: none;
-    color: #fff;
+    background-color: #e65c85;
 }
 
 .table-container {
@@ -87,33 +99,23 @@ h1 {
 table {
     width: 100%;
     border-collapse: collapse;
-    
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
 }
+
 th, td {
     text-align: left;
-    padding: 10px;
+    padding: 15px;
     border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #f8f9fa;
+    background-color: #F5F5F5;
+    color: black;
     font-weight: bold;
 }
 
-.actions {
-    display: flex;
-    gap: 10px;
-}
-
-.action-button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-}
-/* Pagination Container */
 .pagination {
     display: flex;
     justify-content: right;
@@ -124,7 +126,6 @@ th {
     border-radius: 8px;
 }
 
-/* Page Buttons */
 .page-btn, .page-number {
     background: white;
     color: #333;
@@ -137,113 +138,64 @@ th {
     margin: 2px;
 }
 
-
-/* Hover Effect */
 .page-btn:hover, .page-number:hover {
     background: #ddd;
 }
 
-/* Active Page */
 .page-number.active {
-    background: #16a159;
+    background: #FF6699;
     color: white;
-    border-color: #16a159;
+    border-color: #FF6699;
     font-weight: bold;
 }
 
-/* Disabled Buttons */
 .page-btn:disabled {
     background: #eee;
     color: #999;
     cursor: not-allowed;
 }
 
-.editAction, .deleteAction {
-    display: inline-flex;
-    align-items: center;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-right: 5px;
-    text-decoration: none;
-    color: #fff;
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
-.editAction {
-    color: #007bff;
-}
-
-.deleteAction {
-    color: #dc3545;
-}
-
-.editAction i, .deleteAction i {
-    margin-right: auto;
-}
-
-.editAction:hover {
-    color: #0056b3;
-}
-
-.deleteAction:hover {
-    color: #c82333;
-}
-
-#ViewLinkButton {
-    display: flex;
-    align-items: center;
-    padding: 8px 20px;
-    font-size: 13px;
-    color: #fff;
-    background-color: #16a159;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-    border: 1px solid white;
-
-}
-
-#ViewLinkButton:hover {
-    background-color: #218838;
-}
-
-.viewuploadLink {
-    text-decoration: none;
-    color: #fff;
-}
-
-/* Responsive styles */
 @media (max-width: 768px) {
     .container {
         width: 90%;
         margin-left: auto;
         margin-right: auto;
-
     }
     .header {
+        padding: 10px;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
     }
-
     .header-actions {
-        margin-top: 10px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .search-container {
         width: 100%;
-        justify-content: space-between;
-    }
-
-    #searchBar {
-        width: calc(100% - 130px); /* Adjust width based on button size */
-        margin-right: 0;
-    }
-
-    #addUserButton {
-        width: 120px;
         justify-content: center;
     }
-    .table-container {
-        overflow-x: auto;
+    #searchBar {
+        width: 100%;
+    }
+    .pagination {
+        justify-content: center;
     }
 }

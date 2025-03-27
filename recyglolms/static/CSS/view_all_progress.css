@@ -1,3 +1,4 @@
+/* General Reset */
 body {
     font-family: sans-serif;
     margin: 0;
@@ -5,12 +6,13 @@ body {
     background-color: #f0f2f5;
 }
 
+/* Main Container */
 .container {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 300px); /* Adjust width for sidebar */
+    width: calc(100% - 300px);
     margin: 10px auto;
-    margin-left: 270px; /* Offset for sidebar */
+    margin-left: 270px;
     margin-top: 80px;
     margin-right: 20px;
     margin-bottom: 30px;
@@ -19,99 +21,91 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: margin-left 0.5s, width 0.5s;
     box-sizing: border-box;
+    border-radius: 0px;
 }
 
-h1 {
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 25px;
-}
-
+/* HEADER */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    background: #0A1931;
+    padding: 20px 20px;
+    border-radius: 8px;
+    color: white;
 }
 
+/* HEADER TITLE */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* HEADER ACTIONS */
 .header-actions {
     display: flex;
     align-items: center;
-    margin-left: auto;
-    gap: 15px;
+    gap: 10px;
 }
 
-/* Style the search bar */
+/* SEARCH BAR */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #FF6699;
+    transition: 0.3s;
+}
+
+.search-container:focus-within {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+}
+
+.search-icon {
+    color: #FF6699;
+    font-size: 16px;
+}
+
 #searchBar {
     width: 200px;
-    padding: 10px;
-    border: 1px solid #16a159;
-    border-radius: 10px;
+    padding: 5px;
+    border: none;
     outline: none;
-    transition: 0.3s;
     font-size: 14px;
-    background: #f8f9fa;
+    background: transparent;
 }
 
-#searchBar:focus {
-    border-color: #2c3e50;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-}
-
-/* Style the filter dropdown */
-.filter-select {
-    padding: 10px;
-    border: 1px solid #16a159;
-    border-radius: 10px;
-    font-size: 14px;
-    background: white;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.filter-select:hover, .filter-select:focus {
-    border-color: #2c3e50;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-}
-
+/* ADD BUTTON */
 #addUserButton {
     display: flex;
     align-items: center;
-    padding: 10px 20px;
-    font-size: 13px;
-    color: #fff;
-    background-color: #A9C9A4;
+    padding: 14px 25px;
+    font-size: 14px;
+    color: white;
+    background-color: #FF6699;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#addUserButton i {
-    margin-right: 5px;
+    text-decoration: none;
+    transition: 0.3s ease;
 }
 
 #addUserButton:hover {
-    background-color: #98cd97;
+    background-color: #e65c85;
 }
 
-#addUserLink {
-    text-decoration: none;
-    color: #fff;
-}
-
+/* TABLE */
 .table-container {
     overflow-x: auto;
-}
-
-.back-icon {
-    margin-bottom: 20px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    
 }
 
 th, td {
@@ -121,25 +115,11 @@ th, td {
 }
 
 th {
-    background-color: #f8f9fa;
+    background-color: #F5F5F5;
     font-weight: bold;
 }
 
-.actions {
-    display: flex;
-    gap: 10px;
-}
-
-.action-button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-}
-
-/* Pagination Container */
+/* PAGINATION */
 .pagination {
     display: flex;
     justify-content: right;
@@ -150,7 +130,6 @@ th {
     border-radius: 8px;
 }
 
-/* Page Buttons */
 .page-btn, .page-number {
     background: white;
     color: #333;
@@ -163,122 +142,96 @@ th {
     margin: 2px;
 }
 
-
-/* Hover Effect */
 .page-btn:hover, .page-number:hover {
     background: #ddd;
 }
 
-/* Active Page */
 .page-number.active {
-    background: #16a159;
+    background: #FF6699;
     color: white;
-    border-color: #16a159;
+    border-color: #FF6699;
     font-weight: bold;
 }
 
-/* Disabled Buttons */
 .page-btn:disabled {
     background: #eee;
     color: #999;
     cursor: not-allowed;
 }
 
-.editAction, .deleteAction {
-    display: inline-flex;
+/* FILTER FORM */
+#filterForm {
+    display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+/* SELECT DROPDOWN */
+.filter-select {
+    padding: 13px 20px;
+    font-size: 14px;
+    border: 1px solid #FF6699;
+    border-radius: 6px;
+    background-color: white;
+    color: #333;
     cursor: pointer;
-    margin-right: 5px;
-    text-decoration: none;
-    color: #fff;
+    transition: all 0.3s ease-in-out;
 }
 
-.editAction {
-    color: #007bff;
+.filter-select:focus {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+    outline: none;
 }
 
-.deleteAction {
-    color: #dc3545;
+.filter-select:hover {
+    border-color: #e65c85;
 }
 
-.editAction i, .deleteAction i {
-    margin-right: auto;
-}
-
-.editAction:hover {
-    color: #0056b3;
-}
-
-.deleteAction:hover {
-    color: #c82333;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
     .container {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 100px;
-        margin-bottom: 600px;
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
     }
     .header {
         flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .header-actions {
-        margin-top: 10px;
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    #searchBar {
-        width: calc(100% - 130px); /* Adjust width based on button size */
-        margin-right: 0;
-    }
-
-    #addUserButton {
-        width: 120px;
-        justify-content: center;
-    }
-    .table-container {
-        overflow-x: auto;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 100px;
-        
-        
+        gap: 10px;
+        text-align: center;
     }
     .header-actions {
         flex-direction: column;
-        align-items: stretch;
+        gap: 10px;
     }
+}
 
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .header {
+        padding: 10px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .search-container {
+        width: 100%;
+        justify-content: center;
+    }
     #searchBar {
         width: 100%;
-        margin-bottom: 10px;
     }
-
-    #addUserButton {
-        width: 100%;
-    }
-    .table-container {
-        overflow-x: auto;
-    }
-
-    table {
-        width: 100%;
-    }
-
-    th, td {
-        padding: 8px;
+    .pagination {
+        justify-content: center;
     }
 }

@@ -17,7 +17,7 @@
                 <span class="icon">&#9776;</span>
             </button>
             <div class="profile-right">
-                <img src="static/img/Recyglo logo.png" alt="Logo" class="logo" style="width: 110px;">
+                <img src="static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
@@ -59,7 +59,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="static/img/Recyglo logo.png" alt="Logo" id="sidebar-logo" style="width: 140px;">
+                <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -333,84 +333,7 @@
             generateCalendar(currentYear, currentMonth);
         });
         
-        
-                const ctx = document.getElementById('userActivityChart').getContext('2d');
-        
-                const userActivityChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: [
-                            'Active within last 7 Days',
-                            'Active within 15 last Days',
-                           
-                            'Inactive for over 30 Days'
-                        ],
-                        datasets: [{
-                            label: 'User Activity',
-                            data: [
-                                {{ user_data.active_7_days }},
-                                {{ user_data.active_15_days }},
-                                {{ user_data.inactive_30_days }}
-                            ],
-                            backgroundColor: [
-                                '#16a159', // Green
-                                '#d4ac0d ', // Yellow
-                                '#c0392b'  // Red
-                            ],
-                            borderWidth: 1
-                            
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom', // Moves the legend to the side
-                                labels: {
-                                    font: {
-                                        size: 10,
-                                        family: 'Arial, sans-serif',
-                                        weight: 'bold'
-                                    },
-                                    color: '#333' // Dark color for the legend text
-                                }
-                            },
-                            tooltip: {
-                                enabled: true, // Enable tooltips for hover interaction
-                                callbacks: {
-                                    label: function(context) {
-                                        const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
-                                        const percentage = ((context.raw / total) * 100).toFixed(1);
-                                        return `${context.label}: ${context.raw} users (${percentage}%)`;
-                                    }
-                                }
-                            },
-                            datalabels: {
-                                color: '#ffffff', // White text for better contrast
-                                align: 'center', // Center the text on the segment
-                                backgroundColor: '#000000a0', // Semi-transparent black background
-                                borderColor: '#ffffff', // White border for contrast
-                                borderWidth: 1,
-                                borderRadius: 4, // Rounded corners
-                                padding: 2, // Space around the label text
-                                font: {
-                                    size: 8, // Font size
-                                    family: 'Arial, sans-serif', // Clean font family
-                                    weight: 'bold' // Bold text
-                                },
-                                formatter: (value, ctx) => {
-                                    const total = ctx.dataset.data.reduce((sum, val) => sum + val, 0);
-                                    const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
-                                    const label = ctx.chart.data.labels[ctx.dataIndex]; // Get label text
-                                    return `${label}\n${percentage}%`; // Two-line label
-                                }
-                            }
-                        }
-                    },
-                    plugins: [ChartDataLabels]
-                });
-        
+    
         
         
             </script>

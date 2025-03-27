@@ -9,7 +9,7 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     margin: 0;
-    background-color: #f0f2f5;
+    background-color: #F5F5F5;
 }
 
 /* Dashboard Layout */
@@ -39,18 +39,18 @@ body {
 }
 
 .icon{
-    color: gray;
+    color: #0A1931; /* Secondary color */
     font-size: 16px;
 }
 
 .icon:hover {
-    color: #16a159;
+    color: #FF6699; /* Primary color */
 }
 
 /* Sidebar */
 .sidebar {
     background-color: white;
-    color: gray;
+    color: #0A1931; /* Secondary color */
     width: 250px;
     padding: 20px;
     transition: transform 0.3s ease;
@@ -75,21 +75,21 @@ body {
     
 }
 
+
 .sidebar ul li a {
     display: flex;
     align-items: center;
     padding: 8px;
     text-decoration: none;
-    color: gray;
+    color: #0A1931; /* Secondary color */
     font-size: 14px;
     transition: background 0.2s ease-in-out;
     border-radius: 6px;
 }
 
 .sidebar ul li a:hover {
-    background: #e2e2e2;
-    color: #16a159;
-    /* padding: 10px; */
+    background: #F5F5F5; /* Accent color */
+    color: #FF6699; /* Primary color */
 }
 
 
@@ -110,8 +110,8 @@ body {
     align-items: center;
     justify-content: flex-end;
     padding: 10px 20px;
-    background-color: white; /* Change background color */
-    color: black; /* Change text color */
+    background-color: white;
+    color: #0A1931; /* Secondary color */
     position: fixed;
     top: 0;
     right: 0;
@@ -131,7 +131,7 @@ body {
 }
 
 .notification-button:hover {
-    color: black;
+    color: #0A1931; /* Secondary color */
 }
 
 /* .notification-button {
@@ -173,7 +173,7 @@ body {
 
 .notification-dropdown li {
     padding: 10px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f5f5f5;
     cursor: pointer;
 }
 
@@ -201,6 +201,8 @@ body {
     width: 30px;
     height: 30px;
     margin-right: 10px; /* Add some space between the image and the text */
+    margin-top: 9px;
+    border: 1px solid #FF6699;
 }
 
 /* .profile-right .profile-name {
@@ -278,6 +280,7 @@ body {
     justify-content: center;
     align-items: center;
     margin-bottom: 10px;
+   
 }
 
 .dropdown-profile-pic {
@@ -285,7 +288,7 @@ body {
     height: 80px;
     border-radius: 50%; /* Circular shape */
     object-fit: cover;
-    border: 3px solid #16a159; /* Green border */
+    border: 3px solid #FF6699; /* Green border */
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -312,7 +315,7 @@ body {
 #logout-button {
     display: block;
     text-align: center;
-    background: #16a159;
+    background: #0A1931;
     color: white;
     padding: 8px 12px;
     margin-top: 5px;
@@ -426,7 +429,7 @@ body {
     align-items: center;
     padding: 5px;
     text-decoration: none;
-    color: gray;
+    color: #0A1931;
     font-size: 14px;
     /* transition: background 0.2s ease-in-out; */
     /* border-radius: 6px; */
@@ -438,15 +441,14 @@ body {
 .dropdown-container ul li a i 
 ,.dropdown-container-quiz ul li a i{
     margin-left: 20px;
-    color: gray;
+    color: #0A1931;
 }
 
 /* Hover effect */
 .dropdown-container-class ul li a:hover,
 .dropdown-container ul li a:hover 
 .dropdown-container-quiz ul li a:hover{
-    background: #e2e2e2;
-    /* color: white; */
+   color: #FF6699;
 }
 
 /* Responsive Design */
