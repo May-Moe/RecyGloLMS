@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <!-- Bootstrap CSS (optional for styling) -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            padding-top: 50px;
+        }
+
+        .container {
+            max-width: 500px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            height: 45px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .btn-primary {
+            background-color:rgb(250, 71, 131);
+            border-color:rgb(253, 68, 130);
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color:rgb(253, 127, 169);
+            border-color:rgb(251, 117, 161);
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            color:rgb(248, 72, 131);
+            cursor: pointer;
+        }
+
+        .checkbox-label:hover {
+            text-decoration: underline;
+        }
+
+        .text-center {
+            color:rgb(246, 76, 133);
+            font-size: 14px;
+        }
+
+        /* Add some margin to checkboxes and labels */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .checkbox-group input {
+            margin-right: 10px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Reset Your Password</h2>
+
+        <form method="POST" action="{{ url_for('auth.verify_otp') }}" onsubmit="return validatePasswords()">
+            <!-- OTP Field -->
+            <div class="form-group">
+                <label for="otp">Enter OTP</label>
+                <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" required>
+            </div>
+
+            <!-- New Password Field -->
+            <div class="form-group position-relative">
+                <label for="new_password">Enter New Password</label>
+                <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Enter New Password" required>
+                <div class="checkbox-group">
+                    <input type="checkbox" class="password-toggle" id="toggleNewPassword" onclick="togglePassword('new_password')">
+                    <label for="toggleNewPassword" class="checkbox-label">Show Password</label>
+                </div>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="form-group position-relative">
+                <label for="confirm_password">Confirm New Password</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm New Password" required>
+                <div class="checkbox-group">
+                    <input type="checkbox" class="password-toggle" id="toggleConfirmPassword" onclick="togglePassword('confirm_password')">
+                    <label for="toggleConfirmPassword" class="checkbox-label">Show Password</label>
+                </div>
+                <div id="error-message" class="error-message"></div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Reset Password</button>
+        </form>
+
+        <p class="text-center mt-3">
+            Remember your password? <a href="{{ url_for('auth.login') }}" class="checkbox-label">Login here</a>
+        </p>
+    </div>
+
+    <!-- Bootstrap JS (optional for styling) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function togglePassword(fieldId) {
+            var passwordField = document.getElementById(fieldId);
+            var fieldType = passwordField.type;
+
+            if (fieldType === "password") {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        }
+
+        function validatePasswords() {
+            var newPassword = document.getElementById('new_password').value;
+            var confirmPassword = document.getElementById('confirm_password').value;
+            var errorMessage = document.getElementById('error-message');
+
+            if (newPassword !== confirmPassword) {
+                errorMessage.textContent = "Passwords do not match. Please try again.";
+                return false; // Prevent form submission
+            }
+
+            errorMessage.textContent = ""; // Clear any previous error
+            return true; // Allow form submission
+        }
+    </script>
+</body>
+</html>

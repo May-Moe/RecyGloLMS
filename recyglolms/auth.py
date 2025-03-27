@@ -1,8 +1,14 @@
+from mailbox import Message
+import random
+import string
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from recyglolms.__inti__ import db, bcrypt
-from recyglolms.models import User
+from recyglolms.__inti__ import db, bcrypt, mail
+from recyglolms.models import PasswordReset, User
 from flask_login import login_user, logout_user, login_required, current_user
-from datetime import datetime
+from flask_mail import Message
+import pytz
+
+from datetime import datetime, timedelta, timezone
 
 # Create Blueprint for authentication
 auth_bp = Blueprint('auth', __name__)
@@ -65,3 +71,103 @@ def logout():
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('auth.login'))
+
+@auth_bp.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        
+        # Check if the email exists in the system
+        user = User.query.filter_by(email=email).first()
+        
+        if user:
+            # Generate a one-time password (OTP)
+            otp = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            
+            # Set OTP expiration time (e.g., 10 minutes)
+            expiration_time = datetime.now(timezone.utc) + timedelta(minutes=1)
+
+            # Save the OTP to the PasswordReset model
+            password_reset = PasswordReset(
+                user_id=user.userid, 
+                otp=otp, 
+                created_at=datetime.now(timezone.utc), 
+                expiration_time=expiration_time
+            )
+            db.session.add(password_reset)
+            db.session.commit()
+
+            # Temporarily bypass email sending
+            # msg = Message(
+            #     subject="Password Reset OTP",
+            #     recipients=[email],
+            #     body=f"Your OTP for password reset is: {otp}"
+            # )
+            # mail.send(msg)  # This line is commented out to avoid the email sending error
+            
+            # Redirect directly to the OTP verification page
+            flash('OTP generated. Please proceed to verify your OTP.', 'success')
+            return redirect(url_for('auth.verify_otp'))
+        else:
+            flash('Email address not found. Please check and try again.', 'danger')
+    
+    return render_template('forgot_password.html')
+
+
+@auth_bp.route('/verify_otp', methods=['GET', 'POST'])
+def verify_otp():
+    if request.method == 'POST':
+        otp = request.form.get('otp')  # Use .get() to prevent KeyError
+        new_password = request.form.get('new_password')  # Use .get() to avoid KeyError
+        
+        if not otp or not new_password:
+            flash('OTP and New Password are required.', 'danger')
+            return render_template('otp_login.html')
+
+        # Debugging: Print the received form data
+        print("Received form data:", request.form)
+
+        # Fetch the most recent password reset record for the given OTP
+        password_reset = PasswordReset.query.filter_by(otp=otp).order_by(PasswordReset.created_at.desc()).first()
+
+        if password_reset:
+            # Ensure that created_at is in UTC and offset-aware
+            if password_reset.created_at.tzinfo is None:
+                # If naive, make it UTC-aware
+                password_reset.created_at = pytz.utc.localize(password_reset.created_at)
+
+            # Ensure expiration_time is in UTC and offset-aware
+            if password_reset.expiration_time.tzinfo is None:
+                # If naive, make it UTC-aware
+                password_reset.expiration_time = pytz.utc.localize(password_reset.expiration_time)
+
+            # Debugging: Print the created_at and current time (in UTC)
+            print(f"OTP created at (UTC): {password_reset.created_at}")
+            print(f"Current time (UTC): {datetime.now(timezone.utc)}")
+
+            # Check if OTP is within the valid timeframe (e.g., 10 minutes)
+            if datetime.now(timezone.utc) < password_reset.expiration_time:
+                user = User.query.get(password_reset.user_id)
+                
+                if user:
+                    # Update the user's password after successful OTP verification
+                    user.password = bcrypt.generate_password_hash(new_password)
+                    db.session.commit()
+                    
+                    # Delete the OTP record after successful password reset
+                    db.session.delete(password_reset)
+                    db.session.commit()
+                    
+                    flash('Your password has been reset successfully!', 'success')
+                    return redirect(url_for('auth.login'))
+                else:
+                    flash('User not found.', 'danger')
+            else:
+                # OTP has expired, delete expired OTP record
+                db.session.delete(password_reset)
+                db.session.commit()
+                flash('OTP has expired. Please request a new one.', 'danger')
+        else:
+            flash('Invalid OTP. Please try again.', 'danger')
+
+    return render_template('otp_login.html')

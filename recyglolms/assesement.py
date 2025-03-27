@@ -291,6 +291,8 @@ def submit_answer(assessment_id, question_index):
 def review_answers(assessment_id):
     responses = Assese_Response.query.filter_by(user_id=current_user.userid, assessment_id=assessment_id).all()
     
+    user = User.query.filter_by(userid=current_user.userid)
+    
     # Fetch the corresponding questions
     assess_questions = {q.id: q for q in Assese_Questions.query.filter_by(assessment_id=assessment_id).all()}
     
@@ -298,5 +300,13 @@ def review_answers(assessment_id):
         flash("Assessment submitted successfully!", "success")
         return redirect(url_for('main.learning'))
 
+<<<<<<< HEAD
     return render_template('review_answers.html', responses=responses, assessment_id=assessment_id, assess_questions=assess_questions,current_user_name = current_user.name,
                             current_user_email = current_user.email)
+=======
+    return render_template('review_answers.html', responses=responses, assessment_id=assessment_id, assess_questions=assess_questions,user=user,
+                           current_user_name=current_user.name,
+        current_user_email=current_user.email,
+        current_user_id=current_user.userid,
+        current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+>>>>>>> 7abdf729f03b450885ff1f955cbb09cbde32ed63

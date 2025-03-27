@@ -119,7 +119,7 @@
         </nav>
         <div class="container">
             <a href="{{ url_for('admin.dashboard') }}"  class="back-icon"><i class="fa-solid fa-angle-left"></i></i></a>
-        <h2 style="margin-bottom: 15px;">Feedback <span class="count">{{ total_feedback }}</span></h2>
+            <h2 style="margin-bottom: 15px;">Feedback <span class="count">{{ total_feedback }}</span></h2>
         {% for feedback, user in feedbacks %}
         <div class="feedback-card">
             <div class="user-info">
