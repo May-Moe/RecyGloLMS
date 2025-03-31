@@ -434,111 +434,142 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-    function editCard(button) {
-        console.log("editCard function called");
-        const card = button.closest(".card");
-        if (!card) {
-            console.log("Card not found"); // Debugging log
-            return;
-        }
-
-        const cardId = card.getAttribute("data-id");
-        const title = card.querySelector("h3").innerText;
-        const description = card.querySelector("p").innerText;
-        const imageSrc = card.querySelector(".slide").src;
-
-        console.log("Card ID:", cardId); // Debugging log
-        console.log("Title:", title); // Debugging log
-        console.log("Description:", description); // Debugging log
-        console.log("Image Src:", imageSrc); // Debugging log
-
-        // Create the edit popup if it doesn't exist
-        let editPopup = document.getElementById("edit-popup-form");
-        if (!editPopup) {
-            editPopup = document.createElement("div");
-            editPopup.id = "edit-popup-form";
-            editPopup.classList.add("popup-form", "hidden");
-            editPopup.innerHTML = `
-                <button class="close-popup" onclick="hideEditPopup()">✖</button>
-                <h3>Edit Activity</h3>
-                <input type="text" id="edit-title" placeholder="Title">
-                <textarea id="edit-description" placeholder="Description" rows="5"></textarea>
-                <input type="file" id="edit-image" placeholder="Image URL">
-                <button class="submit-popup" onclick="updateCard()">Update</button>
-            `;
-            document.body.appendChild(editPopup);
-        }
-
-        // Create the overlay if it doesn't exist
-        let editOverlay = document.getElementById("edit-popup-overlay");
-        if (!editOverlay) {
-            editOverlay = document.createElement("div");
-            editOverlay.id = "edit-popup-overlay";
-            editOverlay.classList.add("popup-overlay", "hidden");
-            document.body.appendChild(editOverlay);
-        }
-
-        // Set the values in the edit form
-        document.getElementById("edit-title").value = title;
-        document.getElementById("edit-description").value = description;
-
-        // Store cardId in the edit button for reference
-        document.querySelector(".submit-popup").setAttribute("data-id", cardId);
-
-        // Show edit popup
-        editPopup.classList.remove("hidden");
-        editOverlay.classList.remove("hidden");
-    }
-
-    function hideEditPopup() {
-        document.getElementById("edit-popup-form").classList.add("hidden");
-        document.getElementById("edit-popup-overlay").classList.add("hidden");
-    }
-
-    async function updateCard() {
-        const cardId = document.querySelector(".submit-popup").getAttribute("data-id");
-        const updatedTitle = document.getElementById("edit-title").value;
-        const updatedDescription = document.getElementById("edit-description").value;
-        const updatedImage = document.getElementById("edit-image").files[0];
-
-        if (!updatedTitle || !updatedDescription) {
-            alert("Please fill all fields.");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("activity_name", updatedTitle);
-        formData.append("activity_description", updatedDescription);
-        if (updatedImage) {
-            formData.append("activity_image", updatedImage);
-        }
-
-        try {
-            const response = await fetch(`/user_activity/${cardId}`, {
-                method: "PUT",
-                body: formData,
-            });
-
-            if (response.ok) {
-                // Update the UI without reloading
-                const card = document.querySelector(`.card[data-id='${cardId}']`);
-                card.querySelector("h3").innerText = updatedTitle;
-                card.querySelector("p").innerText = updatedDescription;
-                if (updatedImage) {
-                    const imageUrl = URL.createObjectURL(updatedImage);
-                    card.querySelector(".slide").src = imageUrl;
-                }
-
-                // Close the edit popup
-                hideEditPopup();
-            } else {
-                alert("Failed to update activity.");
+        function editCard(button) {
+            console.log("editCard function called");
+            const card = button.closest(".card");
+            if (!card) {
+                console.log("Card not found"); // Debugging log
+                return;
             }
-        } catch (error) {
-            console.error("Error updating activity:", error);
-            alert("An error occurred.");
+        
+            const cardId = card.getAttribute("data-id");
+            const title = card.querySelector("h3").innerText;
+            const description = card.querySelector("p").innerText;
+            const imageElements = card.querySelectorAll(".slide"); // Select all images
+        
+            console.log("Card ID:", cardId); // Debugging log
+            console.log("Title:", title); // Debugging log
+            console.log("Description:", description); // Debugging log
+            console.log("Images:", imageElements); // Debugging log
+        
+            // Create the edit popup if it doesn't exist
+            let editPopup = document.getElementById("edit-popup-form");
+            if (!editPopup) {
+                editPopup = document.createElement("div");
+                editPopup.id = "edit-popup-form";
+                editPopup.classList.add("popup-form", "hidden");
+                editPopup.innerHTML = `
+                    <button class="close-popup" onclick="hideEditPopup()">✖</button>
+                    <h3>Edit Activity</h3>
+                    <input type="text" id="edit-title" placeholder="Title">
+                    <textarea id="edit-description" placeholder="Description" rows="5"></textarea>
+                    <input type="file" id="edit-image" placeholder="Select images" multiple>
+                    <button class="submit-popup" onclick="updateCard()">Update</button>
+                `;
+                document.body.appendChild(editPopup);
+            }
+        
+            // Create the overlay if it doesn't exist
+            let editOverlay = document.getElementById("edit-popup-overlay");
+            if (!editOverlay) {
+                editOverlay = document.createElement("div");
+                editOverlay.id = "edit-popup-overlay";
+                editOverlay.classList.add("popup-overlay", "hidden");
+                document.body.appendChild(editOverlay);
+            }
+        
+            // Set the values in the edit form
+            document.getElementById("edit-title").value = title;
+            document.getElementById("edit-description").value = description;
+        
+            // Handle existing images for display
+            const imagePreviewContainer = document.getElementById("image-preview-container");
+            if (!imagePreviewContainer) {
+                const newContainer = document.createElement("div");
+                newContainer.id = "image-preview-container";
+                newContainer.classList.add("image-preview-container");
+                document.querySelector("#edit-popup-form").insertBefore(newContainer, document.querySelector("#edit-popup-form").querySelector("button.submit-popup"));
+            }
+        
+            // Clear the image preview container
+            imagePreviewContainer.innerHTML = "";
+        
+            // Preview existing images
+            imageElements.forEach((img) => {
+                const imgElement = document.createElement("img");
+                imgElement.src = img.src;
+                imgElement.classList.add("image-preview");
+                imagePreviewContainer.appendChild(imgElement);
+            });
+        
+            // Store cardId in the edit button for reference
+            document.querySelector(".submit-popup").setAttribute("data-id", cardId);
+        
+            // Show edit popup
+            editPopup.classList.remove("hidden");
+            editOverlay.classList.remove("hidden");
         }
-    }
+        
+        function hideEditPopup() {
+            document.getElementById("edit-popup-form").classList.add("hidden");
+            document.getElementById("edit-popup-overlay").classList.add("hidden");
+        }
+        async function updateCard() {
+            const cardId = document.querySelector(".submit-popup").getAttribute("data-id");
+            const updatedTitle = document.getElementById("edit-title").value;
+            const updatedDescription = document.getElementById("edit-description").value;
+            const updatedImages = document.getElementById("edit-image").files; // Get multiple files
+        
+            if (!updatedTitle || !updatedDescription) {
+                alert("Please fill all fields.");
+                return;
+            }
+        
+            const formData = new FormData();
+            formData.append("activity_name", updatedTitle);
+            formData.append("activity_description", updatedDescription);
+        
+            // Append multiple images
+            for (let i = 0; i < updatedImages.length; i++) {
+                formData.append("activity_image", updatedImages[i]);
+            }
+        
+            try {
+                const response = await fetch(`/user_activity/${cardId}`, {
+                    method: "PUT",
+                    body: formData,
+                });
+        
+                if (response.ok) {
+                    const responseData = await response.json();
+        
+                    // Update the UI dynamically
+                    const card = document.querySelector(`.card[data-id='${cardId}']`);
+                    card.querySelector("h3").innerText = updatedTitle;
+                    card.querySelector("p").innerText = updatedDescription;
+        
+                    // Update image carousel or gallery (assuming multiple images)
+                    const imageContainer = card.querySelector(".image-container"); // Replace with actual class
+                    imageContainer.innerHTML = ""; // Clear existing images
+        
+                    // Append new images
+                    responseData.activity.images.forEach((imageUrl) => {
+                        const imgElement = document.createElement("img");
+                        imgElement.src = imageUrl;
+                        imgElement.classList.add("slide"); // Adjust based on your CSS
+                        imageContainer.appendChild(imgElement);
+                    });
+        
+                    // Close the edit popup
+                    hideEditPopup();
+                } else {
+                    alert("Failed to update activity.");
+                }
+            } catch (error) {
+                console.error("Error updating activity:", error);
+                alert("An error occurred.");
+            }
+        }
 
 
     </script>

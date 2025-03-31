@@ -8,6 +8,16 @@ from recyglolms.__inti__ import db, app, bcrypt
 
 main_bp = Blueprint('main', __name__)
 
+UPLOAD_FOLDER_PROFILE = os.path.join(app.root_path, 'static/profile_images')
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
+app.config['UPLOAD_FOLDER_PROFILE'] = UPLOAD_FOLDER_PROFILE
+
+if not os.path.exists(UPLOAD_FOLDER_PROFILE):
+    os.makedirs(UPLOAD_FOLDER_PROFILE)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @main_bp.route('/')
 @login_required
 def index():
@@ -166,6 +176,74 @@ def delete_activity(activity_id):
     db.session.commit()
     return '', 204
 
+
+@app.route('/user_activity/<int:activity_id>', methods=['PUT'])
+@login_required
+def update_user_activity(activity_id):
+    activity = Activity.query.get_or_404(activity_id)
+
+    # Ensure the current user owns the activity
+    if activity.userid != current_user.userid:
+        return jsonify({"error": "Unauthorized access"}), 403
+
+    # Get updated fields from request
+    activity_name = request.form.get("activity_name")
+    activity_description = request.form.get("activity_description")
+
+    if not activity_name or not activity_description:
+        flash("Please fill all fields.", "danger")
+        return jsonify({"error": "Missing fields"}), 400
+
+    # Update activity details
+    activity.name = activity_name
+    activity.description = activity_description
+
+    # Handle multiple image replacements
+    if 'activity_image' in request.files:
+        files = request.files.getlist('activity_image')  # Get multiple files
+
+        # Delete old images from storage and database
+        old_images = ActivityImage.query.filter_by(activityid=activity.activityid).all()
+        for img in old_images:
+            try:
+                os.remove(os.path.join('static', img.activity_image))  # Delete old files
+            except FileNotFoundError:
+                pass
+            db.session.delete(img)  # Remove record from database
+
+        # Save new images
+        new_image_paths = []
+        for file in files:
+            if file and allowed_file(file.filename):
+                file_extension = file.filename.rsplit('.', 1)[1].lower()
+                sanitized_name = secure_filename(file.filename.rsplit('.', 1)[0])
+                final_filename = f"{sanitized_name}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.{file_extension}"
+                file_path = os.path.join(UPLOAD_FOLDER, final_filename)
+
+                try:
+                    file.save(file_path)
+                    new_image = ActivityImage(activityid=activity.activityid, activity_image=final_filename)
+                    db.session.add(new_image)
+                    new_image_paths.append(url_for('static', filename=f'uploads/activities/{final_filename}', _external=True))
+                except Exception as e:
+                    flash("File upload failed!", "danger")
+                    return jsonify({"error": "File upload failed"}), 500
+
+    db.session.commit()
+    flash("Activity updated successfully!", "success")
+
+    # Return updated activity data with multiple images
+    return jsonify({
+        "message": "Activity updated successfully",
+        "activity": {
+            "id": activity.activityid,
+            "name": activity.name,
+            "description": activity.description,
+            "images": new_image_paths if 'activity_image' in request.files else None
+        }
+    })
+
+
 @main_bp.route('/learning')
 @login_required
 def learning():
@@ -308,15 +386,7 @@ def user_home():
 
 
 
-UPLOAD_FOLDER_PROFILE = os.path.join(app.root_path, 'static/profile_images')
-ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
-app.config['UPLOAD_FOLDER_PROFILE'] = UPLOAD_FOLDER_PROFILE
 
-if not os.path.exists(UPLOAD_FOLDER_PROFILE):
-    os.makedirs(UPLOAD_FOLDER_PROFILE)
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/user_account', methods=['GET'])
 @login_required
