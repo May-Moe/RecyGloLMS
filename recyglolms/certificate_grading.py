@@ -168,29 +168,30 @@ def user_gradebook():
         # Calculate quiz, assessment, and final scores for each class
         average_quiz_score, assessment_score, final_score = calculate_final_grade(user_id, user_class.classid)
 
-        # Check if access to download certificate is granted
-        is_access_granted = UserClass.is_access_granted  # Assuming this column exists in UserClass
+        # Get the actual value of is_access_granted for the user-class relationship
+        user_class_info = db.session.query(UserClass).filter_by(userid=user_id, classid=user_class.classid).first()
+        is_access_granted = user_class_info.is_access_granted if user_class_info else 0  # Default to 0 if not found
 
         # If either score is 0.0, mark the grade as Pending
         if assessment_score == 0.0:
             user_grades.append({
-                "class_name": user_class.name,  # Class name
-                "quiz_score": average_quiz_score, # Quiz score
-                "assessment_score": "Pending",  # Mark as Pending
-                "final_score": "Pending",  # Mark final score as Pending
-                "grade": "Pending",  # Mark grade as Pending
+                "class_name": user_class.name,
+                "quiz_score": average_quiz_score,
+                "assessment_score": "Pending",
+                "final_score": "Pending",
+                "grade": "Pending",
                 "class_id": user_class.classid,
-                "is_access_granted": is_access_granted  # Pass certificate access status
+                "is_access_granted": is_access_granted  # Pass the actual certificate access status
             })
         else:
             user_grades.append({
-                "class_name": user_class.name,  # Class name
-                "quiz_score": average_quiz_score,  # Quiz score
-                "assessment_score": assessment_score,  # Assessment score
-                "final_score": final_score,  # Final score as the average of the two
-                "grade": get_grade(final_score),  # Function to calculate grade based on final score
+                "class_name": user_class.name,
+                "quiz_score": average_quiz_score,
+                "assessment_score": assessment_score,
+                "final_score": final_score,
+                "grade": get_grade(final_score),
                 "class_id": user_class.classid,
-                "is_access_granted": is_access_granted  # Pass certificate access status
+                "is_access_granted": is_access_granted  # Pass the actual certificate access status
             })
 
     # If no grades are available, add a "No grade available yet" message
