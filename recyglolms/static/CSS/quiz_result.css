@@ -25,12 +25,28 @@ body {
     box-sizing: border-box;
 }
 
-.quiz-header {
-    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #16a159);
-    color: #16a159;
-    padding: 30px;
-    font-size: 1.5rem;
-    margin-top: 20px;
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    background: #0A1931;
+    padding: 30px 20px;
+    border-radius: 8px;
+    color: white;
+}
+
+/* HEADER TITLE */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* HEADER ACTIONS */    
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /* Quiz Attempts */
@@ -49,12 +65,13 @@ body {
 }
 
 .review-button{
-    padding: 10px;
+    padding: 13px 20px;
     margin-top: 10px;
-    background-color: #16a159;
+    background-color: #FF6699;
     border-radius: 5px;
     color: white;
     border: 1px solid white;
+    border: none;
 }
 
 .review-section {
@@ -73,8 +90,8 @@ body {
 
 
 .btn {
-    padding: 10px 20px;
-    background-color: #16a159;
+    padding: 15px 20px;
+    background-color: #FF6699;
     color: white;
     border: none;
     border-radius: 5px;
