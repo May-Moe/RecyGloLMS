@@ -71,11 +71,14 @@
             </ul>
         </nav>
         <div class="container">
-            <div class="cards-header">
-                <h2 style="color: #16a159;">Activity Board</h2>
+            <div class="header">
+                <h2 style="color: white">Activity Board</h2>
                 <div class="header-actions">
-                    <input type="text" id="searchBar" placeholder="Search">
-                    <button class="add-activity" onclick="showPopup()"><i class="fas fa-plus"></i> Add Activity</button>
+                    <div class="search-container">
+                        <input type="text" id="searchBar" placeholder="Search   ">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <button class="add-activity" onclick="showPopup()"><i class="fas fa-plus" style="margin-right: 10px;"></i> Add Activity</button>
                 </div>
              </div>
             <div id="card-container" class="grid">
@@ -240,31 +243,35 @@
             cardContainer.appendChild(newCard);
         }
         
-        // ...existing code...
-
-// Load existing cards from the backend
-async function loadCards() {
+        async function loadCards() {
     try {
         const response = await fetch("/user_activity", {
             method: "GET",
             headers: {
-                "Accept": "application/json",  // Explicitly tell the server you want JSON
+                "Accept": "application/json",
             }
         });
 
         if (response.ok) {
-            const activities = await response.json(); // Parse JSON response
+            const activities = await response.json();
             const cardContainer = document.getElementById("card-container");
-            cardContainer.innerHTML = ""; // Clear existing cards
+
+            // Find and remove the "No activities available." message if it exists
+            const noActivitiesMessage = document.querySelector(".no-activities-message");
+            if (noActivitiesMessage) {
+                noActivitiesMessage.remove();
+            }
+
+            cardContainer.innerHTML = ""; // Clear previous content
 
             if (activities.length === 0) {
-                // If no activities, show the "No activities available" message
-                const noActivitiesMessage = document.createElement("p");
-                noActivitiesMessage.textContent = "No activities available.";
-                noActivitiesMessage.classList.add("no-activities-message");
-                cardContainer.appendChild(noActivitiesMessage);
+                // If no activities exist, show the message
+                const noMessage = document.createElement("p");
+                noMessage.textContent = "No activities available.";
+                noMessage.classList.add("no-activities-message");
+                cardContainer.appendChild(noMessage);
             } else {
-                // Create a card for each activity
+                // Populate activities
                 activities.forEach(activity => {
                     createCard(activity);
                 });
@@ -277,6 +284,9 @@ async function loadCards() {
         alert("Error loading activities.");
     }
 }
+
+
+
 
 // Call loadCards when the page loads
 document.addEventListener("DOMContentLoaded", () => {

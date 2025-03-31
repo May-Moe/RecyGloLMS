@@ -82,7 +82,21 @@
                     <input type="text" id="searchBar" placeholder="Search By Courses">
                 </div>
             </div>
-        
+
+            <h3 class="assessment-header">
+                Assessments for {{ selected_class.name }}
+            </h3>
+            <div class="assessment-dropdown">
+                {% for assessment in assessments %}
+                <div class="assessment-item">
+                    <a href="{{ url_for('assessment.submit_answer', assessment_id=assessment.id, question_index=0) }}" class="assessment-link">                                    <h4>{{ assessment.title }}</h4>
+                        <p>Time Limit: {{ assessment.time_limit }} min</p>
+                    </a>
+                </div>
+                {% endfor %}
+                <!-- Add more assessments as needed -->
+            </div>
+
             <div class="course-container">
                 {% if courses %}
                     {% for course in courses %}
@@ -101,23 +115,6 @@
                 {% endif %}
             </div>
             
-            <!-- Assessments Section -->
-            <div class="assessment-container">
-                <h3>Assessments for {{ selected_class.name }}</h3>
-                {% if assessments %}
-                    <ul class="assessment-list">
-                        {% for assessment in assessments %}
-                            <li class="assessment-item">
-                                <a href="{{ url_for('assessment.submit_answer', assessment_id=assessment.id, question_index=0) }}" class="assessment-link">                                    <h4>{{ assessment.title }}</h4>
-                                    <p>Time Limit: {{ assessment.time_limit }} min</p>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No assessments available for this class.</p>
-                {% endif %}
-            </div>
         </div>
     <script src="/static/JS/script.js"></script>
     <script>
@@ -151,6 +148,24 @@
                 }
             });
         });
+
+        document.querySelector('.assessment-header').addEventListener('click', function() {
+        const dropdown = document.querySelector('.assessment-dropdown');
+        
+        // Toggle the visibility of the dropdown
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+        
+        // Optional: Add smooth expanding effect (if necessary)
+        if (dropdown.style.display === 'block') {
+            dropdown.style.maxHeight = dropdown.scrollHeight + 'px';  // Expand
+            dropdown.style.opacity = 1;
+        } else {
+            dropdown.style.maxHeight = '0';  // Collapse
+            dropdown.style.opacity = 0;
+        }
+    });
+
+
     </script>
     
 </body>

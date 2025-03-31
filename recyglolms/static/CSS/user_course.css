@@ -22,15 +22,13 @@ h4, p {
     margin: 0;
 }
 
-.header{
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background: linear-gradient(to right, rgba(239, 251, 240, 0.8), #16a159); */
     padding: 10px;
     color: #16a159;
     margin-bottom: 10px;
-    /* border-radius: 10px; */
 }
 
 .header-actions {
@@ -55,18 +53,19 @@ h4, p {
     box-sizing: border-box;
 }
 
-.cards-header{
+.cards-header {
     background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
 }
+
 .course-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px;
     justify-content: left;
-    padding: 20px 0px;
+    padding: 20px 0;
 }
 
 .course-item {
@@ -98,7 +97,7 @@ h4, p {
 }
 
 .course-content {
-    padding: 6px 0px;
+    padding: 6px 0;
 }
 
 .course-title {
@@ -111,7 +110,7 @@ h4, p {
 .course-details {
     font-size: 14px;
     color: #666;
-    margin-top: 0px;
+    margin-top: 0;
     text-align: left;
 }
 
@@ -123,12 +122,6 @@ h4, p {
     justify-content: center;
     align-items: center;
     height: 40vh;
-}
-
-.course-image {
-    width: 100%; /* Make sure images fill the card width */
-    height: 180px; /* Set a fixed height for uniformity */
-    object-fit: cover; /* Ensures images scale while maintaining aspect ratio */
 }
 
 .filters {
@@ -171,68 +164,56 @@ h4, p {
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
-/* Flex container for title and button */
-.assessment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    background: #16a159;
-    color: white;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-
-/* Title styling */
-.assessment-header p {
-    margin: 0;
-    font-size: 15px;
-}
-
-/* Dropdown button styling */
-.dropdown-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 15px;
-    cursor: pointer;
-    padding: 5px;
-    justify-content: space-between;
-    align-items: center;
-    display: flex;
-    gap: 10px;
-}
-
-.dropdown-btn:hover {
-    color: #e0e0e0;
-}
-
-/* Hidden dropdown content */
-.dropdown-content {
+/* Dropdown hidden by default */
+.assessment-dropdown {
     display: none;
     padding: 10px;
-    border: 1px solid #ccc;
+    margin-top: 10px;
+    background-color: #f8f9fa;
     border-radius: 5px;
-    background: #f8f9fa;
-    margin-top: 5px;
-    width: 73%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
-/* Assessment cards */
-.assessment-card {
-    background: white;
-    padding: 10px;
+/* Styling each assessment item */
+.assessment-item {
+    padding: 8px;
+    margin-bottom: 8px;
+    background-color: #fff;
     border-radius: 5px;
-    margin-bottom: 5px;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-    transition: 0.3s;
+    transition: transform 0.3s ease-in-out;
 }
 
-.assessment-card:hover {
-    background: #e0e0e0;
+.assessment-item:hover {
+    transform: translateY(-3px);
 }
 
+.assessment-title {
+    font-weight: bold;
+    margin: 0;
+}
 
+.assessment-time {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Add some spacing for header and assessment dropdown */
+.assessment-header {
+    cursor: pointer;
+    padding: 10px 15px;
+    background-color: #16a159;
+    color: white;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.assessment-header:hover {
+    background-color: #138a4b;
+}
+
+/* Media Query for Mobile */
 @media screen and (max-width: 768px) {
     .container {
         width: 90%; 
@@ -240,11 +221,14 @@ h4, p {
         margin-right: auto;
     }
 
-    .filter-select{
+    .filter-select {
         width: calc(100% - 130px); /* Adjust width based on button size */
         margin-right: 0;
     }
 
+    /* Dropdown Button Padding for Small Screens */
+    .dropdown-btn {
+        font-size: 14px;
+        padding: 5px 10px;
+    }
 }
-
-
