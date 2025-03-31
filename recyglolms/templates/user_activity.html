@@ -496,49 +496,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function updateCard() {
-        const cardId = document.querySelector(".submit-popup").getAttribute("data-id");
-        const updatedTitle = document.getElementById("edit-title").value;
-        const updatedDescription = document.getElementById("edit-description").value;
-        const updatedImage = document.getElementById("edit-image").files[0];
+    const cardId = document.querySelector(".submit-popup").getAttribute("data-id");
+    const updatedTitle = document.getElementById("edit-title").value;
+    const updatedDescription = document.getElementById("edit-description").value;
+    const updatedImage = document.getElementById("edit-image").files[0];
 
-        if (!updatedTitle || !updatedDescription) {
-            alert("Please fill all fields.");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("activity_name", updatedTitle);
-        formData.append("activity_description", updatedDescription);
-        if (updatedImage) {
-            formData.append("activity_image", updatedImage);
-        }
-
-        try {
-            const response = await fetch(`/user_activity/${cardId}`, {
-                method: "PUT",
-                body: formData,
-            });
-
-            if (response.ok) {
-                // Update the UI without reloading
-                const card = document.querySelector(`.card[data-id='${cardId}']`);
-                card.querySelector("h3").innerText = updatedTitle;
-                card.querySelector("p").innerText = updatedDescription;
-                if (updatedImage) {
-                    const imageUrl = URL.createObjectURL(updatedImage);
-                    card.querySelector(".slide").src = imageUrl;
-                }
-
-                // Close the edit popup
-                hideEditPopup();
-            } else {
-                alert("Failed to update activity.");
-            }
-        } catch (error) {
-            console.error("Error updating activity:", error);
-            alert("An error occurred.");
-        }
+    if (!updatedTitle || !updatedDescription) {
+        alert("Please fill all fields.");
+        return;
     }
+
+    const formData = new FormData();
+    formData.append("name", updatedTitle);
+    formData.append("description", updatedDescription);
+    if (updatedImage) {
+        formData.append("images", updatedImage);
+    }
+
+    try {
+        const response = await fetch(`/user_activity/${cardId}`, {
+            method: "PUT",
+            body: formData,
+        });
+
+        const responseText = await response.text(); // Get response body
+        console.log("Response Status:", response.status);
+        console.log("Response Text:", responseText);
+
+        if (response.ok) {
+            const card = document.querySelector(`.card[data-id='${cardId}']`);
+            card.querySelector("h3").innerText = updatedTitle;
+            card.querySelector("p").innerText = updatedDescription;
+            if (updatedImage) {
+                const imageUrl = URL.createObjectURL(updatedImage);
+                card.querySelector(".slide").src = imageUrl;
+            }
+
+            hideEditPopup();
+        } else {
+            alert("Failed to update activity.");
+        }
+    } catch (error) {
+        console.error("Error updating activity:", error);
+        alert("An error occurred.");
+    }
+}
+
 
 
     </script>

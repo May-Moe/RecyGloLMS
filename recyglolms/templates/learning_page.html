@@ -15,7 +15,7 @@
                 <span class="icon">&#9776;</span>
             </button>
             <div class="profile-right">
-                <img src="static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                <img src="/static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
                 <!-- Language Selector -->
             <div class="language-dropdown">
                 <button class="language-btn">
@@ -56,7 +56,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+                <img src="/static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -71,7 +71,7 @@
         <div class="container">
             <div class="header">
                 <a href="{{ url_for('main.learning') }}" class="back-icon" style="font-size: 20px;"><i class="fa-solid fa-angle-left"></i></a>
-                <h2 style="margin-left: 15px;">Course Overviews</h2>
+                <h2>Course Overviews</h2>
                 <div class="header-actions">
                     <select class="filter-select" id="courseFilter">
                         <option value="all">Show all Courses</option>
@@ -79,7 +79,10 @@
                             <option value="{{ course.name|lower|replace(' ', '-') }}">{{ course.name }}</option>
                         {% endfor %}
                     </select>
-                    <input type="text" id="searchBar" placeholder="Search By Courses">
+                    <div class="search-container">
+                        <input type="text" id="searchBar" placeholder="Search   ">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
                 </div>
             </div>
 
