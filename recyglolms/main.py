@@ -58,7 +58,7 @@ def home():
         current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
     )
 # Ensure the upload folder exists
-UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
+UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads', 'activities')
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
@@ -177,6 +177,7 @@ def delete_activity(activity_id):
     return '', 204
 
 
+#Edit user activity
 @app.route('/user_activity/<int:activity_id>', methods=['PUT'])
 @login_required
 def update_user_activity(activity_id):
