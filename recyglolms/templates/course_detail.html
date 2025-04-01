@@ -70,11 +70,11 @@
         </nav>
         <div class="container">
             <div class="cards-header">
-                <a href="{{ url_for('main.learning') }}" class="back-icon" style="font-size: 20px;"><i class="fa-solid fa-angle-left"></i></a>
-                <h2 style="margin-bottom: 10px; margin-top: 10px; font-size:35px; color: #16a159">{{ data.course.name }}</h2>
+                <a href="{{ url_for('main.learning') }}" class="back-icon" style="color: white;"><i class="fa-solid fa-angle-left"></i></a>
+                <h2 style="margin-bottom: 10px; margin-top: 10px; font-size:35px; color: white">{{ data.course.name }}</h2>
             <p style="margin-bottom: 20px; color: gray;">{{ data.course.description }}</p>
              </div>
-            <h3 style="margin-bottom: 10px; margin-top: 10px; font-size: 20px; color: #16a159">Modules overview</h3>
+            <h3 style="margin-bottom: 10px; margin-top: 0px; font-size: 20px; color: #FF6699;">Modules overview</h3>
             {% for module_data in data.modules %}
             <div class="dropdown_course">
                 <button class="dropdown-toggle-module" onclick="toggleDropdown('module{{ module_data.module.moduleid }}')">

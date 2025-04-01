@@ -1,600 +1,600 @@
 <html lang="en">
-    <!DOCTYPE html>
-    
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/static/CSS/style.css">
-        <link rel="stylesheet" href="/static/CSS/user_activity.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <title>User Activity</title>
-    </head>
-    <body>
-        <div class="dashboard">
-            <nav class="navbar">
-                <button id="toggle-button" class="toggle-button">
-                    <span class="icon">&#9776;</span>
-                </button>
-                <div class="profile-right">
-                    <img src="/static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
-                    <!-- Language Selector -->
-                <div class="language-dropdown">
-                    <button class="language-btn">
-                    <img src="/static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
-                    </button>
-                <div class="dropdown-content">
-                    <a href="?lang=en"><img src="/static/img/uk.svg" class="flag-icon"> English</a>
-                    <a href="?lang=th"><img src="/static/img/th.svg" class="flag-icon"> Thailand</a>
-                    <a href="?lang=my"><img src="/static/img/my.svg" class="flag-icon"> Myanmar</a>
-                    <a href="?lang=vi"><img src="/static/img/vi.svg" class="flag-icon"> Vietnam</a>
-                    <a href="?lang=in"><img src="/static/img/id.svg" class="flag-icon"> Indonia</a>
-                    <a href="?lang=ko"><img src="/static/img/kr.svg" class="flag-icon"> Korea</a>
-                    
+   <!DOCTYPE html>
+  
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <link rel="stylesheet" href="/static/CSS/style.css">
+       <link rel="stylesheet" href="/static/CSS/user_activity.css">
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+       <title>User Activity</title>
+   </head>
+   <body>
+       <div class="dashboard">
+           <nav class="navbar">
+               <button id="toggle-button" class="toggle-button">
+                   <span class="icon">&#9776;</span>
+               </button>
+               <div class="profile-right">
+                   <img src="/static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                   <!-- Language Selector -->
+               <div class="language-dropdown">
+                   <button class="language-btn">
+                   <img src="/static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                   </button>
+               <div class="dropdown-content">
+                   <a href="?lang=en"><img src="/static/img/uk.svg" class="flag-icon"> English</a>
+                   <a href="?lang=th"><img src="/static/img/th.svg" class="flag-icon"> Thailand</a>
+                   <a href="?lang=my"><img src="/static/img/my.svg" class="flag-icon"> Myanmar</a>
+                   <a href="?lang=vi"><img src="/static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                   <a href="?lang=in"><img src="/static/img/id.svg" class="flag-icon"> Indonia</a>
+                   <a href="?lang=ko"><img src="/static/img/kr.svg" class="flag-icon"> Korea</a>
+                  
+               </div>
+               </div>
+               <button class="notification-button" id="notification-button">
+                   <i class="fas fa-bell"></i>
+                   <span id="notification-count" class="notification-count">0</span>
+                   </button>
+  
+                   <div id="notification-dropdown" class="notification-dropdown hidden">
+                       <ul id="notification-list"></ul>
+                   </div>
+               <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+                   <div class="dropdown">
+                      
+                       <img src="{{ current_user_image if current_user_image else url_for('static', filename='img/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                       <div id="profile-dropdown" class="dropdown-menu hidden">
+                            <!-- Profile Image -->
+                            <div class="profile-image-container">
+                               <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                           </div>
+                           <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_name }}</span></h5>
+                           <p id="profile-email">{{ current_email }}</p>
+                           <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                       </div>
+                   </div>
+               </div>
+           </nav>
+           <nav class="sidebar">
+               <div class="logo" style="text-align: left;">
+                   <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+               </div>
+               <ul>
+                   <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
+                   <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                   <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                   <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Classes</a></li>
+                   <li><a href="{{ url_for('grading.user_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                   <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                   <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+               </ul>
+           </nav>
+           <div class="container">
+               <div class="header">
+                   <h2 style="color: white">Activity Board</h2>
+                   <div class="header-actions">
+                       <div class="search-container">
+                           <input type="text" id="searchBar" placeholder="Search   ">
+                           <i class="fas fa-search search-icon"></i>
+                       </div>
+                       <button class="add-activity" onclick="showPopup()"><i class="fas fa-plus" style="margin-right: 10px;"></i> Add Activity</button>
+                   </div>
                 </div>
-                </div>
-                <button class="notification-button" id="notification-button">
-                    <i class="fas fa-bell"></i>
-                    <span id="notification-count" class="notification-count">0</span>
-                    </button>
-    
-                    <div id="notification-dropdown" class="notification-dropdown hidden">
-                        <ul id="notification-list"></ul>
-                    </div>
-                <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
-                    <div class="dropdown">
-                        
-                        <img src="{{ current_user_image if current_user_image else url_for('static', filename='img/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
-                        <div id="profile-dropdown" class="dropdown-menu hidden">
-                             <!-- Profile Image -->
-                             <div class="profile-image-container">
-                                <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
-                            </div>
-                            <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_name }}</span></h5>
-                            <p id="profile-email">{{ current_email }}</p>
-                            <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-            <nav class="sidebar">
-                <div class="logo" style="text-align: left;">
-                    <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
-                </div>
-                <ul>
-                    <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
-                    <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
-                    <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
-                    <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Classes</a></li>
-                    <li><a href="{{ url_for('grading.user_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
-                    <li><a href="{{ url_for('user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
-                    <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
-                </ul>
-            </nav>
-            <div class="container">
-                <div class="header">
-                    <h2 style="color: white">Activity Board</h2>
-                    <div class="header-actions">
-                        <div class="search-container">
-                            <input type="text" id="searchBar" placeholder="Search   ">
-                            <i class="fas fa-search search-icon"></i>
-                        </div>
-                        <button class="add-activity" onclick="showPopup()"><i class="fas fa-plus" style="margin-right: 10px;"></i> Add Activity</button>
-                    </div>
-                 </div>
-                <div id="card-container" class="grid">
-                    <div class="popup-overlay hidden" id="popup-overlay"></div>
-                    <div class="popup-form hidden" id="popup-form">
-                        <button class="close-popup" onclick="hidePopup()">✖</button>
-                        <h3>Add New Activity</h3>
-                        <input type="text" id="activity_name" placeholder="Title">
-                        <input type="file" id="activity_images" placeholder="Image URL" multiple>
-                        <textarea id="activity_description" placeholder="Description" rows="10" cols="50"></textarea>
-                        <button class="submit-popup" onclick="addCard()">Submit</button>
-                    </div>
-                    <div class="view-popup-overlay hidden" id="view-popup-overlay"></div>
-                    <div class="view-popup-form hidden" id="view-popup-form">
-                        <button class="close-popup" onclick="hideViewPopup()">✖</button>
-                        <h3 id="view-title"></h3>
-                        <div id="view-image"></div>
-                        <p id="view-description"></p>
-                    </div>
-                    <div class="edit-popup-overlay hidden" id="edit-popup-overlay"></div>
-                    <div class="edit-popup-form hidden" id="edit-popup-form">
-                        <button class="close-popup" onclick="hideEditPopup()">✖</button>
-                        <h3>Edit Activity</h3>
-                        <input type="text" id="edit-title" placeholder="Title">
-                        <textarea id="edit-description" placeholder="Description" rows="5"></textarea>
-                        <button class="submit-popup" onclick="updateCard()">Update</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script src="static/JS/script.js"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                loadCards(); // Load cards from backend on page load
-            });
-            
-            // Show Add Activity Popup
-        function showPopup() {
-            // Check if the popup exists, create if not
-            let popupForm = document.getElementById("popup-form");
-            if (!popupForm) {
-                popupForm = document.createElement("div");
-                popupForm.id = "popup-form";
-                popupForm.classList.add("popup-form", "hidden");
-                popupForm.innerHTML = `
-                    <button class="close-popup" onclick="hidePopup()">✖</button>
-                    <h3>Add New Activity</h3>
-                    <input type="text" id="activity_name" placeholder="Title">
-                    <input type="file" id="activity_images" placeholder="Image URL" multiple>
-                    <textarea id="activity_description" placeholder="Description" rows="10" cols="50"></textarea>
-                    <button class="submit-popup" onclick="addCard()">Submit</button>
-                `;
-                document.body.appendChild(popupForm);
-            }
-            // Check if the overlay exists, create if not
-            let popupOverlay = document.getElementById("popup-overlay");
-            if (!popupOverlay) {
-                popupOverlay = document.createElement("div");
-                popupOverlay.id = "popup-overlay";
-                popupOverlay.classList.add("popup-overlay", "hidden");
-                document.body.appendChild(popupOverlay);
-            }
-            // Show the popup and overlay
-            popupForm.classList.remove("hidden");
-            popupOverlay.classList.remove("hidden");
-        }
-        // Hide Add Activity Popup
-        function hidePopup() {
-            let popupForm = document.getElementById("popup-form");
-            let popupOverlay = document.getElementById("popup-overlay");
-            // Hide the popup and overlay
-            if (popupForm) popupForm.classList.add("hidden");
-            if (popupOverlay) popupOverlay.classList.add("hidden");
-        }
-            // Add new activity card
-            function addCard() {
-                const title = document.getElementById("activity_name").value;
-                const description = document.getElementById("activity_description").value;
-                const imageFiles = document.getElementById("activity_images").files; // Get all selected files
-                if (!title || !description || imageFiles.length === 0) {
-                    alert("Please fill all fields and select at least one image.");
-                    return;
-                }
-            
-                if (title && description && imageFiles.length > 0) {
-                    const formData = new FormData();
-                    formData.append("activity_name", title); // Backend expects 'activity_name'
-                    formData.append("activity_description", description); // Backend expects 'activity_description'
-            
-                    // Append each selected image file to the form data
-                    for (let i = 0; i < imageFiles.length; i++) {
-                        formData.append("activity_images", imageFiles[i]); // Backend expects 'activity_images'
-                    }
-            
-                    // Send a POST request to the backend
-                    fetch('/user_activity', {
-                        method: 'POST',
-                        body: formData,
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.activityid) {
-                            // Success - create the card in the UI
-                            createCard(data);
-                            resetForm();
-                            hidePopup();
-                        } else {
-                            alert("Failed to save the activity. Please try again.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error saving activity:", error);
-                        alert("An error occurred. Please try again.");
-                    });
-                } else {
-                    alert("Please fill all fields and select at least one image.");
-                }
-            }
-            
-            // Create a card dynamically
-            function createCard(cardData) {
-                const cardContainer = document.getElementById("card-container");
-            
-                const newCard = document.createElement("div");
-                newCard.classList.add("card");
-                newCard.setAttribute("data-id", cardData.activityid); // Use 'activityid' from the response
-            
-                const showNavButtons = cardData.images.length > 1;
-            
-                const imagesHTML = cardData.images.length > 0
-                    ? `<div class="image-container image-slider">
-                            ${cardData.images.map((image, index) =>
-                                `<img class="slide" src="/static/uploads/${image}" alt="${cardData.name}" style="display: ${index === 0 ? 'block' : 'none'};">`
-                            ).join("")}
-                            ${showNavButtons ? `
-                            <button class="prev-btn" onclick="prevSlide(this)">&#10094;</button>
-                            <button class="next-btn" onclick="nextSlide(this)">&#10095;</button>
-                            ` : ""}
-                       </div>`
-                    : "<div class='image-container'><p>No Image Available</p></div>";
-            
-                newCard.innerHTML = `
-                    <button class="delete-btn" onclick="deleteCard(this)">×</button>
-                    <div class="card-content">
-                        ${imagesHTML}
-                        <h3>${cardData.name}</h3>
-                        <hr class="card-line">
-                        <p>${cardData.description}</p>
-                    </div>
-                    <div class="card-actions">
-                        <button class="view-btn" onclick="viewCard(this)">View</button>
-                        <button class="edit-btn" onclick="editCard(this)">Edit</button>
-                    </div>
-                `;
-            
-                cardContainer.appendChild(newCard);
-            }
-            
-            async function loadCards() {
-        try {
-            const response = await fetch("/user_activity", {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json",
-                }
-            });
-            if (response.ok) {
-                const activities = await response.json();
-                const cardContainer = document.getElementById("card-container");
-                // Find and remove the "No activities available." message if it exists
-                const noActivitiesMessage = document.querySelector(".no-activities-message");
-                if (noActivitiesMessage) {
-                    noActivitiesMessage.remove();
-                }
-                cardContainer.innerHTML = ""; // Clear previous content
-                if (activities.length === 0) {
-                    // If no activities exist, show the message
-                    const noMessage = document.createElement("p");
-                    noMessage.textContent = "No activities available.";
-                    noMessage.classList.add("no-activities-message");
-                    cardContainer.appendChild(noMessage);
-                } else {
-                    // Populate activities
-                    activities.forEach(activity => {
-                        createCard(activity);
-                    });
-                }
-            } else {
-                alert("Failed to load activities.");
-            }
-        } catch (error) {
-            console.error("Error loading activities:", error);
-            alert("Error loading activities.");
-        }
-    }
-    // Call loadCards when the page loads
-    document.addEventListener("DOMContentLoaded", () => {
-        loadCards();
-    });
-    // ...existing code...
-            
-            // Delete an activity card
-            async function deleteCard(button) {
-                const card = button.closest(".card");
-                if (!card) return;
-            
-                const cardId = card.getAttribute("data-id");
-            
-                try {
-                    const response = await fetch(`/user_activity/${cardId}`, {
-                        method: "DELETE",
-                    });
-            
-                    if (response.ok) {
-                        card.remove(); // Remove the card from the UI if deleted successfully
-                    } else {
-                        alert("Failed to delete activity.");
-                    }
-                } catch (error) {
-                    console.error("Error:", error);
-                    alert("Error deleting activity.");
-                }
-            }
-            
-            // Reset the form fields after submission
-            function resetForm() {
-                document.getElementById("activity_name").value = "";
-                document.getElementById("activity_description").value = "";
-                document.getElementById("activity_images").value = "";
-            }
-        
-            function viewCard(button) {
-                const card = button.closest(".card");
-                if (!card) return;
-        
-                const cardId = card.getAttribute("data-id");
-                const title = card.querySelector("h3").innerText;
-                const description = card.querySelector("p").innerText;
-                const images = card.querySelectorAll(".slide");
-        
-                // Create the view popup if it doesn't exist
-                let viewPopup = document.getElementById("view-popup-form");
-                if (!viewPopup) {
-                    viewPopup = document.createElement("div");
-                    viewPopup.id = "view-popup-form";
-                    viewPopup.classList.add("popup-form", "hidden");
-                    document.body.appendChild(viewPopup);
-                }
-        
-                // Generate HTML content for the popup
-                const imagesHTML = images.length > 0
-                    ? `<div class="image-slider">
-                            ${Array.from(images).map((image, index) =>
-                                `<img class="slide-view" src="${image.src}" alt="${title}" style="display: ${index === 0 ? 'block' : 'none'};">`
-                            ).join("")}
-                            ${images.length > 1 ? `
-                            <button class="prev-btn" onclick="prevSlideView()">&#10094;</button>
-                            <button class="next-btn" onclick="nextSlideView()">&#10095;</button>
-                            ` : ""}
-                       </div>`
-                    : "<p>No Image Available</p>";
-        
-                viewPopup.innerHTML = `
-                    <button class="close-popup" onclick="hideViewPopup()">✖</button>
-                    <h3>${title}</h3>
-                    ${imagesHTML}
-                    <p>${description}</p>
-                `;
-        
-                // Show the popup
-                viewPopup.classList.remove("hidden");
-        
-                // Create an overlay if it doesn't exist
-                let viewOverlay = document.getElementById("view-popup-overlay");
-                if (!viewOverlay) {
-                    viewOverlay = document.createElement("div");
-                    viewOverlay.id = "view-popup-overlay";
-                    viewOverlay.classList.add("popup-overlay", "hidden");
-                    document.body.appendChild(viewOverlay);
-                }
-        
-                // Show overlay
-                viewOverlay.classList.remove("hidden");
-            }
-        
-            function hideViewPopup() {
-                document.getElementById("view-popup-form").classList.add("hidden");
-                document.getElementById("view-popup-overlay").classList.add("hidden");
-            }
-        
-            // Functions for image navigation in the view popup
-            function nextSlideView() {
-                const slides = document.querySelectorAll(".slide-view");
-                let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
-                slides[currentIndex].style.display = 'none';
-                if (currentIndex < slides.length - 1) {
-                    slides[currentIndex + 1].style.display = 'block';
-                } else {
-                    slides[0].style.display = 'block';
-                }
-            }
-        
-            function prevSlideView() {
-                const slides = document.querySelectorAll(".slide-view");
-                let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
-                slides[currentIndex].style.display = 'none';
-                if (currentIndex > 0) {
-                    slides[currentIndex - 1].style.display = 'block';
-                } else {
-                    slides[slides.length - 1].style.display = 'block';
-                }
-            }
-        
-            function prevSlide(button) {
-                const card = button.closest(".card");
-                const slides = card.querySelectorAll(".slide");
-                let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
-                if (currentIndex > 0) {
-                    slides[currentIndex].style.display = 'none';
-                    slides[currentIndex - 1].style.display = 'block';
-                } else {
-                    slides[currentIndex].style.display = 'none';
-                    slides[slides.length - 1].style.display = 'block';
-                }
-            }
-        
-            function nextSlide(button) {
-                const card = button.closest(".card");
-                const slides = card.querySelectorAll(".slide");
-                let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
-                if (currentIndex < slides.length - 1) {
-                    slides[currentIndex].style.display = 'none';
-                    slides[currentIndex + 1].style.display = 'block';
-                } else {
-                    slides[currentIndex].style.display = 'none';
-                    slides[0].style.display = 'block';
-                }
-            }
-            function editCard(button) {
-                console.log("editCard function called");
-                const card = button.closest(".card");
-                if (!card) {
-                    console.log("Card not found"); // Debugging log
-                    return;
-                }
-            
-                const cardId = card.getAttribute("data-id");
-                const title = card.querySelector("h3").innerText;
-                const description = card.querySelector("p").innerText;
-                const imageElements = card.querySelectorAll(".slide"); // Select all images
-            
-                console.log("Card ID:", cardId); // Debugging log
-                console.log("Title:", title); // Debugging log
-                console.log("Description:", description); // Debugging log
-                console.log("Images:", imageElements); // Debugging log
-            
-                // Create the edit popup if it doesn't exist
-                let editPopup = document.getElementById("edit-popup-form");
-                if (!editPopup) {
-                    editPopup = document.createElement("div");
-                    editPopup.id = "edit-popup-form";
-                    editPopup.classList.add("popup-form", "hidden");
-                    editPopup.innerHTML = `
-                        <button class="close-popup" onclick="hideEditPopup()">✖</button>
-                        <h3>Edit Activity</h3>
-                        <input type="text" id="edit-title" placeholder="Title">
-                        <textarea id="edit-description" placeholder="Description" rows="5"></textarea>
-                        <input type="file" id="edit-image" placeholder="Select images" multiple>
-                        <button class="submit-popup" onclick="updateCard()">Update</button>
-                    `;
-                    document.body.appendChild(editPopup);
-                }
-            
-                // Create the overlay if it doesn't exist
-                let editOverlay = document.getElementById("edit-popup-overlay");
-                if (!editOverlay) {
-                    editOverlay = document.createElement("div");
-                    editOverlay.id = "edit-popup-overlay";
-                    editOverlay.classList.add("popup-overlay", "hidden");
-                    document.body.appendChild(editOverlay);
-                }
-            
-                // Set the values in the edit form
-                document.getElementById("edit-title").value = title;
-                document.getElementById("edit-description").value = description;
-            
-                // Handle existing images for display
-                const imagePreviewContainer = document.getElementById("image-preview-container");
-                if (!imagePreviewContainer) {
-                    const newContainer = document.createElement("div");
-                    newContainer.id = "image-preview-container";
-                    newContainer.classList.add("image-preview-container");
-                    document.querySelector("#edit-popup-form").insertBefore(newContainer, document.querySelector("#edit-popup-form").querySelector("button.submit-popup"));
-                }
-            
-                // Clear the image preview container
-                imagePreviewContainer.innerHTML = "";
-            
-                // Preview existing images
-                imageElements.forEach((img) => {
-                    const imgElement = document.createElement("img");
-                    imgElement.src = img.src;
-                    imgElement.classList.add("image-preview");
-                    imagePreviewContainer.appendChild(imgElement);
-                });
-            
-                // Store cardId in the edit button for reference
-                document.querySelector(".submit-popup").setAttribute("data-id", cardId);
-            
-                // Show edit popup
-                editPopup.classList.remove("hidden");
-                editOverlay.classList.remove("hidden");
-            }
-            
-            function hideEditPopup() {
-                document.getElementById("edit-popup-form").classList.add("hidden");
-                document.getElementById("edit-popup-overlay").classList.add("hidden");
-            }
-            
-            async function updateCard() {
-                const cardId = document.querySelector(".submit-popup").getAttribute("data-id");
-                const updatedTitle = document.getElementById("edit-title").value;
-                const updatedDescription = document.getElementById("edit-description").value;
-                const updatedImages = document.getElementById("edit-image").files; // Get multiple files
-            
-                if (!updatedTitle || !updatedDescription) {
-                    alert("Please fill all fields.");
-                    return;
-                }
-            
-                const formData = new FormData();
-                formData.append("activity_name", updatedTitle); // Backend expects 'activity_name'
-                formData.append("activity_description", updatedDescription); // Backend expects 'activity_description'
-            
-                // Append multiple images with the correct key
-                for (let i = 0; i < updatedImages.length; i++) {
-                    formData.append("activity_image", updatedImages[i]); // Backend expects 'activity_image'
-                }
-            
-                try {
-                    const response = await fetch(`/user_activity/${cardId}`, {
-                        method: "PUT",
-                        body: formData,
-                    });
-            
-                    if (response.ok) {
-                        const responseData = await response.json();
-            
-                        // Add a slight delay to ensure the images are available on the server
-                        setTimeout(() => {
-                            // Check if the card exists
-                            const card = document.querySelector(`.card[data-id='${cardId}']`);
-                            if (!card) {
-                                console.error(`Card with ID ${cardId} not found.`);
-                                return;
-                            }
-            
-                            // Update the title and description
-                            card.querySelector("h3").innerText = updatedTitle;
-                            card.querySelector("p").innerText = updatedDescription;
-            
-                            // Update the images
-                            const imageContainer = card.querySelector(".image-container");
-                            if (!imageContainer) {
-                                console.error("Image container not found.");
-                                return;
-                            }
-            
-                            // Clear existing images
-                            imageContainer.innerHTML = ""; // Clear all child elements
-            
-                            // Append new images
-                            if (responseData.activity.images && responseData.activity.images.length > 0) {
-                                responseData.activity.images.forEach((imageUrl, index) => {
-                                    const imgElement = document.createElement("img");
-                                    imgElement.src = imageUrl;
-                                    imgElement.classList.add("slide");
-                                    imgElement.style.display = index === 0 ? "block" : "none"; // Show the first image
-                                    imageContainer.appendChild(imgElement);
-                                });
-            
-                                // Add navigation buttons if there are multiple images
-                                if (responseData.activity.images.length > 1) {
-                                    const prevButton = document.createElement("button");
-                                    prevButton.classList.add("prev-btn");
-                                    prevButton.innerHTML = "&#10094;";
-                                    prevButton.onclick = () => prevSlide(card);
-            
-                                    const nextButton = document.createElement("button");
-                                    nextButton.classList.add("next-btn");
-                                    nextButton.innerHTML = "&#10095;";
-                                    nextButton.onclick = () => nextSlide(card);
-            
-                                    imageContainer.appendChild(prevButton);
-                                    imageContainer.appendChild(nextButton);
-                                }
-                            } else {
-                                // If no images are available, show a placeholder
-                                imageContainer.innerHTML = "<p>No Image Available</p>";
-                            }
-            
-                            // Close the edit popup
-                            hideEditPopup();
-                        }, 500); // Delay of 500ms
-                    } else {
-                        const errorData = await response.json();
-                        console.error("Error response:", errorData);
-                        alert("Failed to update activity.");
-                    }
-                } catch (error) {
-                    console.error("Error updating activity:", error);
-                    alert("An error occurred.");
-                }
-            }
-            
-        </script>
-    
-    </body>
-    </html>
+               <div id="card-container" class="grid">
+                   <div class="popup-overlay hidden" id="popup-overlay"></div>
+                   <div class="popup-form hidden" id="popup-form">
+                       <button class="close-popup" onclick="hidePopup()">✖</button>
+                       <h3>Add New Activity</h3>
+                       <input type="text" id="activity_name" placeholder="Title">
+                       <input type="file" id="activity_images" placeholder="Image URL" multiple>
+                       <textarea id="activity_description" placeholder="Description" rows="10" cols="50"></textarea>
+                       <button class="submit-popup" onclick="addCard()">Submit</button>
+                   </div>
+                   <div class="view-popup-overlay hidden" id="view-popup-overlay"></div>
+                   <div class="view-popup-form hidden" id="view-popup-form">
+                       <button class="close-popup" onclick="hideViewPopup()">✖</button>
+                       <h3 id="view-title"></h3>
+                       <div id="view-image"></div>
+                       <p id="view-description"></p>
+                   </div>
+                   <div class="edit-popup-overlay hidden" id="edit-popup-overlay"></div>
+                   <div class="edit-popup-form hidden" id="edit-popup-form">
+                       <button class="close-popup" onclick="hideEditPopup()">✖</button>
+                       <h3>Edit Activity</h3>
+                       <input type="text" id="edit-title" placeholder="Title">
+                       <textarea id="edit-description" placeholder="Description" rows="5"></textarea>
+                       <button class="submit-popup" onclick="updateCard()">Update</button>
+                   </div>
+               </div>
+           </div>
+       </div>
+       <script src="static/JS/script.js"></script>
+       <script>
+           document.addEventListener("DOMContentLoaded", () => {
+               loadCards(); // Load cards from backend on page load
+           });
+          
+           // Show Add Activity Popup
+       function showPopup() {
+           // Check if the popup exists, create if not
+           let popupForm = document.getElementById("popup-form");
+           if (!popupForm) {
+               popupForm = document.createElement("div");
+               popupForm.id = "popup-form";
+               popupForm.classList.add("popup-form", "hidden");
+               popupForm.innerHTML = `
+                   <button class="close-popup" onclick="hidePopup()">✖</button>
+                   <h3>Add New Activity</h3>
+                   <input type="text" id="activity_name" placeholder="Title">
+                   <input type="file" id="activity_images" placeholder="Image URL" multiple>
+                   <textarea id="activity_description" placeholder="Description" rows="10" cols="50"></textarea>
+                   <button class="submit-popup" onclick="addCard()">Submit</button>
+               `;
+               document.body.appendChild(popupForm);
+           }
+           // Check if the overlay exists, create if not
+           let popupOverlay = document.getElementById("popup-overlay");
+           if (!popupOverlay) {
+               popupOverlay = document.createElement("div");
+               popupOverlay.id = "popup-overlay";
+               popupOverlay.classList.add("popup-overlay", "hidden");
+               document.body.appendChild(popupOverlay);
+           }
+           // Show the popup and overlay
+           popupForm.classList.remove("hidden");
+           popupOverlay.classList.remove("hidden");
+       }
+       // Hide Add Activity Popup
+       function hidePopup() {
+           let popupForm = document.getElementById("popup-form");
+           let popupOverlay = document.getElementById("popup-overlay");
+           // Hide the popup and overlay
+           if (popupForm) popupForm.classList.add("hidden");
+           if (popupOverlay) popupOverlay.classList.add("hidden");
+       }
+           // Add new activity card
+           function addCard() {
+               const title = document.getElementById("activity_name").value;
+               const description = document.getElementById("activity_description").value;
+               const imageFiles = document.getElementById("activity_images").files; // Get all selected files
+               if (!title || !description || imageFiles.length === 0) {
+                   alert("Please fill all fields and select at least one image.");
+                   return;
+               }
+          
+               if (title && description && imageFiles.length > 0) {
+                   const formData = new FormData();
+                   formData.append("activity_name", title); // Backend expects 'activity_name'
+                   formData.append("activity_description", description); // Backend expects 'activity_description'
+          
+                   // Append each selected image file to the form data
+                   for (let i = 0; i < imageFiles.length; i++) {
+                       formData.append("activity_images", imageFiles[i]); // Backend expects 'activity_images'
+                   }
+          
+                   // Send a POST request to the backend
+                   fetch('/user_activity', {
+                       method: 'POST',
+                       body: formData,
+                   })
+                   .then(response => response.json())
+                   .then(data => {
+                       if (data.activityid) {
+                           // Success - create the card in the UI
+                           createCard(data);
+                           resetForm();
+                           hidePopup();
+                       } else {
+                           alert("Failed to save the activity. Please try again.");
+                       }
+                   })
+                   .catch(error => {
+                       console.error("Error saving activity:", error);
+                       alert("An error occurred. Please try again.");
+                   });
+               } else {
+                   alert("Please fill all fields and select at least one image.");
+               }
+           }
+          
+           // Create a card dynamically
+           function createCard(cardData) {
+               const cardContainer = document.getElementById("card-container");
+          
+               const newCard = document.createElement("div");
+               newCard.classList.add("card");
+               newCard.setAttribute("data-id", cardData.activityid); // Use 'activityid' from the response
+          
+               const showNavButtons = cardData.images.length > 1;
+          
+               const imagesHTML = cardData.images.length > 0
+                   ? `<div class="image-container image-slider">
+                           ${cardData.images.map((image, index) =>
+                               `<img class="slide" src="/static/uploads/${image}" alt="${cardData.name}" style="display: ${index === 0 ? 'block' : 'none'};">`
+                           ).join("")}
+                           ${showNavButtons ? `
+                           <button class="prev-btn" onclick="prevSlide(this)">&#10094;</button>
+                           <button class="next-btn" onclick="nextSlide(this)">&#10095;</button>
+                           ` : ""}
+                      </div>`
+                   : "<div class='image-container'><p>No Image Available</p></div>";
+          
+               newCard.innerHTML = `
+                   <button class="delete-btn" onclick="deleteCard(this)">×</button>
+                   <div class="card-content">
+                       ${imagesHTML}
+                       <h3>${cardData.name}</h3>
+                       <hr class="card-line">
+                       <p>${cardData.description}</p>
+                   </div>
+                   <div class="card-actions">
+                       <button class="view-btn" onclick="viewCard(this)">View</button>
+                       <button class="edit-btn" onclick="editCard(this)">Edit</button>
+                   </div>
+               `;
+          
+               cardContainer.appendChild(newCard);
+           }
+          
+           async function loadCards() {
+       try {
+           const response = await fetch("/user_activity", {
+               method: "GET",
+               headers: {
+                   "Accept": "application/json",
+               }
+           });
+           if (response.ok) {
+               const activities = await response.json();
+               const cardContainer = document.getElementById("card-container");
+               // Find and remove the "No activities available." message if it exists
+               const noActivitiesMessage = document.querySelector(".no-activities-message");
+               if (noActivitiesMessage) {
+                   noActivitiesMessage.remove();
+               }
+               cardContainer.innerHTML = ""; // Clear previous content
+               if (activities.length === 0) {
+                   // If no activities exist, show the message
+                   const noMessage = document.createElement("p");
+                   noMessage.textContent = "No activities available.";
+                   noMessage.classList.add("no-activities-message");
+                   cardContainer.appendChild(noMessage);
+               } else {
+                   // Populate activities
+                   activities.forEach(activity => {
+                       createCard(activity);
+                   });
+               }
+           } else {
+               alert("Failed to load activities.");
+           }
+       } catch (error) {
+           console.error("Error loading activities:", error);
+           alert("Error loading activities.");
+       }
+   }
+   // Call loadCards when the page loads
+   document.addEventListener("DOMContentLoaded", () => {
+       loadCards();
+   });
+   // ...existing code...
+          
+           // Delete an activity card
+           async function deleteCard(button) {
+               const card = button.closest(".card");
+               if (!card) return;
+          
+               const cardId = card.getAttribute("data-id");
+          
+               try {
+                   const response = await fetch(`/user_activity/${cardId}`, {
+                       method: "DELETE",
+                   });
+          
+                   if (response.ok) {
+                       card.remove(); // Remove the card from the UI if deleted successfully
+                   } else {
+                       alert("Failed to delete activity.");
+                   }
+               } catch (error) {
+                   console.error("Error:", error);
+                   alert("Error deleting activity.");
+               }
+           }
+          
+           // Reset the form fields after submission
+           function resetForm() {
+               document.getElementById("activity_name").value = "";
+               document.getElementById("activity_description").value = "";
+               document.getElementById("activity_images").value = "";
+           }
+      
+           function viewCard(button) {
+               const card = button.closest(".card");
+               if (!card) return;
+      
+               const cardId = card.getAttribute("data-id");
+               const title = card.querySelector("h3").innerText;
+               const description = card.querySelector("p").innerText;
+               const images = card.querySelectorAll(".slide");
+      
+               // Create the view popup if it doesn't exist
+               let viewPopup = document.getElementById("view-popup-form");
+               if (!viewPopup) {
+                   viewPopup = document.createElement("div");
+                   viewPopup.id = "view-popup-form";
+                   viewPopup.classList.add("popup-form", "hidden");
+                   document.body.appendChild(viewPopup);
+               }
+      
+               // Generate HTML content for the popup
+               const imagesHTML = images.length > 0
+                   ? `<div class="image-slider">
+                           ${Array.from(images).map((image, index) =>
+                               `<img class="slide-view" src="${image.src}" alt="${title}" style="display: ${index === 0 ? 'block' : 'none'};">`
+                           ).join("")}
+                           ${images.length > 1 ? `
+                           <button class="prev-btn" onclick="prevSlideView()">&#10094;</button>
+                           <button class="next-btn" onclick="nextSlideView()">&#10095;</button>
+                           ` : ""}
+                      </div>`
+                   : "<p>No Image Available</p>";
+      
+               viewPopup.innerHTML = `
+                   <button class="close-popup" onclick="hideViewPopup()">✖</button>
+                   <h3>${title}</h3>
+                   ${imagesHTML}
+                   <p>${description}</p>
+               `;
+      
+               // Show the popup
+               viewPopup.classList.remove("hidden");
+      
+               // Create an overlay if it doesn't exist
+               let viewOverlay = document.getElementById("view-popup-overlay");
+               if (!viewOverlay) {
+                   viewOverlay = document.createElement("div");
+                   viewOverlay.id = "view-popup-overlay";
+                   viewOverlay.classList.add("popup-overlay", "hidden");
+                   document.body.appendChild(viewOverlay);
+               }
+      
+               // Show overlay
+               viewOverlay.classList.remove("hidden");
+           }
+      
+           function hideViewPopup() {
+               document.getElementById("view-popup-form").classList.add("hidden");
+               document.getElementById("view-popup-overlay").classList.add("hidden");
+           }
+      
+           // Functions for image navigation in the view popup
+           function nextSlideView() {
+               const slides = document.querySelectorAll(".slide-view");
+               let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
+               slides[currentIndex].style.display = 'none';
+               if (currentIndex < slides.length - 1) {
+                   slides[currentIndex + 1].style.display = 'block';
+               } else {
+                   slides[0].style.display = 'block';
+               }
+           }
+      
+           function prevSlideView() {
+               const slides = document.querySelectorAll(".slide-view");
+               let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
+               slides[currentIndex].style.display = 'none';
+               if (currentIndex > 0) {
+                   slides[currentIndex - 1].style.display = 'block';
+               } else {
+                   slides[slides.length - 1].style.display = 'block';
+               }
+           }
+      
+           function prevSlide(button) {
+               const card = button.closest(".card");
+               const slides = card.querySelectorAll(".slide");
+               let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
+               if (currentIndex > 0) {
+                   slides[currentIndex].style.display = 'none';
+                   slides[currentIndex - 1].style.display = 'block';
+               } else {
+                   slides[currentIndex].style.display = 'none';
+                   slides[slides.length - 1].style.display = 'block';
+               }
+           }
+      
+           function nextSlide(button) {
+               const card = button.closest(".card");
+               const slides = card.querySelectorAll(".slide");
+               let currentIndex = Array.from(slides).findIndex(slide => slide.style.display === 'block');
+               if (currentIndex < slides.length - 1) {
+                   slides[currentIndex].style.display = 'none';
+                   slides[currentIndex + 1].style.display = 'block';
+               } else {
+                   slides[currentIndex].style.display = 'none';
+                   slides[0].style.display = 'block';
+               }
+           }
+           function editCard(button) {
+               console.log("editCard function called");
+               const card = button.closest(".card");
+               if (!card) {
+                   console.log("Card not found"); // Debugging log
+                   return;
+               }
+          
+               const cardId = card.getAttribute("data-id");
+               const title = card.querySelector("h3").innerText;
+               const description = card.querySelector("p").innerText;
+               const imageElements = card.querySelectorAll(".slide"); // Select all images
+          
+               console.log("Card ID:", cardId); // Debugging log
+               console.log("Title:", title); // Debugging log
+               console.log("Description:", description); // Debugging log
+               console.log("Images:", imageElements); // Debugging log
+          
+               // Create the edit popup if it doesn't exist
+               let editPopup = document.getElementById("edit-popup-form");
+               if (!editPopup) {
+                   editPopup = document.createElement("div");
+                   editPopup.id = "edit-popup-form";
+                   editPopup.classList.add("popup-form", "hidden");
+                   editPopup.innerHTML = `
+                       <button class="close-popup" onclick="hideEditPopup()">✖</button>
+                       <h3>Edit Activity</h3>
+                       <input type="text" id="edit-title" placeholder="Title">
+                       <textarea id="edit-description" placeholder="Description" rows="5"></textarea>
+                       <input type="file" id="edit-image" placeholder="Select images" multiple>
+                       <button class="submit-popup" onclick="updateCard()">Update</button>
+                   `;
+                   document.body.appendChild(editPopup);
+               }
+          
+               // Create the overlay if it doesn't exist
+               let editOverlay = document.getElementById("edit-popup-overlay");
+               if (!editOverlay) {
+                   editOverlay = document.createElement("div");
+                   editOverlay.id = "edit-popup-overlay";
+                   editOverlay.classList.add("popup-overlay", "hidden");
+                   document.body.appendChild(editOverlay);
+               }
+          
+               // Set the values in the edit form
+               document.getElementById("edit-title").value = title;
+               document.getElementById("edit-description").value = description;
+          
+               // Handle existing images for display
+               const imagePreviewContainer = document.getElementById("image-preview-container");
+               if (!imagePreviewContainer) {
+                   const newContainer = document.createElement("div");
+                   newContainer.id = "image-preview-container";
+                   newContainer.classList.add("image-preview-container");
+                   document.querySelector("#edit-popup-form").insertBefore(newContainer, document.querySelector("#edit-popup-form").querySelector("button.submit-popup"));
+               }
+          
+               // Clear the image preview container
+               imagePreviewContainer.innerHTML = "";
+          
+               // Preview existing images
+               imageElements.forEach((img) => {
+                   const imgElement = document.createElement("img");
+                   imgElement.src = img.src;
+                   imgElement.classList.add("image-preview");
+                   imagePreviewContainer.appendChild(imgElement);
+               });
+          
+               // Store cardId in the edit button for reference
+               document.querySelector(".submit-popup").setAttribute("data-id", cardId);
+          
+               // Show edit popup
+               editPopup.classList.remove("hidden");
+               editOverlay.classList.remove("hidden");
+           }
+          
+           function hideEditPopup() {
+               document.getElementById("edit-popup-form").classList.add("hidden");
+               document.getElementById("edit-popup-overlay").classList.add("hidden");
+           }
+          
+           async function updateCard() {
+               const cardId = document.querySelector(".submit-popup").getAttribute("data-id");
+               const updatedTitle = document.getElementById("edit-title").value;
+               const updatedDescription = document.getElementById("edit-description").value;
+               const updatedImages = document.getElementById("edit-image").files; // Get multiple files
+          
+               if (!updatedTitle || !updatedDescription) {
+                   alert("Please fill all fields.");
+                   return;
+               }
+          
+               const formData = new FormData();
+               formData.append("activity_name", updatedTitle); // Backend expects 'activity_name'
+               formData.append("activity_description", updatedDescription); // Backend expects 'activity_description'
+          
+               // Append multiple images with the correct key
+               for (let i = 0; i < updatedImages.length; i++) {
+                   formData.append("activity_image", updatedImages[i]); // Backend expects 'activity_image'
+               }
+          
+               try {
+                   const response = await fetch(`/user_activity/${cardId}`, {
+                       method: "PUT",
+                       body: formData,
+                   });
+          
+                   if (response.ok) {
+                       const responseData = await response.json();
+          
+                       // Add a slight delay to ensure the images are available on the server
+                       setTimeout(() => {
+                           // Check if the card exists
+                           const card = document.querySelector(`.card[data-id='${cardId}']`);
+                           if (!card) {
+                               console.error(`Card with ID ${cardId} not found.`);
+                               return;
+                           }
+          
+                           // Update the title and description
+                           card.querySelector("h3").innerText = updatedTitle;
+                           card.querySelector("p").innerText = updatedDescription;
+          
+                           // Update the images
+                           const imageContainer = card.querySelector(".image-container");
+                           if (!imageContainer) {
+                               console.error("Image container not found.");
+                               return;
+                           }
+          
+                           // Clear existing images
+                           imageContainer.innerHTML = ""; // Clear all child elements
+          
+                           // Append new images
+                           if (responseData.activity.images && responseData.activity.images.length > 0) {
+                               responseData.activity.images.forEach((imageUrl, index) => {
+                                   const imgElement = document.createElement("img");
+                                   imgElement.src = imageUrl;
+                                   imgElement.classList.add("slide");
+                                   imgElement.style.display = index === 0 ? "block" : "none"; // Show the first image
+                                   imageContainer.appendChild(imgElement);
+                               });
+          
+                               // Add navigation buttons if there are multiple images
+                               if (responseData.activity.images.length > 1) {
+                                   const prevButton = document.createElement("button");
+                                   prevButton.classList.add("prev-btn");
+                                   prevButton.innerHTML = "&#10094;";
+                                   prevButton.onclick = () => prevSlide(card);
+          
+                                   const nextButton = document.createElement("button");
+                                   nextButton.classList.add("next-btn");
+                                   nextButton.innerHTML = "&#10095;";
+                                   nextButton.onclick = () => nextSlide(card);
+          
+                                   imageContainer.appendChild(prevButton);
+                                   imageContainer.appendChild(nextButton);
+                               }
+                           } else {
+                               // If no images are available, show a placeholder
+                               imageContainer.innerHTML = "<p>No Image Available</p>";
+                           }
+          
+                           // Close the edit popup
+                           hideEditPopup();
+                       }, 500); // Delay of 500ms
+                   } else {
+                       const errorData = await response.json();
+                       console.error("Error response:", errorData);
+                       alert("Failed to update activity.");
+                   }
+               } catch (error) {
+                   console.error("Error updating activity:", error);
+                   alert("An error occurred.");
+               }
+           }
+          
+       </script>
+  
+   </body>
+   </html>

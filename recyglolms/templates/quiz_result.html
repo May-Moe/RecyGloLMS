@@ -56,7 +56,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+                <img src="/static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('main.user_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -70,7 +70,8 @@
         </nav>
         <div class="container">
             <!-- <a href="{{ url_for('quiz.start_quiz', quizid=user_quiz_results[0].quizid) }}" class="button">Start Quiz Again</a> -->
-            <h2 class="quiz-header"><a href="{{ url_for('quiz.start_quiz', quizid=user_quiz_results[0].quizid) }}" class="back-icon" style="font-size: 20px; color: black; margin-right: 10px;"><i class="fa-solid fa-angle-left"></i></a>
+            <h2 class="header">
+                <a href="{{ url_for('quiz.start_quiz', quizid=user_quiz_results[0].quizid) }}" class="back-icon" style="font-size: 20px; color: white; margin-right: 10px;"><i class="fa-solid fa-angle-left"></i></a>
                 Quiz Result</h2>
             <h4 style="margin: 20px 0px;">Your Quiz Attempts</h4>
             <ul class="quiz-attempts">

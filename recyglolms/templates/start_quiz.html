@@ -6,6 +6,53 @@
     <link rel="stylesheet" href="../static/CSS/start_quiz.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Start Quiz</title>
+</head>
+<body>
+    <div class="container">
+        <div class="quiz-header">
+            <h2>{{ quiz.title }}</h2>
+        </div>
+
+        <div id="quiz-instruction">
+            <p><strong>Instructions:</strong></p>
+            <ul>
+                <li>Once you start the quiz, the <strong>timer will begin</strong> and cannot be paused.</li>
+                <li>You have <strong>{{ quiz.time_limit }} minutes</strong> to complete the quiz.</li>
+                <li>Do not switch tabs, minimize the window, or refresh the page.</li>
+                <li><strong>No screenshots allowed.</strong></li>
+                <li>Good luck!</li>
+            </ul>
+        </div>
+
+        <!-- Start Quiz Button -->
+        <button id="start-quiz-btn" class="start-quiz-btn" onclick="startQuiz()">Start Quiz</button>
+
+        <!-- Timer (Hidden Initially) -->
+        <div id="timer" style="display: none; font-size: 15px; color: red; margin-top: 10px;"></div>
+
+        <!-- Quiz Content (Hidden Initially) -->
+        <div id="quiz-content" style="display: none;">
+            <form method="POST" action="{{ url_for('quiz.submit_quiz', quizid=quiz.quizid) }}">
+                {% for question in quiz.questions %}
+                <div class="quiz-body">
+                    <div class="question">
+                        <h5>{{ loop.index }}. {{ question.text }}</h5>
+                    </div>
+                    {% for answer in question.answers %}
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="question_{{ question.questionid }}" value="{{ answer.answerid }}" required>
+                        <label class="form-check-label">{{ answer.text }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+                <hr>
+                {% endfor %}
+                <div class="quiz-footer">
+                    <button type="submit" class="finish-btn">Finish Attempt</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script>
         let timer;
         let remainingTime = {{ quiz.time_limit * 60 }}; // Convert minutes to seconds
@@ -39,52 +86,5 @@
             }, 1000);
         }
     </script>
-</head>
-<body>
-    <div class="container">
-        <div class="quiz-header">
-            <h2>{{ quiz.title }}</h2>
-        </div>
-
-        <div id="quiz-instruction">
-            <p><strong>Instructions:</strong></p>
-            <ul>
-                <li>Once you start the quiz, the <strong>timer will begin</strong> and cannot be paused.</li>
-                <li>You have <strong>{{ quiz.time_limit }} minutes</strong> to complete the quiz.</li>
-                <li>Do not switch tabs, minimize the window, or refresh the page.</li>
-                <li><strong>No screenshots allowed.</strong></li>
-                <li>Good luck!</li>
-            </ul>
-        </div>
-
-        <!-- Start Quiz Button -->
-        <button id="start-quiz-btn" class="start-quiz-btn" onclick="startQuiz()">Start Quiz</button>
-
-        <!-- Timer (Hidden Initially) -->
-        <div id="timer" style="display: none; font-size: 20px; color: red;"></div>
-
-        <!-- Quiz Content (Hidden Initially) -->
-        <div id="quiz-content" style="display: none;">
-            <form method="POST" action="{{ url_for('quiz.submit_quiz', quizid=quiz.quizid) }}">
-                {% for question in quiz.questions %}
-                <div class="quiz-body">
-                    <div class="question">
-                        <h5>{{ loop.index }}. {{ question.text }}</h5>
-                    </div>
-                    {% for answer in question.answers %}
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="question_{{ question.questionid }}" value="{{ answer.answerid }}" required>
-                        <label class="form-check-label">{{ answer.text }}</label>
-                    </div>
-                    {% endfor %}
-                </div>
-                <hr>
-                {% endfor %}
-                <div class="quiz-footer">
-                    <button type="submit" class="btn">Finish Attempt</button>
-                </div>
-            </form>
-        </div>
-    </div>
 </body>
 </html>

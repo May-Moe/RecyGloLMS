@@ -21,24 +21,30 @@ body {
     box-sizing: border-box;
 }
 
-h1 {
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 25px;
-}
-
+/* HEADER */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    background: #0A1931;
+    padding: 20px 20px;
+    border-radius: 8px;
+    color: white;
 }
 
+/* HEADER TITLE */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* HEADER ACTIONS */    
 .header-actions {
     display: flex;
     align-items: center;
-    margin-left: auto;
+    gap: 10px;
 }
+
 
 #searchBar {
     padding: 10px;
@@ -59,10 +65,10 @@ h1 {
 #addUserButton {
     display: flex;
     align-items: center;
-    padding: 10px 20px;
+    padding: 15px 20px;
     font-size: 13px;
     color: #fff;
-    background-color: #16a159;
+    background-color: #FF6699;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -74,7 +80,7 @@ h1 {
 }
 
 #addUserButton:hover {
-    background-color: #16a159;
+    background-color: #fc3f7e;
 }
 
 #addUserLink {
@@ -116,34 +122,11 @@ th {
     padding: 5px 10px;
     border: none;
     border-radius: 3px;
-    background-color: #007bff;
+    background-color: #FF6699;
     color: #fff;
     cursor: pointer;
 }
 
-.pagination {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
-
-.pagination button {
-    margin: 0 5px;
-    padding: 6px 17px;
-    border: 1px solid #9f9f9f;
-    border-radius: 3px;
-    background-color: white;
-    color: #9f9f9f;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 5px;
-}
-
-.pagination button:hover {
-    background-color: #16a159;
-    border-radius: 5px;
-    color: white;
-}
 
 .editAction, .deleteAction {
     display: inline-flex;
@@ -158,14 +141,10 @@ th {
 }
 
 .editAction {
-    color: #007bff;
+    color: #FF6699;
 }
 
-.deleteAction {
-    color: #dc3545;
-}
-
-.editAction i, .deleteAction i {
+.editAction i{
     margin-right: auto;
 }
 

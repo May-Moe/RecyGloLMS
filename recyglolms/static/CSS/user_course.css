@@ -26,15 +26,64 @@ h4, p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    color: #16a159;
-    margin-bottom: 10px;
+    background: #0A1931;
+    padding: 30px 20px;
+    border-radius: 8px;
+    color: white;
+    gap: 20px; /* Adds space between items */
 }
 
+/* Ensure the title stays left-aligned */
+.header h2 {
+    margin: 0;
+    font-size: 22px;
+    flex-grow: 1; /* Pushes other elements to the right */
+    text-align: left; /* Explicitly left-align text */
+}
+
+
+/* HEADER TITLE */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* HEADER ACTIONS */    
 .header-actions {
     display: flex;
     align-items: center;
-    margin-left: auto;
+    gap: 10px;
+}
+
+/* SEARCH BAR */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #FF6699;
+    transition: 0.3s;
+}
+
+.search-container:focus-within {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+}
+
+.search-icon {
+    color: #FF6699;
+    font-size: 16px;
+}
+
+#searchBar {
+    width: 200px;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
 }
 
 .container {
@@ -65,18 +114,22 @@ h4, p {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px;
     justify-content: left;
-    padding: 20px 0;
+    background-color: #F5F5F5;
+    padding: 10px;
+    border-radius: 12px;
 }
 
 .course-item {
     background: #fff;
-    overflow: hidden;
-    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
+    overflow: hidden;
 }
 
 .course-item:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .course_link {
@@ -97,7 +150,7 @@ h4, p {
 }
 
 .course-content {
-    padding: 6px 0;
+    padding: 12px;
 }
 
 .course-title {
@@ -110,7 +163,7 @@ h4, p {
 .course-details {
     font-size: 14px;
     color: #666;
-    margin-top: 0;
+    margin-top: 5px;
     text-align: left;
 }
 
@@ -124,44 +177,42 @@ h4, p {
     height: 40vh;
 }
 
-.filters {
+
+/* Filter Form */
+#filterForm {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
 }
 
-/* Style the search bar */
-#searchBar {
-    width: 200px;
-    padding: 10px;
-    border: 1px solid #16a159;
-    border-radius: 10px;
-    outline: none;
-    transition: 0.3s;
-    font-size: 14px;
-    background: #f8f9fa;
-    margin-left: 10px;
-}
-
-#searchBar:focus {
-    border-color: #2c3e50;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-}
-
-/* Style the filter dropdown */
+/* Select Dropdown */
 .filter-select {
-    padding: 10px;
-    border: 1px solid #16a159;
-    border-radius: 10px;
+    padding: 13px 20px;
     font-size: 14px;
-    background: white;
+    border: 1px solid #FF6699;
+    border-radius: 6px;
+    background-color: white;
+    color: #333;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease-in-out;
+
 }
 
-.filter-select:hover, .filter-select:focus {
-    border-color: #2c3e50;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+.filter-select:focus {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+    outline: none;
+}
+
+.filter-select option {
+    padding: 10px;
+}
+
+/* Add Hover Effect */
+.filter-select:hover {
+    border-color: #e65c85;
 }
 
 /* Dropdown hidden by default */
@@ -186,6 +237,7 @@ h4, p {
 
 .assessment-item:hover {
     transform: translateY(-3px);
+    background-color: #FF6699;
 }
 
 .assessment-title {
@@ -201,16 +253,17 @@ h4, p {
 /* Add some spacing for header and assessment dropdown */
 .assessment-header {
     cursor: pointer;
-    padding: 10px 15px;
-    background-color: #16a159;
+    padding: 15px 15px;
+    background-color: #FF6699;
     color: white;
     border-radius: 5px;
     font-size: 18px;
     transition: background-color 0.3s ease;
+    margin-top: 5px;
 }
 
 .assessment-header:hover {
-    background-color: #138a4b;
+    background-color: #fa3878;
 }
 
 /* Media Query for Mobile */
