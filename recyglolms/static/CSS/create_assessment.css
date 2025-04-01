@@ -30,7 +30,7 @@ body {
 h1 {
     /* text-align: center; */
     font-size: 24px;
-    color: #16a159;
+    color: #FF6699;
     margin-left: 20px;
 }
 
@@ -77,7 +77,7 @@ textarea {
 }
 
 .add_quiz:hover {
-    background: #16a159;
+    background: #FF6699;
 }
 
 .button-container {
@@ -89,7 +89,7 @@ textarea {
 /* Style the Create Quiz button */
 .create_quiz {
     padding: 10px 20px;
-    background: #16a159;
+    background: #0A1931;
     color: white;
     border: none;
     border-radius: 5px;
@@ -100,7 +100,7 @@ textarea {
 
 /* Hover Effect */
 .create_quiz:hover {
-    background: #16a159;
+    background: #1d3965;
 }
 
 /* .create_quiz {
@@ -139,7 +139,7 @@ textarea {
 .added-question {
     background: #e8f5e9;
     padding: 10px;
-    border-left: 5px solid #16a159;
+    border-left: 5px solid #0A1931;
     margin-bottom: 10px;
 }
 
@@ -166,7 +166,7 @@ textarea {
 }
 
 .done-btn{
-    background-color: #16a159;
+    background-color: #0A1931;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -175,7 +175,7 @@ textarea {
 }
 
 .done-btn:hover {
-    background-color: #055e30;
+    background-color: #1e375e;
 }
 
 .remove-btn{

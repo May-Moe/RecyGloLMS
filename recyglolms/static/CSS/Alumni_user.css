@@ -167,6 +167,7 @@ span {
     background: white;
     cursor: pointer;
     transition: 0.3s;
+    width: 100%;
 }
 
 .filter-select:hover, .filter-select:focus {

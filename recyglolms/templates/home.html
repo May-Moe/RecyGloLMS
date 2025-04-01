@@ -139,40 +139,38 @@
             </div>
             <!-- first row of dashboard end -->
 
-            <!-- third row start -->
-        <div class="chart3">
-            <!-- third row first card -->
-            <div class="card3">
-                <div class="card3-title">Upcoming Courses</div>
-                <div class="card3-value">
-                    <table class="courses-table">
-                        <thead>
-                          <tr>
+            <!-- Third row start -->
+<div class="chart3">
+    <!-- Third row first card -->
+    <div class="card3">
+        <div class="card3-title">Upcoming Courses</div>
+        <div class="card3-value">
+            <!-- Scrollable wrapper -->
+            <div class="table-container">
+                <table class="courses-table">
+                    <thead>
+                        <tr>
                             <th>Course</th>
                             <th>Description</th>
                             <th>Date</th>
-                          </tr>
-                        </thead>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {% for course in courses %}
-                        <tbody>
-                          <tr>
+                        <tr>
                             <td> {{ course.name }} </td>
                             <td> {{ course.description }} </td>
                             <td> {{ course.created_date }}</td>
-                          </tr>
-                        </tbody>
+                        </tr>
                         {% endfor %}
-                      </table>
-                </div>
-
-                <!-- <div class="view-all">
-                    <a href="Courses.html">View All Feedback <i class="fas fa-arrow-right"></i></a>
-                  </div> -->
-                  <a href="{{ url_for('main.learning') }}" class="view-courses">view all courses</a>
+                    </tbody>
+                </table>
             </div>
-            <!-- third row first card end -->
+        </div>
+        <a href="{{ url_for('main.learning') }}" class="view-courses">view all courses</a>
     </div>
-         <!-- third row end -->
+</div>
+
 
             <!-- second row of dashboard -->
             <div class="course_header">

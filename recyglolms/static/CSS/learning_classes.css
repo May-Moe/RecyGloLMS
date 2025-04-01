@@ -189,10 +189,10 @@ h1 {
 
 /* Select Dropdown */
 .filter-select {
-    padding: 13px 20px;
+    padding: 13px 30px;
     font-size: 14px;
     border: 1px solid #FF6699;
-    border-radius: 6px;
+    border-radius: 10px;
     background-color: white;
     color: #333;
     cursor: pointer;
@@ -216,16 +216,36 @@ h1 {
 }
 
 
+/* RESPONSIVE DESIGN */
+@media screen and (max-width: 1024px) {
+    .container {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 30px;
+    }
+
+    .header {
+        padding: 15px;
+    }
+
+    .search-container {
+        width: 100%;
+    }
+
+    .class-container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
 
 @media screen and (max-width: 768px) {
     .container {
-        width: 90%;
+        width: 95%;
         margin-left: auto;
         margin-right: auto;
     }
 
     .header {
-        padding: 10px;
         flex-direction: column;
         align-items: center;
         text-align: center;
@@ -245,6 +265,34 @@ h1 {
         width: 100%;
     }
 
+    .class-container {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        padding: 10px;
+    }
+
+    .class-card {
+        border-radius: 8px;
+    }
+
+    .class-image {
+        height: 160px;
+    }
 }
 
+@media screen and (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
 
+    .header {
+        padding: 10px;
+    }
+
+    .class-container {
+        grid-template-columns: 1fr;
+    }
+
+    .class-image {
+        height: 140px;
+    }
+}

@@ -24,7 +24,7 @@ body {
 h2 {
     text-align: left;
     margin-bottom: 20px;
-    color: #333;
+    color: #FF6699;
 }
 
 .form-group {
@@ -53,9 +53,8 @@ input[type="text"], input[type="email"], input[type="password"], textarea, selec
 
 .submit-button {
     padding: 8px 20px;
-    background-color: white;
-    border: 1px solid #9f9f9f;
-    color: #9f9f9f;
+    background-color: #0A1931;
+    color: white;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -64,26 +63,24 @@ input[type="text"], input[type="email"], input[type="password"], textarea, selec
 }
 
 .submit-button:hover {
-    background-color: #dee5e1;
+    background-color: #2b4b7f;
     color: #9f9f9f;
 }
 
 .cancel-button:hover {
-    background-color: #dee5e1;
+    background-color: #2b4b7f;
     color: #9f9f9f;
 }
 
 .cancel-button {
     padding: 8px 20px;
-    background-color: white;
-    border: 1px solid #9f9f9f;
-    color: #9f9f9f;
+    background-color: #0A1931;
+    color: white;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     min-width: 70px; /* Ensure buttons have the same size */
     text-align: center;
-    margin-left: 10px;
 }
 
 .cancel-button:hover {

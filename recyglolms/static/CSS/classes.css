@@ -75,7 +75,7 @@ body {
 #addUserButton {
     display: flex;
     align-items: center;
-    padding: 14px 20px;
+    padding: 14px 40px;
     font-size: 14px;
     color: white;
     background-color: #FF6699;
@@ -215,4 +215,3 @@ body {
 }
 
 
-   

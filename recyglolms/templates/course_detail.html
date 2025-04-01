@@ -78,14 +78,14 @@
             {% for module_data in data.modules %}
             <div class="dropdown_course">
                 <button class="dropdown-toggle-module" onclick="toggleDropdown('module{{ module_data.module.moduleid }}')">
-                {{ module_data.module.name }}
+                {{ module_data.module.name }}<i class="fas fa-chevron-down icon" style="margin-left:10px; font-size: 12px;"></i>
                 </button>
             <div id="module{{ module_data.module.moduleid }}" class="dropdown-content-module">
             <div class="module-dropdown">
                 {% if module_data.videos %}
                     {% for video in module_data.videos %}
                         <button class="dropdown-toggle-video" onclick="toggleDropdown('video{{ video.videoid }}')">
-                            {{ video.title }}
+                            {{ video.title }}<i class="fas fa-chevron-down icon" style="margin-left:10px; font-size: 12px;"></i>
                         </button>
                         <div id="video{{ video.videoid }}" class="dropdown-content-video">
                             <div class="tab_section">
@@ -108,9 +108,6 @@
                                         
                                     </div>
                                     <p>Duration: {{ video.duration // 60 }} min {{ video.duration % 60 }} sec</p>
-                                        <button class="complete" onclick="markComplete({{ video.videoid }})">
-                                            Mark as Complete
-                                        </button>
                                 </div>
                             </div>
                         </div>

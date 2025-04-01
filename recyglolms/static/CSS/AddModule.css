@@ -12,7 +12,7 @@ body {
     max-width: 600px; /* Limit the maximum width of the form */
     margin: 10px auto;
     margin-left: 600px; /* Offset for sidebar */
-    margin-top: 70px; /* Adjust for fixed navbar */
+    margin-top: 80px; /* Adjust for fixed navbar */
     margin-right: 70px;
     background-color: #fff;
     padding: 35px;
@@ -24,7 +24,7 @@ body {
 h2 {
     text-align: left;
     margin-bottom: 20px;
-    color: #333;
+    color: #FF6699;
 }
 
 .form-group {
@@ -66,23 +66,6 @@ input[type="file"] {
     color: #333;
 }
 
-.view-current-button {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #16a159;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.view-current-button:hover {
-    background-color: #12864a;
-    color: white;
-}
-
 .buttons {
     display: flex;
     justify-content: flex-end; /* Align buttons to the right */
@@ -92,9 +75,8 @@ input[type="file"] {
 
 .submit-button {
     padding: 8px 20px;
-    background-color: white;
-    border: 1px solid #9f9f9f;
-    color: #9f9f9f;
+    background-color: #0A1931;
+    color: white;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -103,15 +85,14 @@ input[type="file"] {
 }
 
 .submit-button:hover {
-    background-color: #dee5e1;
+    background-color: #2b4b7f;
     color: #9f9f9f;
 }
 
 .cancel-button {
     padding: 8px 20px;
-    background-color: white;
-    border: 1px solid #9f9f9f;
-    color: #9f9f9f;
+    background-color: #0A1931;
+    color: white;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -121,7 +102,7 @@ input[type="file"] {
 }
 
 .cancel-button:hover {
-    background-color: #dee5e1;
+    background-color: #213b65;
     color: #9f9f9f;
 }
 

@@ -238,6 +238,7 @@ h4, p {
 .assessment-item:hover {
     transform: translateY(-3px);
     background-color: #FF6699;
+    color: white;
 }
 
 .assessment-title {
@@ -266,22 +267,64 @@ h4, p {
     background-color: #fa3878;
 }
 
-/* Media Query for Mobile */
-@media screen and (max-width: 768px) {
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
     .container {
-        width: 90%; 
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
         margin-left: auto;
         margin-right: auto;
     }
 
-    .filter-select {
-        width: calc(100% - 130px); /* Adjust width based on button size */
-        margin-right: 0;
+    .header {
+        padding: 10px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
 
-    /* Dropdown Button Padding for Small Screens */
-    .dropdown-btn {
-        font-size: 14px;
-        padding: 5px 10px;
+
+    .search-container {
+        width: 100%;
+        justify-content: center;
+    }
+
+    #searchBar {
+        width: 100%;
+    }
+
+    .filter-select {
+        padding: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+
+    .course-container {
+        grid-template-columns: 1fr;
     }
 }

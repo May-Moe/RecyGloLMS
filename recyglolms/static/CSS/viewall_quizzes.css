@@ -278,21 +278,25 @@ th {
     }
 
     .header {
+        padding: 10px;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
     }
 
     .header-actions {
-        margin-top: 10px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-container {
         width: 100%;
-        justify-content: space-between;
+        justify-content: center;
     }
 
     #searchBar {
-        width: calc(100% - 130px);
-        margin-right: 0;
+        width: 100%;
     }
-
     #addUserButton {
         width: 120px;
         justify-content: center;
@@ -310,16 +314,26 @@ th {
         margin-right: auto;
     }
 
+    .header {
+        padding: 10px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
     .header-actions {
         flex-direction: column;
-        align-items: stretch;
+        gap: 10px;
+    }
+
+    .search-container {
+        width: 100%;
+        justify-content: center;
     }
 
     #searchBar {
         width: 100%;
-        margin-bottom: 10px;
     }
-
     #addUserButton {
         width: 100%;
     }

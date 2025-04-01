@@ -167,18 +167,37 @@ body {
 }
 
 .chart3 {
-  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  display: block;
   margin-top: 10px;
-  gap: 20px;
-  margin-top: 20px;
-  animation: myAnimation 2s ease-in-out infinite;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .chart3:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
 }
+
+/* Scrollable wrapper for the table */
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Make table responsive */
+.courses-table {
+  min-width: 600px; /* Ensures table doesn’t shrink too much */
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Prevent text from wrapping */
+.courses-table th, 
+.courses-table td {
+  white-space: nowrap;
+}
+
 
 .card3 {
   display: flex;
@@ -219,6 +238,7 @@ body {
   text-decoration: none;
   color: var(--accent);
   text-align: right;
+  font-size: 13px;
 }
 
 .view-courses:hover {
@@ -501,5 +521,14 @@ h3 {
     width: 90%; 
     margin-left: auto;
     margin-right: auto;
+  } 
+
+  .table-container {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .courses-table {
+    display: block;
   }
 }
