@@ -130,7 +130,9 @@ def admin_gradebook():
                 "is_access_granted": is_access_granted  # Get access status from UserClass model
             })
 
-    return render_template('admin_grading.html', all_grades=all_grades)
+    return render_template('admin_grading.html', all_grades=all_grades,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 #Grading scheme
 def get_grade(final_score):
@@ -198,7 +200,10 @@ def user_gradebook():
     if not user_grades:
         user_grades = [{"message": "No grade available yet"}]
 
-    return render_template('user_grade.html', user_grades=user_grades)
+    return render_template('user_grade.html', user_grades=user_grades,current_user_name=current_user.name,
+                            current_user_email=current_user.email,
+                             current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
+                            )
 
 @grading_bp.route('/admin/grant_certificate_access', methods=['POST'])
 @login_required

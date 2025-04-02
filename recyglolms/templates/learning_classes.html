@@ -45,7 +45,7 @@
                          <div class="profile-image-container">
                             <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
                         </div>
-                        <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_username }}</span></h5>
+                        <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_user_name }}</span></h5>
                         <p id="profile-email">{{ current_user_email }}</p>
                         <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
@@ -89,7 +89,7 @@
                         <div class="class-card">
                             <a href="{{ url_for('main.learning_class_courses', classid=class_.classid) }}" class="class-link">
                                 <!-- <img src="{{ class_.image_url }}" alt="{{ class_.name }}" class="class-image"> -->
-                                 <img src="static/img/2.jpg" alt="" class="class-image">
+                                 <img src="static/img/online.avif" alt="" class="class-image">
                                 <div class="class-content">
                                     <h3 class="class-title">{{ class_.name }}</h3>
                                     <p class="class-des">{{class_.description}}</p>

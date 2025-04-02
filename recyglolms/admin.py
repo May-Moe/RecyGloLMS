@@ -159,7 +159,9 @@ def add_user():
             flash("User added successfully!", "success")
             return redirect(url_for('admin.view_users'))
 
-    return render_template('adduser.html')
+    return render_template('adduser.html',
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 #Logs tracking
 @admin_bp.route('/logs')
@@ -295,7 +297,9 @@ def edit_user(user_id):
 
         return redirect(url_for('admin.view_users'))
 
-    return render_template('edituser.html', user=user)
+    return render_template('edituser.html', user=user,
+                            current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 
@@ -440,7 +444,9 @@ def add_module():
             flash("Module added successfully!", "success")
             return redirect(url_for('admin.manage_course'))
 
-    return render_template('add_modules.html', courses=courses)
+    return render_template('add_modules.html', courses=courses,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 @admin_bp.route('/add_video', methods=['GET', 'POST'])
 @login_required
@@ -511,7 +517,9 @@ def add_video():
         courses=courses, 
         modules=modules, 
         selected_course_id=selected_course_id, 
-        selected_module_id=selected_module_id
+        selected_module_id=selected_module_id,
+        current_user_name = current_user.name,
+        current_user_email = current_user.email
     )
     
 # Route to delete a course and its associated modules and videos
@@ -702,7 +710,9 @@ def edit_module(module_id):
             flash("Module updated successfully!", "success")
             return redirect(url_for('admin.manage_course'))
 
-    return render_template('edit_module.html', module=module, courses=courses)
+    return render_template('edit_module.html', module=module, courses=courses,
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 # Route to get modules for a selected course (used in AJAX request)
@@ -749,8 +759,14 @@ def edit_video(video_id):
         # Update the modules list when the course changes
         modules = Module.query.filter_by(courseid=selected_course_id).all()
 
-    return render_template('edit_video.html', video=video, courses=courses, modules=modules, 
-                           selected_course_id=selected_course_id, selected_module_id=selected_module_id)
+    return render_template('edit_video.html', 
+                           video=video,
+                             courses=courses,
+                               modules=modules, 
+                           selected_course_id=selected_course_id,
+                             selected_module_id=selected_module_id,
+                             current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 
 # Admin dashboard to view all user progress
@@ -1039,7 +1055,9 @@ def add_classes():
         flash('Class created successfully!', 'success')
         return redirect(url_for('manage_classes'))
 
-    return render_template('add_classes.html')
+    return render_template('add_classes.html',
+                           current_user_name = current_user.name,
+                            current_user_email = current_user.email)
 
 from flask import request
 

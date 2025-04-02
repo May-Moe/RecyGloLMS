@@ -178,7 +178,7 @@ def delete_activity(activity_id):
 
 
 #Edit user activity
-@app.route('/user_activity/<int:activity_id>', methods=['PUT'])
+@main_bp.route('/user_activity/<int:activity_id>', methods=['PUT'])
 @login_required
 def update_user_activity(activity_id):
     activity = Activity.query.get_or_404(activity_id)
@@ -366,13 +366,20 @@ def update_video_progress(videoid):
 @main_bp.route('/user/progress', methods=['GET'])
 @login_required
 def user_progress():
-    courses = Course.query.all()
+    # Get the user's assigned class IDs
+    user_classes = [uc.classid for uc in UserClass.query.filter_by(userid=current_user.userid).all()]
+    
+    # Get courses linked to those classes
+    courses = Course.query.join(CourseClass).filter(CourseClass.classid.in_(user_classes)).all()
     progress_data = {
         course.name: course.calculate_course_progress(current_user.userid) for course in courses
     }
-    return render_template('each_user_progress.html', user=current_user, progress_data=progress_data, courses=courses
+    return render_template('each_user_progress.html', user=current_user, 
+                           progress_data=progress_data, courses=courses
                            ,current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                            current_user_email = current_user.email,
+                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
+)
 
 
 @main_bp.route('/user_home')
@@ -382,12 +389,9 @@ def user_home():
     announcements = Announcement.query.order_by(Announcement.date.desc()).limit(2).all()
     return render_template('user_home.html', announcements=announcements,
                            current_user_name = current_user.name,
-                            current_user_email = current_user.email)
-
-
-
-
-
+                            current_user_email = current_user.email,
+                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
+)
 
 @app.route('/user_account', methods=['GET'])
 @login_required
