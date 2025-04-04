@@ -255,8 +255,8 @@ h4, p {
 .assessment-header {
     cursor: pointer;
     padding: 15px 15px;
-    background-color: #FF6699;
-    color: white;
+    /* background-color: #FF6699; */
+    color: #FF6699;
     border-radius: 5px;
     font-size: 18px;
     transition: background-color 0.3s ease;
@@ -265,6 +265,7 @@ h4, p {
 
 .assessment-header:hover {
     background-color: #fa3878;
+    color: white;
 }
 
 /* RESPONSIVE DESIGN */

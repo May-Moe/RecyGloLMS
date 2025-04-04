@@ -102,9 +102,9 @@
           {% for grade in user_grades %}
           <tr>
             <td>{{ grade.class_name }}</td>
-            <td>{{ grade.quiz_score }}</td>
-            <td>{{ grade.assessment_score }}</td>
-            <td>{{ grade.final_score }}</td>
+            <td>{{ grade.quiz_score | float | round(2) }}</td>
+            <td>{{ grade.assessment_score | float | round(2) }}</td>
+            <td>{{ grade.final_score | float | round(2) }}</td>
             <td>{{ grade.grade }}</td>
             <td>
                 {% if grade.is_access_granted == 1 %}

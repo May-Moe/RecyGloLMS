@@ -70,21 +70,23 @@
         </nav>
         <div class="container">
             <div class="cards-header">
-                <a href="{{ url_for('main.learning') }}" class="back-icon" style="color: white;"><i class="fa-solid fa-angle-left"></i></a>
+                <a href="{{ url_for('main.learning_class_courses', classid=selected_class.classid) }}" class="back-icon" style="color: white;">
+                    <i class="fa-solid fa-angle-left"></i>
+                </a>
                 <h2 style="margin-bottom: 10px; margin-top: 10px; font-size:35px; color: white">{{ data.course.name }}</h2>
             <p style="margin-bottom: 20px; color: gray;">{{ data.course.description }}</p>
              </div>
             <h3 style="margin-bottom: 10px; margin-top: 0px; font-size: 20px; color: #FF6699;">Modules overview</h3>
             {% for module_data in data.modules %}
             <div class="dropdown_course">
-                <button class="dropdown-toggle-module" onclick="toggleDropdown('module{{ module_data.module.moduleid }}')">
-                {{ module_data.module.name }}<i class="fas fa-chevron-down icon" style="margin-left:10px; font-size: 12px;"></i>
+                <button class="dropdown-toggle-module">
+                    {{ module_data.module.name }}<i class="fas fa-chevron-down icon" style="margin-left:10px; font-size: 12px;"></i>
                 </button>
             <div id="module{{ module_data.module.moduleid }}" class="dropdown-content-module">
             <div class="module-dropdown">
                 {% if module_data.videos %}
                     {% for video in module_data.videos %}
-                        <button class="dropdown-toggle-video" onclick="toggleDropdown('video{{ video.videoid }}')">
+                        <button class="dropdown-toggle-video">
                             {{ video.title }}<i class="fas fa-chevron-down icon" style="margin-left:10px; font-size: 12px;"></i>
                         </button>
                         <div id="video{{ video.videoid }}" class="dropdown-content-video">
@@ -93,13 +95,14 @@
                                     <h3>{{ video.title }}</h3>
                                     <div class="video-container">
                                         <iframe 
+                                            height="315"
+                                            width="560"
                                             id="video{{ video.videoid }}"
                                             src="{{ video.url }}" 
                                             frameborder="0" 
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                             allowfullscreen 
-                                            class="w-100" 
-                                            style="height: 315px;" 
+                                            class="w-100"  
                                             data-video-id="{{ video.videoid }}">
                                         </iframe>    
                                         <div class="video-overlay" onclick="startVideo({{ video.videoid }}, this)">
@@ -132,7 +135,7 @@
 {% endfor %}  <!-- Closing module loop -->
 
 
-<script src="../static/JS/script.js"></script>
+<script src="/static/JS/script.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Hide all dropdowns by default
@@ -142,12 +145,31 @@
         });
     });
 
-    function toggleDropdown(id) {
-        const section = document.getElementById(id);
-        if (section) {
-            section.style.display = section.style.display === "block" ? "none" : "block";
-        }
-    }
+    document.addEventListener("DOMContentLoaded", function() {
+    // Add event listeners to all buttons with the class 'dropdown-toggle-module'
+    document.querySelectorAll('.dropdown-toggle-module').forEach(button => {
+        button.addEventListener('click', function() {
+            const section = this.nextElementSibling; // Get the next sibling (the dropdown content)
+            if (section) {
+                // Toggle the display of the module dropdown content directly
+                section.style.display = (section.style.display === "none" || section.style.display === "") ? "block" : "none";
+            }
+        });
+    });
+
+    // Add event listeners to all buttons with the class 'dropdown-toggle-video'
+    document.querySelectorAll('.dropdown-toggle-video').forEach(button => {
+        button.addEventListener('click', function() {
+            const section = this.nextElementSibling; // Get the next sibling (the dropdown content)
+            if (section) {
+                // Toggle the display of the video dropdown content directly
+                section.style.display = (section.style.display === "none" || section.style.display === "") ? "block" : "none";
+            }
+        });
+    });
+});
+
+
 
     function startVideo(videoId, overlayElement) {
         overlayElement.style.display = 'none';
@@ -184,6 +206,7 @@
         })
         .catch(error => console.error('Error:', error));
     }
+
 </script>
 
     

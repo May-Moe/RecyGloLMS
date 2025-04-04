@@ -34,7 +34,9 @@
                     <div class="form-checkbox">
                         <input type="checkbox" id="show-password">
                         <label for="show-password">Show Password</label><br>
-                        <a href="{{ url_for('auth.forgot_password') }}"><span class="forgot-password" id="forgot-password">Forgot Password?</span></a>
+                        <div class="forgot-password-container">
+                            <a href="{{ url_for('auth.forgot_password') }}" class="forgot-password">Forgot Password?</a>
+                        </div>
                     </div>
                    <button type="submit">Login</button>
                 </form>

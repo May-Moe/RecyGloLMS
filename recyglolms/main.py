@@ -30,7 +30,7 @@ def home():
     user_classes = [uc.classid for uc in UserClass.query.filter_by(userid=current_user.userid).all()]
     
     # Get courses linked to those classes
-    courses = Course.query.join(CourseClass).filter(CourseClass.classid.in_(user_classes)).all()
+    courses = Course.query.join(CourseClass).filter(CourseClass.classid.in_(user_classes)).limit(4).all()
 
     # Compute progress for filtered courses
     progress_data = {
@@ -286,6 +286,9 @@ def course_detail(courseid):
     course = Course.query.get_or_404(courseid)
     modules = Module.query.filter_by(courseid=courseid).all()
 
+     # Fetch the class associated with the course
+    selected_class = Class.query.join(CourseClass).filter(CourseClass.courseid == courseid).first()
+
     # Transform URLs to embeddable format
     for module in modules:
         for video in module.videos:
@@ -309,6 +312,7 @@ def course_detail(courseid):
     }
     return render_template('course_detail.html', 
                            data=data,
+                           selected_class=selected_class,
                            current_user_name = current_user.name,
                             current_user_email = current_user.email,
                             current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)

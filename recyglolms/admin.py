@@ -983,7 +983,15 @@ def manage_classes():
     assigned_courses = {class_.classid: [cc.courseid for cc in class_.courses] for class_ in classes}
     assigned_users = {class_.classid: [uc.userid for uc in class_.users] for class_ in classes}
 
-    return render_template('classes.html', classes=classes, courses=courses, users=users, assigned_courses=assigned_courses, assigned_users=assigned_users)
+    return render_template('classes.html',
+                            classes=classes,
+                            courses=courses, 
+                            users=users, 
+                            assigned_courses=assigned_courses, 
+                            assigned_users=assigned_users,
+                            current_user_name=current_user.name,
+                            current_user_email=current_user.email)
+                            
 
 @app.route('/admin/classes/<int:classid>/assign-courses', methods=['GET', 'POST'])
 @login_required

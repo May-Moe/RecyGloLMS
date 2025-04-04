@@ -129,10 +129,9 @@
                                 <i class="fas fa-search search-icon"></i>
                             </div>
                         <div class="dropdown">
-                            <button id="addUserButton" class="addUserButton"><i class="fas fa-plus"></i> Add</button>
+                            <button id="addUserButton" class="addUserButton"><i class="fas fa-plus" style="margin-right: 10px;"></i> Add</button>
                             <ul id="addCourseDropdown" class="dropdown-menu hidden">
                                 <li><a href="{{ url_for('assessment.create_assessment', classid=selected_class.classid) }}"><i class="fa-solid fa-file-signature icon"></i>Assessment</a></li>
-                                <li><a href="{{ url_for('admin.add_module') }}"><i class="fa-solid fa-file-arrow-up icon"></i>Assignment</a></li>
                             </ul>
                         </div>
                     </div>
@@ -145,8 +144,6 @@
                                 <th>Title</th>
                                 <th>Time Limit</th>
                                 <th>Created By</th>
-                                <th>Start Date</th>
-                                <th>Due Date</th>
                                 <th>Check Answers</th>
                                 <th>Action</th>
                             </tr>
@@ -157,8 +154,6 @@
                                 <td>{{ assessment.title }}</td>
                                 <td>{{ assessment.time_limit }} min</td>
                                 <td>{{ assessment.created_by }}</td>
-                                <td>Mar21</td>
-                                <td>Mar31</td>
                                 <td>
                                     <a href="{{ url_for('assessment.view_attempted_users', assessment_id=assessment.id) }}" style="text-decoration: none; color:#FF6699">
                                         check<i class="fa-solid fa-pen-fancy icon" style="margin-left: 5px; color:#FF6699"></i>

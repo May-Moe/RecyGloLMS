@@ -55,7 +55,7 @@
         </nav>
         <nav class="sidebar">
             <div class="logo" style="text-align: left;">
-                <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+                <img src="../static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
             </div>
             <ul>
                 <li><a href="{{ url_for('admin.admin_home') }}"><i class="fa-solid fa-house icon"></i> Home</a></li>
@@ -73,9 +73,9 @@
                 
                 <div class="dropdown-container-class">
                     <ul>
-                    <li><a href="{{ url_for('manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
-                    <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
-                </ul>
+                        <li><a href="{{ url_for('manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
+                        <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                    </ul>
                 </div>
 
                 <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
@@ -91,12 +91,12 @@
                 
                 <div class="dropdown-container">
                     <ul>
-                    <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> View All Users</a></li>
-                    <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
-                    <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
-                    <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
-                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
-                </ul>
+                        <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> View All Users</a></li>
+                        <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+                        <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                        <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                        <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                    </ul>
                 </div>
 
                 <!-- dropdown quiz management -->
@@ -113,7 +113,7 @@
                         <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
                         <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
                     </ul>
-                </div>               
+                </div>                
                 <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
             </ul>
         </nav>
@@ -278,7 +278,7 @@
     </main>
 </div>
     </div>
-    <script src="static/JS/script.js"></script>
+    <script src="../static/JS/script.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
         const prevButtonCourses = document.getElementById("prevPageCourses");
@@ -364,27 +364,6 @@
         showPage(videoRows, currentPageVideos, prevButtonVideos, nextButtonVideos, pageNumberVideos);
     });
 
-
-    // Dropdown functionality
-    document.addEventListener("DOMContentLoaded", function () {
-        const dropdowns = [
-            { button: ".dropdown-class", container: ".dropdown-container-class" },
-            { button: ".dropdown-user", container: ".dropdown-container" },
-            { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
-        ];
-
-        dropdowns.forEach(({ button, container }) => {
-            const btn = document.querySelector(button);
-            const dropContainer = document.querySelector(container);
-
-            if (btn && dropContainer) {  // Ensure elements exist
-                btn.addEventListener("click", function () {
-                    dropContainer.classList.toggle("active");
-                });
-            }
-        });
-    });
-
     // Search functionality
     document.addEventListener("DOMContentLoaded", function () {
         const searchBar = document.getElementById("searchBar");
@@ -457,25 +436,27 @@
         });
     }
 
-    // Dropdown functionality for other menus (Class, User, Quiz)
-    const dropdowns = [
-        { button: ".dropdown-class", container: ".dropdown-container-class" },
-        { button: ".dropdown-user", container: ".dropdown-container" },
-        { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
-    ];
-
-    dropdowns.forEach(({ button, container }) => {
-        const btn = document.querySelector(button);
-        const dropContainer = document.querySelector(container);
-
-        if (btn && dropContainer) {
-            btn.addEventListener("click", function () {
-                dropContainer.classList.toggle("active");
-            });
-        }
-    });
 });
 
+    // Dropdown functionality
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = [
+            { button: ".dropdown-class", container: ".dropdown-container-class" },
+            { button: ".dropdown-user", container: ".dropdown-container" },
+            { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+        ];
+
+        dropdowns.forEach(({ button, container }) => {
+            const btn = document.querySelector(button);
+            const dropContainer = document.querySelector(container);
+
+            if (btn && dropContainer) {  // Ensure elements exist
+                btn.addEventListener("click", function () {
+                    dropContainer.classList.toggle("active");
+                });
+            }
+        });
+    });
 
     </script>
 </body>

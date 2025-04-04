@@ -48,7 +48,7 @@
                         </div>
                         <h4 class="profile-header">Hello, <span id="user-name">{{ current_user.name }}</span></h4>
                         <p id="profile-email">{{ current_user.email }}</p>
-                        <button id="logout-button">Logout</button>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
                     </div>
                 </div>
             </div>
@@ -127,24 +127,34 @@
             <!-- Activity List -->
             {% if activities %}
             {% for activity in activities %}
-                <div class="post" onclick="openModal(this)">
-                    {% if activity.image %}
-                        {% for img in activity.image %}
-                            <img src="{{ url_for('static', filename='uploads/' + img.activity_image) }}" alt="Activity Image">
-                        {% endfor %}
-                    {% else %}
-                        <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="No Image">
-                    {% endif %}
-                    <div class="post-content">
-                        <div class="post-title">{{ activity.name }}</div>
-                        <div class="post-text">{{ activity.description }}</div>
-                        <div class="post-date">{{ activity.date.strftime('%d/%m/%Y') }}</div>
+            <div class="post" onclick="openModal(this)" 
+            data-images="{% for img in activity.image %}{{ url_for('static', filename='uploads/activities/' + img.activity_image) }},{% endfor %}">
+            
+            {% if activity.image %}
+                {% set total_images = activity.image|length %}
+                {% if total_images > 0 %}
+                    <div class="post-image-container">
+                        <img src="{{ url_for('static', filename='uploads/activities/' + activity.image[0].activity_image) }}" alt="Activity Image" class="post-image">
+                        {% if total_images > 1 %}
+                            <div class="image-overlay">+{{ total_images - 1 }}</div>
+                        {% endif %}
                     </div>
-                </div>
+                {% endif %}
+            {% else %}
+                <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="No Image" class="post-image">
+            {% endif %}
+
+            <div class="post-content">
+                <div class="post-title">{{ activity.name }}</div>
+                <div class="post-text">{{ activity.description }}</div>
+                <div class="post-date">{{ activity.date.strftime('%d/%m/%Y') }}</div>
+            </div>
+        </div>
+            
             {% endfor %}
             {% else %}
-            <div style="text-align: center; font-size: 1.0rem; font-weight: bold; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
-                <p style="margin: 0;">No activities found.</p>
+            <div style="text-align: center; font-size: 1.0rem; padding: 20px; margin-top: 20px; display: flex; justify-content: center; align-items: center; height: 50vh; color: gray;">
+                <p style="margin: 0;">No activities found</p>
             </div>
             {% endif %}
         </div>
@@ -174,62 +184,83 @@
 
     <script>
         let currentImageIndex = 0;
-let imageArray = [];
+        let imageArray = [];
 
-function openModal(postElement) {
-    const title = postElement.querySelector('.post-title').textContent;
-    const text = postElement.querySelector('.post-text').textContent;
-    const date = postElement.querySelector('.post-date').textContent;
-    
-    imageArray = Array.from(postElement.querySelectorAll('img')).map(img => img.src);
-    currentImageIndex = 0;
+        function openModal(postElement) {
+            const title = postElement.querySelector('.post-title').textContent;
+            const text = postElement.querySelector('.post-text').textContent;
+            const date = postElement.querySelector('.post-date').textContent;
+            
+            // Get images from data-images attribute and convert to array
+            const imageData = postElement.getAttribute("data-images");
+            imageArray = imageData.split(',').filter(img => img.trim() !== ""); // Remove empty strings
 
-    document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalText').textContent = text;
-    document.getElementById('modalDate').textContent = date;
+            currentImageIndex = 0;
 
-    if (imageArray.length > 1) {
-        document.querySelector('.prev').style.display = "block";
-        document.querySelector('.next').style.display = "block";
-    } else {
-        document.querySelector('.prev').style.display = "none";
-        document.querySelector('.next').style.display = "none";
-    }
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalText').textContent = text;
+            document.getElementById('modalDate').textContent = date;
 
-    updateModalImage();
+            if (imageArray.length > 1) {
+                document.querySelector('.prev').style.display = "block";
+                document.querySelector('.next').style.display = "block";
+            } else {
+                document.querySelector('.prev').style.display = "none";
+                document.querySelector('.next').style.display = "none";
+            }
 
-    document.getElementById('postModal').style.display = "flex";  
-}
+            updateModalImage();
 
-function updateModalImage(animationDirection = "") {
-    const modalImage = document.getElementById('modalImage');
-    
-    if (animationDirection === "left") {
-        modalImage.style.transform = "translateX(100%)"; // Move image to right before displaying
-    } else if (animationDirection === "right") {
-        modalImage.style.transform = "translateX(-100%)"; // Move image to left before displaying
-    }
+            document.getElementById('postModal').style.display = "flex";  
+        }
 
-    setTimeout(() => {
-        modalImage.src = imageArray[currentImageIndex];
-        modalImage.style.transform = "translateX(0%)"; // Move back to center
-    }, 100); // Delay to make transition smooth
-}
+        function updateModalImage(animationDirection = "") {
+            const modalImage = document.getElementById('modalImage');
+            
+            if (animationDirection === "left") {
+                modalImage.style.transform = "translateX(100%)"; // Move image to right before displaying
+            } else if (animationDirection === "right") {
+                modalImage.style.transform = "translateX(-100%)"; // Move image to left before displaying
+            }
 
-function nextImage() {
-    currentImageIndex = (currentImageIndex + 1) % imageArray.length;
-    updateModalImage("left");
-}
+            setTimeout(() => {
+                modalImage.src = imageArray[currentImageIndex];
+                modalImage.style.transform = "translateX(0%)"; // Move back to center
+            }, 100); // Delay to make transition smooth
+        }
 
-function prevImage() {
-    currentImageIndex = (currentImageIndex - 1 + imageArray.length) % imageArray.length;
-    updateModalImage("right");
-}
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % imageArray.length;
+            updateModalImage("left");
+        }
 
-function closeModal() {
-    document.getElementById('postModal').style.display = "none";
-}
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + imageArray.length) % imageArray.length;
+            updateModalImage("right");
+        }
 
+        function closeModal() {
+            document.getElementById('postModal').style.display = "none";
+        }
+
+    document.addEventListener("DOMContentLoaded", function () {
+            const dropdowns = [
+                { button: ".dropdown-class", container: ".dropdown-container-class" },
+                { button: ".dropdown-user", container: ".dropdown-container" },
+                { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+            ];
+
+            dropdowns.forEach(({ button, container }) => {
+                const btn = document.querySelector(button);
+                const dropContainer = document.querySelector(container);
+
+                if (btn && dropContainer) {  // Ensure elements exist
+                    btn.addEventListener("click", function () {
+                        dropContainer.classList.toggle("active");
+                    });
+                }
+            });
+            });
 
     </script>
 </body>

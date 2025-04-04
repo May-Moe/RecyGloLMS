@@ -121,7 +121,9 @@
         <div class="container">
             <div class="course-container">
                 <div class="header">
-                    <a href="{{ url_for('assessment.view_classes') }}" class="back-icon" style="font-size: 17px; color:white;"><i class="fa-solid fa-angle-left"></i></i></a>
+                    <a href="{{ url_for('assessment.view_assessments', classid=classid) }}" class="back-icon" style="color: white; margin-right: 10px;">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </a>                     
                         <h1>Users Who Attempted the Assessment</h1>
                         <div class="header-actions">
                         <div class="search-container">

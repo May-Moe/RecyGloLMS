@@ -148,8 +148,6 @@ def get_grade(final_score):
     else:
         return 'F'
     
-
-# User page to display grades
 @grading_bp.route('/my-grades', methods=['GET'])
 @login_required
 def user_gradebook():
@@ -174,7 +172,12 @@ def user_gradebook():
         user_class_info = db.session.query(UserClass).filter_by(userid=user_id, classid=user_class.classid).first()
         is_access_granted = user_class_info.is_access_granted if user_class_info else 0  # Default to 0 if not found
 
-        # If either score is 0.0, mark the grade as Pending
+        # Ensure numbers are rounded and properly formatted
+        average_quiz_score = round(average_quiz_score, 2) if average_quiz_score is not None else 0.0
+        assessment_score = round(assessment_score, 2) if assessment_score is not None else 0.0
+        final_score = round(final_score, 2) if final_score is not None else 0.0
+
+        # If assessment score is 0.0, mark the grade as "Pending"
         if assessment_score == 0.0:
             user_grades.append({
                 "class_name": user_class.name,
@@ -200,10 +203,12 @@ def user_gradebook():
     if not user_grades:
         user_grades = [{"message": "No grade available yet"}]
 
-    return render_template('user_grade.html', user_grades=user_grades,current_user_name=current_user.name,
+    return render_template('user_grade.html', user_grades=user_grades, 
+                            current_user_name=current_user.name,
                             current_user_email=current_user.email,
-                             current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
-                            )
+                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
+                          )
+
 
 @grading_bp.route('/admin/grant_certificate_access', methods=['POST'])
 @login_required

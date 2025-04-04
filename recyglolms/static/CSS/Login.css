@@ -145,13 +145,24 @@ body {
     margin-left: 5px;
 }
 
-.forgot-password {
-    margin-left: auto;
-    cursor: pointer;
-    color: #FF6699;
-    text-decoration: underline;
-    font-size: small;
+.forgot-password-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 70%;
+    margin-top: 5px;
 }
+
+.forgot-password {
+    text-decoration: none;
+    color: #FF6699; /* Use your primary color */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
 
 .overlay {
     position: fixed;

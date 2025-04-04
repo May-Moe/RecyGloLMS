@@ -312,6 +312,18 @@ th {
     display: block;
 }
 
+.dropdown-container-class,
+.dropdown-container,
+.dropdown-container-quiz {
+    display: none;
+}
+
+.dropdown-container-class.active,
+.dropdown-container.active,
+.dropdown-container-quiz.active {
+    display: block;
+}
+
 
 /* RESPONSIVE DESIGN */
 @media (max-width: 1024px) {

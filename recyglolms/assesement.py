@@ -36,6 +36,7 @@ def view_classes():
 @assessment_bp.route('/admin/assessments/<int:classid>', methods=['GET'])
 @login_required
 def view_assessments(classid):
+    print(f"Class ID: {classid}")
     if not current_user.role:
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
@@ -44,9 +45,11 @@ def view_assessments(classid):
     assessments = Assessment.query.filter_by(classid=classid).all()
     
     return render_template('viewall_assessment.html', 
-                           assessments=assessments, selected_class=selected_class,
+                           assessments=assessments, 
+                           selected_class=selected_class,
+                           classid=classid,
                            current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                            current_user_email = current_user.email)    
 
 @assessment_bp.route('/admin/assessments/<int:classid>/create', methods=['GET', 'POST'])
 @login_required
@@ -128,6 +131,14 @@ def view_attempted_users(assessment_id):
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
+    # Fetch the class ID related to this assessment
+    assessment = Assessment.query.get(assessment_id)
+    if not assessment:
+        flash("Assessment not found!", "danger")
+        return redirect(url_for('dashboard.admin_dashboard'))  # Redirect to a relevant page
+    
+    classid = assessment.classid  # Assuming Assessment model has a classid field
+
     # Fetch users who attempted the assessment along with their marks
     users = db.session.query(
         User.userid, 
@@ -139,8 +150,13 @@ def view_attempted_users(assessment_id):
     .group_by(User.userid, User.name)\
     .all()
 
-    return render_template('assess_attempt_user.html', users=users, assessment_id=assessment_id,current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+    return render_template('assess_attempt_user.html',
+                            users=users, 
+                            assessment_id=assessment_id,
+                            current_user_name=current_user.name,
+                            current_user_email=current_user.email,
+                            classid=classid)  # Now classid is correctly passed
+
 
 @assessment_bp.route('/delete_assessment/<int:assessment_id>', methods=['POST'])
 @login_required

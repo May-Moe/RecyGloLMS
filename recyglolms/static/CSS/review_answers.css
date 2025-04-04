@@ -10,7 +10,7 @@ body {
 /* HEADER */
 .header {
     display: flex;
-    justify-content: space-between;
+    justify-content: left;
     align-items: center;
     background: #0A1931;
     padding: 20px 20px;
