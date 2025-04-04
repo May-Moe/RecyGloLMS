@@ -19,8 +19,6 @@ def upload_file_to_gcp(file, folder="announcements"):
     blob = bucket.blob(filename)
     blob.upload_from_file(file, content_type=file.content_type)
 
-    # ❌ REMOVE this line because UBLA prevents ACL-based public access
-    # blob.make_public()
 
     # ✅ Construct public URL directly
     file_url = f"https://storage.googleapis.com/{bucket_name}/{filename}"
