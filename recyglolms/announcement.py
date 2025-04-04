@@ -1,21 +1,24 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
 from werkzeug.utils import secure_filename
-from recyglolms.__inti__ import app, db
+from recyglolms import db
 from recyglolms.models import Announcement, Notification, User, ActionLog
 from flask_login import login_required, current_user
 import os
 from datetime import datetime
+from recyglolms.utils import upload_file_to_gcp  #  Import the new function for cloud storage
+from recyglolms.utils import allowed_file
+
 
 # Blueprint for announcements
 announcement_bp = Blueprint('announcement', __name__)
 
 # Configure upload folder and allowed extensions
-UPLOAD_FOLDER = os.path.join(app.root_path, 'static/announcements')
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg','pdf'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# UPLOAD_FOLDER = os.path.join(app.root_path, 'static/announcements')
+# ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg','pdf'}
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+# if not os.path.exists(UPLOAD_FOLDER):
+#     os.makedirs(UPLOAD_FOLDER)
 
 
 def allowed_file(filename):
@@ -75,17 +78,16 @@ def add_announcement():
             flash("Invalid date format. Please use YYYY-MM-DD.", "danger")
             return redirect(request.url)
 
-        # Handle file upload
-        filename = None
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        # ✅ Handle file upload with GCP
+        file_url = None
+        if file:
+            file_url = upload_file_to_gcp(file, folder="announcements")  # Save to GCP storage
 
-        # Create and save new announcement
+        # ✅ Create and save new announcement
         new_announcement = Announcement(
             title=title,
             content=content,
-            announcement_img=filename,
+            announcement_img=file_url,  # Store URL instead of filename
             event_date=event_date,
             date=datetime.utcnow(),
             userid=current_user.userid
@@ -110,8 +112,9 @@ def add_announcement():
         return redirect(url_for('announcement.view_all_announcements'))
 
     return render_template('addannounce.html',
-    current_user_name=current_user.name,
-    current_user_email=current_user.email)
+        current_user_name=current_user.name,
+        current_user_email=current_user.email
+    )
 
 
 @announcement_bp.route('/edit_announcement/<int:announcement_id>', methods=['GET', 'POST'])

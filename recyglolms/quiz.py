@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
-from recyglolms.__inti__ import db  # Fixed import
+from recyglolms import db  # Fixed import
 from recyglolms.models import Quiz, Question, Answer, Module, Course, UserResponse, UserAnswer, Class
 import json  # Use built-in json module
 

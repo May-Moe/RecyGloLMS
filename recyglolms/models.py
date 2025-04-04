@@ -1,6 +1,21 @@
-from recyglolms.__inti__ import db  # Import db from __init__.py
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask_login import UserMixin
+from recyglolms import db
+
+
+# # Initialize db as None at first
+# db = None
+
+# # Import db lazily inside the function
+# def get_db():
+#     from recyglolms.__init__ import db
+#     return db
+
+# # db = get_db()
+# from flask_sqlalchemy import SQLAlchemy
+
+# # Initialize db here instead of __init__.py
+# db = SQLAlchemy()
 
 
 class User(db.Model, UserMixin):
@@ -376,11 +391,11 @@ class Assese_Response(db.Model):
         print(str(query))  # Debugging line to check generated SQL query
         return query.all()
 
-class Certificate(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
-    course_name = db.Column(db.String(255), nullable=False)
-    issue_date = db.Column(db.Date, nullable=False)
-    file_path = db.Column(db.String(255), nullable=False)  # Path to certificate file
+# class Certificate(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+#     course_name = db.Column(db.String(255), nullable=False)
+#     issue_date = db.Column(db.Date, nullable=False)
+#     file_path = db.Column(db.String(255), nullable=False)  # Path to certificate file
 
-    user = db.relationship('User', backref=db.backref('certificates', lazy=True))
+#     user = db.relationship('User', backref=db.backref('certificates', lazy=True))

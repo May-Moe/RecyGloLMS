@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
-from recyglolms.__inti__ import db
+from recyglolms import db
 from recyglolms.models import Assese_Response, Assessment, Assese_Questions, User, Class, ActionLog
 import os
 import json

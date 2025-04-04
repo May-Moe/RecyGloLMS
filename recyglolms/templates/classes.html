@@ -75,7 +75,7 @@
                 
                 <div class="dropdown-container-class">
                     <ul>
-                        <li><a href="{{ url_for('manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
+                        <li><a href="{{ url_for('admin.manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
                         <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
                     </ul>
                 </div>
@@ -145,6 +145,7 @@
                             </form>
                         </h2>
                         <div class="class-actions">
+<<<<<<< HEAD
                             <!-- Manage Button -->
                             <button class="dropdown-btn" data-toggle="class-dropdown-{{ class_.classid }}" style="padding: 20px 10px; background-color: #ececec; font-size: 14px; font-weight: bold; color: #FF6699; text-align: center;">Manage</button>
                         
@@ -154,6 +155,13 @@
                                 <button class="dropdown-btn" data-toggle="class-courses-{{ class_.classid }}" style="padding: 20px 10px; margin-bottom: 5px;">Assign Courses</button>
                                 <div class="inner-dropdown-content-ver class-courses-{{ class_.classid }}">
                                     <form method="POST" action="{{ url_for('assign_courses_to_class', classid=class_.classid) }}">
+=======
+                            <button onclick="toggleDropdown('dropdown-{{ class_.classid }}')" style="padding: 20px 10px; background-color: #ececec; font-size: 14px; font-weight: bold; color: #FF6699; text-align: center;">Manage</button>
+                            <div id="dropdown-{{ class_.classid }}" class="dropdown-content">
+                                <button onclick="toggleDropdown('courses-{{ class_.classid }}')" style="padding: 20px 10px; margin-bottom: 5px;">Assign Courses</button>
+                                <div id="courses-{{ class_.classid }}" class="inner-dropdown-content">
+                                    <form method="POST" action="{{ url_for('admin.assign_courses_to_class', classid=class_.classid) }}">
+>>>>>>> c53b631 (Beta deployment)
                                         {% for course in courses %}
                                             <input type="checkbox" name="courses" value="{{ course.courseid }}" 
                                                 {% if course.courseid in assigned_courses[class_.classid] %} checked {% endif %}> 
@@ -163,10 +171,16 @@
                                     </form>
                                 </div>
                                 
+<<<<<<< HEAD
                                 <!-- Assign Users Button -->
                                 <button class="dropdown-btn" data-toggle="class-users-{{ class_.classid }}" style="padding: 20px 10px;">Assign Users</button>
                                 <div class="inner-dropdown-content-ver class-users-{{ class_.classid }}">
                                     <form method="POST" action="{{ url_for('assign_users_to_class', classid=class_.classid) }}">
+=======
+                                <button onclick="toggleDropdown('users-{{ class_.classid }}')" style="padding: 20px 10px;">Assign Users</button>
+                                <div id="users-{{ class_.classid }}" class="inner-dropdown-content">
+                                    <form method="POST" action="{{ url_for('admin.assign_users_to_class', classid=class_.classid) }}">
+>>>>>>> c53b631 (Beta deployment)
                                         {% for user in users %}
                                             <input type="checkbox" name="users" value="{{ user.userid }}" 
                                                 {% if user.userid in assigned_users[class_.classid] %} checked {% endif %}> 

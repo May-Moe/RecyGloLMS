@@ -3,7 +3,7 @@ from flask_apscheduler import APScheduler
 from flask import jsonify, request
 from datetime import datetime
 from werkzeug.utils import secure_filename
-from recyglolms.__inti__ import db, bcrypt, app
+from recyglolms import db, bcrypt
 from recyglolms.models import Progress, User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse, UserClass, Class, CourseClass, Notification
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
@@ -14,9 +14,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 # Blueprint for admin functionality
 admin_bp = Blueprint('admin', __name__)
 # Configure upload folder and allowed file types
-UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')  # Absolute path
-ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')  # Absolute path
+# ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip'}
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -960,7 +960,7 @@ def admin_view_activity(userid):
  
 
 # Class management
-@app.route('/admin/classes', methods=['GET', 'POST'])
+@admin_bp.route('/admin/classes', methods=['GET', 'POST'])
 @login_required
 def manage_classes():
     if current_user.role != 1:  # Ensure only admins can access
@@ -993,7 +993,7 @@ def manage_classes():
                             current_user_email=current_user.email)
                             
 
-@app.route('/admin/classes/<int:classid>/assign-courses', methods=['GET', 'POST'])
+@admin_bp.route('/admin/classes/<int:classid>/assign-courses', methods=['GET', 'POST'])
 @login_required
 def assign_courses_to_class(classid):
     if current_user.role != 1:
@@ -1013,9 +1013,9 @@ def assign_courses_to_class(classid):
         db.session.commit()
         flash('Courses assigned successfully!', 'success')
 
-    return redirect(url_for('manage_classes'))
+    return redirect(url_for('admin.manage_classes'))
 
-@app.route('/admin/classes/<int:classid>/assign-users', methods=['GET', 'POST'])
+@admin_bp.route('/admin/classes/<int:classid>/assign-users', methods=['GET', 'POST'])
 @login_required
 def assign_users_to_class(classid):
     if current_user.role != 1:  # Check if the current user is an admin
@@ -1043,7 +1043,7 @@ def assign_users_to_class(classid):
         db.session.commit()
 
     db.session.commit()  # Commit the changes to the database
-    return redirect(url_for('manage_classes'))
+    return redirect(url_for('admin.manage_classes'))
 
 #Add classes
 @admin_bp.route('/admin/add_classes', methods=['GET', 'POST'])
@@ -1061,7 +1061,7 @@ def add_classes():
         db.session.add(new_class)
         db.session.commit()
         flash('Class created successfully!', 'success')
-        return redirect(url_for('manage_classes'))
+        return redirect(url_for('admin.manage_classes'))
 
     return render_template('add_classes.html',
                            current_user_name = current_user.name,
@@ -1078,8 +1078,8 @@ def delete_class(class_id):
         UserClass.query.filter_by(classid=class_id).delete() # Delete all course assignments
         db.session.delete(class_)
         db.session.commit()
-        return redirect(url_for('manage_classes'))
-    return redirect(url_for('manage_classes'))  # Or handle the error case
+        return redirect(url_for('admin.manage_classes'))
+    return redirect(url_for('admin.manage_classes'))  # Or handle the error case
 
 @admin_bp.route('/class-detail', methods=['GET'])
 @login_required

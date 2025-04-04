@@ -4,16 +4,15 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from recyglolms.models import Course, Video, Progress, Activity, Module, User, Feedback, ActivityImage, Announcement, CourseClass, UserClass, Class, Notification, Assessment
-from recyglolms.__inti__ import db, app, bcrypt
-
+from recyglolms import db, bcrypt
 main_bp = Blueprint('main', __name__)
 
-UPLOAD_FOLDER_PROFILE = os.path.join(app.root_path, 'static/profile_images')
-ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
-app.config['UPLOAD_FOLDER_PROFILE'] = UPLOAD_FOLDER_PROFILE
+# UPLOAD_FOLDER_PROFILE = os.path.join(app.root_path, 'static/profile_images')
+# ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
+# app.config['UPLOAD_FOLDER_PROFILE'] = UPLOAD_FOLDER_PROFILE
 
-if not os.path.exists(UPLOAD_FOLDER_PROFILE):
-    os.makedirs(UPLOAD_FOLDER_PROFILE)
+# if not os.path.exists(UPLOAD_FOLDER_PROFILE):
+#     os.makedirs(UPLOAD_FOLDER_PROFILE)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -58,9 +57,9 @@ def home():
         current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
     )
 # Ensure the upload folder exists
-UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads', 'activities')
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+# UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads', 'activities')
+# if not os.path.exists(UPLOAD_FOLDER):
+#     os.makedirs(UPLOAD_FOLDER)
 
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 
@@ -397,7 +396,7 @@ def user_home():
                             current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
 )
 
-@app.route('/user_account', methods=['GET'])
+@main_bp.route('/user_account', methods=['GET'])
 @login_required
 def user_account():
     return render_template(
@@ -408,7 +407,7 @@ def user_account():
         current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
     )
 
-@app.route('/update_profile_image', methods=['POST'])
+@main_bp.route('/update_profile_image', methods=['POST'])
 @login_required
 def update_profile_image():
     if 'profile_image' in request.files:
@@ -429,9 +428,9 @@ def update_profile_image():
                 flash("File upload failed!", "danger")
         else:
             flash("Invalid file format!", "danger")
-    return redirect(url_for('user_account'))
+    return redirect(url_for('main.user_account'))
 
-@app.route('/update_username', methods=['POST'])
+@main_bp.route('/update_username', methods=['POST'])
 @login_required
 def update_username():
     new_username = request.form.get('username')
@@ -439,9 +438,9 @@ def update_username():
         current_user.name = new_username
         db.session.commit()
         flash("Username updated successfully!", "success")
-    return redirect(url_for('user_account'))
+    return redirect(url_for('main.user_account'))
 
-@app.route('/change_password', methods=['POST'])
+@main_bp.route('/change_password', methods=['POST'])
 @login_required
 def change_password():
     current_password = request.form.get('current-password')
@@ -454,7 +453,7 @@ def change_password():
             flash("Password updated successfully!", "success")
         else:
             flash("Current password is incorrect.", "danger")
-    return redirect(url_for('user_account'))
+    return redirect(url_for('main.user_account'))
     
 #for user feedback
 
@@ -498,14 +497,14 @@ def Alumni_user():
                             current_user_email = current_user.email,
                             current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
     
-@app.route('/notifications/mark-read', methods=['POST'])
+@main_bp.route('/notifications/mark-read', methods=['POST'])
 @login_required
 def mark_notifications_as_read():
     Notification.query.filter_by(user_id=current_user.userid, is_read=False).update({"is_read": True})
     db.session.commit()
     return jsonify({"success": True})
 
-@app.route('/notifications', methods=['GET'])
+@main_bp.route('/notifications', methods=['GET'])
 @login_required
 def get_notifications():
     notifications = Notification.query.filter_by(user_id=current_user.userid, is_read=False).order_by(Notification.created_at.desc()).all()

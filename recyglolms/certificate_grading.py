@@ -1,8 +1,8 @@
 from datetime import date, datetime
 from flask import Blueprint, request, jsonify, render_template, send_file, redirect, url_for, flash
 from flask_login import login_required, current_user
-from recyglolms.__inti__ import db
-from recyglolms.models import Assese_Response, UserResponse, Certificate, User, Assese_Questions, Assessment, UserClass, Class, Quiz, UserResponse, UserResponse
+from recyglolms import db
+from recyglolms.models import Assese_Response, UserResponse, User, Assese_Questions, Assessment, UserClass, Class, Quiz, UserResponse, UserResponse
 from sqlalchemy.sql import func
 import os
 from datetime import datetime

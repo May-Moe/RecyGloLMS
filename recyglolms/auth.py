@@ -1,11 +1,13 @@
-from mailbox import Message
 import random
 import string
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from recyglolms.__inti__ import db, bcrypt, mail
+from recyglolms import db, bcrypt
 from recyglolms.models import PasswordReset, User
 from flask_login import login_user, logout_user, login_required, current_user
-from flask_mail import Message
+from flask import current_app
+from flask_mail import Message  # ✅ Correct one
 import pytz
 
 from datetime import datetime, timedelta, timezone
@@ -105,6 +107,15 @@ def forgot_password():
             # )
             # mail.send(msg)  # This line is commented out to avoid the email sending error
             
+            # ✅ Send the OTP via SendGrid
+            send_status = send_otp_email(email, otp)
+            if send_status == 202:
+                flash('OTP sent to your email. Please check your inbox.', 'success')
+            else:
+                flash('Failed to send OTP email. Please try again later.', 'danger')
+                return redirect(url_for('auth.forgot_password'))
+
+            
             # Redirect directly to the OTP verification page
             flash('OTP generated. Please proceed to verify your OTP.', 'success')
             return redirect(url_for('auth.verify_otp'))
@@ -145,29 +156,85 @@ def verify_otp():
             print(f"OTP created at (UTC): {password_reset.created_at}")
             print(f"Current time (UTC): {datetime.now(timezone.utc)}")
 
-            # Check if OTP is within the valid timeframe (e.g., 10 minutes)
-            if datetime.now(timezone.utc) < password_reset.expiration_time:
+            if datetime.now(timezone.utc) <= password_reset.expiration_time:
                 user = User.query.get(password_reset.user_id)
-                
+
                 if user:
-                    # Update the user's password after successful OTP verification
-                    user.password = bcrypt.generate_password_hash(new_password)
+                    # Update password (you forgot to `.decode('utf-8')`)
+                    user.password = bcrypt.generate_password_hash(new_password).decode('utf-8')
                     db.session.commit()
-                    
-                    # Delete the OTP record after successful password reset
+
+                    # Delete OTP
                     db.session.delete(password_reset)
                     db.session.commit()
-                    
+
                     flash('Your password has been reset successfully!', 'success')
                     return redirect(url_for('auth.login'))
                 else:
                     flash('User not found.', 'danger')
             else:
-                # OTP has expired, delete expired OTP record
                 db.session.delete(password_reset)
                 db.session.commit()
                 flash('OTP has expired. Please request a new one.', 'danger')
+
         else:
             flash('Invalid OTP. Please try again.', 'danger')
 
     return render_template('otp_login.html')
+
+
+def send_otp_email(email, otp):
+    """Send OTP email using SendGrid with HTML formatting."""
+    sg = SendGridAPIClient(api_key=current_app.config['SENDGRID_API_KEY'])
+
+    # HTML Content
+    html_content = f"""
+    <html>
+    <body style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4;">
+        <div style="max-width: 500px; margin: auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0px 0px 10px #ccc;">
+            <h2 style="color: #2C3E50;">Password Reset Request</h2>
+            <p style="font-size: 16px;">You have requested to reset your password. Please use the following OTP to proceed:</p>
+            <h3 style="font-size: 22px; color: #E74C3C; padding: 10px; background: #f9eceb; display: inline-block; border-radius: 5px;">{otp}</h3>
+            <p style="font-size: 14px; color: #7f8c8d;">This OTP will expire in 10 minutes.</p>
+            <p>If you did not request this, please ignore this email.</p>
+            <hr style="border: 0.5px solid #ddd;">
+        </div>
+    </body>
+    </html>
+    """
+
+    message = Mail(
+        from_email=current_app.config['MAIL_DEFAULT_SENDER'],
+        to_emails=email,
+        subject="Your OTP for Password Reset",
+        plain_text_content=f"Your OTP for password reset is: {otp}\n\nThis OTP will expire in 10 minutes.",
+        html_content=html_content  # Adding the HTML version
+    )
+
+    try:
+        response = sg.send(message)
+        return response.status_code  # Should return 202 if successful
+    except Exception as e:
+        print("Email sending failed:", str(e))
+        return None
+
+
+# using SendGrid's Python Library
+# https://github.com/sendgrid/sendgrid-python
+# import os
+# from sendgrid import SendGridAPIClient
+# from sendgrid.helpers.mail import Mail
+
+# message = Mail(
+#     from_email='contact@sanaterra.info',
+#     to_emails='chrisrecyglo@gmail.com',
+#     subject='Sending with Twilio SendGrid is Fun',
+#     html_content='<strong>and easy to do anywhere, even with Python</strong>')
+# try:
+#     sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+#     response = sg.send(message)
+#     print(response.status_code)
+#     print(response.body)
+#     print(response.headers)
+# except Exception as e:
+#     print(e.message)
