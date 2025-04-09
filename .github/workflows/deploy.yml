@@ -3,31 +3,31 @@ name: Deploy to Cloud Run
 on:
   push:
     branches:
-      - main  # Or replace with your deployment branch
+      - main
 
 jobs:
   deploy:
-    name: Deploy LMS App to Cloud Run
+    name: Deploy to Cloud Run
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
+        uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v8
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v1
 
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker asia-southeast1-docker.pkg.dev
 
-      - name: Build Docker image
+      - name: Build and Push Docker image
         run: |
-          docker build -t asia-southeast1-docker.pkg.dev/sheworkslms/sheworks-repo/recyglo-lms:v6 .
+          docker build --platform linux/amd64 -t asia-southeast1-docker.pkg.dev/sheworkslms/sheworks-repo/recyglo-lms:v6 .
           docker push asia-southeast1-docker.pkg.dev/sheworkslms/sheworks-repo/recyglo-lms:v6
 
       - name: Deploy to Cloud Run
