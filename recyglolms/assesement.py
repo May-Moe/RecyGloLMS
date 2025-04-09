@@ -13,7 +13,8 @@ UPLOAD_FOLDER = "static/uploads"
 
 # Ensure upload folder exists
 if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 
 # Allowed file types
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
