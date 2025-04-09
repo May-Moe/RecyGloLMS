@@ -88,8 +88,9 @@
         <div class="grid" id="team-grid">
             {% for item in users_with_classes %}
             <div class="card">
-                <img src="{{ url_for('static', filename=item.user.profile_img) if item.user.profile_img else url_for('static', filename='/uploads/default-profile.jpg') }}" 
-                    alt="{{ item.user.name }}">
+                <img src="{{ item.user.profile_img if item.user.profile_img else url_for('static', filename='uploads/default-profile.jpg') }}" 
+                alt="{{ item.user.name }}">
+
                 <h3>{{ item.user.name }}</h3>
                 <!-- <p>{{ item.user.email }}</p> -->
 

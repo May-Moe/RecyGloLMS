@@ -206,7 +206,7 @@ def user_gradebook():
     return render_template('user_grade.html', user_grades=user_grades, 
                             current_user_name=current_user.name,
                             current_user_email=current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
+                            current_user_image=current_user.profile_img if current_user.profile_img else None
                           )
 
 

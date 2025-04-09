@@ -4,7 +4,7 @@ from flask import jsonify, request
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from recyglolms import db, bcrypt
-from recyglolms.models import Progress, User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse, UserClass, Class, CourseClass, Notification
+from recyglolms.models import Progress, User, Course, Module, Video, Feedback, Announcement, Activity , ActivityImage, ActionLog, UserResponse, UserClass, Class, CourseClass, Notification, PasswordReset, Quiz
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -163,17 +163,30 @@ def add_user():
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
 
-#Logs tracking
+
+
+# Logs tracking
 @admin_bp.route('/logs')
+@login_required
 def show_logs():
-    # Ensure only Admins (1)
-    if current_user.role not in [1]:  
+    if current_user.role not in [1]:
         flash("Unauthorized access!", "danger")
         return redirect(url_for('admin.dashboard'))
+
+    #  Delete logs older than 7 days
+    seven_days_ago = datetime.utcnow() - timedelta(days=3) #can change days here
+    old_logs = ActionLog.query.filter(ActionLog.timestamp < seven_days_ago).all()
+    for log in old_logs:
+        db.session.delete(log)
+    db.session.commit()
+
+    #  Fetch remaining logs
     logs = ActionLog.query.order_by(ActionLog.timestamp.desc()).all()
+    
     return render_template('viewlogs.html', logs=logs,
-                           current_user_name = current_user.name,
-                            current_user_email = current_user.email)
+                           current_user_name=current_user.name,
+                           current_user_email=current_user.email)
+
 
 @admin_bp.route('/viewallusers', methods=['GET', 'POST'])
 @login_required
@@ -319,6 +332,12 @@ def delete_user(user_id):
     
      # Step 1: Delete all related records in UserClass
     UserClass.query.filter_by(userid=user_id).delete()
+    
+     # Step 1: Delete all related records in UserClass
+    Notification.query.filter_by(user_id=user_id).delete()
+    
+    # Step 1: Delete all related records in UserClass
+    PasswordReset.query.filter_by(user_id=user_id).delete()
 
     # Step 2: Then delete the user
     db.session.delete(user)
@@ -531,12 +550,15 @@ def delete_course(course_id):
         return redirect(url_for('auth.login'))
 
     course = Course.query.get_or_404(course_id)
+    # Delete course classes
+    CourseClass.query.filter_by(courseid=course.courseid).delete()
 
     try:
         # Delete all modules and videos associated with the course
         modules = Module.query.filter_by(courseid=course.courseid).all()
         for module in modules:
             Video.query.filter_by(moduleid=module.moduleid).delete()  # Delete associated videos
+            Quiz.query.filter_by(moduleid=module.moduleid).delete()  # 👈 Add this
             db.session.delete(module)  # Delete module
         
         db.session.delete(course)  # Delete the course
@@ -952,11 +974,13 @@ def admin_view_activity(userid):
     user = User.query.get_or_404(userid)
     activities = Activity.query.filter_by(userid=userid).all()
 
-    # Fetch activity images
+    # ✅ Store image URLs separately instead of overwriting 'image' field
     for activity in activities:
-        activity.image = ActivityImage.query.filter_by(activityid=activity.activityid).all()
-
+        activity.image_urls = [img.activity_image for img in ActivityImage.query.filter_by(activityid=activity.activityid).all()]
+    
     return render_template('admin_view_activity.html', user=user, activities=activities)
+
+
  
 
 # Class management
@@ -978,7 +1002,9 @@ def manage_classes():
 
     classes = Class.query.all()
     courses = Course.query.all()
-    users = User.query.all()
+    # users = User.query.all()
+    # Only fetch users who are not admin or sub-admin
+    users = User.query.filter(User.role != 1, User.role != 2).all()
     # Fetch assigned courses and users for each class
     assigned_courses = {class_.classid: [cc.courseid for cc in class_.courses] for class_ in classes}
     assigned_users = {class_.classid: [uc.userid for uc in class_.users] for class_ in classes}

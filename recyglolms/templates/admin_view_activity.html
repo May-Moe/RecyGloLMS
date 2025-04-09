@@ -127,36 +127,36 @@
             <!-- Activity List -->
             {% if activities %}
             {% for activity in activities %}
-            <div class="post" onclick="openModal(this)" 
-            data-images="{% for img in activity.image %}{{ url_for('static', filename='uploads/activities/' + img.activity_image) }},{% endfor %}">
-            
-            {% if activity.image %}
-                {% set total_images = activity.image|length %}
-                {% if total_images > 0 %}
-                    <div class="post-image-container">
-                        <img src="{{ url_for('static', filename='uploads/activities/' + activity.image[0].activity_image) }}" alt="Activity Image" class="post-image">
-                        {% if total_images > 1 %}
-                            <div class="image-overlay">+{{ total_images - 1 }}</div>
-                        {% endif %}
-                    </div>
-                {% endif %}
-            {% else %}
-                <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="No Image" class="post-image">
-            {% endif %}
+                <div class="post" onclick="openModal(this)" 
+                    data-images="{% for img in activity.image_urls %}{{ img }},{% endfor %}">
 
-            <div class="post-content">
-                <div class="post-title">{{ activity.name }}</div>
-                <div class="post-text">{{ activity.description }}</div>
-                <div class="post-date">{{ activity.date.strftime('%d/%m/%Y') }}</div>
-            </div>
-        </div>
-            
+                    {% if activity.image_urls %}
+                        {% set total_images = activity.image_urls|length %}
+                        {% if total_images > 0 %}
+                            <div class="post-image-container">
+                                <img src="{{ activity.image_urls[0] }}" alt="Activity Image" class="post-image">
+                                {% if total_images > 1 %}
+                                    <div class="image-overlay">+{{ total_images - 1 }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="No Image" class="post-image">
+                    {% endif %}
+
+                    <div class="post-content">
+                        <div class="post-title">{{ activity.name }}</div>
+                        <div class="post-text">{{ activity.description }}</div>
+                        <div class="post-date">{{ activity.date.strftime('%d/%m/%Y') }}</div>
+                    </div>
+                </div>
             {% endfor %}
             {% else %}
             <div style="text-align: center; font-size: 1.0rem; padding: 20px; margin-top: 20px; display: flex; justify-content: center; align-items: center; height: 50vh; color: gray;">
                 <p style="margin: 0;">No activities found</p>
             </div>
             {% endif %}
+
         </div>
     </div>
 

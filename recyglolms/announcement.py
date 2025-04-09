@@ -7,7 +7,11 @@ import os
 from datetime import datetime
 from recyglolms.utils import upload_file_to_gcp  #  Import the new function for cloud storage
 from recyglolms.utils import allowed_file
+from google.cloud import storage
 
+
+# Define allowed file extensions globally
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'pdf'}
 
 # Blueprint for announcements
 announcement_bp = Blueprint('announcement', __name__)
@@ -115,8 +119,6 @@ def add_announcement():
         current_user_name=current_user.name,
         current_user_email=current_user.email
     )
-
-
 @announcement_bp.route('/edit_announcement/<int:announcement_id>', methods=['GET', 'POST'])
 @login_required
 def edit_announcement(announcement_id):
@@ -142,19 +144,16 @@ def edit_announcement(announcement_id):
             flash("Invalid date format. Please use YYYY-MM-DD.", "danger")
             return redirect(request.url)
 
-        # If a new file is provided, update the image
+        # ✅ Upload new file to GCP if provided
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            announcement.announcement_img = filename
-        else:
-            # If no file is provided, preserve the existing image
-            filename = announcement.announcement_img
+            file_url = upload_file_to_gcp(file, folder="announcements")
+            announcement.announcement_img = file_url  # Update to new file URL
 
-        # Update the announcement
+        # ✅ Preserve old image if no new file
+        # (no change to image URL if no file uploaded)
+
         announcement.title = title
         announcement.content = content
-        announcement.img = filename  # Ensure you're updating the right field
         announcement.event_date = event_date
         announcement.date = datetime.utcnow()
 
@@ -164,30 +163,115 @@ def edit_announcement(announcement_id):
         return redirect(url_for('announcement.view_all_announcements'))
 
     return render_template('editannouncement.html',
-                            announcement=announcement,
-                            current_user_name=current_user.name,
-                            current_user_email=current_user.email)
+                           announcement=announcement,
+                           current_user_name=current_user.name,
+                           current_user_email=current_user.email)
 
 
-# Route to delete an announcement
 @announcement_bp.route('/delete_announcement/<int:announcement_id>', methods=['POST'])
 @login_required
 def delete_announcement(announcement_id):
-    if not current_user.role:  # Ensure only admins can access
+    if not current_user.role:
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
     announcement = Announcement.query.get_or_404(announcement_id)
 
-    # Delete the image file if it exists
+    # ✅ Delete image from GCP Storage if exists
     if announcement.announcement_img:
-        image_path = os.path.join(app.config['UPLOAD_FOLDER'], announcement.announcement_img)
-        if os.path.exists(image_path):
-            os.remove(image_path)
+        from urllib.parse import urlparse
+        bucket_name = os.getenv("STORAGE_BUCKET", "sheworks-uploads")
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(bucket_name)
 
-    # Delete the announcement
+        # Extract the file path from the URL
+        parsed_url = urlparse(announcement.announcement_img)
+        blob_path = parsed_url.path.lstrip('/')  # Remove leading slash
+
+        blob = bucket.blob(blob_path)
+        if blob.exists():
+            blob.delete()
+
     db.session.delete(announcement)
     db.session.commit()
 
     flash("Announcement deleted successfully!", "success")
     return redirect(url_for('announcement.view_all_announcements'))
+
+# @announcement_bp.route('/edit_announcement/<int:announcement_id>', methods=['GET', 'POST'])
+# @login_required
+# def edit_announcement(announcement_id):
+#     if not current_user.role:
+#         flash("Unauthorized access!", "danger")
+#         return redirect(url_for('auth.login'))
+
+#     announcement = Announcement.query.get_or_404(announcement_id)
+
+#     if request.method == 'POST':
+#         title = request.form.get('title')
+#         content = request.form.get('content')
+#         event_date_str = request.form.get('event_date')
+#         file = request.files.get('announcement_img')
+
+#         if not title or not content or not event_date_str:
+#             flash("Title, content, and event date are required!", "danger")
+#             return redirect(request.url)
+
+#         try:
+#             event_date = datetime.strptime(event_date_str, '%Y-%m-%d')
+#         except ValueError:
+#             flash("Invalid date format. Please use YYYY-MM-DD.", "danger")
+#             return redirect(request.url)
+
+#         # If a new file is provided, update the image
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             announcement.announcement_img = filename
+#         else:
+#             # If no file is provided, preserve the existing image
+#             filename = announcement.announcement_img
+
+#         # Update the announcement
+#         announcement.title = title
+#         announcement.content = content
+#         announcement.img = filename  # Ensure you're updating the right field
+#         announcement.event_date = event_date
+#         announcement.date = datetime.utcnow()
+
+#         db.session.commit()
+
+#         flash("Announcement updated successfully!", "success")
+#         return redirect(url_for('announcement.view_all_announcements'))
+
+#     return render_template('editannouncement.html',
+#                             announcement=announcement,
+#                             current_user_name=current_user.name,
+#                             current_user_email=current_user.email)
+
+
+
+
+
+# # Route to delete an announcement
+# @announcement_bp.route('/delete_announcement/<int:announcement_id>', methods=['POST'])
+# @login_required
+# def delete_announcement(announcement_id):
+#     if not current_user.role:  # Ensure only admins can access
+#         flash("Unauthorized access!", "danger")
+#         return redirect(url_for('auth.login'))
+
+#     announcement = Announcement.query.get_or_404(announcement_id)
+
+#     # Delete the image file if it exists
+#     if announcement.announcement_img:
+#         image_path = os.path.join(app.config['UPLOAD_FOLDER'], announcement.announcement_img)
+#         if os.path.exists(image_path):
+#             os.remove(image_path)
+
+#     # Delete the announcement
+#     db.session.delete(announcement)
+#     db.session.commit()
+
+#     flash("Announcement deleted successfully!", "success")
+#     return redirect(url_for('announcement.view_all_announcements'))

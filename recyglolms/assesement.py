@@ -155,24 +155,26 @@ def view_attempted_users(assessment_id):
                             assessment_id=assessment_id,
                             current_user_name=current_user.name,
                             current_user_email=current_user.email,
-                            classid=classid)  # Now classid is correctly passed
+                            classid=classid,
+                            current_user_image=current_user.profile_img if current_user.profile_img else None)  # Now classid is correctly passed
 
 
 @assessment_bp.route('/delete_assessment/<int:assessment_id>', methods=['POST'])
 @login_required
 def delete_assessment(assessment_id):
-    # Ensure only admins can access
-    if not current_user.role:  # Assuming role=1 is admin
+    if not current_user.role:
         flash("Unauthorized access!", "danger")
         return redirect(url_for('auth.login'))
 
     assessment = Assessment.query.get_or_404(assessment_id)
 
-    # Delete the assessment
-    db.session.delete(assessment)
-    db.session.commit()
+    # Step 1: Delete responses linked to this assessment
+    Assese_Response.query.filter_by(assessment_id=assessment_id).delete()
 
-    # Log the deletion
+    # Step 2: Delete questions linked to this assessment
+    Assese_Questions.query.filter_by(assessment_id=assessment_id).delete()
+
+    # Step 3: Log the action
     log_entry = ActionLog(
         userid=current_user.userid,
         username=current_user.name,
@@ -183,10 +185,15 @@ def delete_assessment(assessment_id):
         details=f"Deleted assessment: {assessment.title}"
     )
     db.session.add(log_entry)
+
+    # Step 4: Delete the assessment
+    db.session.delete(assessment)
     db.session.commit()
 
     flash("Assessment deleted successfully!", "success")
-    return redirect(url_for('assessment.view_classes'))  # Redirect to the assessment view
+    return redirect(url_for('assessment.view_classes'))
+
+
 
 @assessment_bp.route('/admin/assessment/<int:assessment_id>/answers/<int:user_id>')
 @login_required

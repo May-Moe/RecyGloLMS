@@ -28,11 +28,17 @@ class User(db.Model, UserMixin):
     last_login = db.Column(db.DateTime, default=None)  # New field for last login time
     level = db.Column(db.String(20), nullable=False, default="Beginner") # New field for user level (default to Beginner)
 
-    announcements = db.relationship('Announcement', backref='user', lazy=True)
-    progress = db.relationship('Progress', backref='user', lazy=True)  # Tracks user progress on videos
+    # announcements = db.relationship('Announcement', backref='user', lazy=True)
+    # progress = db.relationship('Progress', backref='user', lazy=True)  # Tracks user progress on videos
+    announcements = db.relationship('Announcement', backref='user', lazy=True, cascade="all, delete")
+    progress = db.relationship('Progress', backref='user', lazy=True, cascade="all, delete")
     
     # Relationship with classes
-    classes = db.relationship('UserClass', backref='user', lazy=True)
+    classes = db.relationship('UserClass', backref='user', lazy=True, cascade="all, delete")
+    uploads = db.relationship('Upload', backref='user', lazy=True, cascade="all, delete")
+    action_logs = db.relationship('ActionLog', backref='user', lazy=True, cascade="all, delete")
+    password_resets = db.relationship('PasswordReset', backref='user', lazy=True, cascade="all, delete")
+    activities = db.relationship('Activity', backref='user', lazy=True, cascade="all, delete")
 
     def get_id(self):
         """Override Flask-Login's get_id method."""
@@ -56,7 +62,7 @@ class PasswordReset(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     expiration_time = db.Column(db.DateTime, nullable=False)  # Add expiration_time field
     
-    user = db.relationship('User', backref=db.backref('password_resets', lazy=True))
+    # user = db.relationship('User', backref=db.backref('password_resets', lazy=True))
     
     def __init__(self, user_id, otp, created_at, expiration_time):
         self.user_id = user_id
@@ -76,7 +82,7 @@ class ActionLog(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     details = db.Column(db.String(255))  # Optionally store detailed info like what fields were updated
 
-    user = db.relationship('User', backref=db.backref('action_logs', lazy=True))
+    # user = db.relationship('User', backref=db.backref('action_logs', lazy=True))
 
     def __repr__(self):
         return f"<ActionLog {self.action_type} by {self.username} on {self.timestamp}>"
@@ -133,10 +139,11 @@ class Course(db.Model):
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationship to modules
-    modules = db.relationship('Module', backref='course', lazy=True)
+    modules = db.relationship('Module', backref='course', lazy=True, cascade="all, delete")
     
-       # Relationship to classes
-    classes = db.relationship('CourseClass', backref='course', lazy=True)
+    # Relationship to classes
+    classes = db.relationship('CourseClass', backref='course', lazy=True, cascade="all, delete")
+
 
     def calculate_course_progress(self, userid):
         """
@@ -167,8 +174,8 @@ class Module(db.Model):
     description = db.Column(db.Text, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
     courseid = db.Column(db.Integer, db.ForeignKey('course.courseid'), nullable=False)
-    videos = db.relationship('Video', backref='module', lazy=True)
-    quizzes = db.relationship('Quiz', backref='module', lazy=True)  # Add this line
+    videos = db.relationship('Video', backref='module', lazy=True, cascade="all, delete")
+    quizzes = db.relationship('Quiz', backref='module', lazy=True, cascade="all, delete")
     
     def calculate_module_progress(self, userid):
         """
@@ -230,14 +237,16 @@ class Quiz(db.Model):
     time_limit = db.Column(db.Integer, nullable=True, default=5)  # Default 5 minutes
     
     # Define the relationship with UserResponse
-    user_responses = db.relationship('UserResponse', backref='quiz', lazy=True)
+    # user_responses = db.relationship('UserResponse', backref='quiz', lazy=True)
+    questions = db.relationship('Question', backref='quiz', lazy=True, cascade="all, delete-orphan")
+    user_responses = db.relationship('UserResponse', backref='quiz', lazy=True, cascade="all, delete")
 
 
 class Question(db.Model):
     questionid = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)  # The question text
     quizid = db.Column(db.Integer, db.ForeignKey('quiz.quizid'), nullable=False)  # Foreign key to Quiz
-    answers = db.relationship('Answer', backref='question', lazy=True)  # Relationship with answers
+    answers = db.relationship('Answer', backref='question', lazy=True, cascade="all, delete-orphan")  # Relationship with answers
 
 
 class Answer(db.Model):
@@ -254,7 +263,7 @@ class UserResponse(db.Model):
     quizid = db.Column(db.Integer, db.ForeignKey('quiz.quizid'), nullable=False)  # Foreign key to Quiz
     score = db.Column(db.Float, default=0)  # Total score for the quiz
     created_date = db.Column(db.DateTime, default=datetime.utcnow)  # When the user took the quiz
-    user_answers = db.relationship('UserAnswer', backref='response', lazy=True)  # Relationship with UserAnswers
+    user_answers = db.relationship('UserAnswer', backref='response', lazy=True, cascade="all, delete-orphan")  # Relationship with UserAnswers
 
 
 class UserAnswer(db.Model):

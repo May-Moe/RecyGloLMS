@@ -209,16 +209,17 @@
                const showNavButtons = cardData.images.length > 1;
           
                const imagesHTML = cardData.images.length > 0
-                   ? `<div class="image-container image-slider">
-                           ${cardData.images.map((image, index) =>
-                               `<img class="slide" src="./static/uploads/activities/${image}" alt="${cardData.name}" style="display: ${index === 0 ? 'block' : 'none'};">`
-                           ).join("")}
-                           ${showNavButtons ? `
-                           <button class="prev-btn" onclick="prevSlide(this)">&#10094;</button>
-                           <button class="next-btn" onclick="nextSlide(this)">&#10095;</button>
-                           ` : ""}
-                      </div>`
-                   : "<div class='image-container'><p>No Image Available</p></div>";
+                ? `<div class="image-container image-slider">
+                        ${cardData.images.map((image, index) =>
+                            `<img class="slide" src="${image}" alt="${cardData.name}" style="display: ${index === 0 ? 'block' : 'none'};">`
+                        ).join("")}
+                        ${showNavButtons ? `
+                        <button class="prev-btn" onclick="prevSlide(this)">&#10094;</button>
+                        <button class="next-btn" onclick="nextSlide(this)">&#10095;</button>
+                        ` : ""}
+                </div>`
+                : "<div class='image-container'><p>No Image Available</p></div>";
+
           
                newCard.innerHTML = `
                    <button class="delete-btn" onclick="deleteCard(this)">×</button>

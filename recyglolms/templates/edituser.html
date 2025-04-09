@@ -161,7 +161,9 @@
             
                 <div class="buttons">
                     <button type="submit" class="submit-button" id="submit-button" style="display: none;">Save Changes</button>
-                    <button type="button" class="cancel-button" onclick="cancelEdit()">Cancel</button>
+                   <!-- <button type="button" class="cancel-button" onclick="cancelEdit()" href=""{{ url_for('admin.view_users') }}"">Cancel</button> -->
+                   <button type="button" class="cancel-button" onclick="window.location.href='{{ url_for('admin.view_users') }}'">Cancel</button>
+
                 </div>
             </form>
             

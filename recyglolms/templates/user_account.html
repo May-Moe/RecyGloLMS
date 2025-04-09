@@ -74,7 +74,7 @@
                 <div class="profile-header">
                     <form method="POST" action="{{ url_for('main.update_profile_image') }}" enctype="multipart/form-data">
                         <div class="profile-pic">
-                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='img/default-profile.jpg') }}" alt="Profile Picture" id="profile-picture">
+                            <img src="{{ current_user_image | default(url_for('static', filename='img/default-profile.jpg')) }}" alt="Profile Picture" id="profile-picture">
                             
                             <!-- Hidden File Input -->
                         <input type="file" id="profile_image" name="profile_image" accept="image/*" style="display: none;" onchange="previewImage(event)">

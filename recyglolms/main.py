@@ -1,6 +1,8 @@
 import os
 from flask import Blueprint, render_template, jsonify, request, redirect, url_for, flash
 from flask_login import login_required, current_user
+from recyglolms.utils import upload_file_to_gcp
+from recyglolms.utils import delete_file_from_gcp
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from recyglolms.models import Course, Video, Progress, Activity, Module, User, Feedback, ActivityImage, Announcement, CourseClass, UserClass, Class, Notification, Assessment
@@ -13,6 +15,8 @@ main_bp = Blueprint('main', __name__)
 
 # if not os.path.exists(UPLOAD_FOLDER_PROFILE):
 #     os.makedirs(UPLOAD_FOLDER_PROFILE)
+
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -54,17 +58,15 @@ def home():
         progress_data=progress_data,
         current_username=current_username,
         current_useremail=current_useremail,
-        current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
+        current_user_image=current_user.profile_img if current_user.profile_img else None
     )
 # Ensure the upload folder exists
 # UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads', 'activities')
 # if not os.path.exists(UPLOAD_FOLDER):
 #     os.makedirs(UPLOAD_FOLDER)
 
-ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 
         
@@ -108,6 +110,7 @@ def user_activity():
         if not activity_name or not activity_description:
             return jsonify({"error": "Activity name and description are required!"}), 400
 
+        # ✅ Create and save the new activity
         new_activity = Activity(
             name=activity_name,
             description=activity_description,
@@ -120,15 +123,13 @@ def user_activity():
         uploaded_images = []
         for file in images:
             if file and allowed_file(file.filename):
-                file_extension = file.filename.rsplit('.', 1)[1].lower()
-                sanitized_name = secure_filename(file.filename.rsplit('.', 1)[0])
-                final_filename = f"{sanitized_name}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.{file_extension}"
-                filepath = os.path.join(UPLOAD_FOLDER, final_filename)
-                file.save(filepath)
+                # ✅ Upload to GCP instead of saving locally
+                file_url = upload_file_to_gcp(file, folder="activity_images")
 
-                new_image = ActivityImage(activityid=new_activity.activityid, activity_image=final_filename)
+                # ✅ Store URL in the database
+                new_image = ActivityImage(activityid=new_activity.activityid, activity_image=file_url)
                 db.session.add(new_image)
-                uploaded_images.append(final_filename)
+                uploaded_images.append(file_url)
 
         db.session.commit()
 
@@ -136,23 +137,24 @@ def user_activity():
             "activityid": new_activity.activityid,
             "name": new_activity.name,
             "description": new_activity.description,
-            "images": uploaded_images
+            "images": uploaded_images  # Return URLs instead of filenames
         }), 201
 
-    # GET request: Fetch activities for the logged-in user
+    # ✅ GET request: Fetch activities for the logged-in user
     activities = Activity.query.filter_by(userid=current_user.userid).all()
-    # Pass current user info to the template
+    
     current_username = current_user.name
     current_useremail = current_user.email
 
     activity_list = []
     for activity in activities:
+        # ✅ Get image URLs from the database instead of filenames
         images = [img.activity_image for img in ActivityImage.query.filter_by(activityid=activity.activityid).all()]
         activity_list.append({
             "activityid": activity.activityid,
             "name": activity.name,
             "description": activity.description,
-            "images": images
+            "images": images  # Already stored as URLs
         })
 
     # Ensure the server sends JSON when requested by AJAX
@@ -162,8 +164,9 @@ def user_activity():
     # For non-AJAX requests, render the HTML template
     return render_template('user_activity.html', activities=activity_list,
                            current_username=current_username,
-                            current_useremail=current_useremail,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+                           current_useremail=current_useremail,
+                           current_user_image=current_user.profile_img if current_user.profile_img else None)
+
 
 
 
@@ -198,50 +201,39 @@ def update_user_activity(activity_id):
     activity.name = activity_name
     activity.description = activity_description
 
-    # Handle multiple image replacements
+    # ✅ Handle image replacement with GCS
     if 'activity_image' in request.files:
         files = request.files.getlist('activity_image')  # Get multiple files
 
-        # Delete old images from storage and database
+        # ✅ Delete old images from GCS and remove records from DB
         old_images = ActivityImage.query.filter_by(activityid=activity.activityid).all()
         for img in old_images:
-            try:
-                os.remove(os.path.join('static', img.activity_image))  # Delete old files
-            except FileNotFoundError:
-                pass
-            db.session.delete(img)  # Remove record from database
+            delete_file_from_gcp(img.activity_image)  # ✅ Delete from GCS
+            db.session.delete(img)  # Remove from database
 
-        # Save new images
-        new_image_paths = []
+        # ✅ Upload new images to GCS
+        new_image_urls = []
         for file in files:
             if file and allowed_file(file.filename):
-                file_extension = file.filename.rsplit('.', 1)[1].lower()
-                sanitized_name = secure_filename(file.filename.rsplit('.', 1)[0])
-                final_filename = f"{sanitized_name}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.{file_extension}"
-                file_path = os.path.join(UPLOAD_FOLDER, final_filename)
-
-                try:
-                    file.save(file_path)
-                    new_image = ActivityImage(activityid=activity.activityid, activity_image=final_filename)
-                    db.session.add(new_image)
-                    new_image_paths.append(url_for('static', filename=f'uploads/activities/{final_filename}', _external=True))
-                except Exception as e:
-                    flash("File upload failed!", "danger")
-                    return jsonify({"error": "File upload failed"}), 500
+                file_url = upload_file_to_gcp(file, folder="activities")  # ✅ Upload to GCS
+                new_image = ActivityImage(activityid=activity.activityid, activity_image=file_url)
+                db.session.add(new_image)
+                new_image_urls.append(file_url)  # ✅ Store GCS URL
 
     db.session.commit()
     flash("Activity updated successfully!", "success")
 
-    # Return updated activity data with multiple images
+    # ✅ Return updated activity data with GCS image URLs
     return jsonify({
         "message": "Activity updated successfully",
         "activity": {
             "id": activity.activityid,
             "name": activity.name,
             "description": activity.description,
-            "images": new_image_paths if 'activity_image' in request.files else None
+            "images": new_image_urls if 'activity_image' in request.files else None
         }
     })
+
 
 
 @main_bp.route('/learning')
@@ -254,7 +246,7 @@ def learning():
                             classes=user_classes,  # Pass the correct classes to the template
                             current_user_name=current_user.name,
                             current_user_email=current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+                            current_user_image=current_user.profile_img if current_user.profile_img else None)
 
 @main_bp.route('/learning/class/<int:classid>')
 @login_required
@@ -278,7 +270,7 @@ def learning_class_courses(classid):
                             assessments=assessments,  # Pass assessments to the template
                             current_user_name=current_user.name,
                             current_user_email=current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+                            current_user_image=current_user.profile_img if current_user.profile_img else None)
 @main_bp.route('/course/<int:courseid>')
 @login_required
 def course_detail(courseid):
@@ -314,7 +306,7 @@ def course_detail(courseid):
                            selected_class=selected_class,
                            current_user_name = current_user.name,
                             current_user_email = current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+                            current_user_image=current_user.profile_img if current_user.profile_img else None)
 
 @main_bp.route('/update_video_progress/<int:videoid>', methods=['POST'])
 @login_required
@@ -369,20 +361,20 @@ def update_video_progress(videoid):
 @main_bp.route('/user/progress', methods=['GET'])
 @login_required
 def user_progress():
-    # Get the user's assigned class IDs
     user_classes = [uc.classid for uc in UserClass.query.filter_by(userid=current_user.userid).all()]
-    
-    # Get courses linked to those classes
     courses = Course.query.join(CourseClass).filter(CourseClass.classid.in_(user_classes)).all()
     progress_data = {
         course.name: course.calculate_course_progress(current_user.userid) for course in courses
     }
-    return render_template('each_user_progress.html', user=current_user, 
-                           progress_data=progress_data, courses=courses
-                           ,current_user_name = current_user.name,
-                            current_user_email = current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
-)
+    return render_template('each_user_progress.html',
+        user=current_user,
+        progress_data=progress_data,
+        courses=courses,
+        current_user_name=current_user.name,
+        current_user_email=current_user.email,
+        current_user_image=current_user.profile_img if current_user.profile_img else None
+    )
+
 
 
 @main_bp.route('/user_home')
@@ -393,7 +385,7 @@ def user_home():
     return render_template('user_home.html', announcements=announcements,
                            current_user_name = current_user.name,
                             current_user_email = current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
+                            current_user_image=current_user.profile_img if current_user.profile_img else None
 )
 
 @main_bp.route('/user_account', methods=['GET'])
@@ -404,7 +396,7 @@ def user_account():
         current_user_name=current_user.name,
         current_user_email=current_user.email,
         current_user_id=current_user.userid,
-        current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None
+        current_user_image=current_user.profile_img if current_user.profile_img else None
     )
 
 @main_bp.route('/update_profile_image', methods=['POST'])
@@ -413,22 +405,21 @@ def update_profile_image():
     if 'profile_image' in request.files:
         file = request.files['profile_image']
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(UPLOAD_FOLDER_PROFILE, filename)
             try:
-                file.save(file_path)
-                print(f"File successfully saved at: {file_path}")
+                # ✅ Upload to GCS instead of saving locally
+                file_url = upload_file_to_gcp(file, folder="profile_images")
 
-                # Update the user's profile image in the database
-                current_user.profile_img = f'profile_images/{filename}'  # Store relative path to static
+                # ✅ Save the public URL in the DB
+                current_user.profile_img = file_url
                 db.session.commit()
                 flash("Profile image updated successfully!", "success")
             except Exception as e:
-                print(f" Error saving file: {e}")
+                print(f"Error uploading to GCP: {e}")
                 flash("File upload failed!", "danger")
         else:
             flash("Invalid file format!", "danger")
     return redirect(url_for('main.user_account'))
+
 
 @main_bp.route('/update_username', methods=['POST'])
 @login_required
@@ -495,7 +486,7 @@ def Alumni_user():
                            users_with_classes=users_with_classes,
                            current_user_name = current_user.name,
                             current_user_email = current_user.email,
-                            current_user_image=url_for('static', filename=current_user.profile_img) if current_user.profile_img else None)
+                            current_user_image=current_user.profile_img if current_user.profile_img else None)
     
 @main_bp.route('/notifications/mark-read', methods=['POST'])
 @login_required

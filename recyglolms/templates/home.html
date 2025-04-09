@@ -293,7 +293,7 @@
                                     <ul class="announcement-item">
                                         <li><h3>${announcement.title}</h3></li>
                                         <li><p>${announcement.content}</p></li>
-                                        <li>${announcement.image ? `<img src="/static/announcements/${announcement.image}" alt="Announcement Image">` : ""}</li>
+                                        <li>${announcement.image ? `<img src="${announcement.image}" alt="Announcement Image">` : ""}</li>
                                     </ul>`;
                                 announcementContainer.innerHTML += announcementItem;
                             });
