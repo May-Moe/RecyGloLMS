@@ -337,6 +337,9 @@ def delete_user(user_id):
     Notification.query.filter_by(user_id=user_id).delete()
     
     # Step 1: Delete all related records in UserClass
+    Feedback.query.filter_by(userid=user_id).delete()
+    
+    # Step 1: Delete all related records in UserClass
     PasswordReset.query.filter_by(user_id=user_id).delete()
 
     # Step 2: Then delete the user

@@ -160,7 +160,7 @@ def verify_otp():
                 user = User.query.get(password_reset.user_id)
 
                 if user:
-                    # Update password (you forgot to `.decode('utf-8')`)
+                    # Update password
                     user.password = bcrypt.generate_password_hash(new_password).decode('utf-8')
                     db.session.commit()
 

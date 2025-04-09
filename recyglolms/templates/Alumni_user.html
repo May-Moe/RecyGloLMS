@@ -87,25 +87,28 @@
         </div>
         <div class="grid" id="team-grid">
             {% for item in users_with_classes %}
-            <div class="card">
-                <img src="{{ item.user.profile_img if item.user.profile_img else url_for('static', filename='uploads/default-profile.jpg') }}" 
-                alt="{{ item.user.name }}">
+                <div class="card">
+                    {% if item.user.profile_img and item.user.profile_img.startswith('http') %}
+                        <img src="{{ item.user.profile_img }}" alt="{{ item.user.name }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='uploads/default-profile.jpg') }}" alt="{{ item.user.name }}">
+                    {% endif %}
 
-                <h3>{{ item.user.name }}</h3>
-                <!-- <p>{{ item.user.email }}</p> -->
+                    <h3>{{ item.user.name }}</h3>
 
-                {% if item.classes %}
-                <p>Enrolled Classes:</p>
-                <ul class="dynamic-class-list">
-                    {% for class_ in item.classes %}
-                        <li>{{ class_.name }}</li> 
-                    {% endfor %}
-                </ul>     
-                {% else %}
-                <p style="color: gray;">No classes enrolled</p>
-                {% endif %}
-            </div>
+                    {% if item.classes %}
+                        <p>Enrolled Classes:</p>
+                        <ul class="dynamic-class-list">
+                            {% for class_ in item.classes %}
+                                <li>{{ class_.name }}</li> 
+                            {% endfor %}
+                        </ul>     
+                    {% else %}
+                        <p style="color: gray;">No classes enrolled</p>
+                    {% endif %}
+                </div>
             {% endfor %}
+
         </div>
         </div>
     <script src="static/JS/script.js"></script>
