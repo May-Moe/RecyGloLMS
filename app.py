@@ -13,5 +13,6 @@ from recyglolms import create_app
 app = create_app()  # ✅ Create the app instance
 
 if __name__ == '__main__':
+    print("App is starting...")  # Temporary change for testing
     app.run(host="0.0.0.0", port=8080)
 
