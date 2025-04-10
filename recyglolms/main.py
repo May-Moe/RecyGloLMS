@@ -21,45 +21,60 @@ ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# @main_bp.route('/')
+# @login_required
+# def index():
+#     return render_template('sheworks.html')
+
+# @main_bp.route('/login')
+# @login_required
+# def login():
+#     return render_template('login.html')
 @main_bp.route('/')
 @login_required
 def index():
     return render_template('login.html')
 
+
 @main_bp.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
-    # Get the user's assigned class IDs
     user_classes = [uc.classid for uc in UserClass.query.filter_by(userid=current_user.userid).all()]
-    
-    # Get courses linked to those classes
-    courses = Course.query.join(CourseClass).filter(CourseClass.classid.in_(user_classes)).limit(4).all()
+    courses = Course.query.join(CourseClass).filter(CourseClass.classid.in_(user_classes)).all()
 
-    # Compute progress for filtered courses
+    # Calculate course progress
     progress_data = {
         course.name: course.calculate_course_progress(current_user.userid) for course in courses
     }
 
-    if request.method == 'POST':  # Handle username update
-        new_username = request.form.get('username')
-        if new_username:  # Validate the input
-            current_user.name = new_username
-            db.session.commit()  # Save the change to the database
-            flash("Username updated successfully!", "success")
-            return redirect(url_for('main.home'))  # Redirect to home
+    # Ongoing and completed course counts
+    ongoing_courses = sum(1 for progress in progress_data.values() if 0 < progress < 100)
+    completed_courses = sum(1 for progress in progress_data.values() if progress == 100)
 
-    # Pass current user info to the template
-    current_username = current_user.name
-    current_useremail = current_user.email
+    # My activities count
+    activities_count = Activity.count_distinct_activities(current_user.userid)
+
+    # Username update logic
+    if request.method == 'POST':
+        new_username = request.form.get('username')
+        if new_username:
+            current_user.name = new_username
+            db.session.commit()
+            flash("Username updated successfully!", "success")
+            return redirect(url_for('main.home'))
 
     return render_template(
         'home.html',
         courses=courses,
         progress_data=progress_data,
-        current_username=current_username,
-        current_useremail=current_useremail,
+        ongoing_courses=ongoing_courses,
+        completed_courses=completed_courses,
+        activities_count=activities_count,
+        current_username=current_user.name,
+        current_useremail=current_user.email,
         current_user_image=current_user.profile_img if current_user.profile_img else None
     )
+
 # Ensure the upload folder exists
 # UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads', 'activities')
 # if not os.path.exists(UPLOAD_FOLDER):

@@ -80,7 +80,7 @@
                 <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_username }}</span></h5>
                 <h2 style="color: #0A1931;">Welcome to RecyGlo!</h2>
              </div>
-            <div class="cards-container">
+             <div class="cards-container">
                 <a href="user_course.html">
                     <div class="card">
                         <div class="card-content">
@@ -89,7 +89,7 @@
                             </div>
                             <div class="card-text">
                                 <div class="card-title">Ongoing Courses</div>
-                                <div class="card-value">4</div>
+                                <div class="card-value">{{ ongoing_courses }}</div>
                             </div>
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                             </div>
                             <div class="card-text">
                                 <div class="card-title">Complete Courses</div>
-                                <div class="card-value">2</div>
+                                <div class="card-value">{{ completed_courses }}</div>
                             </div>
                         </div>
                     </div>
@@ -115,28 +115,13 @@
                             </div>
                             <div class="card-text">
                                 <div class="card-title">My Activities</div>
-                                <div class="card-value">3</div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                <a href="#">
-                    <div class="card" >
-                        <div class="card-content">
-                            <div class="card-icon">
-                                <i class="fa-regular fa-clock"></i>
-                            </div>
-                            <div class="card-text">
-                                <div class="card-title">Learning Hours</div>
-                                <div class="card-value">
-                                    2<span>h</span>
-                                    30<span>min</span>
-                                </div>
+                                <div class="card-value">{{ activities_count }}</div>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
+            
             <!-- first row of dashboard end -->
 
             <!-- Third row start -->
