@@ -22,6 +22,7 @@ body {
     width: 100%;
     height: 70vh;
     overflow-y: auto; 
+    animation: fadeIn 1s ease-in-out;
 }
 
 .left-side {
@@ -34,6 +35,7 @@ body {
     align-items: center;
     width: 50%;
     z-index: 1; /* Ensure content stays on top */
+    animation: slideInLeft 1s ease-in-out;
 }
 
 .left-side::before {
@@ -103,6 +105,7 @@ body {
     padding: 40px;
     width: 50%;
     background-color: #F5F5F5;
+    animation: slideInRight 1s ease-in-out;
 }
 
 .login-form {
@@ -132,6 +135,14 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+/* Input focus zoom */
+.form-group input:focus {
+    transform: scale(1.02);
+    border-color: #FF6699;
+    transition: transform 0.2s ease, border-color 0.3s ease;
+    outline: none;
 }
 
 .form-checkbox {
@@ -214,10 +225,12 @@ button[type="submit"] {
     cursor: pointer;
     width: 100%;
     font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button[type="submit"]:hover {
     background-color: #051227;
+    transform: scale(1.03);
 }
 
 footer{
@@ -246,4 +259,20 @@ footer{
         max-width: 400px; /* Limit the form width on small screens */
         height: auto; /* Adjust height for better fit */
     }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
 }
