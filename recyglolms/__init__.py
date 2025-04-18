@@ -63,6 +63,7 @@ def create_app():
     from recyglolms.quiz import quiz_bp
     from recyglolms.assesement import assessment_bp
     from recyglolms.certificate_grading import grading_bp
+    from recyglolms.home import home_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
@@ -72,6 +73,7 @@ def create_app():
     app.register_blueprint(quiz_bp)
     app.register_blueprint(assessment_bp)
     app.register_blueprint(grading_bp)
+    app.register_blueprint(home_bp)
 
     # User loader function for Flask-Login
     @login_manager.user_loader
