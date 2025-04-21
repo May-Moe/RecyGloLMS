@@ -72,7 +72,8 @@ def logout():
     # Log out the user
     logout_user()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('auth.login'))
+    # return redirect(url_for('auth.login'))
+    return redirect(url_for('main.index'))  # Redirect to index web page after logout
 
 @auth_bp.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
