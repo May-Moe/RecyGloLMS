@@ -1,0 +1,213 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="/static/CSS/course_detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Course Details</title>
+
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="/static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="/static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="/static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="/static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="/static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="/static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="/static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="/static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+           <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list"></ul>
+                </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user.profile_img if current_user.profile_img else url_for('static', filename='default_profile.png') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_user_name }}</span></h5>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="../static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Classes</a></li>
+                <li><a href="{{ url_for('grading.user_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="cards-header">
+                <a href="{{ url_for('main.learning_class_courses', classid=selected_class.classid) }}" class="back-icon" style="color: white;">
+                    <i class="fa-solid fa-angle-left"></i>
+                </a>
+                <h2 style="margin-bottom: 10px; margin-top: 10px; font-size:35px; color: white">{{ data.course.name }}</h2>
+            <p style="margin-bottom: 20px; color: gray;">{{ data.course.description }}</p>
+             </div>
+            <h3 style="margin-bottom: 10px; margin-top: 0px; font-size: 20px; color: #FF6699;">Modules overview</h3>
+            {% for module_data in data.modules %}
+            <div class="dropdown_course">
+                <button class="dropdown-toggle-module">
+                    {{ module_data.module.name }}<i class="fas fa-chevron-down icon" style="margin-left:10px; font-size: 12px;"></i>
+                </button>
+            <div id="module{{ module_data.module.moduleid }}" class="dropdown-content-module">
+            <div class="module-dropdown">
+                {% if module_data.videos %}
+                    {% for video in module_data.videos %}
+                        <button class="dropdown-toggle-video">
+                            {{ video.title }}<i class="fas fa-chevron-down icon" style="margin-left:10px; font-size: 12px;"></i>
+                        </button>
+                        <div id="video{{ video.videoid }}" class="dropdown-content-video">
+                            <div class="tab_section">
+                                <div class="tab">
+                                    <h3>{{ video.title }}</h3>
+                                    <div class="video-container">
+                                        <iframe 
+                                            height="315"
+                                            width="560"
+                                            id="video{{ video.videoid }}"
+                                            src="{{ video.url }}" 
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen 
+                                            class="w-100"  
+                                            data-video-id="{{ video.videoid }}">
+                                        </iframe>    
+                                        <div class="video-overlay" onclick="startVideo({{ video.videoid }}, this)">
+                                            <span>▶ Play</span>
+                                        </div>
+                                        
+                                    </div>
+                                    <p>Duration: {{ video.duration // 60 }} min {{ video.duration % 60 }} sec</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}  <!-- Closing video loop -->
+                {% else %}
+                    <p>No videos available for this module.</p>
+                {% endif %}
+                <!-- quiz section -->
+                
+            {% for quiz in module_data.quizzes %}
+            <a href="{{ url_for('quiz.start_quiz', quizid=quiz.quizid) }}">
+            <button class="dropdown-toggle-quiz">
+                Quiz
+            </button>
+            </a>
+            {% endfor %}  <!-- Closing the quiz loop -->
+
+
+            </div>
+        </div>
+    </div>
+{% endfor %}  <!-- Closing module loop -->
+
+
+<script src="/static/JS/script.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Hide all dropdowns by default
+        const dropdowns = document.querySelectorAll('.dropdown-content-module, .dropdown-content-video');
+        dropdowns.forEach(dropdown => {
+            dropdown.style.display = 'none';
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    // Add event listeners to all buttons with the class 'dropdown-toggle-module'
+    document.querySelectorAll('.dropdown-toggle-module').forEach(button => {
+        button.addEventListener('click', function() {
+            const section = this.nextElementSibling; // Get the next sibling (the dropdown content)
+            if (section) {
+                // Toggle the display of the module dropdown content directly
+                section.style.display = (section.style.display === "none" || section.style.display === "") ? "block" : "none";
+            }
+        });
+    });
+
+    // Add event listeners to all buttons with the class 'dropdown-toggle-video'
+    document.querySelectorAll('.dropdown-toggle-video').forEach(button => {
+        button.addEventListener('click', function() {
+            const section = this.nextElementSibling; // Get the next sibling (the dropdown content)
+            if (section) {
+                // Toggle the display of the video dropdown content directly
+                section.style.display = (section.style.display === "none" || section.style.display === "") ? "block" : "none";
+            }
+        });
+    });
+});
+
+
+
+    function startVideo(videoId, overlayElement) {
+        overlayElement.style.display = 'none';
+        updateProgress(videoId);
+        const iframe = document.getElementById(`video${videoId}`);
+        const videoUrl = iframe.src;
+        iframe.src = `${videoUrl}?autoplay=1`;
+    }
+
+    function updateProgress(videoId) {
+        fetch(`/update_video_progress/${videoId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ completed: true })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Progress updated:", data);
+        })
+        .catch(error => console.error("Error updating progress:", error));
+    }
+
+    function markComplete(videoid) {
+        fetch(`/update_video_progress/${videoid}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ increment: 1000 })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Progress updated:', data);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+</script>
+
+    
+</body>
+</html>

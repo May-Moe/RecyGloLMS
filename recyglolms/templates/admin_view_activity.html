@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/CSS/style.css">
+    <link rel="stylesheet" href="../static/CSS/admin_view_activity.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Activity</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="../static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                <!-- Language Selector -->
+                <div class="language-dropdown">
+                    <button class="language-btn">
+                        <img src="../static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="?lang=en"><img src="../static/img/uk.svg" class="flag-icon"> English</a>
+                        <a href="?lang=th"><img src="../static/img/th.svg" class="flag-icon"> Thailand</a>
+                        <a href="?lang=my"><img src="../static/img/my.svg" class="flag-icon"> Myanmar</a>
+                        <a href="?lang=vi"><img src="../static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                        <a href="?lang=in"><img src="../static/img/id.svg" class="flag-icon"> Indonesia</a>
+                        <a href="?lang=ko"><img src="../static/img/kr.svg" class="flag-icon"> Korea</a>
+                    </div>
+                </div>
+           <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list"></ul>
+                </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user.name }}</span></h4>
+                        <p id="profile-email">{{ current_user.email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="../static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <!-- Dropdown Class Management -->
+                <li class="dropdown-class">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-chalkboard icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Class Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container-class">
+                    <ul>
+                    <li><a href="{{ url_for('admin.manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
+                    <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                </ul>
+                </div>
+
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+
+                <!-- dropdown user management -->
+                <li class="dropdown-user">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fas fa-user icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">User Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container">
+                    <ul>
+                    <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> View All Users</a></li>
+                    <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+                    <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                    <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                </ul>
+                </div>
+
+                <!-- dropdown quiz management -->
+                <li class="dropdown-quiz">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-lightbulb icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Assessment</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                <div class="dropdown-container-quiz">
+                    <ul>
+                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                        <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
+                    </ul>
+                </div>                
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+            <a href="{{ url_for('admin.Activities') }}" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
+            <h3 style="text-align:center; font-size: 20px; margin-bottom: 20px;">{{ user.name }}'s Activities</h3>
+            <hr style="color: gray; margin-bottom: 20px;">
+
+            <!-- Activity List -->
+            {% if activities %}
+            {% for activity in activities %}
+                <div class="post" onclick="openModal(this)" 
+                    data-images="{% for img in activity.image_urls %}{{ img }},{% endfor %}">
+
+                    {% if activity.image_urls %}
+                        {% set total_images = activity.image_urls|length %}
+                        {% if total_images > 0 %}
+                            <div class="post-image-container">
+                                <img src="{{ activity.image_urls[0] }}" alt="Activity Image" class="post-image">
+                                {% if total_images > 1 %}
+                                    <div class="image-overlay">+{{ total_images - 1 }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <img src="{{ url_for('static', filename='img/profile.webp') }}" alt="No Image" class="post-image">
+                    {% endif %}
+
+                    <div class="post-content">
+                        <div class="post-title">{{ activity.name }}</div>
+                        <div class="post-text">{{ activity.description }}</div>
+                        <div class="post-date">{{ activity.date.strftime('%d/%m/%Y') }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% else %}
+            <div style="text-align: center; font-size: 1.0rem; padding: 20px; margin-top: 20px; display: flex; justify-content: center; align-items: center; height: 50vh; color: gray;">
+                <p style="margin: 0;">No activities found</p>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- Modal Form -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            
+            <div class="image-container">
+                <img id="modalImage" src="" alt="Post Image">
+            </div>
+    
+            <button class="prev" onclick="prevImage()">&#10094;</button>
+            <button class="next" onclick="nextImage()">&#10095;</button>
+    
+            <h2 id="modalTitle"></h2>
+            <p id="modalText"></p>
+            <p id="modalDate" class="modal-date"></p>
+        </div>
+    </div>
+    
+    
+
+    <script src="../static/JS/script.js"></script>
+
+    <script>
+        let currentImageIndex = 0;
+        let imageArray = [];
+
+        function openModal(postElement) {
+            const title = postElement.querySelector('.post-title').textContent;
+            const text = postElement.querySelector('.post-text').textContent;
+            const date = postElement.querySelector('.post-date').textContent;
+            
+            // Get images from data-images attribute and convert to array
+            const imageData = postElement.getAttribute("data-images");
+            imageArray = imageData.split(',').filter(img => img.trim() !== ""); // Remove empty strings
+
+            currentImageIndex = 0;
+
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalText').textContent = text;
+            document.getElementById('modalDate').textContent = date;
+
+            if (imageArray.length > 1) {
+                document.querySelector('.prev').style.display = "block";
+                document.querySelector('.next').style.display = "block";
+            } else {
+                document.querySelector('.prev').style.display = "none";
+                document.querySelector('.next').style.display = "none";
+            }
+
+            updateModalImage();
+
+            document.getElementById('postModal').style.display = "flex";  
+        }
+
+        function updateModalImage(animationDirection = "") {
+            const modalImage = document.getElementById('modalImage');
+            
+            if (animationDirection === "left") {
+                modalImage.style.transform = "translateX(100%)"; // Move image to right before displaying
+            } else if (animationDirection === "right") {
+                modalImage.style.transform = "translateX(-100%)"; // Move image to left before displaying
+            }
+
+            setTimeout(() => {
+                modalImage.src = imageArray[currentImageIndex];
+                modalImage.style.transform = "translateX(0%)"; // Move back to center
+            }, 100); // Delay to make transition smooth
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % imageArray.length;
+            updateModalImage("left");
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + imageArray.length) % imageArray.length;
+            updateModalImage("right");
+        }
+
+        function closeModal() {
+            document.getElementById('postModal').style.display = "none";
+        }
+
+    document.addEventListener("DOMContentLoaded", function () {
+            const dropdowns = [
+                { button: ".dropdown-class", container: ".dropdown-container-class" },
+                { button: ".dropdown-user", container: ".dropdown-container" },
+                { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+            ];
+
+            dropdowns.forEach(({ button, container }) => {
+                const btn = document.querySelector(button);
+                const dropContainer = document.querySelector(container);
+
+                if (btn && dropContainer) {  // Ensure elements exist
+                    btn.addEventListener("click", function () {
+                        dropContainer.classList.toggle("active");
+                    });
+                }
+            });
+            });
+
+    </script>
+</body>
+</html>

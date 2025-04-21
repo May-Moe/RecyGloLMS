@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/user_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>User Dashboard</title>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- nav -->
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+                <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list"></ul>
+                </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_username }}</span></h4>
+                        <p id="profile-email">{{ current_useremail }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Classes</a></li>
+                <li><a href="{{ url_for('grading.user_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+                <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+            </ul>
+        </nav>
+        <!-- nav end -->
+
+        <!-- body start -->
+        <div class="container">
+            <!-- first row of dashboard -->
+             <div class="cards-header">
+                <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_username }}</span></h5>
+                <h2 style="color: #0A1931;">Welcome to RecyGlo!</h2>
+             </div>
+             <div class="cards-container">
+                <a href="user_course.html">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-rotate"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Ongoing Courses</div>
+                                <div class="card-value">{{ ongoing_courses }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Complete Courses</div>
+                                <div class="card-value">{{ completed_courses }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">My Activities</div>
+                                <div class="card-value">{{ activities_count }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- first row of dashboard end -->
+
+            <!-- Third row start -->
+<div class="chart3">
+    <!-- Third row first card -->
+    <div class="card3">
+        <div class="card3-title">Upcoming Courses</div>
+        <div class="card3-value">
+            <!-- Scrollable wrapper -->
+            <div class="table-container">
+                <table class="courses-table">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                        <tr>
+                            <td> {{ course.name }} </td>
+                            <td> {{ course.description }} </td>
+                            <td> {{ course.created_date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <a href="{{ url_for('main.learning') }}" class="view-courses">view all courses</a>
+    </div>
+</div>
+
+
+            <!-- second row of dashboard -->
+            <div class="course_header">
+                <h1>Courses In Progress</h1>
+                <a href="{{ url_for('main.user_progress') }}" class="view-courses">My Learning</a>
+              </div>
+              
+              <div class="courses">
+                {% if progress_data %}
+                {% for course_name, progress in progress_data.items() %}
+                    <div class="course-card">
+                        <div class="course-header">
+                            <span class="tag">{{ course_name }}</span>
+                        </div>
+                        <h4>{{ course_name }}</h4>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ progress | round(2) }}%
+                            </div>
+                        </div>
+                        {% set course = courses | selectattr("name", "equalto", course_name) | first %}
+                        {% if course %}
+                            <a href="{{ url_for('main.course_detail', courseid=course.courseid) }}" class="continue-btn">Continue</a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-course-message">No courses assigned to you yet.</p>
+            {% endif %}
+            </div>
+            
+    <!-- second row of dashboard -->
+
+        </div>
+
+        
+        <!-- Announcement section start -->
+    <div class="announcements">
+        <h2>Announcements</h2>
+        <div class="calendar-container">
+            <div class="calendar">
+                <header>
+                    <span class="left">◀</span>
+                    <div class="header-display">
+                        <p class="display"></p>
+                    </div>
+                    <span class="right">▶</span>
+                </header>
+
+                <div class="week">
+                    <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                </div>
+                <div class="days"></div>
+            </div>
+        </div>
+
+        <div class="announcement-list">
+            <h3 class="selected-date">Select a date to view announcements</h3>
+            <ul class="announcement-items"></ul>
+        </div>
+    </div>
+    <!-- Announcement section end -->
+    </div>
+        
+    <script src="static/JS/script.js"></script>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const daysContainer = document.querySelector(".days");
+            const selectedDateDisplay = document.querySelector(".selected-date");
+            const announcementContainer = document.querySelector(".announcement-items");
+            const leftButton = document.querySelector(".left");
+            const rightButton = document.querySelector(".right");
+            const headerDisplay = document.querySelector(".display");
+        
+            let currentYear = new Date().getFullYear();
+            let currentMonth = new Date().getMonth();
+        
+            function updateHeader() {
+                const monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                headerDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            }
+        
+            function generateCalendar(year, month) {
+                daysContainer.innerHTML = "";
+                const firstDay = new Date(year, month, 1).getDay();
+                const lastDate = new Date(year, month + 1, 0).getDate();
+        
+                updateHeader();
+        
+                for (let i = 0; i < firstDay; i++) {
+                    const emptyDiv = document.createElement("div");
+                    emptyDiv.classList.add("empty-day");
+                    daysContainer.appendChild(emptyDiv);
+                }
+        
+                for (let day = 1; day <= lastDate; day++) {
+                    const dayElement = document.createElement("div");
+                    dayElement.classList.add("day");
+                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    dayElement.dataset.date = dateStr;
+                    dayElement.textContent = day;
+                    daysContainer.appendChild(dayElement);
+                }
+            }
+        
+            function fetchAnnouncements(selectedDate) {
+                fetch(`/announcements_by_date/${selectedDate}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        announcementContainer.innerHTML = "";
+                        if (data.announcements.length === 0) {
+                            announcementContainer.innerHTML = "<li>No announcements for this date.</li>";
+                        } else {
+                            data.announcements.forEach(announcement => {
+                                const announcementItem = `
+                                    <ul class="announcement-item">
+                                        <li><h3>${announcement.title}</h3></li>
+                                        <li><p>${announcement.content}</p></li>
+                                        <li>${announcement.image ? `<img src="${announcement.image}" alt="Announcement Image">` : ""}</li>
+                                    </ul>`;
+                                announcementContainer.innerHTML += announcementItem;
+                            });
+                        }
+                    })
+                    .catch(error => console.error("Error fetching announcements:", error));
+            }
+        
+            daysContainer.addEventListener("click", function (event) {
+                if (event.target.classList.contains("day")) {
+                    const selectedDate = event.target.dataset.date;
+                    selectedDateDisplay.textContent = `Announcements for: ${selectedDate}`;
+                    fetchAnnouncements(selectedDate);
+                }
+            });
+        
+            leftButton.addEventListener("click", function () {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentYear, currentMonth);
+            });
+        
+            rightButton.addEventListener("click", function () {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentYear, currentMonth);
+            });
+        
+            generateCalendar(currentYear, currentMonth);
+        });
+        
+    
+        
+        
+            </script>
+</body>
+</html>

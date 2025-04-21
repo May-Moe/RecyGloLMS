@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="static/CSS/style.css">
+        <link rel="stylesheet" href="static/CSS/dashboard.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="icon" href="static/img/favicon.ico">
+        <title>Dashboard</title>
+        <!-- Include Chart.js and ChartDataLabels -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    </head>
+<body>
+    <div class="dashboard">
+        <!-- nav -->
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+        
+            <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+        
+            <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list"></ul>
+                </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+        
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                        <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- sidebar -->
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <!-- Dropdown Class Management -->
+                <li class="dropdown-class">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-chalkboard icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Class Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container-class">
+                    <ul>
+                    <li><a href="{{ url_for('admin.manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
+                    <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                    </ul>
+                </div>
+
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+
+                <!-- dropdown user management -->
+                <li class="dropdown-user">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fas fa-user icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">User Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container">
+                    <ul>
+                    <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> View All Users</a></li>
+                    <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+                    <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                    <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                </ul>
+                </div>
+                <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li> -->
+
+                <!-- dropdown quiz management -->
+                <li class="dropdown-quiz">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-lightbulb icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Assessment</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                <div class="dropdown-container-quiz">
+                    <ul>
+                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                        <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
+                    </ul>
+                </div>
+                <li><a href="{{ url_for('admin.show_logs') }}"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+            </ul>
+        </nav>
+        <!-- nav end -->
+
+        <!-- body start -->
+        <div class="container">
+            <div class="cards-header">
+                <h5 class="card_header_title" style="color: gray;">Hello <span class="card_header_title">{{ current_user_name }}</span></h5>
+                <h2 style="color: #0A1931">Welcome to RecyGlo!</h2>
+             </div>
+            <!-- first row of dashboard -->
+            <div class="cards-container">
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Courses</div>
+                                <div class="card-value">{{ total_courses }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-video"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Videos</div>
+                                <div class="card-value">{{ total_videos }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Users</div>
+                                <div class="card-value">{{ total_users }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Inactive Users</div>
+                                <div class="card-value">{{ inactive_users }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- first row of dashboard end -->
+
+            <!-- second row in dashboard -->
+            <div class="chart">
+                <!-- second row first card -->
+                <div class="card2">
+                    <div class="card2-title">Top Courses</div>
+                   
+                    <div class="card2-value">
+                        <table class="card2-table">
+                            <thead>
+                                <tr>
+                                    <th>Course Title</th>
+                                    <th>Modules</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for course in courses[:3] %}  <!-- Limit to 3 rows -->
+                                <tr>
+                                    <td>{{ course.course_name }}</td>
+                                    <td>{{ course.module_count }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    
+                    
+
+                    <div class="view-all">
+                        <a href="{{ url_for('admin.manage_course') }}" style="color: #0A1931;">View All Courses <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                </div>
+                <!-- second row first card end -->
+
+                <!-- second row second card -->
+                <div class="card2">
+                    <div class="card2-title">Active Tracking</div>
+                    <div class="card2-pie">
+                        <canvas id="userActivityChart" class="piechart"></canvas>
+                    </div>
+                    <div class="view-all">
+                        <a href="{{ url_for('admin.view_users') }}" style="color: #0A1931;">View All Users <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                </div>
+                <!-- second row second card end-->
+            </div>
+            <!-- second row in dashboard end -->
+
+
+
+         <!-- fourth row start -->
+         <div class="chart3">
+            <!-- fourth row first card -->
+            <div class="card3">
+                <div class="card3-title">Feedback Box</div>
+                <div class="feedback-container">
+                    {% for feedback, user in feedbacks[:3] %}
+                    <div class="card3-value">
+                        <div class="card3-profile">
+                            <img src="{{ url_for('static', filename=user.profile_img) if user.profile_img else url_for('static', filename='/uploads/default-profile.jpg') }}" 
+                alt="{{ user.name }}">  
+                        </div>
+                        <h4>{{ user.name }}</h4>
+                        <div class="feedback-content">{{ feedback.feedback }}</div> 
+                        <div class="feedback-date">
+                            <p>{{ feedback.submit_date.strftime('%d %b %Y') }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="view-all">
+                    <a href="{{ url_for('admin.admin_feedback') }}" style="color: #0A1931;">View All Feedback <i class="fas fa-arrow-right"></i></a>
+                  </div>
+            </div>
+            <!-- fourth row first card end -->
+    </div>
+        </div>
+        <!-- Announcement section start -->
+    <div class="announcements">
+        <h2>Announcements</h2>
+        <div class="calendar-container">
+            <div class="calendar">
+                <header>
+                    <span class="left">◀</span>
+                    <div class="header-display">
+                        <p class="display"></p>
+                    </div>
+                    <span class="right">▶</span>
+                </header>
+
+                <div class="week">
+                    <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                </div>
+                <div class="days"></div>
+            </div>
+        </div>
+
+        <div class="announcement-list">
+            <h3 class="selected-date">Select a date to view announcements</h3>
+            <ul class="announcement-items"></ul>
+        </div>
+    </div>
+    <!-- Announcement section end -->
+    </div>
+    <script src="static/JS/script.js"></script>
+    <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    const daysContainer = document.querySelector(".days");
+    const selectedDateDisplay = document.querySelector(".selected-date");
+    const announcementContainer = document.querySelector(".announcement-items");
+    const leftButton = document.querySelector(".left");
+    const rightButton = document.querySelector(".right");
+    const headerDisplay = document.querySelector(".display");
+
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth();
+
+    function updateHeader() {
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        headerDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    }
+
+    function generateCalendar(year, month) {
+        daysContainer.innerHTML = "";
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+
+        updateHeader();
+
+        for (let i = 0; i < firstDay; i++) {
+            const emptyDiv = document.createElement("div");
+            emptyDiv.classList.add("empty-day");
+            daysContainer.appendChild(emptyDiv);
+        }
+
+        for (let day = 1; day <= lastDate; day++) {
+            const dayElement = document.createElement("div");
+            dayElement.classList.add("day");
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            dayElement.dataset.date = dateStr;
+            dayElement.textContent = day;
+            daysContainer.appendChild(dayElement);
+        }
+    }
+
+    function fetchAnnouncements(selectedDate) {
+        fetch(`/announcements_by_date/${selectedDate}`)
+            .then(response => response.json())
+            .then(data => {
+                announcementContainer.innerHTML = "";
+                if (data.announcements.length === 0) {
+                    announcementContainer.innerHTML = "<li>No announcements for this date.</li>";
+                } else {
+                    data.announcements.forEach(announcement => {
+                        const announcementItem = `
+                            <ul class="announcement-item">
+                                <li><h3>${announcement.title}</h3></li>
+                                <li><p>${announcement.content}</p></li>
+                                <li>${announcement.image ? `<img src="${announcement.image}" alt="Announcement Image">` : ""}</li>
+                            </ul>`;
+                        announcementContainer.innerHTML += announcementItem;
+                    });
+                }
+            })
+            .catch(error => console.error("Error fetching announcements:", error));
+    }
+
+    daysContainer.addEventListener("click", function (event) {
+        if (event.target.classList.contains("day")) {
+            const selectedDate = event.target.dataset.date;
+            selectedDateDisplay.textContent = `Announcements for: ${selectedDate}`;
+            fetchAnnouncements(selectedDate);
+        }
+    });
+
+    leftButton.addEventListener("click", function () {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        generateCalendar(currentYear, currentMonth);
+    });
+
+    rightButton.addEventListener("click", function () {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        generateCalendar(currentYear, currentMonth);
+    });
+
+    generateCalendar(currentYear, currentMonth);
+});
+
+
+        const ctx = document.getElementById('userActivityChart').getContext('2d');
+
+        const userActivityChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Active within last 7 Days',
+                    'Active within 15 last Days',
+                   
+                    'Inactive for over 30 Days'
+                ],
+                datasets: [{
+                    label: 'User Activity',
+                    data: [
+                        {{ user_data.active_7_days }},
+                        {{ user_data.active_15_days }},
+                        {{ user_data.inactive_30_days }}
+                    ],
+                    backgroundColor: [
+                        '#FF6699', // Pink
+                        '#44525d', // Grey
+                        '#0A1931'  // Navy Blue
+                    ],
+                    borderWidth: 1
+                    
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom', // Moves the legend to the side
+                        labels: {
+                            font: {
+                                size: 10,
+                                family: 'Arial, sans-serif',
+                                weight: 'bold'
+                            },
+                            color: '#333' // Dark color for the legend text
+                        }
+                    },
+                    tooltip: {
+                        enabled: true, // Enable tooltips for hover interaction
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                                const percentage = ((context.raw / total) * 100).toFixed(1);
+                                return `${context.label}: ${context.raw} users (${percentage}%)`;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        color: '#ffffff', // White text for better contrast
+                        align: 'center', // Center the text on the segment
+                        backgroundColor: '#000000a0', // Semi-transparent black background
+                        borderColor: '#ffffff', // White border for contrast
+                        borderWidth: 1,
+                        borderRadius: 4, // Rounded corners
+                        padding: 2, // Space around the label text
+                        font: {
+                            size: 8, // Font size
+                            family: 'Arial, sans-serif', // Clean font family
+                            weight: 'bold' // Bold text
+                        },
+                        formatter: (value, ctx) => {
+                            const total = ctx.dataset.data.reduce((sum, val) => sum + val, 0);
+                            const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage
+                            const label = ctx.chart.data.labels[ctx.dataIndex]; // Get label text
+                            return `${label}\n${percentage}%`; // Two-line label
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+
+
+    </script>
+</body>
+</html>

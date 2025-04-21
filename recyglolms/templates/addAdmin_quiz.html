@@ -1,0 +1,324 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="CSS/addAdmin_quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/lucide-react/icons/lucide.min.js"></script>
+    <title>Add Quiz</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+           <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list"></ul>
+                </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <!-- Dropdown Class Management -->
+                <li class="dropdown-class">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-chalkboard icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Class Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container-class">
+                    <ul>
+                    <li><a href="{{ url_for('admin.manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
+                    <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                </ul>
+                </div>
+
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+
+                <!-- dropdown user management -->
+                <li class="dropdown-user">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fas fa-user icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">User Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container">
+                    <ul>
+                    <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> View All Users</a></li>
+                    <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+                    <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                    <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                </ul>
+                </div>
+
+                <!-- dropdown quiz management -->
+                <li class="dropdown-quiz">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-lightbulb icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Assessment</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                <div class="dropdown-container-quiz">
+                    <ul>
+                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                        <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
+                    </ul>
+                </div>                
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <a href="Admin_quiz.html" class="back-icon"><i class="fa-solid fa-angle-left"></i></a>
+            <h1 style="text-align: center; font-size: 23px; color: rgb(34, 164, 41);" >Quiz Adding Section</h1>
+            <h2 class="question-add">Questions (5)</h2>
+            <ul id="questionItems">
+                <li class="question-item">
+                    What does UI stand for in the context of design?
+                    <button class="delete-question" onclick="deleteQuestion(this)"><i class="fas fa-trash"></i></button>
+                </li>
+                <li class="question-item">
+                    Which aspect of UI design is crucial for usability?
+                    <button class="delete-question" onclick="deleteQuestion(this)"><i class="fas fa-trash"></i></button>
+                </li>
+                <li class="question-item">
+                    How to export a picture from a design tool?
+                    <button class="delete-question" onclick="deleteQuestion(this)"><i class="fas fa-trash"></i></button>
+                </li>
+                <li class="question-item">
+                    Which term refers to the visual structure of an app?
+                    <button class="delete-question" onclick="deleteQuestion(this)"><i class="fas fa-trash"></i></button>
+                </li>
+                <li class="question-item">
+                    Why is maintaining consistency important?
+                    <button class="delete-question" onclick="deleteQuestion(this)"><i class="fas fa-trash"></i></button>
+                </li>
+            </ul>
+            <button id="addQuestion">+ Add Question</button>
+
+            <hr style="margin-top: 30px; color: rgb(76, 218, 50);">
+        
+
+        <div class="question-editor">
+            <h2>Question Editor</h2>
+            <form id="questionForm">
+                <label for="questionText">Question *</label>
+                <div class="input-group">
+                    <input type="text" id="questionText" placeholder="Type your question here..." required>
+                    <button class="delete-question" onclick="clearInput('questionText')"><i class="fas fa-trash"></i></button>
+                </div>
+
+                <label>Choices *</label>
+                <div class="choices-container">
+                        <div class="choice">
+                            <input type="radio" name="correctAnswer" value="0">
+                            <div class="input-group">
+                                <input type="text" class="choiceText" placeholder="Choice 1">
+                                <button type="button" class="delete-choice" onclick="deleteChoice(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="choice">
+                            <input type="radio" name="correctAnswer" value="1">
+                            <div class="input-group">
+                                <input type="text" class="choiceText" placeholder="Choice 2">
+                                <button type="button" class="delete-choice" onclick="deleteChoice(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="choice">
+                            <input type="radio" name="correctAnswer" value="2">
+                            <div class="input-group">
+                                <input type="text" class="choiceText" placeholder="Choice 3">
+                                <button type="button" class="delete-choice" onclick="deleteChoice(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <button id="addChoice">+ Add Answer</button>
+                
+                <div class="settings">
+                    <div class="setting-item">
+                        <label for="timeLimit">Time Limit (mins)</label>
+                        <input type="number" id="timeLimit" min="1" placeholder="2">
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="points">Points</label>
+                        <input type="number" id="points" min="1" placeholder="1">
+                    </div>
+                </div>
+                <button type="submit">Save Question</button>
+            </form>
+        </div>
+        </div>
+        </div>
+    <script src="JS/script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+    const questionItems = document.getElementById("questionItems");
+    const addQuestionButton = document.getElementById("addQuestion");
+    const questionForm = document.getElementById("questionForm");
+    const addChoiceButton = document.getElementById("addChoice");
+    const choicesContainer = document.querySelector(".choices-container");
+
+    // Function to add delete button event for a question
+    function addDeleteEventToQuestion(questionItem) {
+        const deleteButton = questionItem.querySelector(".delete-question");
+        deleteButton.addEventListener("click", () => {
+            questionItem.remove();
+        });
+    }
+
+    // Add new question
+    addQuestionButton.addEventListener("click", () => {
+        const newQuestion = prompt("Enter the new question:");
+        if (newQuestion) {
+            const li = document.createElement("li");
+            li.className = "question-item";
+            li.textContent = newQuestion;
+            
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-question";
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            
+            li.appendChild(deleteButton);
+            questionItems.appendChild(li);
+            
+            addDeleteEventToQuestion(li);  // Attach delete event to the new question
+        }
+    });
+
+    // Function to add delete event for choices
+    function addDeleteEventToChoice(choiceDiv) {
+        const deleteButton = choiceDiv.querySelector(".delete-choice");
+        deleteButton.addEventListener("click", () => {
+            choiceDiv.remove();
+        });
+    }
+
+    // Add new choice
+    addChoiceButton.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const choiceDiv = document.createElement("div");
+        choiceDiv.className = "choice";
+
+        const radioInput = document.createElement("input");
+        radioInput.type = "radio";
+        radioInput.name = "correctAnswer";
+        radioInput.value = choicesContainer.children.length;
+
+        const textInput = document.createElement("input");
+        textInput.type = "text";
+        textInput.className = "choiceText";
+        textInput.placeholder = `Choice ${choicesContainer.children.length + 1}`;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "delete-choice";
+        deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+
+        choiceDiv.appendChild(radioInput);
+        choiceDiv.appendChild(textInput);
+        choiceDiv.appendChild(deleteButton);
+
+        choicesContainer.appendChild(choiceDiv);
+
+        addDeleteEventToChoice(choiceDiv);  // Attach delete event to the new choice
+    });
+
+    // Save question
+    questionForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const questionText = document.getElementById("questionText").value;
+        const timeLimit = document.getElementById("timeLimit").value;
+        const points = document.getElementById("points").value;
+
+        if (questionText && timeLimit && points) {
+            alert("Question saved successfully!");
+            questionForm.reset();
+        } else {
+            alert("Please fill out all required fields.");
+        }
+    });
+});
+    //drop down sidebar
+            document.addEventListener("DOMContentLoaded", function () {
+                    const dropdowns = [
+                        { button: ".dropdown-class", container: ".dropdown-container-class" },
+                        { button: ".dropdown-user", container: ".dropdown-container" },
+                        { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+                    ];
+
+                    dropdowns.forEach(({ button, container }) => {
+                        const btn = document.querySelector(button);
+                        const dropContainer = document.querySelector(container);
+
+                        if (btn && dropContainer) {  // Ensure elements exist
+                            btn.addEventListener("click", function () {
+                                dropContainer.classList.toggle("active");
+                            });
+                        }
+                    });
+                    });
+
+    </script>
+</body>
+</html>
+

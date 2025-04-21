@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/CSS/style.css">
+    <link rel="stylesheet" href="static/CSS/Admin_Home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>RecyGlo</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+           <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list"></ul>
+                </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h4 class="profile-header">Hello, <span id="user-name"> {{current_user_name}}</span></h4>
+                        <p id="profile-email"> {{current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+                
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <!-- Dropdown Class Management -->
+                <li class="dropdown-class">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-chalkboard icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Class Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container-class">
+                    <ul>
+                    <li><a href="{{ url_for('admin.manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
+                    <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                </ul>
+                </div>
+
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+
+                <!-- dropdown user management -->
+                <li class="dropdown-user">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fas fa-user icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">User Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container">
+                    <ul>
+                    <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> View All Users</a></li>
+                    <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+                    <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                    <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                </ul>
+                </div>
+
+                <!-- dropdown quiz management -->
+                <li class="dropdown-quiz">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-lightbulb icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Assessment</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                <div class="dropdown-container-quiz">
+                    <ul>
+                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                        <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
+                    </ul>
+                </div>                
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <!-- <header>
+                <h1>Welcome to RecyGlo!</h1>
+            </header> -->
+            <!-- <div class="about-us">
+                <div class="about-text">
+                    <h2>ABOUT US</h2>
+                    <p>This platform is designed to support your vocational training journey. Whether you're learning new skills, completing activities, or connecting with trainers and peers, this LMS has everything you need in one place.</p>
+                </div>
+                <div class="about-image">
+                    <img src="img/homepic2.png" alt="Our Images">
+                </div>
+            </div> -->
+                
+            <!-- <div class="about-us">
+                <div class="about-text">
+                    <h2>ABOUT US</h2>
+                    <p>This platform is designed to support your vocational training journey. Whether you're learning new skills, completing activities, or connecting with trainers and peers, this LMS has everything you need in one place.</p>
+                </div>
+            </div>             -->
+
+            <div class="about-us">
+                <button class="prev" onclick="prevSlide()">❮</button>
+                <div class="text-box">
+                    <h2>WELCOME TO RECYGLO</h2>
+                    <p>This platform is designed to support your vocational training journey. Whether you're learning new skills, completing activities, or connecting with trainers and peers, this LMS has everything you need in one place.</p>
+                </div>                
+                <div class="dots"></div>
+                <button class="next" onclick="nextSlide()">❯</button>
+            </div>
+            
+            <div class="support">
+                <h2 class="header">💡 Services & Supports</h2>
+                <div class="support-container">
+                    <div class="support-card">
+                        <div class="support-icon">📚</div>
+                        <h2>What We Support?</h2>
+                        <p><strong>Training Videos:</strong> Access a vast library of videos to enhance your skills.</p>
+                        <p><strong>Interactive Activities:</strong> Participate in quizzes, projects, and hands-on tasks.</p>
+                        <p><strong>Track Your Progress:</strong> Stay on top of your achievements with real-time tracking.</p>
+                        <p><strong>Announcements:</strong> Receive updates on courses, events, and new resources.</p>
+                        <p><strong>Chat with Peers:</strong> Engage in discussions with your learning community.</p>
+                    </div>
+            
+                    <div class="support-card">
+                        <div class="support-icon">🚀</div>
+                        <h2>Key Benefits for Users</h2>
+                        <p><strong>Accessible Anywhere:</strong> Learn at your convenience, 24/7, from any device.</p>
+                        <p><strong>User-Friendly Interface:</strong> Enjoy a seamless and intuitive user experience.</p>
+                        <p><strong>Eco-Friendly Learning:</strong> Go paperless and contribute to a sustainable future.</p>
+                    </div>
+            
+                    <div class="support-card feedback-form">
+                        <div class="support-icon">💬</div>
+                        <h2> Feedback Form</h2>
+                        <form id="FeedbackForm">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" placeholder="Enter Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="Enter Email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea name="message" id="message" placeholder="Enter Message"></textarea>
+                            </div>
+                            <button class="submit-button" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="Announcement">
+                <h2 style="text-align: center; margin-bottom: 20px;">Announcement</h2>
+                <div class="ann-container">
+                        {% for announcement in announcements %}
+                        <ul class="announcement-item">
+                            {% if announcement.announcement_img %}
+                                <li>
+                                    <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" 
+                                         alt="Announcement Image" class="ann-img">
+                                </li>
+                                <li style="text-align: center; margin: 10px 0px;" class="ann-label"><span style="color: #A9C9A4; font-weight: bold;">Event Date:</span> {{ announcement.event_date }}</li>
+                            {% else %}
+                                <li>No Image</li>
+                            {% endif %}
+                        </ul>
+                        
+                        {% endfor %}
+                    
+                </div>
+            </div> -->
+
+            <div class="Announcement">
+                <h2 style="text-align: center; margin-bottom: 20px;">Announcement</h2>
+                <div class="ann-container">
+                    {% for announcement in announcements %}
+                    <div class="announcement-item">
+                        {% if announcement.announcement_img %}
+                            <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" 
+                                 alt="Announcement Image" class="ann-img">
+                        {% else %}
+                            <div class="no-img">No Image</div>
+                        {% endif %}
+                        <p class="ann-label"><span>Event Date:</span> {{ announcement.event_date }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+
+            <!-- <div class="programs">
+                <h2>Programs Offered</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque voluptates vero alias ex libero a eius maiores repellendus ea id dolorem voluptatibus ipsa obcaecati, voluptate ratione deleniti aliquid culpa. Dolore.</p>
+                <a href="#">Learn More</a>
+            </div> -->
+            
+            <div class="contact-us">
+                <h2 class="title">Contact Us</h2>
+                <div class="contact-container">
+                    <div class="contact-form card">
+                        <form id="FeedbackForm">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" placeholder="Enter Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="Enter Email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea name="message" id="message" placeholder="Enter Message"></textarea>
+                            </div>
+                            <button class="submit-button" type="submit">Submit</button>
+                        </form>
+                    </div>
+
+                    <div class="contact-info card">
+                        <div class="info-section">
+                            <h3>📍 Location</h3>
+                            <div class="location">
+                                    <p>Thailand</p>
+                                    <p>Myanmar</p>
+                                    <p>South Korea</p>
+                                    <p>Vietnam</p>
+                                    <p>Indonesia</p>
+                                
+                            </div>
+                        </div>
+                        <div class="info-section">
+                            <h3>📞 Contact Info</h3>
+                            <p><i class="fas fa-envelope"></i> Contact@recyglo.com</p>
+                        </div>
+                        <div class="info-section">
+                            <h3>🌍 Follow us on Social Media</h3>
+                            <div class="social-icons">
+                                <a href="#"><i class="fab fa-facebook"></i></a>
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <footer>
+                <p>© Copyright 2025 by RecyGlo Company Pte. Ltd. All rights reserved.</p>
+            </footer>
+        </div>
+        
+    </div>
+    <script src="static/JS/script.js"></script>
+    <script>
+       const images = [
+    "static/img/1.png",
+    "static/img/9.png",
+    "static/img/3.png"
+];
+
+let currentIndex = 0;
+const aboutUsSection = document.querySelector(".about-us");
+const dotsContainer = document.querySelector(".dots");
+
+// Function to update the background
+function updateBackground() {
+    aboutUsSection.style.backgroundImage = `url('${images[currentIndex]}')`;
+    aboutUsSection.style.animation = "slideEffect 1s ease-in-out";
+    updateDots();
+}
+
+// Function to move to the previous slide
+function prevSlide() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    updateBackground();
+}
+
+// Function to move to the next slide
+function nextSlide() {
+    currentIndex = (currentIndex + 1) % images.length;
+    updateBackground();
+}
+
+// Function to create dots for manual navigation
+function createDots() {
+    images.forEach((_, index) => {
+        const dot = document.createElement("div");
+        dot.classList.add("dot");
+        dot.addEventListener("click", () => {
+            currentIndex = index;
+            updateBackground();
+        });
+        dotsContainer.appendChild(dot);
+    });
+}
+
+// Function to update active dot
+function updateDots() {
+    document.querySelectorAll(".dot").forEach((dot, index) => {
+        dot.classList.toggle("active", index === currentIndex);
+    });
+}
+
+// Auto-slide every 5 seconds
+setInterval(nextSlide, 5000);
+
+// Initialize slideshow
+createDots();
+updateBackground();
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    const dropdowns = [
+                        { button: ".dropdown-class", container: ".dropdown-container-class" },
+                        { button: ".dropdown-user", container: ".dropdown-container" },
+                { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+                    ];
+
+                    dropdowns.forEach(({ button, container }) => {
+                        const btn = document.querySelector(button);
+                        const dropContainer = document.querySelector(container);
+
+                        if (btn && dropContainer) {  // Ensure elements exist
+                            btn.addEventListener("click", function () {
+                                dropContainer.classList.toggle("active");
+                            });
+                        }
+                    });
+                    });
+
+    </script>
+</body>
+</html>

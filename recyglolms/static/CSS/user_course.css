@@ -1,0 +1,331 @@
+/* Base styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fc;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+h1 {
+    font-size: 24px;
+    color: #1a6e1b;
+    margin-bottom: 20px;
+}
+
+h4, p {
+    margin: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0A1931;
+    padding: 30px 20px;
+    border-radius: 8px;
+    color: white;
+    gap: 20px; /* Adds space between items */
+}
+
+/* Ensure the title stays left-aligned */
+.header h2 {
+    margin: 0;
+    font-size: 22px;
+    flex-grow: 1; /* Pushes other elements to the right */
+    text-align: left; /* Explicitly left-align text */
+}
+
+
+/* HEADER TITLE */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* HEADER ACTIONS */    
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* SEARCH BAR */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #FF6699;
+    transition: 0.3s;
+}
+
+.search-container:focus-within {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+}
+
+.search-icon {
+    color: #FF6699;
+    font-size: 16px;
+}
+
+#searchBar {
+    width: 200px;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 300px); /* Adjust width for sidebar */
+    margin: 10px auto;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
+}
+
+.cards-header {
+    background: linear-gradient(to right, rgba(254, 254, 254, 0.8), #A9C9A4);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.course-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    justify-content: left;
+    background-color: #F5F5F5;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.course-item {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.course-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.course_link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.course-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.course-image:hover {
+    opacity: 0.9;
+}
+
+.course-content {
+    padding: 12px;
+}
+
+.course-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+}
+
+.course-details {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.no-classes {
+    text-align: center;
+    color: gray;
+    font-size: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+}
+
+
+/* Filter Form */
+#filterForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+/* Select Dropdown */
+.filter-select {
+    padding: 13px 20px;
+    font-size: 14px;
+    border: 1px solid #FF6699;
+    border-radius: 6px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+}
+
+.filter-select:focus {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+    outline: none;
+}
+
+.filter-select option {
+    padding: 10px;
+}
+
+/* Add Hover Effect */
+.filter-select:hover {
+    border-color: #e65c85;
+}
+
+/* Dropdown hidden by default */
+.assessment-dropdown {
+    display: none;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+/* Styling each assessment item */
+.assessment-item {
+    padding: 8px;
+    margin-bottom: 8px;
+    background-color: #fff;
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.assessment-item:hover {
+    transform: translateY(-3px);
+    background-color: #FF6699;
+    color: white;
+}
+
+.assessment-title {
+    font-weight: bold;
+    margin: 0;
+}
+
+.assessment-time {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Add some spacing for header and assessment dropdown */
+.assessment-header {
+    cursor: pointer;
+    padding: 15px 15px;
+    /* background-color: #FF6699; */
+    color: #FF6699;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    margin-top: 5px;
+}
+
+.assessment-header:hover {
+    background-color: #fa3878;
+    color: white;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .header {
+        padding: 10px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+
+    .search-container {
+        width: 100%;
+        justify-content: center;
+    }
+
+    #searchBar {
+        width: 100%;
+    }
+
+    .filter-select {
+        padding: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+
+    .course-container {
+        grid-template-columns: 1fr;
+    }
+}

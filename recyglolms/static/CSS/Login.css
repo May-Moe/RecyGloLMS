@@ -1,0 +1,279 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url('../img/pink5.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow: auto;
+    margin-top: 80px;
+}
+
+.container {
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 1000px;
+    width: 100%;
+    height: 80vh;
+    overflow-y: auto; 
+    animation: fadeIn 1s ease-in-out;
+}
+
+.left-side {
+    position: relative;
+    color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    z-index: 1; /* Ensure content stays on top */
+    animation: slideInLeft 1s ease-in-out;
+}
+
+.left-side::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../img/p.webp') no-repeat center center;
+    background-size: cover;
+    z-index: -1; /* Ensure the blurred image is behind the content */
+}
+
+
+
+.left-side .welcome-group {
+    position: absolute;
+    text-align: center;
+    color: white;
+}
+
+.welcome-group .header {
+    font-size: 35px;
+    margin-bottom: 10px;
+    color: #FF6699;
+}
+
+.welcome-group .paragraph {
+    font-size: 14px;
+    margin-top: 0px;
+    text-align: center;
+    color: white;
+    padding: 0px 50px;
+}
+
+.left-side img {
+    max-width: 100%;
+    height: auto;
+}
+
+.link-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 5px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 13px;
+    background-color: #f44680; /* Rose Pink */
+}
+
+.link-button:hover {
+    background-color: #e14e80;
+}
+
+.right-side {
+    padding: 50px;
+    width: 50%;
+    background-color: #F5F5F5;
+    animation: slideInRight 1s ease-in-out;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0px;
+}
+
+.login-form h2 {
+    color: #FF6699;
+    text-align: center;
+    animation: slideInRight 3s ease-in-out;
+}
+
+.form-group {
+    margin-bottom:15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #0A1931;
+    font-size: 15px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 18px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+/* Input focus zoom */
+.form-group input:focus {
+    transform: scale(1.02);
+    border-color: #FF6699;
+    transition: transform 0.2s ease, border-color 0.3s ease;
+    outline: none;
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+.form-checkbox label {
+    margin-left: 0px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 15px;
+
+}
+
+.forgot-password-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 70%;
+    margin-top: 0px;
+}
+
+.forgot-password {
+    text-decoration: none;
+    color: #FF6699; /* Use your primary color */
+    font-size: 14px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    /* font-weight: bold; */
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s;
+}
+
+.overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 500px;
+    max-height: 80%;
+    overflow-y: auto;
+    position: relative;
+}
+.forgot {
+    margin-top: 20px;
+}
+.close-icon{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+button[type="submit"] {
+    background-color: #FF6699;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+button[type="submit"]:hover {
+    background-color: #051227;
+    transform: scale(1.03);
+}
+
+footer{
+    text-align: center;
+    padding: 10px;
+    font-size: 10px;
+    color: #333;
+}
+
+.paragraph{
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .left-side {
+        display: none; /* Hide the left-side image section */
+    }
+
+    .right-side {
+        width: 100%; /* Make the form take full width */
+        padding: 20px; /* Reduce padding for smaller screens */
+    }
+
+    .container {
+        max-width: 400px; /* Limit the form width on small screens */
+        height: auto; /* Adjust height for better fit */
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}

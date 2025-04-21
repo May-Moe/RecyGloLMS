@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="../static/CSS/style.css">
+    <link rel="stylesheet" href="../static/CSS/view_quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="../static/JS/script.js"></script>
+    
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="../static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="../static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="../static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="../static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="../static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="../static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="../static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="../static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+            <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list"></ul>
+                </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="../static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <!-- Dropdown Class Management -->
+                <li class="dropdown-class">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-chalkboard icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Class Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container-class">
+                    <ul>
+                    <li><a href="{{ url_for('admin.manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
+                    <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                </ul>
+                </div>
+
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+
+                <!-- dropdown user management -->
+                <li class="dropdown-user">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fas fa-user icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">User Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container">
+                    <ul>
+                    <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> View All Users</a></li>
+                    <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+                    <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                    <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                </ul>
+                </div>
+
+                <!-- dropdown quiz management -->
+                <li class="dropdown-quiz">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-lightbulb icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Assessment</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                <div class="dropdown-container-quiz">
+                    <ul>
+                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                        <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
+                    </ul>
+                </div>                
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+            </ul>
+        </nav>
+        <script>
+            // This function toggles the edit mode for a specific question
+            function toggleEditQuestion(questionId) {
+                let textElement = document.getElementById(`question-text-${questionId}`);
+                let textareaElement = document.getElementById(`question-textarea-${questionId}`);
+    
+                if (textElement.style.display === "none") {
+                    textElement.style.display = "block"; // Show text
+                    textareaElement.style.display = "none"; // Hide textarea
+                } else {
+                    textElement.style.display = "none"; // Hide text
+                    textareaElement.style.display = "block"; // Show textarea
+                }
+            }
+    
+            // This function toggles the edit mode for a specific answer
+            function toggleEditAnswer(questionId, answerIndex) {
+                let answerTextElement = document.getElementById(`answer-span-${questionId}-${answerIndex}`);
+                let answerInputElement = document.getElementById(`answer-input-${questionId}-${answerIndex}`);
+                let radioButtons = document.getElementsByName(`correct-answer-${questionId}`);
+    
+                if (answerTextElement.style.display === "none") {
+                    answerTextElement.style.display = "block"; // Show answer text
+                    answerInputElement.style.display = "none"; // Hide input for editing
+                    // Hide the radio buttons when editing ends
+                    radioButtons.forEach(radio => radio.style.display = "none");
+                } else {
+                    answerTextElement.style.display = "none"; // Hide answer text
+                    answerInputElement.style.display = "block"; // Show input for editing
+                    // Show the radio buttons when editing starts
+                    radioButtons.forEach(radio => radio.style.display = "inline-block");
+                }
+            }
+    
+            function saveQuestionChanges(questionId) {
+            let questionText = document.getElementById(`question-textarea-${questionId}`).value;
+            let answers = [];
+            let correctAnswer = document.querySelector(`input[name='correct-answer-${questionId}']:checked`).value;
+    
+    // Collect the answers for this question
+    document.querySelectorAll(`input[name^='answer_text_${questionId}']`).forEach((answerInput, index) => {
+        let isCorrect = (answerInput.value === correctAnswer);
+        let answerId = answerInput.getAttribute("data-answer-id"); // Get answer ID
+        answers.push({
+            answer_id: answerId,  // Send answer ID along with the text
+            text: answerInput.value,
+            is_correct: isCorrect
+        });
+    });
+
+    // Send request to backend to save changes
+    fetch("/update_question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            question_id: questionId,
+            text: questionText,
+            answers: answers  // Send the answers with their IDs and correctness status
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+
+        // After saving, hide textarea and show the updated question text
+        let textElement = document.getElementById(`question-text-${questionId}`);
+        let textareaElement = document.getElementById(`question-textarea-${questionId}`);
+        textElement.innerText = questionText;  // Update the displayed question text
+        textElement.style.display = "block";   // Show the updated text
+        textareaElement.style.display = "none"; // Hide the textarea
+
+        // Update answers
+        answers.forEach((answer, index) => {
+            let answerTextElement = document.getElementById(`answer-span-${questionId}-${index}`);
+            let answerInputElement = document.getElementById(`answer-input-${questionId}-${index}`);
+
+            answerTextElement.innerText = answer.text;  // Update the answer text
+            answerTextElement.style.display = "block"; // Show the updated answer text
+            answerInputElement.style.display = "none"; // Hide the input
+
+            //Mark correct answer
+            if (answer.is_correct) {
+                document.querySelector(`#correct-answer-${questionId}-${index}`).checked = true;
+                // Highlight correct answer in green
+                answerTextElement.style.color = 'green';
+                answerTextElement.style.fontWeight = 'bold';
+            } else {
+                answerTextElement.style.color = ''; // Reset to default color
+            }
+        });
+          // This function updates the correct answer when the user selects a different radio button
+          function updateCorrectAnswer(questionId) {
+                let answers = document.querySelectorAll(`input[name='correct-answer-${questionId}']`);
+                answers.forEach((radioButton, index) => {
+                    let answerTextElement = document.getElementById(`answer-span-${questionId}-${index}`);
+                    if (radioButton.checked) {
+                        answerTextElement.style.color = 'green';
+                        answerTextElement.style.fontWeight = 'bold';
+                    } else {
+                        answerTextElement.style.color = ''; // Reset to default color
+                    }
+                });
+            }
+        // Reload the page after saving the changes
+        location.reload();
+    })
+    .catch(error => console.error("Error:", error));
+}    
+
+document.addEventListener("DOMContentLoaded", function () {
+                    const dropdowns = [
+                        { button: ".dropdown-class", container: ".dropdown-container-class" },
+                        { button: ".dropdown-user", container: ".dropdown-container" },
+                { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+                    ];
+
+                    dropdowns.forEach(({ button, container }) => {
+                        const btn = document.querySelector(button);
+                        const dropContainer = document.querySelector(container);
+
+                        if (btn && dropContainer) {  // Ensure elements exist
+                            btn.addEventListener("click", function () {
+                                dropContainer.classList.toggle("active");
+                            });
+                        }
+                    });
+                    });
+        </script>
+        <div class="container">
+             <div class="header">
+                <a href="{{ url_for('quiz.view_all_quizzes') }}"  class="back-icon" style="margin-right: 20px;"><i class="fa-solid fa-angle-left"></i></a>
+                <h2 style="color: white">Quiz Name: <span id="quiz-title" contenteditable="true">{{ quiz.title }}</span></h2>
+               </div>
+               <!-- <p style="color: gray;"><strong>Description:</strong> <span id="quiz-description" contenteditable="true">{{ quiz.description }}</span></p> -->
+            {% if quiz_data %}
+                <div id="questions-container">
+                    {% for item in quiz_data %}
+                    <div class="question" id="question-container-{{ item.question.questionid }}">
+                        <h3 style="margin-bottom: 10px;">Question{{ loop.index }}</h3>
+                        <p id="question-text-{{ item.question.questionid }}" style="margin-bottom: 15px; font-size: 15px;">Question: {{ item.question.text }}</p>
+                        <textarea id="question-textarea-{{ item.question.questionid }}" style="display:none;">{{ item.question.text }}</textarea>
+                        <ul class="answer-list">
+                            {% for answer in item.answers %}
+                            <li class="answer-list2">
+                                <!-- Answer text, initially displayed -->
+                                <span id="answer-span-{{ item.question.questionid }}-{{ loop.index0 }}" {% if answer.is_correct %} style="color: #FF6699; font-weight: bold;" {% endif %}>{{ answer.text }}</span>
+            
+                                <!-- Answer input for editing -->
+                                <input type="text" id="answer-input-{{ item.question.questionid }}-{{ loop.index0 }}" name="answer_text_{{ item.question.questionid }}_{{ loop.index0 }}" value="{{ answer.text }}" style="display:none;" data-answer-id="{{ answer.answerid }}">
+            
+                                <!-- Radio buttons for defining correct answer -->
+                                <label>
+                                    <input type="radio" name="correct-answer-{{ item.question.questionid }}" id="correct-answer-{{ item.question.questionid }}-{{ loop.index0 }}" value="{{ answer.text }}" {% if answer.is_correct %} checked {% endif %} onclick="updateCorrectAnswer({{ item.question.questionid }})">
+                                    Correct Answer
+                                </label>
+            
+                                <!-- Edit answer button -->
+                                <button type="button" class="edit-btn" onclick="toggleEditAnswer({{ item.question.questionid }}, {{ loop.index0 }})"><i class="fas fa-edit"></i></button>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="button-container">
+                            <button type="button" class="edit_question" onclick="toggleEditQuestion({{ item.question.questionid }})">Edit Question</button>
+                            <button type="button" class="edit_question" onclick="saveQuestionChanges({{ item.question.questionid }})">Save Changes</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

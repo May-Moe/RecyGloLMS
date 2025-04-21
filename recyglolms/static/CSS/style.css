@@ -1,0 +1,500 @@
+/* General Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    background-color: #F5F5F5;
+}
+
+/* Dashboard Layout */
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Toggle Button */
+.toggle-button {
+    border: none;
+    color: black;
+    padding: 10px;
+    cursor: pointer;
+    display: none; /* Hide by default */
+    position: fixed;
+    top: 15px; /* Adjusted to align with the profile navbar */
+    left: 10px;
+    z-index: 1001; /* Ensure it is above the profile navbar */
+    background: none; /* Remove background color */
+}
+
+.toggle-button .icon {
+    font-size: 20px;
+}
+
+.icon{
+    color: #0A1931; /* Secondary color */
+    font-size: 16px;
+}
+
+.icon:hover {
+    color: #FF6699; /* Primary color */
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: white;
+    color: #0A1931; /* Secondary color */
+    width: 250px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+    transform: translateX(0);
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 999; /* Ensure sidebar is below the profile navbar */
+}
+
+.sidebar.open {
+    transform: translateX(0); /* Sidebar visible */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 16px 0;
+    
+}
+
+
+.sidebar ul li a {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    text-decoration: none;
+    color: #0A1931; /* Secondary color */
+    font-size: 14px;
+    transition: background 0.2s ease-in-out;
+    border-radius: 6px;
+}
+
+.sidebar ul li a:hover {
+    background: #F5F5F5; /* Accent color */
+    color: #FF6699; /* Primary color */
+}
+
+
+/* Main Content */
+.content {
+    margin-left: 250px;
+    padding: 20px;
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px; /* Adjust margin to account for profile navbar height */
+}
+
+/* Profile Navbar */
+.profile-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 20px;
+    background-color: white;
+    color: #0A1931; /* Secondary color */
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    z-index: 1000;
+    height: 60px; /* Set a fixed height for the navbar */
+}
+
+.notification-button {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #9f9f9f;
+    margin-right: 20px;
+}
+
+.notification-button:hover {
+    color: #0A1931; /* Secondary color */
+}
+
+/* .notification-button {
+    position: relative;
+    font-size: 20px;
+    cursor: pointer;
+} */
+
+.notification-count {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 10px;
+     /* Hidden by default */
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 400px;
+    z-index: 1000;
+    display: none; /* Hidden by default */
+}
+
+.notification-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+}
+
+.notification-dropdown li {
+    padding: 10px;
+    border-bottom: 1px solid #f5f5f5;
+    cursor: pointer;
+}
+
+.notification-dropdown ul li:last-child {
+    border-bottom: none;
+}
+
+.notification-dropdown li:hover {
+    background-color: #f5f5f5;
+}
+
+
+/* Show when dropdown is active */
+.notification-dropdown.active {
+    display: block;
+}
+
+/* .profile-name {
+    font-size: 16px;
+    color: #333;
+} */
+
+.profile-right .profile-pic {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px; /* Add some space between the image and the text */
+    margin-top: 9px;
+    border: 1px solid #FF6699;
+}
+
+/* .profile-right .profile-name {
+    text-align: center;
+    font-size: 15px;
+    color: #9f9f9f;
+} */
+
+/* Hide logo on large screens */
+.profile-right .logo {
+    display: none; /* Hide the logo by default */
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    width: 270px;
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dropdown-menu p {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+}
+
+.dropdown-menu button {
+    background-color: #085d23;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+}
+
+.dropdown-menu button a {
+    text-decoration: none;
+    color: white;
+}
+
+.dropdown-menu button:hover {
+    background-color: #0a4523;
+}
+
+/* Show dropdown when visible */
+.dropdown-menu.hidden {
+    display: none;
+}
+
+.dropdown-menu:not(.hidden) {
+    display: flex;
+}
+
+/* Profile Image Styling */
+.profile-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+   
+}
+
+.dropdown-profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%; /* Circular shape */
+    object-fit: cover;
+    border: 3px solid #FF6699; /* Green border */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Profile Dropdown Styling */
+#profile-dropdown {
+    text-align: center;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+#profile-email {
+    font-size: 14px;
+    color: gray;
+}
+
+#logout-button {
+    display: block;
+    text-align: center;
+    background: #0A1931;
+    color: white;
+    padding: 8px 12px;
+    margin-top: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    width: 100%;
+}
+
+#logout-button:hover {
+    background: #a93226;
+}
+
+
+
+  .language-dropdown {
+    position: relative;
+}
+
+.language-btn {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.language-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.flag-icon {
+    width: 18px;
+    height: 12px;
+    border-radius: 3px;
+    object-fit: cover;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 10px;
+    min-width: 140px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.language-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    text-decoration: none;
+    color: #333;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.dropdown-content a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+}
+
+/* Dropdown button styling */
+.dropdown-class, .dropdown-user, .dropdown-quiz {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.dropdown-class:hover, .dropdown-user:hover ,.dropdown-quiz:hover {
+    background: #e2e2e2;
+}
+
+/* Dropdown container hidden */
+.dropdown-container-class, .dropdown-container, .dropdown-container-quiz {
+    display: none;
+}
+
+.dropdown-container.active, .dropdown-container-class.active, .dropdown-container-quiz.active {
+    display: block; /* Show when active */
+}
+
+/* Dropdown list items */
+.dropdown-container-class ul, .dropdown-container ul ,.dropdown-container-quiz ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Individual dropdown links */
+.dropdown-container-class ul li a,
+.dropdown-container ul li a 
+,.dropdown-container-quiz ul li a{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    text-decoration: none;
+    color: #0A1931;
+    font-size: 14px;
+    /* transition: background 0.2s ease-in-out; */
+    /* border-radius: 6px; */
+    border-bottom: 1px solid #ccc;
+}
+
+/* Icon alignment */
+.dropdown-container-class ul li a i,
+.dropdown-container ul li a i 
+,.dropdown-container-quiz ul li a i{
+    margin-left: 20px;
+    color: #0A1931;
+}
+
+/* Hover effect */
+.dropdown-container-class ul li a:hover,
+.dropdown-container ul li a:hover 
+.dropdown-container-quiz ul li a:hover{
+   color: #FF6699;
+}
+
+/* Responsive Design */
+@media (max-width: 800px) {
+    .sidebar {
+        transform: translateX(-250px); /* Hide sidebar by default */
+    }
+
+    .sidebar.open {
+        transform: translateX(0); /* Show sidebar when open */
+        margin-top: 9%;
+    }
+
+    .sidebar ul li a:hover {
+        background-color: #9f9f9f;
+        padding-right: 10px;
+    }
+
+    .toggle-button {
+        display: block; /* Show toggle button on small screens */
+    }
+
+    .profile-right {
+        width: 100%; /* Full width on small screens */
+        padding: 10px; /* Adjust padding for small screens */
+         /* Center elements in the navbar */
+        height: 70px; /* Ensure enough height for profile pic and logo */
+    }
+
+    /* Show and center logo on small screens */
+    .profile-right .logo {
+        display: block; /* Show the logo on small screens */
+        position: absolute; /* Position it absolutely to center it */
+        left: 25%;
+        transform: translateX(-50%);
+        top: 30%; /* Vertically center the logo */
+        z-index: 1; /* Ensure the logo is above the profile picture */
+    }
+
+    .content {
+        margin-left: 0;
+        margin-top: 60px; /* Adjust margin to account for profile navbar height */
+        padding: 20px;
+    }
+}
+
+.icon {
+    margin-right: 10px; /* Adjust the value as needed */
+}

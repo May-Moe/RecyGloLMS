@@ -1,0 +1,196 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/CSS/style.css">
+    <link rel="stylesheet" href="../static/CSS/EditAnnouncement.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Edit Announcements</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="../static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="../static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="../static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="../static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="../static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="../static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="../static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="../static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+           <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list"></ul>
+                </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="../static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <!-- Dropdown Class Management -->
+                <li class="dropdown-class">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-chalkboard icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Class Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container-class">
+                    <ul>
+                    <li><a href="{{ url_for('admin.manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
+                    <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                </ul>
+                </div>
+
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+
+                <!-- dropdown user management -->
+                <li class="dropdown-user">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fas fa-user icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">User Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container">
+                    <ul>
+                    <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> View All Users</a></li>
+                    <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+                    <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                    <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                    <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                </ul>
+                </div>
+
+                <!-- dropdown quiz management -->
+                <li class="dropdown-quiz">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-lightbulb icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Assessment</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                <div class="dropdown-container-quiz">
+                    <ul>
+                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                        <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
+                    </ul>
+                </div>                
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div style ="display:flex;">
+                <a href="{{ url_for('announcement.view_all_announcements') }}"  class="back-icon" style="margin-right:10px;"><i class="fa-solid fa-angle-left"></i></a>
+                <h2>Edit Announcements</h2>   
+            </div>
+            <form id="AddAnnouncementForm" action="{{ url_for('announcement.edit_announcement', announcement_id=announcement.announcementid) }}" method="POST" enctype="multipart/form-data">
+                <div class="form-group">    
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" value="{{ announcement.title }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" class="form-control" rows="5" required>{{ announcement.content }}</textarea>
+                </div>
+                <!-- <div class="form-group">
+                    <label for="file" style="color: green;">Click to Choose file</label>
+                    <input id="" type="file" name="file" required>
+                    <span id="file-chosen">No file chosen</span>
+                </div> -->
+                <div class="form-group">
+                    {% if announcement.announcement_img %}
+                        <div>
+                            <p style="color:red; margin-bottom:10px">Current image: {{ announcement.announcement_img }}</p>
+                            <!-- <img src="{{ url_for('static', filename='announcements/' + announcement.announcement_img) }}" alt="Current Announcement Image" style="max-width: 200px; max-height: 200px;"> -->
+                        </div>
+                    {% else %}
+                        <p>No image uploaded</p>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="announcement_img" style="color: white; background-color:#FF6699; padding: 14px 5px; border-radius: 5px; font-size: 14px;">Click to Choose New Image</label>
+                        <input id="announcement_img" type="file" name="announcement_img">
+                        <span id="file-chosen">No file chosen</span>
+                        <!-- <input type="file" name="file" id="file" required> -->
+                    </div>
+                </div>  
+                <div class="form-group">
+                    <label for="event_date">Events Date</label>
+                    <input type="date" id="event_date" name="event_date" class="form-control" value="{{ announcement.event_date }}" required>
+                </div>  
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" class="form-control" value="{{ announcement.date}}" disabled>
+                </div>
+                <div class="buttons">
+                    <button type="submit" class="submit-button">Save Changes</button>
+                    <a href="{{ url_for('announcement.view_all_announcements') }}"><button type="button" class="cancel-button">Cancel</button></a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="../static/JS/script.js"></script>
+    <script>
+        const fileUpload = document.getElementById('announcement_img');
+        const fileChosen = document.getElementById('file-chosen');
+    
+        fileUpload.addEventListener('change', function(){
+            fileChosen.textContent = this.files[0].name;
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+                    const dropdowns = [
+                        { button: ".dropdown-class", container: ".dropdown-container-class" },
+                        { button: ".dropdown-user", container: ".dropdown-container" },
+                { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+                    ];
+
+                    dropdowns.forEach(({ button, container }) => {
+                        const btn = document.querySelector(button);
+                        const dropContainer = document.querySelector(container);
+
+                        if (btn && dropContainer) {  // Ensure elements exist
+                            btn.addEventListener("click", function () {
+                                dropContainer.classList.toggle("active");
+                            });
+                        }
+                    });
+                    });
+    </script>
+</body>
+</html>

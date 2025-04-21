@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Activities</title>
+</head>
+<body>
+    <h1>Your Activities</h1>
+
+    {% if activities %}
+        <ul>
+            {% for activity in activities %}
+                <li>
+                    <strong>{{ activity.name }}</strong><br>
+                    {{ activity.description }}<br>
+                    <em>Added on: {{ activity.date.strftime('%Y-%m-%d %H:%M') }}</em>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No activities found.</p>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('main.home') }}">Back to Dashboard</a>
+</body>
+</html>

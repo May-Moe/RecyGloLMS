@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/CSS/Login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Login</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="left-side">
+                <div class="welcome-group">
+                   
+                </div>
+                <!-- <div class="welcome-group">
+                    <p>Join us to manage your documents efficiently.</p>
+                </div> -->
+            </div>
+            <div class="right-side">
+                <form class="login-form" id="loginForm" method="POST" action="/login">
+                    <h2><img src="static/img/shework.png" alt="RecyGlo" class="logo" width="150px"></h2>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="show-password">
+                        <label for="show-password" style="font-size: 12px;">Show Password</label>
+                        <div class="forgot-password-container">
+                            <a href="{{ url_for('auth.forgot_password') }}" class="forgot-password">Forgot Password?</a>
+                        </div>
+                    </div>
+                   <button type="submit">Login Here</button>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            <p style="font-size: 12px; color: #FF6699;">© Copyright 2025 by RecyGlo Company Pte. Ltd. All rights reserved.</p>
+        </footer>
+
+        <script src="static/JS/Login.js"></script>
+    </body>

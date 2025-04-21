@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="/static/CSS/user_grade.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Grade</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="/static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                <!-- Language Selector -->
+            <div class="language-dropdown">
+                <button class="language-btn">
+                <img src="/static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                </button>
+            <div class="dropdown-content">
+                <a href="?lang=en"><img src="/static/img/uk.svg" class="flag-icon"> English</a>
+                <a href="?lang=th"><img src="/static/img/th.svg" class="flag-icon"> Thailand</a>
+                <a href="?lang=my"><img src="/static/img/my.svg" class="flag-icon"> Myanmar</a>
+                <a href="?lang=vi"><img src="/static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                <a href="?lang=in"><img src="/static/img/id.svg" class="flag-icon"> Indonia</a>
+                <a href="?lang=ko"><img src="/static/img/kr.svg" class="flag-icon"> Korea</a>
+                
+            </div>
+            </div>
+           <button class="notification-button" id="notification-button">
+                <i class="fas fa-bell"></i>
+                <span id="notification-count" class="notification-count">0</span>
+                </button>
+
+                <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <ul id="notification-list"></ul>
+                </div>
+            <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+                <div class="dropdown">
+                    
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h4 class="profile-header">Hello, <span id="user-name">{{ current_user_name }}</span></h4>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+          <div class="logo" style="text-align: left;">
+            <img src="static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+        </div>
+          <ul>
+              <li><a href="{{ url_for('main.home') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+              <li><a href="{{ url_for('main.user_activity') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+              <li><a href="{{ url_for('main.learning') }}"><i class="fa-solid fa-book-open icon"></i> Classes</a></li>
+              <li><a href="{{ url_for('grading.user_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+              <li><a href="{{ url_for('main.user_account') }}"><i class="fa-solid fa-user-gear icon"></i> My Account</a></li>
+              <li><a href="{{ url_for('main.Alumni_user') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+      </nav>
+                
+        <div class="container">
+            <div class="header">
+                <h1>Grades</h1>
+                <!-- User Filter & Search -->
+                <div class="header-actions">
+                        <input type="text" id="searchBar" placeholder="Search By name">
+                </div>
+
+
+            </div>
+            <div class="table-container">
+              {% if user_grades[0].message %}
+              <p>{{ user_grades[0].message }}</p>
+          {% else %}          
+    <table>
+        <thead>
+          <tr>
+            <th>Class Name</th>
+            <th>Quiz Score</th>
+            <th>Assessment Score</th>
+            <th>Final Score</th>
+            <th>Grade</th>
+            <th>Certificate</th> <!-- New column for the certificate link -->
+          </tr>  
+        </thead>
+        <tbody id="userTableBody">
+          <!--  <p> {{ user_grades[0] }} </p> --> <!-- for user_grades debugging -->
+          {% for grade in user_grades %}
+          <tr>
+            <td>{{ grade.class_name }}</td>
+            <td>{{ grade.quiz_score | float | round(2) }}</td>
+            <td>{{ grade.assessment_score | float | round(2) }}</td>
+            <td>{{ grade.final_score | float | round(2) }}</td>
+            <td>{{ grade.grade }}</td>
+            <td>
+                {% if grade.is_access_granted == 1 %}
+                    <a href="{{ url_for('grading.download_certificate', class_id=grade.class_id) }}">
+                        <button class="download-btn">Download Certificate</button>
+                    </a>
+                {% else %}
+                    <button class="download-btn" onclick="handlePendingDownload(event)">Pending</button>
+                {% endif %}
+            </td>                                            
+          </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+            </div>
+            <div class="pagination">
+                <button id="prevPage" class="page-btn">Previous</button>
+                <span id="pageNumbers"></span>
+                <button id="nextPage" class="page-btn">Next</button>
+            </div>  
+            </div>
+           
+        </div>
+    </main>
+</div>
+    </div>
+    <script src="/static/JS/script.js"></script>
+    <script>
+        function submitForm() {
+        document.getElementById("filterForm").submit();
+    }
+
+    //last Login sorting
+    document.addEventListener("DOMContentLoaded", function () {
+    const tableBody = document.getElementById("userTableBody");
+    const sortButton = document.getElementById("sortLastLogin");
+    let ascending = true;
+
+    sortButton.addEventListener("click", function () {
+        let rows = Array.from(tableBody.querySelectorAll("tr"));
+
+        rows.sort((a, b) => {
+            let dateA = new Date(a.cells[3].innerText.trim()); // 4th column (index 3)
+            let dateB = new Date(b.cells[3].innerText.trim());
+
+            if (isNaN(dateA)) dateA = new Date(0); // Handle invalid dates
+            if (isNaN(dateB)) dateB = new Date(0);
+
+            return ascending ? dateA - dateB : dateB - dateA;
+        });
+
+        ascending = !ascending; // Toggle sorting order
+
+        // Reorder rows in table
+        rows.forEach(row => tableBody.appendChild(row));
+
+        // Update sort icon
+        sortButton.className = ascending ? "fas fa-sort-up" : "fas fa-sort-down";
+    });
+});
+
+
+    // Search Functionality
+    document.getElementById("searchBar").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let tableRows = document.querySelectorAll("#userTableBody tr");
+    
+            tableRows.forEach(row => {
+                let title = row.querySelector("td:nth-child(1)").innerText.toLowerCase(); // Title is in the first column
+                if (title.includes(filter)) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+
+        //next and previous page
+        document.addEventListener("DOMContentLoaded", function () {
+        const tableBody = document.getElementById("userTableBody");
+        const rows = Array.from(tableBody.querySelectorAll("tr"));
+        const prevButton = document.getElementById("prevPage");
+        const nextButton = document.getElementById("nextPage");
+        const pageNumbersContainer = document.getElementById("pageNumbers");
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let totalPages = Math.ceil(rows.length / rowsPerPage);
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            rows.forEach((row, index) => {
+                row.style.display = index >= start && index < end ? "table-row" : "none";
+            });
+
+            prevButton.disabled = page === 1;
+            nextButton.disabled = page === totalPages;
+
+            updatePageNumbers();
+        }
+
+        function updatePageNumbers() {
+            pageNumbersContainer.innerHTML = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+                let pageBtn = document.createElement("button");
+                pageBtn.innerText = i;
+                pageBtn.classList.add("page-number");
+                if (i === currentPage) pageBtn.classList.add("active");
+
+                pageBtn.addEventListener("click", function () {
+                    currentPage = i;
+                    showPage(currentPage);
+                });
+
+                pageNumbersContainer.appendChild(pageBtn);
+            }
+        }
+
+        prevButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        nextButton.addEventListener("click", function () {
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        showPage(currentPage);
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+                    const dropdowns = [
+                        { button: ".dropdown-class", container: ".dropdown-container-class" },
+                        { button: ".dropdown-user", container: ".dropdown-container" },
+                { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+                    ];
+
+                    dropdowns.forEach(({ button, container }) => {
+                        const btn = document.querySelector(button);
+                        const dropContainer = document.querySelector(container);
+
+                        if (btn && dropContainer) {  // Ensure elements exist
+                            btn.addEventListener("click", function () {
+                                dropContainer.classList.toggle("active");
+                            });
+                        }
+                    });
+                    });
+                    
+    function handlePendingDownload(event) {
+    event.preventDefault(); // Only call this if you truly need to prevent default behavior
+    alert('You cannot download the certificate at this time. Please wait until it is granted.');
+}
+
+    </script>
+</body>
+</html>

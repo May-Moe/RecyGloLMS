@@ -1,0 +1,379 @@
+/* General Reset */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 300px); /* Adjust width for sidebar */
+    margin: 10px auto;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
+    border-radius: 0px;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0A1931;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+}
+
+/* HEADER TITLE */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* HEADER ACTIONS */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* SEARCH BAR */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #FF6699;
+    transition: 0.3s;
+}
+
+.search-container:focus-within {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+}
+
+.search-icon {
+    color: #FF6699;
+    font-size: 16px;
+}
+
+#searchBar {
+    width: 200px;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+/* Basic button styling */
+.addUserButton {
+    background-color: #FF6699; /* Navy Blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for the button */
+.addUserButton:hover {
+    background-color: #FF6699; /* Rose Pink */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dropdown Menu Styling */
+.dropdown-menu {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 45px;
+    right: 10px;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px 10px;
+    width: 300px;
+    list-style: none;
+    z-index: 10;
+}
+
+/* Show the dropdown menu when active */
+.dropdown-menu.active {
+    display: block;
+}
+
+/* Dropdown items */
+.dropdown-menu li {
+    padding: 12px 20px;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for the items */
+.dropdown-menu li:hover {
+    background-color: #FF6699; /* Rose Pink */
+    color: white;
+}
+
+/* Add icons to the dropdown items */
+.dropdown-menu li a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu li a i {
+    margin-right: 10px;
+}
+
+/* Add smooth transition when clicking the dropdown button */
+.addUserButton i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+/* Add an arrow to indicate dropdown direction */
+.addUserButton::after {
+    content: '\f0d7'; /* Unicode for the down arrow */
+    font-family: 'Font Awesome 5 Free';
+    margin-left: 10px;
+    font-weight: 900;
+}
+
+.addUserButton:hover::after {
+    content: '\f0de'; /* Unicode for up arrow */
+}
+
+
+/* TABLE */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #F5F5F5;
+    font-weight: bold;
+}
+
+/* Basic styling for the pagination container */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Styling for the pagination buttons */
+.pagination-btn {
+    background-color: #0A1931; /* Navy Blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+/* Hover effect for buttons */
+.pagination-btn:hover {
+    background-color: #FF6699; /* Rose Pink */
+}
+
+/* Page number styling */
+.page-number {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+/* Add icons to prev/next buttons using Font Awesome */
+.pagination-btn.prev::before {
+    content: '\f053'; /* FontAwesome left arrow */
+    font-family: 'Font Awesome 5 Free';
+    margin-right: 5px;
+}
+
+.pagination-btn.next::before {
+    content: '\f054'; /* FontAwesome right arrow */
+    font-family: 'Font Awesome 5 Free';
+    margin-left: 5px;
+}
+
+/* Adjust styles when buttons are disabled */
+.pagination-btn:disabled {
+    background-color: #f5f5f5;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+
+/* BUTTONS */
+.action-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+/* VIEW LINK BUTTON */
+#ViewLinkButton {
+    display: flex;
+    align-items: center;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: white;
+    background-color: #FF6699;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    text-decoration: none;
+    border: 1px solid white;
+}
+
+#ViewLinkButton:hover {
+    background-color: #e65c85;
+}
+
+.editAction, .deleteAction {
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+    text-decoration: none;
+}
+
+.editAction {
+    color: #007bff;
+}
+
+.deleteAction {
+    color: #dc3545;
+    border: none;
+}
+
+.editAction i, .deleteAction i {
+    margin-right: auto;
+}
+
+.editAction:hover {
+    color: #0056b3;
+}
+
+.deleteAction:hover {
+    color: #c82333;
+}
+
+/* Hide dropdown by default */
+.hidden {
+    display: none;
+}
+
+/* Show dropdown when active */
+.active {
+    display: block;
+}
+
+.dropdown-container-class,
+.dropdown-container,
+.dropdown-container-quiz {
+    display: none;
+}
+
+.dropdown-container-class.active,
+.dropdown-container.active,
+.dropdown-container-quiz.active {
+    display: block;
+}
+
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .header {
+        padding: 10px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-container {
+        width: 100%;
+        justify-content: center;
+    }
+
+    #searchBar {
+        width: 100%;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+}

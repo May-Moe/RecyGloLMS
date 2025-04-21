@@ -1,0 +1,197 @@
+/* General Styles */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 300px); /* Adjust width for sidebar */
+    margin: 10px auto;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
+}
+
+/* Header Styling */
+.header {
+    display: flex;
+    align-items: center;
+    background: #0A1931; /* Dark blue background */
+    padding: 20px 20px;
+    border-radius: 8px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+/* Header Title */
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* Header Actions (like buttons) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Back Icon Styling */
+.back-icon {
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.back-icon:hover {
+    color: #FF6699;
+}
+
+h1 {
+    /* text-align: center; */
+    font-size: 24px;
+    color: white;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 25px;
+}
+
+label {
+    margin: 10px 0 5px;
+    
+    
+}
+
+input, textarea, select {
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.add_quiz {
+    background: white;
+    color: hsl(0, 0%, 0%);
+    padding: 15px;
+    border: 2px dotted black;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.add_quiz:hover {
+    background: #FF6699;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+/* Style the Create Quiz button */
+.create_quiz {
+    padding: 15px 20px;
+    background: #0A1931;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 20%;
+}
+
+/* Hover Effect */
+.create_quiz:hover {
+    background: #061123;
+}
+
+#questions-container {
+    margin-top: 0px;
+    padding: 15px;
+}
+
+.question {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background: #f9f9f9;
+}
+
+.answers-container input {
+    display: block;
+    margin-top: 5px;
+    width: 100%;
+    padding: 15px;
+}
+
+.added-question {
+    background: #e8f5e9;
+    padding: 20px;
+    border-left: 5px solid #FF6699;
+    margin-bottom: 10px;
+    background-color: #0A1931;
+    color: white;
+}
+
+.added-question h4 {
+    margin: 0 0 5px;
+}
+
+.added-question ul {
+    padding-left: 20px;
+    margin: 5px 0;
+}
+
+.added-question button {
+    background: #e74c3c;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+}
+
+.added-question button:hover {
+    background: #c0392b;
+}
+
+.done{
+    background-color: #0A1931;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    width: 20%;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 90%; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

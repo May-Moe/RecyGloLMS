@@ -1,0 +1,21 @@
+<svg width="677" height="677" viewBox="0 0 677 677" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_1_225" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="677" height="677">
+<circle cx="338.5" cy="338.5" r="338.5" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1_225)">
+<path d="M-339 0V677H1015V0H-339Z" fill="#012169"/>
+<path d="M-339 0L1015 677ZM1015 0L-339 677Z" fill="black"/>
+<path d="M-339 0L1015 677M1015 0L-339 677" stroke="white" stroke-width="135.4"/>
+<mask id="mask1_1_225" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-339" y="0" width="1354" height="677">
+<path d="M338 338.5H1015V677L338 338.5ZM338 338.5V677H-339L338 338.5ZM338 338.5H-339V0L338 338.5ZM338 338.5V0H1015L338 338.5Z" fill="white"/>
+</mask>
+<g mask="url(#mask1_1_225)">
+<path d="M-339 0L1015 677ZM1015 0L-339 677Z" fill="black"/>
+<path d="M-339 0L1015 677M1015 0L-339 677" stroke="#C8102E" stroke-width="90.2667"/>
+</g>
+<path d="M338 0V677ZM-339 338.5H1015Z" fill="black"/>
+<path d="M338 0V677M-339 338.5H1015" stroke="white" stroke-width="225.667"/>
+<path d="M338 0V677ZM-339 338.5H1015Z" fill="black"/>
+<path d="M338 0V677M-339 338.5H1015" stroke="#C8102E" stroke-width="135.4"/>
+</g>
+</svg>

@@ -1,0 +1,313 @@
+/* General Reset */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 300px); /* Adjust width for sidebar */
+    margin: 10px auto;
+    margin-left: 270px; /* Offset for sidebar */
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: margin-left 0.5s, width 0.5s;
+    box-sizing: border-box;
+}
+
+/* Header Styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0A1931;
+    padding: 20px 20px;
+    border-radius: 8px;
+    color: white;
+    font-size: 12px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+/* Search Bar and Filter */
+#searchBar, #courseFilter {
+    padding: 10px;
+    font-size: 13px;
+    border: 1px solid #FF6699;
+    border-radius: 4px;
+    width: 200px;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+#searchBar, #courseFilter:focus {
+    border-color: #0A1931;
+    box-shadow: 0 0 5px rgba(10, 25, 49, 0.3);
+    outline: none;
+}
+
+/* Add User Button */
+#addUserButton {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #FF6699;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#addUserButton i {
+    margin-right: 5px;
+}
+
+#addUserButton:hover {
+    background-color: #e65c85;
+}
+
+#addUserLink {
+    text-decoration: none;
+    color: #fff;
+}
+
+/* Table Styling */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #F5F5F5;
+    font-weight: bold;
+}
+
+/* Action Buttons */
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+/* Pagination Styling */
+.pagination {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* Pagination Buttons */
+.page-btn, .page-number {
+    background: white;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin: 2px;
+}
+
+/* Hover Effect for Pagination */
+.page-btn:hover, .page-number:hover {
+    background: #ddd;
+}
+
+/* Active Page */
+.page-number.active {
+    background: #FF6699;
+    color: white;
+    border-color: #FF6699;
+    font-weight: bold;
+}
+
+/* Disabled Pagination */
+.page-btn:disabled {
+    background: #eee;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* Edit and Delete Actions */
+.editAction, .deleteAction {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 5px;
+    text-decoration: none;
+}
+
+.editAction {
+    color: #007bff;
+}
+
+.deleteAction {
+    color: #dc3545;
+}
+
+.editAction i, .deleteAction i {
+    margin-right: auto;
+}
+
+.editAction:hover {
+    color: #0056b3;
+}
+
+.deleteAction:hover {
+    color: #c82333;
+}
+
+/* Select Dropdown */
+select[name="level"] {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 2px solid #FF6699;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+select[name="level"]:focus {
+    border-color: #0A1931;
+    outline: none;
+}
+
+/* Submit Button */
+button[type="submit"] {
+    padding: 8px 14px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #FF6699;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    margin-left: 10px;
+}
+
+button[type="submit"]:hover {
+    background-color: #e65c85;
+}
+
+button[type="submit"]:active {
+    transform: scale(0.95);
+}
+
+/* Flex Container for Form Alignment */
+td form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 100px;
+        margin-bottom: 600px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    #searchBar, #courseFilter {
+        width: calc(100% - 130px); /* Adjust width based on button size */
+        margin-right: 0;
+    }
+
+    #addUserButton {
+        width: 120px;
+        justify-content: center;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 100px;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #searchBar, #courseFilter {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #addUserButton {
+        width: 100%;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}

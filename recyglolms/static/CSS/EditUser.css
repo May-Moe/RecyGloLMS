@@ -1,0 +1,132 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px); /* Adjust width to account for sidebar */
+    max-width: 600px; /* Limit the maximum width of the form */
+    margin: 10px auto;
+    margin-left: 600px; /* Offset for sidebar */
+    margin-top: 80px; /* Adjust for fixed navbar */
+    margin-right: 70px;
+    background-color: #fff;
+    padding: 35px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    transition: margin-left 0.5s, width 0.5s;
+}
+
+h2 {
+    text-align: left;
+    margin-bottom: 20px;
+    color: #FF6699;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="email"], input[type="password"], select {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.submit-button {
+    padding: 8px 20px;
+    background-color: #0A1931;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 70px; /* Ensure buttons have the same size */
+    text-align: center;
+}
+
+.submit-button:hover {
+    background-color: #2b4b7f;
+    color: #9f9f9f;
+}
+
+.cancel-button:hover {
+    background-color: #2b4b7f;
+    color: #9f9f9f;
+}
+
+.cancel-button {
+    padding: 8px 20px;
+    background-color: #0A1931;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 70px; /* Ensure buttons have the same size */
+    text-align: center;
+}
+
+.change-password-button{
+    width: 100%;
+    text-align: left;
+    padding: 15px 10px;
+    background-color: #0A1931;
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+
+.change-password-button:hover{
+    background-color: #233e6a;
+}
+
+.verify-password-button{
+    width: 100%;
+    text-align: left;
+    padding: 15px 10px;
+    background-color: #16a159;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+}
+
+.verify-password-button:hover{
+    background-color: #007a3b;
+}
+
+.back-icon {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #9f9f9f;
+    font-size: 16px;
+    margin-bottom: 20px;
+    margin-right:10px;
+}
+/* Responsive styles */
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto; /* Adjust top margin for smaller screens */
+    }
+}

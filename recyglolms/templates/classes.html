@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/CSS/style.css">
+    <link rel="stylesheet" href="../static/CSS/classes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="../static/JS/script.js"></script>
+    <title>Class Management</title>
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <button id="toggle-button" class="toggle-button">
+                <span class="icon">&#9776;</span>
+            </button>
+            <div class="profile-right">
+                <img src="../static/img/shework3.png" alt="Logo" class="logo" style="width: 100px; margin-top: 5px;">
+                <!-- Language Selector -->
+                <div class="language-dropdown">
+                    <button class="language-btn">
+                        <img src="../static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="?lang=en"><img src="../static/img/uk.svg" class="flag-icon"> English</a>
+                        <a href="?lang=th"><img src="../static/img/th.svg" class="flag-icon"> Thailand</a>
+                        <a href="?lang=my"><img src="../static/img/my.svg" class="flag-icon"> Myanmar</a>
+                        <a href="?lang=vi"><img src="../static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                        <a href="?lang=in"><img src="../static/img/id.svg" class="flag-icon"> Indonia</a>
+                        <a href="?lang=ko"><img src="../static/img/kr.svg" class="flag-icon"> Korea</a>
+                    </div>
+                </div>
+
+                <button class="notification-button" id="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count">0</span>
+                    </button>
+    
+                    <div id="notification-dropdown" class="notification-dropdown hidden">
+                        <ul id="notification-list"></ul>
+                    </div>
+                <script src="{{ url_for('static', filename='JS/notification.js') }}"></script>
+                <div class="dropdown">
+                    <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
+                    <div id="profile-dropdown" class="dropdown-menu hidden">
+                         <!-- Profile Image -->
+                         <div class="profile-image-container">
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">
+                        </div>
+                        <h5 class="card_header_title" style="color: gray;">Hello, <span class="card_header_title">{{ current_user_name }}</span></h5>
+                        <p id="profile-email">{{ current_user_email }}</p>
+                        <a href="{{ url_for('auth.logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="sidebar">
+            <div class="logo" style="text-align: left;">
+                <img src="../static/img/shework.png" alt="Logo" id="sidebar-logo" style="width: 130px;">
+            </div>
+            <ul>
+                <li><a href="{{ url_for('admin.dashboard') }}"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin.Activities') }}"><i class="fas fa-tasks icon"></i> Activity</a></li>
+                <li><a href="{{ url_for('announcement.view_all_announcements') }}"><i class="fas fa-bullhorn icon"></i> Announcement</a></li>
+                <!-- Dropdown Class Management -->
+                <li class="dropdown-class">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-chalkboard icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Class Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container-class">
+                    <ul>
+                        <li><a href="{{ url_for('admin.manage_classes') }}"><i class="fa-solid fa-chalkboard-user icon"></i> Classes</a></li>
+                        <li><a href="{{ url_for('admin.manage_course') }}"><i class="fa-solid fa-book-open icon"></i> Courses</a></li>
+                    </ul>
+                </div>
+
+                <li><a href="{{ url_for('upload.view_files') }}"><i class="fas fa-upload icon"></i> Upload</a></li>
+
+                <!-- dropdown user management -->
+                <li class="dropdown-user">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fas fa-user icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">User Management</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                
+                <div class="dropdown-container">
+                    <ul>
+                        <li><a href="{{ url_for('admin.view_users') }}"><i class="fas fa-user icon"></i> View All Users</a></li>
+                        <li><a href="{{ url_for('admin.user_levels') }}"><i class="fa-solid fa-users-gear icon"></i> Users Roles</a></li>
+                        <li><a href="{{ url_for('admin.Alumni_admin') }}"><i class="fa-solid fa-user-group icon"></i> Alumni</a></li>
+                        <li><a href="{{ url_for('admin.view_all_progress') }}"><i class="fa-solid fa-bars-progress icon"></i> Progress</a></li>
+                        <li><a href="{{ url_for('grading.admin_gradebook') }}"><i class="fa-solid fa-graduation-cap icon"></i> Grades</a></li>
+                    </ul>
+                </div>
+
+                <!-- dropdown quiz management -->
+                <li class="dropdown-quiz">
+                    <span style="display: flex; align-items: center; margin-left: 4px; padding: 10px 0px;">
+                        <i class="fa-solid fa-lightbulb icon"></i> 
+                        <span style="margin-left: 9px; font-size: 14px;">Assessment</span>
+                    </span>
+                    <i class="fa fa-caret-down icon"></i>
+                </li>
+                <div class="dropdown-container-quiz">
+                    <ul>
+                        <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-lightbulb icon"></i> Quiz</a></li>
+                        <li><a href="{{ url_for('assessment.view_classes') }}"><i class="fa-solid fa-file-signature icon"></i> Assessment</a></li>
+                        <!-- <li><a href="{{ url_for('quiz.view_all_quizzes') }}"><i class="fa-solid fa-file-export icon"></i> Assignment</a></li> -->
+                    </ul>
+                </div>                
+                <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="header">
+                <h1>Manage Classes</h1>
+                <div class="header-actions">
+                    <div class="search-container">
+                        <input type="text" id="searchBar" placeholder="Search   ">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <a href="{{ url_for('admin.add_classes') }}" id="addUserLink" style="text-decoration: none;">
+                        <button id="addUserButton"><i class="fas fa-plus" style="margin-right: 10px;"></i> Add New Class</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="class-grid">
+                {% for class_ in classes %}
+                    <div class="class-card">
+                        <h2>{{ class_.name }}
+                            <form action="{{ url_for('admin.delete_class', class_id=class_.classid) }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="deleteAction" onclick="return confirm('Are you sure you want to delete this class?');" style="float: right; background: none; border: none; cursor: pointer; color: red;">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </h2>
+                        <div class="class-actions">
+                            <!-- Manage Button -->
+                            <button class="dropdown-btn" data-toggle="class-dropdown-{{ class_.classid }}" style="padding: 20px 10px; background-color: #ececec; font-size: 14px; font-weight: bold; color: #FF6699; text-align: center;">Manage</button>
+                        
+                            <!-- Dropdown Content -->
+                            <div class="dropdown-content-ver class-dropdown-{{ class_.classid }}">
+                                <!-- Assign Courses Button -->
+                                <button class="dropdown-btn" data-toggle="class-courses-{{ class_.classid }}" style="padding: 20px 10px; margin-bottom: 5px;">Assign Courses</button>
+                                <div class="inner-dropdown-content-ver class-courses-{{ class_.classid }}">
+                                    <form method="POST" action="{{ url_for('admin.assign_courses_to_class', classid=class_.classid) }}">
+                                        {% for course in courses %}
+                                            <input type="checkbox" name="courses" value="{{ course.courseid }}" 
+                                                {% if course.courseid in assigned_courses[class_.classid] %} checked {% endif %}> 
+                                                {{ course.name }}<br>
+                                        {% endfor %}
+                                        <button type="submit" style="padding: 10px 20px; margin: 20px 10px; text-align: center;">Save</button>
+                                    </form>
+                                </div>
+                                
+                                <!-- Assign Users Button -->
+                                <button class="dropdown-btn" data-toggle="class-users-{{ class_.classid }}" style="padding: 20px 10px;">Assign Users</button>
+                                <div class="inner-dropdown-content-ver class-users-{{ class_.classid }}">
+                                    <form method="POST" action="{{ url_for('admin.assign_users_to_class', classid=class_.classid) }}">
+                                        {% for user in users %}
+                                            <input type="checkbox" name="users" value="{{ user.userid }}" 
+                                                {% if user.userid in assigned_users[class_.classid] %} checked {% endif %}> 
+                                                {{ user.name }} ({{ user.email }})<br>
+                                        {% endfor %}
+                                        <button type="submit" style="padding: 10px 20px; margin: 20px 10px; text-align: center;">Save</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+    <script>
+        // Search Functionality
+        document.getElementById("searchBar").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let classCards = document.querySelectorAll(".class-card");
+            
+            classCards.forEach(card => {
+                let title = card.querySelector("h2").innerText.toLowerCase(); // Class name is in the h2 element
+                if (title.includes(filter)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+    
+        document.addEventListener("DOMContentLoaded", function () {
+        // Add event listeners to buttons with data-toggle attribute
+        document.querySelectorAll("button[data-toggle]").forEach(button => {
+            button.addEventListener("click", function () {
+                const targetClass = this.getAttribute("data-toggle");
+                const dropdown = document.querySelector(`.${targetClass}`);
+
+                // Check if the dropdown exists, and toggle the 'show' class
+                if (dropdown) {
+                    dropdown.classList.toggle("show");
+                }
+            });
+        });
+    });
+
+        document.addEventListener("DOMContentLoaded", function () {
+                    const dropdowns = [
+                        { button: ".dropdown-class", container: ".dropdown-container-class" },
+                        { button: ".dropdown-user", container: ".dropdown-container" },
+                { button: ".dropdown-quiz", container: ".dropdown-container-quiz" }
+                    ];
+
+                    dropdowns.forEach(({ button, container }) => {
+                        const btn = document.querySelector(button);
+                        const dropContainer = document.querySelector(container);
+
+                        if (btn && dropContainer) {  // Ensure elements exist
+                            btn.addEventListener("click", function () {
+                                dropContainer.classList.toggle("active");
+                            });
+                        }
+                    });
+                    });
+    </script>
+</body>
+</html>
