@@ -26,7 +26,7 @@ def allowed_file(filename):
 def index():
     return render_template('shework.html')
 
-@main_bp.route('/login')
+@main_bp.route('/account')
 @login_required
 def login():
     return render_template('login.html')
