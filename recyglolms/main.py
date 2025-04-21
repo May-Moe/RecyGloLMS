@@ -24,7 +24,7 @@ def allowed_file(filename):
 @main_bp.route('/')
 @login_required
 def index():
-    return render_template('sheworks.html')
+    return render_template('shework.html')
 
 @main_bp.route('/login')
 @login_required
