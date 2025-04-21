@@ -21,19 +21,19 @@ ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# @main_bp.route('/')
-# @login_required
-# def index():
-#     return render_template('sheworks.html')
-
-# @main_bp.route('/login')
-# @login_required
-# def login():
-#     return render_template('login.html')
 @main_bp.route('/')
 @login_required
 def index():
+    return render_template('shework.html')
+
+@main_bp.route('/login')
+@login_required
+def login():
     return render_template('login.html')
+# @main_bp.route('/')
+# @login_required
+# def index():
+#     return render_template('login.html')
 
 
 @main_bp.route('/home', methods=['GET', 'POST'])
