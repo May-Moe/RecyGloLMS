@@ -122,8 +122,11 @@
         {% for feedback, user in feedbacks %}
         <div class="feedback-card">
             <div class="user-info">
-                <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile" id="profile-pic-right" class="profile-pic" onclick="toggleDropdown()">
-                alt="{{ user.name }}">                
+                {% if item.user.profile_img and item.user.profile_img.startswith('http') %}
+                        <img src="{{ item.user.profile_img }}" alt="{{ item.user.name }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='uploads/default-profile.jpg') }}" alt="{{ item.user.name }}">
+                    {% endif %}
                 <span class="username" style="font-weight: bold;">{{ user.name }}</span>
                 <span class="time">{{ feedback.submit_date.strftime('%d %b %Y') }}</span>
             </div>
