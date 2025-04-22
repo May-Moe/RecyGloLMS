@@ -251,11 +251,8 @@
                     {% for feedback, user in feedbacks[:3] %}
                     <div class="card3-value">
                         <div class="card3-profile">
-                        {% if item.user.profile_img and item.user.profile_img.startswith('http') %}
-                            <img src="{{ item.user.profile_img }}" alt="{{ item.user.name }}">
-                        {% else %}
-                            <img src="{{ url_for('static', filename='uploads/default-profile.jpg') }}" alt="{{ item.user.name }}">
-                        {% endif %}                        </div>
+                            <img src="{{ current_user_image if current_user_image else url_for('static', filename='profile_images/default-profile.jpg') }}" alt="Profile Image" class="dropdown-profile-pic">        
+                        </div>
                         <h4>{{ user.name }}</h4>
                         <div class="feedback-content">{{ feedback.feedback }}</div> 
                         <div class="feedback-date">
