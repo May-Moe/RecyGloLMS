@@ -578,7 +578,7 @@ strong {
 
 #hero-slide .carousel-caption {
   background: var(--white-color);
-  clip-path: polygon(100% 100%, 100% 350px, 0 100%);
+  clip-path: polygon(100% 100%, 100% 850px, 0 100%);
   color: var(--secondary-color);
   top: 1px;
   bottom: -1px;
