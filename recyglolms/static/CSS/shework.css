@@ -572,8 +572,8 @@ strong {
 }
 
 #hero-slide .carousel-item {
-  height: 500px;
-  min-height: 500px;
+  height: 600px;
+  min-height: 600px;
 }
 
 #hero-slide .carousel-caption {
@@ -585,8 +585,8 @@ strong {
   right: 0;
   left: auto;
   text-align: right;
-  min-width: 600px;
-  min-height: 700px;
+  min-width: 500px;
+  min-height: 500px;
   padding: 100px 100px 50px 100px;
 }
 
