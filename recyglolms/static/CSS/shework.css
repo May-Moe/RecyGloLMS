@@ -577,21 +577,18 @@ strong {
 }
 
 #hero-slide .carousel-caption {
-  background: rgba(255, 255, 255, 0.95); /* softer white */
-  clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 30%); /* smooth slant */
+  background: var(--white-color);
+  clip-path: polygon(100% 100%, 100% 350px, 0 100%);
   color: var(--secondary-color);
-  top: auto;
-  bottom: 0;
+  top: 1px;
+  bottom: -1px;
   right: 0;
   left: auto;
   text-align: right;
-  min-width: 400px;
-  min-height: auto;
-  padding: 60px 60px 40px 60px;
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1); /* subtle shadow */
-  border-radius: 0 0 0 30px; /* round edge for elegance */
+  min-width: 500px;
+  min-height: 500px;
+  padding: 100px 100px 50px 100px;
 }
-
 
 .carousel-image {
   display: block;
