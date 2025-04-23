@@ -561,8 +561,8 @@ strong {
   HERO & HERO SLIDE         
 -----------------------------------------*/
 .hero-section-full-height {
-  height: 580px;
-  min-height: 580px;
+  height: 500px;
+  min-height: 500px;
   position: relative;
 }
 
@@ -572,8 +572,8 @@ strong {
 }
 
 #hero-slide .carousel-item {
-  height: 580px;
-  min-height: 580px;
+  height: 500px;
+  min-height: 500px;
 }
 
 #hero-slide .carousel-caption {
@@ -585,8 +585,8 @@ strong {
   right: 0;
   left: auto;
   text-align: right;
-  min-width: 680px;
-  min-height: 680px;
+  min-width: 500px;
+  min-height: 500px;
   padding: 100px 100px 50px 100px;
 }
 
