@@ -561,10 +561,11 @@ strong {
   HERO & HERO SLIDE         
 -----------------------------------------*/
 .hero-section-full-height {
-  height: 500px;
-  min-height: 500px;
+  height: 50vh;
+  min-height: 50vh;
   position: relative;
 }
+
 
 .carousel:hover .carousel-control-next-icon, 
 .carousel:hover .carousel-control-prev-icon {
@@ -572,13 +573,12 @@ strong {
 }
 
 #hero-slide .carousel-item {
-  height: 600px;
-  min-height: 600px;
+  height: 50vh;
+  min-height: 50vh;
 }
 
 #hero-slide .carousel-caption {
   background: var(--white-color);
-  clip-path: polygon(100% 100%, 100% 50px, 50px 100%);
   color: var(--secondary-color);
   top: 1px;
   bottom: -1px;
@@ -593,7 +593,7 @@ strong {
 .carousel-image {
   display: block;
   width: 100%;
-  min-height: 680px;
+  height: 100%;
   object-fit: cover;
   background-size: cover;
   background-repeat: no-repeat;
