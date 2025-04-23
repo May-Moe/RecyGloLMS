@@ -102,7 +102,8 @@ def dashboard():
         user_data=user_data,
         current_user_name=current_user_name,
         current_user_email=current_user_email,
-        feedbacks=feedbacks)
+        feedbacks=feedbacks,
+        current_user_image = current_user.image)
 
 # Route for adding a new user
 @admin_bp.route('/adduser', methods=['GET', 'POST'])
@@ -863,7 +864,8 @@ def admin_feedback():
                            feedbacks=feedbacks,
                            current_user_name=current_user.name,
                            current_user_email=current_user.email,
-                           total_feedback=total_feedback)
+                           total_feedback=total_feedback,
+                           current_user_image = current_user.image)
 
 @admin_bp.route('/Alumni_admin')
 @login_required
