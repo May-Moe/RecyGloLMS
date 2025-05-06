@@ -1420,6 +1420,11 @@ blockquote::before {
   }
 }
 
+body{
+  overflow-x: hidden;
+  width: 100%;
+}
+
 
 /*---------------------------------------
   RESPONSIVE STYLES               
