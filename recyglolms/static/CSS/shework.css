@@ -585,9 +585,12 @@ strong {
   right: 0;
   left: auto;
   text-align: right;
-  min-width: 680px;
-  min-height: 680px;
-  padding: 100px 100px 50px 100px;
+  width: 50%; /* changed from min-width: 680px */
+  height: 100%;
+  padding: 100px 60px 50px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .carousel-image {
@@ -1635,10 +1638,13 @@ blockquote::before {
   }
 
   #hero-slide .carousel-caption {
-    clip-path: polygon(100% 100%, 100% 100px, 0 100%);
-    padding-right: 50px;
-    min-width: inherit;
-    min-height: inherit;
+    clip-path: none; /* REMOVE diagonal effect for mobile */
+    padding: 40px 20px;
+    min-width: 100%;
+    min-height: auto;
+    width: 100%;
+    text-align: center;
+    position: static;
   }
 }
 
