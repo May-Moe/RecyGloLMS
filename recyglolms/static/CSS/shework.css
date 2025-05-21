@@ -1419,6 +1419,21 @@ blockquote::before {
   margin-bottom: 15px; /* Increase this value to add more spacing between list items */
 }
 
+/* -------------------------------------------------------------- */
+.portrait-video {
+  position: relative;
+  width: 100%;
+  padding-top: 177.78%; /* 16:9 is 56.25%, 9:16 is 177.78% */
+}
+
+.portrait-video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 
 @media (max-width: 768px) {
   .carousel-inner img {
