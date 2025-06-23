@@ -1,4 +1,4 @@
-import app
+
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app, send_from_directory
 from recyglolms.admin import allowed_file
 from werkzeug.utils import secure_filename
@@ -50,7 +50,7 @@ def upload_file():
         sanitized_name = secure_filename(custom_name)
         final_filename = f"{sanitized_name}.{file_extension}"
 
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], final_filename)
+        filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], final_filename)
 
         # Save the file
         file.save(filepath)
@@ -100,9 +100,9 @@ def edit_file(uploadid):
 
         # Handle filename change first
         if new_filename and new_filename != file.filename:
-            old_filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            old_filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], file.filename)
             new_filename_secure = secure_filename(new_filename)
-            new_filepath = os.path.join(app.config['UPLOAD_FOLDER'], new_filename_secure)
+            new_filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], new_filename_secure)
 
             if os.path.exists(old_filepath):
                 os.rename(old_filepath, new_filepath)
@@ -112,7 +112,7 @@ def edit_file(uploadid):
         # Handle file content replacement
         if new_file and allowed_file(new_file.filename):
             # Ensure we're saving to the correct path
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], file.filename)
             new_file.save(file_path)
             changes.append(f"Replaced file contents for '{file.filename}'")
 
@@ -148,7 +148,7 @@ def delete_file(uploadid):
         return redirect(url_for('auth.login'))
 
     file = Upload.query.get_or_404(uploadid)
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], file.filename)
 
     # Remove file from storage
     if os.path.exists(filepath):
@@ -200,4 +200,4 @@ def view_files():
 
 @upload_bp.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
