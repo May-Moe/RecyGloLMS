@@ -179,9 +179,12 @@
                     </table>
 
                     <!-- Feedback and delete button -->
-                    <div class="delete-btn-wrapper justify-content-center" id="deleteControls">
-                        <p><span id="selectedCount">0</span> log(s) selected.</p>
-                        <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete selected logs?')">Delete Selected</button>
+                    <!-- Feedback and delete button -->
+                    <div class="delete-controls-wrapper" id="deleteControls">
+                        <p class="selected-info"><span id="selectedCount">0</span> log(s) selected.</p>
+                        <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete selected logs?')">
+                             Delete Selected Logs
+                        </button>
                     </div>
 
                 </form>
