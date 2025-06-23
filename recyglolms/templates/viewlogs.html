@@ -157,11 +157,10 @@
                                 <th>Table</th>
                                 <th>Details</th>
                                 <th>Timestamp <i class="fas fa-sort" id="sortTimestamp"></i></th>
-                                <th><button type="button" id="openDeleteModal" class="delete-btn">
-                                     Delete Logs
-                                </button></th>
                                 {% if current_user.role == 1 %}
                                 <th><input type="checkbox" id="selectAll"> <label for="selectAll">Select All</label></th>
+                                <th>Action</th>
+                                {% else %}
                                 {% endif %}
                             </tr>
                         </thead>
@@ -175,9 +174,11 @@
                                 <td>{{ log.timestamp }}</td>
                                 {% if current_user.role == 1 %}
                                 <td><input type="checkbox" name="log_ids" value="{{ log.id }}" class="log-checkbox"></td>
+                                <td><button type="button" id="openDeleteModal" class="delete-btn"> <i class="fas fa-trash-alt"></i> </button></td>
                                 {% endif %}
                             </tr>
                             {% endfor %}
+
                         </tbody>
                     </table>
 

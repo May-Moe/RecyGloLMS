@@ -176,7 +176,7 @@ th {
     color: #007bff; /* Blue for Edit */
 }
 
-.deleteAction {
+.delete-btn {
     color: #dc3545; /* Red for Delete */
 }
 
@@ -184,7 +184,7 @@ th {
     color: #0056b3;
 }
 
-.deleteAction:hover {
+.delete-btn:hover {
     color: #c82333;
 }
 /* Modal styles */
