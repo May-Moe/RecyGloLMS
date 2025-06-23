@@ -33,6 +33,8 @@ def create_app():
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Avoids warnings
     app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    app.config['ALLOWED_EXTENSIONS'] = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip', 'rar', '7z', 'tar', 'gz', 'tgz', 'bz2', 'xz'}
     app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB max file size
 
     #  Add Google Cloud Storage bucket config

@@ -14,9 +14,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 # Blueprint for admin functionality
 admin_bp = Blueprint('admin', __name__)
 # Configure upload folder and allowed file types
-# UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')  # Absolute path
+# UPLOAD_FOLDER = os.path.join(current_app.root_path, 'static', 'uploads')  # Absolute path
 # ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip'}
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# current_app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -166,26 +166,80 @@ def add_user():
 
 
 # Logs tracking
+# @admin_bp.route('/logs')
+# @login_required
+# def show_logs():
+#     if current_user.role not in [1]:
+#         flash("Unauthorized access!", "danger")
+#         return redirect(url_for('admin.dashboard'))
+
+#     #  Delete logs older than 7 days
+#     seven_days_ago = datetime.utcnow() - timedelta(days=3) #can change days here
+#     old_logs = ActionLog.query.filter(ActionLog.timestamp < seven_days_ago).all()
+#     for log in old_logs:
+#         db.session.delete(log)
+#     db.session.commit()
+
+#     #  Fetch remaining logs
+#     logs = ActionLog.query.order_by(ActionLog.timestamp.desc()).all()
+    
+#     return render_template('viewlogs.html', logs=logs,
+#                            current_user_name=current_user.name,
+#                            current_user_email=current_user.email)
+# Show logs
 @admin_bp.route('/logs')
 @login_required
 def show_logs():
-    if current_user.role not in [1]:
+    if current_user.role != 1:  # Only admin can view logs
         flash("Unauthorized access!", "danger")
         return redirect(url_for('admin.dashboard'))
 
-    #  Delete logs older than 7 days
-    seven_days_ago = datetime.utcnow() - timedelta(days=3) #can change days here
-    old_logs = ActionLog.query.filter(ActionLog.timestamp < seven_days_ago).all()
-    for log in old_logs:
-        db.session.delete(log)
-    db.session.commit()
-
-    #  Fetch remaining logs
     logs = ActionLog.query.order_by(ActionLog.timestamp.desc()).all()
     
     return render_template('viewlogs.html', logs=logs,
                            current_user_name=current_user.name,
                            current_user_email=current_user.email)
+    
+@admin_bp.route('/logs/delete-multiple', methods=['POST'])
+@login_required
+def delete_multiple_logs():
+    if current_user.role != 1:
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('admin.dashboard'))
+
+    selected_ids = request.form.getlist('log_ids')  # Get list of selected log IDs
+
+    if not selected_ids:
+        flash("No logs selected for deletion.", "warning")
+        return redirect(url_for('admin.show_logs'))
+
+    # Convert IDs to integers
+    selected_ids = list(map(int, selected_ids))
+
+    logs_to_delete = ActionLog.query.filter(ActionLog.id.in_(selected_ids)).all()
+
+    for log in logs_to_delete:
+        db.session.delete(log)
+
+    db.session.commit()
+
+    flash(f"{len(logs_to_delete)} logs deleted successfully.", "success")
+    return redirect(url_for('admin.show_logs'))
+
+# # Delete a single log (Admin only)
+# @admin_bp.route('/logs/delete/<int:log_id>', methods=['POST'])
+# @login_required
+# def delete_log(log_id):
+#     if current_user.role != 1:  # Only Admin (role == 1)
+#         flash("Unauthorized access!", "danger")
+#         return redirect(url_for('admin.dashboard'))
+
+#     log = ActionLog.query.get_or_404(log_id)
+#     db.session.delete(log)
+#     db.session.commit()
+
+#     flash("Log deleted successfully.", "success")
+#     return redirect(url_for('admin.show_logs'))
 
 
 @admin_bp.route('/viewallusers', methods=['GET', 'POST'])
