@@ -1,6 +1,6 @@
 
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app, send_from_directory
-from recyglolms.admin import allowed_file
+# from recyglolms.admin import allowed_file
 from werkzeug.utils import secure_filename
 from recyglolms import db
 from recyglolms.models import Upload, User, ActionLog
@@ -12,18 +12,24 @@ from datetime import datetime
 upload_bp = Blueprint('upload', __name__)
 
 # Configure upload folder and allowed file types
-# UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')  # Absolute path
-# ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip', 'rar', '7z', 'tar', 'gz', 'tgz', 'bz2', 'xz'}
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-# app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Limit file size to 16 MB
+# UPLOAD_FOLDER = os.path.join(current_app.root_path, 'static', 'uploads')  # Absolute path
+ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip', 'rar', '7z', 'tar', 'gz', 'tgz', 'bz2', 'xz'}
+# current_app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# current_app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Limit file size to 16 MB
 
 # Ensure the upload folder exists
 # if not os.path.exists(UPLOAD_FOLDER):
 #     os.makedirs(UPLOAD_FOLDER)
 
 # Utility function to check allowed file types
-# def allowed_file(filename):
-#     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# This version reads the allowed extensions from config safely
+def allowed_file(filename):
+    allowed = current_app.config.get("ALLOWED_EXTENSIONS", {
+        'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx',
+        'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip', 'rar', '7z',
+        'tar', 'gz', 'tgz', 'bz2', 'xz'
+    })
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed
 
 # Route to upload a new file
 @upload_bp.route('/upload', methods=['GET', 'POST'])
