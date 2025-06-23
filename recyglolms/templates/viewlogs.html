@@ -7,6 +7,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="static/img/shework4.png" type="image/png">
         <title>SheWorks</title>
+        <style>
+            .selected-row {
+                background-color: #fff4f4 !important;
+            }
+            .delete-btn-wrapper {
+                margin-top: 10px;
+                display: none;
+            }
+            .sticky-header thead th {
+                position: sticky;
+                top: 0;
+                background: #f9f9f9;
+                z-index: 2;
+            }
+        </style>
 </head>
 <body>
     <div class="dashboard">
@@ -117,69 +132,100 @@
                 <li><a href="{{ url_for('admin.show_logs') }}" class="active"><i class="fa-solid fa-database icon"></i> Action Logs</a></li>
             </ul>
         </nav>
+        
+
         <div class="container">
             <div class="header">
                 <h1>Action Logs</h1>
                 <div class="header-actions">
                     <div class="search-container">
-                        <input type="text" id="searchBar" placeholder="Search   ">
+                        <input type="text" id="searchBar" placeholder="Search">
                         <i class="fas fa-search search-icon"></i>
                     </div>
                 </div>
             </div>
+
             <div class="table-container">
                 {% if logs %}
-                <form method="POST" action="{{ url_for('admin.delete_multiple_logs') }}">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Action</th>
-                            <th>Table</th>
-                            <th>Details</th>
-                            <th>Timestamp
-                                <i class="fas fa-sort" id="sortTimestamp"></i>
-                            </th>
-                            
-                            {% if current_user.role == 1 %}
-                            <th><input type="checkbox" id="selectAll"></th>  <!-- Select all checkbox -->
-                            {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody id="userTableBody">
-                        {% for log in logs %}
-                        <!-- User data will be populated here -->
-                         <tr>
-                            <td>{{ log.username }}</td>
-                            <td>{{ log.action_type }}</td>
-                            <td>{{ log.target_table }}</td>
-                            <td>{{ log.details }}</td>
-                            <td>{{ log.timestamp }}</td>
-                            {% if current_user.role == 1 %}
-                            <td><input type="checkbox" name="log_ids" value="{{ log.id }}"></td>
-                            {% endif %}    
-                         </tr>
-                         {% endfor %}
-                    </tbody>
+                <form method="POST" action="{{ url_for('admin.delete_multiple_logs') }}" id="logForm">
+                    <table class="sticky-header">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Table</th>
+                                <th>Details</th>
+                                <th>Timestamp <i class="fas fa-sort" id="sortTimestamp"></i></th>
+                                {% if current_user.role == 1 %}
+                                <th><input type="checkbox" id="selectAll"> <label for="selectAll">Select All</label></th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            {% for log in logs %}
+                            <tr>
+                                <td>{{ log.username }}</td>
+                                <td>{{ log.action_type }}</td>
+                                <td>{{ log.target_table }}</td>
+                                <td>{{ log.details }}</td>
+                                <td>{{ log.timestamp }}</td>
+                                {% if current_user.role == 1 %}
+                                <td><input type="checkbox" name="log_ids" value="{{ log.id }}" class="log-checkbox"></td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
 
-                </table>
-                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete selected logs?')">Delete Selected</button>
-                <script>
-                document.getElementById('selectAll').addEventListener('click', function (e) {
-                    const checkboxes = document.querySelectorAll('input[name="log_ids"]');
-                    checkboxes.forEach(cb => cb.checked = e.target.checked);
-                });
-                </script>
+                    <!-- Feedback and delete button -->
+                    <div class="delete-btn-wrapper" id="deleteControls">
+                        <p><span id="selectedCount">0</span> log(s) selected.</p>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete selected logs?')">Delete Selected</button>
+                    </div>
+
                 </form>
+
+                <script>
+                    const selectAll = document.getElementById('selectAll');
+                    const checkboxes = document.querySelectorAll('.log-checkbox');
+                    const deleteControls = document.getElementById('deleteControls');
+                    const selectedCount = document.getElementById('selectedCount');
+
+                    function updateSelectionUI() {
+                        const selected = document.querySelectorAll('.log-checkbox:checked');
+                        selectedCount.textContent = selected.length;
+                        deleteControls.style.display = selected.length > 0 ? 'block' : 'none';
+
+                        checkboxes.forEach(cb => {
+                            cb.closest('tr').classList.toggle('selected-row', cb.checked);
+                        });
+                    }
+
+                    if (selectAll) {
+                        selectAll.addEventListener('change', () => {
+                            checkboxes.forEach(cb => {
+                                cb.checked = selectAll.checked;
+                            });
+                            updateSelectionUI();
+                        });
+                    }
+
+                    checkboxes.forEach(cb => {
+                        cb.addEventListener('change', () => {
+                            updateSelectionUI();
+                        });
+                    });
+                </script>
                 {% else %}
                 <p style="display: flex; justify-content: center; align-items: center; height: 50vh; color: gray;">There are no logs available.</p>
-            {% endif %}        
+                {% endif %}
             </div>
+
             <div class="pagination">
                 <button id="prevPage" class="page-btn">Previous</button>
                 <span id="pageNumbers"></span>
                 <button id="nextPage" class="page-btn">Next</button>
-            </div>            
+            </div>
         </div>
     </main>
 </div>
