@@ -157,6 +157,9 @@
                                 <th>Table</th>
                                 <th>Details</th>
                                 <th>Timestamp <i class="fas fa-sort" id="sortTimestamp"></i></th>
+                                <th><button type="button" id="openDeleteModal" class="delete-btn">
+                                     Delete Logs
+                                </button></th>
                                 {% if current_user.role == 1 %}
                                 <th><input type="checkbox" id="selectAll"> <label for="selectAll">Select All</label></th>
                                 {% endif %}
@@ -181,9 +184,6 @@
                     <!-- Feedback and delete button -->
                     <div class="delete-controls-wrapper" id="deleteControls" style="display: none;">
                         <p class="selected-info"><span id="selectedCount">0</span> log(s) selected.</p>
-                        <button type="button" id="openDeleteModal" class="delete-btn">
-                            🗑️ Delete Selected Logs
-                        </button>
                     </div>
 
                     <!-- Modal HTML -->
