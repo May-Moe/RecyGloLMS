@@ -200,25 +200,30 @@ def show_logs():
                            current_user_name=current_user.name,
                            current_user_email=current_user.email)
     
-# Bulk delete logs (Admin only)
-@admin_bp.route('/logs/bulk-delete', methods=['POST'])
+@admin_bp.route('/logs/delete-multiple', methods=['POST'])
 @login_required
-def bulk_delete_logs():
+def delete_multiple_logs():
     if current_user.role != 1:
         flash("Unauthorized access!", "danger")
         return redirect(url_for('admin.dashboard'))
 
-    selected_ids = request.form.getlist('log_ids')
-    
+    selected_ids = request.form.getlist('log_ids')  # Get list of selected log IDs
+
     if not selected_ids:
         flash("No logs selected for deletion.", "warning")
         return redirect(url_for('admin.show_logs'))
 
-    # Bulk delete logs
-    ActionLog.query.filter(ActionLog.id.in_(selected_ids)).delete(synchronize_session=False)
+    # Convert IDs to integers
+    selected_ids = list(map(int, selected_ids))
+
+    logs_to_delete = ActionLog.query.filter(ActionLog.id.in_(selected_ids)).all()
+
+    for log in logs_to_delete:
+        db.session.delete(log)
+
     db.session.commit()
 
-    flash(f"Deleted {len(selected_ids)} selected logs.", "success")
+    flash(f"{len(logs_to_delete)} logs deleted successfully.", "success")
     return redirect(url_for('admin.show_logs'))
 
 # # Delete a single log (Admin only)

@@ -129,6 +129,7 @@
             </div>
             <div class="table-container">
                 {% if logs %}
+                <form method="POST" action="{{ url_for('admin.delete_multiple_logs') }}">
                 <table>
                     <thead>
                         <tr>
@@ -166,9 +167,10 @@
                 <script>
                 document.getElementById('selectAll').addEventListener('click', function (e) {
                     const checkboxes = document.querySelectorAll('input[name="log_ids"]');
-                    checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+                    checkboxes.forEach(cb => cb.checked = e.target.checked);
                 });
                 </script>
+                </form>
                 {% else %}
                 <p style="display: flex; justify-content: center; align-items: center; height: 50vh; color: gray;">There are no logs available.</p>
             {% endif %}        
