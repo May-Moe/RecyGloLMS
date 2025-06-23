@@ -1,4 +1,6 @@
+import app
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app, send_from_directory
+from recyglolms.admin import allowed_file
 from werkzeug.utils import secure_filename
 from recyglolms import db
 from recyglolms.models import Upload, User, ActionLog
