@@ -139,6 +139,9 @@
                             <th>Timestamp
                                 <i class="fas fa-sort" id="sortTimestamp"></i>
                             </th>
+                            {% if current_user.role == 1 %}
+                            <th>Delete</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody id="userTableBody">
@@ -149,7 +152,15 @@
                             <td>{{ log.action_type }}</td>
                             <td>{{ log.target_table }}</td>
                             <td>{{ log.details }}</td>
-                            <td>{{ log.timestamp }}</td>    
+                            <td>{{ log.timestamp }}</td>
+                            {% if current_user.role == 1 %}
+                            <td>
+                                <form method="POST" action="{{ url_for('admin.delete_log', log_id=log.id) }}"
+                                    onsubmit="return confirm('Are you sure you want to delete this log?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                            {% endif %}    
                          </tr>
                          {% endfor %}
                     </tbody>

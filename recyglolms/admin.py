@@ -166,26 +166,54 @@ def add_user():
 
 
 # Logs tracking
+# @admin_bp.route('/logs')
+# @login_required
+# def show_logs():
+#     if current_user.role not in [1]:
+#         flash("Unauthorized access!", "danger")
+#         return redirect(url_for('admin.dashboard'))
+
+#     #  Delete logs older than 7 days
+#     seven_days_ago = datetime.utcnow() - timedelta(days=3) #can change days here
+#     old_logs = ActionLog.query.filter(ActionLog.timestamp < seven_days_ago).all()
+#     for log in old_logs:
+#         db.session.delete(log)
+#     db.session.commit()
+
+#     #  Fetch remaining logs
+#     logs = ActionLog.query.order_by(ActionLog.timestamp.desc()).all()
+    
+#     return render_template('viewlogs.html', logs=logs,
+#                            current_user_name=current_user.name,
+#                            current_user_email=current_user.email)
+# Show logs
 @admin_bp.route('/logs')
 @login_required
 def show_logs():
-    if current_user.role not in [1]:
+    if current_user.role != 1:  # Only admin can view logs
         flash("Unauthorized access!", "danger")
         return redirect(url_for('admin.dashboard'))
 
-    #  Delete logs older than 7 days
-    seven_days_ago = datetime.utcnow() - timedelta(days=3) #can change days here
-    old_logs = ActionLog.query.filter(ActionLog.timestamp < seven_days_ago).all()
-    for log in old_logs:
-        db.session.delete(log)
-    db.session.commit()
-
-    #  Fetch remaining logs
     logs = ActionLog.query.order_by(ActionLog.timestamp.desc()).all()
     
     return render_template('viewlogs.html', logs=logs,
                            current_user_name=current_user.name,
                            current_user_email=current_user.email)
+
+# Delete a single log (Admin only)
+@admin_bp.route('/logs/delete/<int:log_id>', methods=['POST'])
+@login_required
+def delete_log(log_id):
+    if current_user.role != 1:  # Only Admin (role == 1)
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for('admin.dashboard'))
+
+    log = ActionLog.query.get_or_404(log_id)
+    db.session.delete(log)
+    db.session.commit()
+
+    flash("Log deleted successfully.", "success")
+    return redirect(url_for('admin.show_logs'))
 
 
 @admin_bp.route('/viewallusers', methods=['GET', 'POST'])
