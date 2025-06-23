@@ -14,9 +14,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 # Blueprint for admin functionality
 admin_bp = Blueprint('admin', __name__)
 # Configure upload folder and allowed file types
-UPLOAD_FOLDER = os.path.join(current_app.root_path, 'static', 'uploads')  # Absolute path
-ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip'}
-current_app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# UPLOAD_FOLDER = os.path.join(current_app.root_path, 'static', 'uploads')  # Absolute path
+# ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mkv', 'mov', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'gif', 'zip'}
+# current_app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
