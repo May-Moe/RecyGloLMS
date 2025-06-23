@@ -199,21 +199,42 @@ def show_logs():
     return render_template('viewlogs.html', logs=logs,
                            current_user_name=current_user.name,
                            current_user_email=current_user.email)
-
-# Delete a single log (Admin only)
-@admin_bp.route('/logs/delete/<int:log_id>', methods=['POST'])
+    
+# Bulk delete logs (Admin only)
+@admin_bp.route('/logs/bulk-delete', methods=['POST'])
 @login_required
-def delete_log(log_id):
-    if current_user.role != 1:  # Only Admin (role == 1)
+def bulk_delete_logs():
+    if current_user.role != 1:
         flash("Unauthorized access!", "danger")
         return redirect(url_for('admin.dashboard'))
 
-    log = ActionLog.query.get_or_404(log_id)
-    db.session.delete(log)
+    selected_ids = request.form.getlist('log_ids')
+    
+    if not selected_ids:
+        flash("No logs selected for deletion.", "warning")
+        return redirect(url_for('admin.show_logs'))
+
+    # Bulk delete logs
+    ActionLog.query.filter(ActionLog.id.in_(selected_ids)).delete(synchronize_session=False)
     db.session.commit()
 
-    flash("Log deleted successfully.", "success")
+    flash(f"Deleted {len(selected_ids)} selected logs.", "success")
     return redirect(url_for('admin.show_logs'))
+
+# # Delete a single log (Admin only)
+# @admin_bp.route('/logs/delete/<int:log_id>', methods=['POST'])
+# @login_required
+# def delete_log(log_id):
+#     if current_user.role != 1:  # Only Admin (role == 1)
+#         flash("Unauthorized access!", "danger")
+#         return redirect(url_for('admin.dashboard'))
+
+#     log = ActionLog.query.get_or_404(log_id)
+#     db.session.delete(log)
+#     db.session.commit()
+
+#     flash("Log deleted successfully.", "success")
+#     return redirect(url_for('admin.show_logs'))
 
 
 @admin_bp.route('/viewallusers', methods=['GET', 'POST'])

@@ -139,8 +139,9 @@
                             <th>Timestamp
                                 <i class="fas fa-sort" id="sortTimestamp"></i>
                             </th>
+                            
                             {% if current_user.role == 1 %}
-                            <th>Delete</th>
+                            <th><input type="checkbox" id="selectAll"></th>  <!-- Select all checkbox -->
                             {% endif %}
                         </tr>
                     </thead>
@@ -154,18 +155,20 @@
                             <td>{{ log.details }}</td>
                             <td>{{ log.timestamp }}</td>
                             {% if current_user.role == 1 %}
-                            <td>
-                                <form method="POST" action="{{ url_for('admin.delete_log', log_id=log.id) }}"
-                                    onsubmit="return confirm('Are you sure you want to delete this log?');">
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                </form>
-                            </td>
+                            <td><input type="checkbox" name="log_ids" value="{{ log.id }}"></td>
                             {% endif %}    
                          </tr>
                          {% endfor %}
                     </tbody>
 
                 </table>
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete selected logs?')">Delete Selected</button>
+                <script>
+                document.getElementById('selectAll').addEventListener('click', function (e) {
+                    const checkboxes = document.querySelectorAll('input[name="log_ids"]');
+                    checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+                });
+                </script>
                 {% else %}
                 <p style="display: flex; justify-content: center; align-items: center; height: 50vh; color: gray;">There are no logs available.</p>
             {% endif %}        
