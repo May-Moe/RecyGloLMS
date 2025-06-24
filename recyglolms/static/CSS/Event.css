@@ -354,3 +354,149 @@
         height: 100px;
     }
 }
+
+/* Hero Section Custom Styles */
+#top {
+    min-height: 100vh; /* Ensure it takes full viewport height */
+    background: linear-gradient(to right, #f8f9fa, #e9ecef); /* Subtle gradient background */
+    padding-top: 100px; /* Adjust based on your fixed navbar height */
+    padding-bottom: 60px;
+}
+
+.webinar-card {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    padding: 30px;
+}
+
+.webinar-title {
+    color: #4CAF50; /* A green color for the title, or match your pink */
+    font-weight: bold;
+    font-size: 2.2rem; /* Larger title */
+}
+
+.webinar-topic {
+    font-size: 1.1rem;
+    color: #343a40;
+}
+
+.speaker-img {
+    width: 60px; /* Adjust size as needed */
+    height: 60px;
+    object-fit: cover;
+    border: 3px solid #ff6699; /* Pink border around speaker images */
+}
+
+.text-pink {
+    color: #ff6699 !important; /* Your brand pink color */
+}
+
+.countdown-timer .countdown-item {
+    padding: 10px;
+    background-color: #fce4ec; /* Light pink background for countdown items */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    min-width: 80px; /* Ensure consistent width */
+}
+
+.countdown-timer .countdown-item span {
+    font-size: 2.5rem; /* Larger numbers for countdown */
+}
+
+.countdown-timer .countdown-item small {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.qr-code-img {
+    max-width: 150px; /* Size of QR code */
+    height: auto;
+    display: block;
+    margin: 0 auto 10px;
+    border: 1px solid #eee;
+    padding: 5px;
+    background-color: #fff;
+}
+
+/* Ensure the custom-btn is styled correctly if not already */
+.custom-btn {
+    background-color: #ff6699; /* Your pink color for buttons */
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.custom-btn:hover {
+    background-color: #e05c8a; /* Slightly darker pink on hover */
+    color: #fff;
+}
+
+/* Adjust heading size for the right column */
+.hero-section h1 {
+    font-size: 3.8rem; /* Even larger for impact */
+    line-height: 1.2;
+    font-weight: 700;
+    color: #333; /* Darker text for readability */
+}
+
+.hero-section p.lead {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.8rem;
+    }
+    .hero-section p.lead {
+        font-size: 1.1rem;
+    }
+    .webinar-title {
+        font-size: 1.8rem;
+    }
+    .countdown-timer .countdown-item span {
+        font-size: 1.8rem;
+    }
+    .countdown-timer .countdown-item {
+        min-width: 60px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section {
+        padding-top: 80px;
+        padding-bottom: 40px;
+    }
+    .webinar-card {
+        padding: 20px;
+    }
+    .webinar-title {
+        font-size: 1.5rem;
+    }
+    .speaker-img {
+        width: 50px;
+        height: 50px;
+    }
+    .countdown-timer .countdown-item span {
+        font-size: 1.5rem;
+    }
+    .countdown-timer .countdown-item {
+        min-width: 50px;
+        padding: 5px;
+    }
+    .qr-code-img {
+        max-width: 100px;
+    }
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    .hero-section p.lead {
+        font-size: 1rem;
+    }
+}
