@@ -116,104 +116,140 @@
                 </div>
             </div>
         </section>
+        
         <section class="all-webinars-section section-padding" id="all-webinars">
-            <div class="container">
-                <div class="row mb-4">
-                    <div class="col-12 text-center" data-aos="fade-up">
-                        <h2 class="section-title">All Webinars</h2>
-                    </div>
-                </div>
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12 text-center" data-aos="fade-up">
+                <h2 class="section-title">All Webinars</h2>
+            </div>
+        </div>
 
-                <div class="row mb-5">
-                    <div class="col-md-6 mb-3 mb-md-0">
-                        <input type="text" class="form-control" placeholder="Search Webinars...">
-                    </div>
-                    <div class="col-md-6">
-                        <select class="form-select">
-                            <option selected>All Categories</option>
-                            <option value="1">Environment</option>
-                            <option value="2">Technology</option>
-                            <option value="3">Business</option>
-                        </select>
-                    </div>
-                </div>
+        <div class="row mb-5">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <input type="text" class="form-control" placeholder="Search Webinars...">
+            </div>
+            <div class="col-md-6">
+                <select class="form-select">
+                    <option selected>All Categories</option>
+                    <option value="1">Environment</option>
+                    <option value="2">Technology</option>
+                    <option value="3">Business</option>
+                </select>
+            </div>
+        </div>
 
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="100">
-                        <div class="webinar-card d-flex flex-column flex-md-row">
-                            <div class="webinar-card-img-container position-relative">
-                                <img src="static/images/w1.jpg" class="webinar-card-img img-fluid" alt="Waste Segregation">
-                                <span class="webinar-tag">Environment</span>
-                            </div>
-                            <div class="webinar-card-body p-3 flex-grow-1">
-                                <h5 class="webinar-card-title">Waste Segregation</h5>
-                                <p class="webinar-card-meta">
-                                    <i class="bi-calendar-event me-1"></i> Date: May 5, 2025<br>
-                                    <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
-                                </p>
-                                <p class="webinar-card-text">Waste segregation is a crucial aspect of responsible waste management...</p>
-                                <a href="#" class="btn btn-sm custom-btn-outline">View Event</a>
-                            </div>
-                        </div>
+        <div class="row">
+            {{-- FIRST WEBINAR CARD --}}
+            <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="webinar-card d-flex flex-column"> {{-- Removed flex-md-row --}}
+                    <div class="webinar-card-img-container position-relative">
+                        <img src="static/images/webinar-waste-segregation.jpg" class="webinar-card-img img-fluid" alt="Waste Segregation">
+                        <span class="webinar-tag">Environment</span>
                     </div>
-
-                    <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="200">
-                        <div class="webinar-card d-flex flex-column flex-md-row">
-                            <div class="webinar-card-img-container position-relative">
-                                <img src="static/images/w2.jpg" class="webinar-card-img img-fluid" alt="The Upcycling Challenge">
-                                <span class="webinar-tag">Sustainability</span>
-                            </div>
-                            <div class="webinar-card-body p-3 flex-grow-1">
-                                <h5 class="webinar-card-title">The Upcycling Challenge of 6 weeks!</h5>
-                                <p class="webinar-card-meta">
-                                    <i class="bi-calendar-event me-1"></i> Date: April 1, 2025<br>
-                                    <i class="bi-person-circle me-1"></i> Speaker: Alice Wonderland
-                                </p>
-                                <p class="webinar-card-text">Join us for a 6-week challenge to transform waste into new products...</p>
-                                <a href="#" class="btn btn-sm custom-btn-outline">View Event</a>
-                            </div>
-                        </div>
+                    <div class="webinar-card-body p-3 flex-grow-1">
+                        <h5 class="webinar-card-title">Waste Segregation</h5>
+                        <p class="webinar-card-meta">
+                            <i class="bi-calendar-event me-1"></i> Date: May 5, 2025<br>
+                            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+                        </p>
+                        <p class="webinar-card-text">Waste segregation is a crucial aspect of responsible waste management...</p>
+                        <a href="#" class="btn btn-sm custom-btn-outline">View Event</a>
                     </div>
-
-                    <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="600">
-                        <div class="webinar-card d-flex flex-column flex-md-row">
-                            <div class="webinar-card-img-container position-relative">
-                                <img src="static/images/w3.jpg" class="webinar-card-img img-fluid" alt="Eco-Friendly Living">
-                                <span class="webinar-tag">Environment</span>
-                            </div>
-                            <div class="webinar-card-body p-3 flex-grow-1">
-                                <h5 class="webinar-card-title">Eco-Friendly Living Tips</h5>
-                                <p class="webinar-card-meta">
-                                    <i class="bi-calendar-event me-1"></i> Date: June 1, 2025<br>
-                                    <i class="bi-person-circle me-1"></i> Speaker: Maria Green
-                                </p>
-                                <p class="webinar-card-text">Discover simple ways to reduce your environmental footprint...</p>
-                                <a href="#" class="btn btn-sm custom-btn-outline">View Event</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="700">
-                        <div class="webinar-card d-flex flex-column flex-md-row">
-                            <div class="webinar-card-img-container position-relative">
-                                <img src="static/images/w4.jpg" class="webinar-card-img img-fluid" alt="Skill Building Workshop">
-                                <span class="webinar-tag">Education</span>
-                            </div>
-                            <div class="webinar-card-body p-3 flex-grow-1">
-                                <h5 class="webinar-card-title">Skill Building for Employability</h5>
-                                <p class="webinar-card-meta">
-                                    <i class="bi-calendar-event me-1"></i> Date: July 20, 2025<br>
-                                    <i class="bi-person-circle me-1"></i> Speaker: Dr. Emily White
-                                </p>
-                                <p class="webinar-card-text">Enhance your professional skills to boost your career prospects...</p>
-                                <a href="#" class="btn btn-sm custom-btn-outline">View Event</a>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
-        </section>
+
+            {{-- SECOND WEBINAR CARD --}}
+            <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="webinar-card d-flex flex-column"> {{-- Removed flex-md-row --}}
+                    <div class="webinar-card-img-container position-relative">
+                        <img src="static/images/webinar-upcycling-challenge.jpg" class="webinar-card-img img-fluid" alt="The Upcycling Challenge">
+                        <span class="webinar-tag">Sustainability</span>
+                    </div>
+                    <div class="webinar-card-body p-3 flex-grow-1">
+                        <h5 class="webinar-card-title">The Upcycling Challenge of 6 weeks!</h5>
+                        <p class="webinar-card-meta">
+                            <i class="bi-calendar-event me-1"></i> Date: April 1, 2025<br>
+                            <i class="bi-person-circle me-1"></i> Speaker: Alice Wonderland
+                        </p>
+                        <p class="webinar-card-text">Join us for a 6-week challenge to transform waste into new products...</p>
+                        <a href="#" class="btn btn-sm custom-btn-outline">View Event</a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- SPEAKER CARDS (unchanged as they are already column layout) --}}
+            <div class="col-lg-4 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="speaker-card text-center p-3">
+                    <img src="static/images/speaker1.jpg" class="speaker-img rounded-circle mb-3 img-fluid" alt="Speaker Jane Doe">
+                    <h5 class="speaker-name mb-1">Jane Doe</h5>
+                    <p class="speaker-title text-muted mb-2">Environmental Consultant</p>
+                    <p class="speaker-bio small">Jane is passionate about sustainable practices and community engagement...</p>
+                    <a href="#" class="btn btn-link btn-sm">Read Bio</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="speaker-card text-center p-3">
+                    <img src="static/images/speaker2.jpg" class="speaker-img rounded-circle mb-3 img-fluid" alt="Speaker John Smith">
+                    <h5 class="speaker-name mb-1">John Smith</h5>
+                    <p class="speaker-title text-muted mb-2">Tech Innovator</p>
+                    <p class="speaker-bio small">John specializes in creating technology solutions for social impact...</p>
+                    <a href="#" class="btn btn-link btn-sm">Read Bio</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="500">
+                <div class="speaker-card text-center p-3">
+                    <img src="static/images/speaker3.jpg" class="speaker-img rounded-circle mb-3 img-fluid" alt="Speaker Sarah Lee">
+                    <h5 class="speaker-name mb-1">Sarah Lee</h5>
+                    <p class="speaker-title text-muted mb-2">Community Organizer</p>
+                    <p class="speaker-bio small">Sarah builds strong communities through various educational programs...</p>
+                    <a href="#" class="btn btn-link btn-sm">Read Bio</a>
+                </div>
+            </div>
+
+            {{-- THIRD WEBINAR CARD --}}
+            <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="600">
+                <div class="webinar-card d-flex flex-column"> {{-- Removed flex-md-row --}}
+                    <div class="webinar-card-img-container position-relative">
+                        <img src="static/images/webinar-eco-friendly.jpg" class="webinar-card-img img-fluid" alt="Eco-Friendly Living">
+                        <span class="webinar-tag">Environment</span>
+                    </div>
+                    <div class="webinar-card-body p-3 flex-grow-1">
+                        <h5 class="webinar-card-title">Eco-Friendly Living Tips</h5>
+                        <p class="webinar-card-meta">
+                            <i class="bi-calendar-event me-1"></i> Date: June 1, 2025<br>
+                            <i class="bi-person-circle me-1"></i> Speaker: Maria Green
+                        </p>
+                        <p class="webinar-card-text">Discover simple ways to reduce your environmental footprint...</p>
+                        <a href="#" class="btn btn-sm custom-btn-outline">View Event</a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- FOURTH WEBINAR CARD --}}
+            <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="700">
+                <div class="webinar-card d-flex flex-column"> {{-- Removed flex-md-row --}}
+                    <div class="webinar-card-img-container position-relative">
+                        <img src="static/images/webinar-skill-building.jpg" class="webinar-card-img img-fluid" alt="Skill Building Workshop">
+                        <span class="webinar-tag">Education</span>
+                    </div>
+                    <div class="webinar-card-body p-3 flex-grow-1">
+                        <h5 class="webinar-card-title">Skill Building for Employability</h5>
+                        <p class="webinar-card-meta">
+                            <i class="bi-calendar-event me-1"></i> Date: July 20, 2025<br>
+                            <i class="bi-person-circle me-1"></i> Speaker: Dr. Emily White
+                        </p>
+                        <p class="webinar-card-text">Enhance your professional skills to boost your career prospects...</p>
+                        <a href="#" class="btn btn-sm custom-btn-outline">View Event</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
         <section class="newsletter-section section-padding bg-dark text-white" data-aos="fade-up" style="background-color: #FF6699">
             <div class="container">
