@@ -1,0 +1,356 @@
+/* Custom Styles for Events Page */
+
+.section-padding {
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+.section-padding-lg {
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: #333; /* Dark text for titles */
+}
+
+/* Event Hero Section */
+.event-hero-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.event-banner {
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 15px; /* Adjust margin to match design */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.event-banner img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.event-banner-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
+
+.event-banner-overlay h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.event-details p {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+/* Countdown Section */
+.countdown-section {
+    background-color: #1A5319; /* Dark green from the design */
+    color: #fff;
+    padding: 30px 0;
+    margin-top: -50px; /* Overlap with the banner slightly as per design */
+    position: relative;
+    z-index: 10;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 30px); /* Adjust width to match design, consider container padding */
+    max-width: 900px; /* Example max-width */
+}
+
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between items */
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #000; /* Black background for digits */
+    padding: 10px 20px;
+    border-radius: 8px;
+    min-width: 80px; /* Ensure consistent width */
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.countdown-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.countdown-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-top: 5px;
+    opacity: 0.8;
+}
+
+/* All Webinars Section */
+.webinar-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%; /* Ensure cards have equal height if content varies */
+}
+
+.webinar-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.webinar-card-img-container {
+    width: 100%;
+    height: 200px; /* Fixed height for consistency */
+    overflow: hidden;
+}
+
+.webinar-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area without distortion */
+}
+
+.webinar-tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: #1A5319; /* Dark green tag */
+    color: white;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.webinar-card-body {
+    padding: 20px;
+}
+
+.webinar-card-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.webinar-card-meta {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.webinar-card-meta i {
+    color: #1A5319; /* Green icon */
+    margin-right: 5px;
+}
+
+.webinar-card-text {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.custom-btn-outline {
+    background-color: transparent;
+    border: 2px solid #1A5319; /* Green border */
+    color: #1A5319; /* Green text */
+    padding: 8px 20px;
+    border-radius: 50px; /* More rounded */
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.custom-btn-outline:hover {
+    background-color: #1A5319;
+    color: white;
+}
+
+/* Speaker Cards */
+.speaker-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%; /* Ensure equal height */
+    padding: 30px;
+}
+
+.speaker-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.speaker-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 4px solid #1A5319; /* Green border around image */
+}
+
+.speaker-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: 15px;
+}
+
+.speaker-title {
+    font-size: 0.95rem;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.speaker-bio {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.speaker-card .btn-link {
+    color: #1A5319; /* Green link */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.speaker-card .btn-link:hover {
+    text-decoration: underline;
+    color: #0d400d; /* Darker green on hover */
+}
+
+
+/* Newsletter Section */
+.newsletter-section {
+    background-color: #1A5319; /* Dark green from the design */
+    padding: 80px 0;
+    text-align: center;
+    color: white;
+}
+
+.newsletter-section h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.newsletter-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.newsletter-input {
+    flex: 1; /* Allows input to grow */
+    padding: 12px 20px;
+    border-radius: 50px; /* Very rounded */
+    border: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+}
+
+.newsletter-input::placeholder {
+    color: #888;
+}
+
+.newsletter-btn {
+    background-color: #28a745; /* A bright green for subscribe button */
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    min-width: 150px; /* Ensure button has some minimum width */
+}
+
+.newsletter-btn:hover {
+    background-color: #218838;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .event-banner-overlay h2 {
+        font-size: 1.8rem;
+    }
+    .event-details p {
+        font-size: 1rem;
+    }
+    .countdown-item {
+        padding: 8px 15px;
+        min-width: 65px;
+    }
+    .countdown-value {
+        font-size: 2rem;
+    }
+    .countdown-label {
+        font-size: 0.7rem;
+    }
+    .webinar-card {
+        flex-direction: column;
+    }
+    .webinar-card-img-container {
+        height: 180px; /* Adjust height for smaller screens */
+    }
+    .newsletter-form .newsletter-input {
+        width: 100%;
+    }
+    .newsletter-form .newsletter-btn {
+        width: 100%;
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .section-padding {
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+    .section-padding-lg {
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+    .event-banner {
+        margin: 0; /* Remove side margins on very small screens */
+        border-radius: 0;
+    }
+    .event-banner-overlay h2 {
+        font-size: 1.5rem;
+    }
+    .event-details p {
+        font-size: 0.9rem;
+    }
+    .countdown-item {
+        padding: 5px 10px;
+        min-width: 50px;
+    }
+    .countdown-value {
+        font-size: 1.8rem;
+    }
+    .countdown-label {
+        font-size: 0.65rem;
+    }
+    .speaker-img {
+        width: 100px;
+        height: 100px;
+    }
+}
