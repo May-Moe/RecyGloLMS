@@ -55,7 +55,7 @@
                         </div>
                     </li>
                     <li class="nav-item ms-3">
-                        <a class="nav-link custom-btn custom-border-btn btn" href="{{ url_for('auth.login') }}">Login</a>
+                        <a class="nav-link custom-btn custom-border-btn btn" href="#">Login</a> {{-- FIXED THIS LINE --}}
                     </li>
                 </ul>
             </div>
@@ -64,7 +64,7 @@
 
     <main>
         <section class="hero-section hero-section-full-height d-flex align-items-center" id="top">
-            <div class="container rounded" style="background-image: url(static/images/pink2.webp);  background-size: cover; background-position: center; height: 100vh; padding: 40px; padding-bottom: 40px;">
+            <div class="container rounded" style="background-image: url(static/images/pink2.webp);  background-size: cover; background-position: center; height: 100vh; padding: 40px; padding-bottom: 40px;">
                 <div class="row align-items-center">
 
                     <div class="col-lg-6 col-md-6 col-12 mb-4 mb-md-0" data-aos="fade-right">
@@ -142,7 +142,7 @@
         <div class="row">
             {{-- FIRST WEBINAR CARD --}}
             <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="webinar-card d-flex flex-column"> {{-- Removed flex-md-row --}}
+                <div class="webinar-card d-flex flex-column"> 
                     <div class="webinar-card-img-container position-relative">
                         <img src="static/images/webinar-waste-segregation.jpg" class="webinar-card-img img-fluid" alt="Waste Segregation">
                         <span class="webinar-tag">Environment</span>
@@ -161,7 +161,7 @@
 
             {{-- SECOND WEBINAR CARD --}}
             <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="webinar-card d-flex flex-column"> {{-- Removed flex-md-row --}}
+                <div class="webinar-card d-flex flex-column"> 
                     <div class="webinar-card-img-container position-relative">
                         <img src="static/images/webinar-upcycling-challenge.jpg" class="webinar-card-img img-fluid" alt="The Upcycling Challenge">
                         <span class="webinar-tag">Sustainability</span>
@@ -211,7 +211,7 @@
 
             {{-- THIRD WEBINAR CARD --}}
             <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="600">
-                <div class="webinar-card d-flex flex-column"> {{-- Removed flex-md-row --}}
+                <div class="webinar-card d-flex flex-column"> 
                     <div class="webinar-card-img-container position-relative">
                         <img src="static/images/webinar-eco-friendly.jpg" class="webinar-card-img img-fluid" alt="Eco-Friendly Living">
                         <span class="webinar-tag">Environment</span>
@@ -230,7 +230,7 @@
 
             {{-- FOURTH WEBINAR CARD --}}
             <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="700">
-                <div class="webinar-card d-flex flex-column"> {{-- Removed flex-md-row --}}
+                <div class="webinar-card d-flex flex-column"> 
                     <div class="webinar-card-img-container position-relative">
                         <img src="static/images/webinar-skill-building.jpg" class="webinar-card-img img-fluid" alt="Skill Building Workshop">
                         <span class="webinar-tag">Education</span>
