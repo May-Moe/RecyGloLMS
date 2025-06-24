@@ -64,32 +64,42 @@
 
     <main>
         <section class="hero-section hero-section-full-height d-flex align-items-center" id="top">
-            <div class="container rounded" style="background-image: url(static/images/pink2.webp);  background-size: cover; background-position: center; height: 100vh; padding: 40px; padding-bottom: 40px;">
-                <div class="row align-items-center">
+    <div class="container rounded" style="background-image: url(static/images/pink2.webp); background-size: cover; background-position: center; min-height: 110vh; padding: 60px 40px 80px;">
+        <div class="row align-items-center">
 
-                    <div class="col-lg-6 col-md-6 col-12 mb-4 mb-md-0" data-aos="fade-right">
-                        <div class="hero-img-container">
-                            <img src="static/images/w1.jpg" class="img-fluid hero-img rounded" alt="Upcycling Waste">
-                        </div>
-                          
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-12 text-center text-md-start" data-aos="fade-left">
-                        <h1 class="display-2 text-dark mb-4">Upcycling For General Waste</h1>
-                        <p class="lead text-dark-50 mb-5">Explore creative and sustainable ways to transform everyday waste into valuable products, reducing environmental impact and promoting a circular economy.</p>
-                        <div class="webinar-speakers mb-3">
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <img src="static/images/profile.jpg" class="speaker-img rounded-circle me-2" alt="Speaker 1">
-                                    <img src="static/images/profile.jpg" class="speaker-img rounded-circle me-2" alt="Speaker 2">
-                                </div>
-                            </div>
-                        <a href="#" class="btn btn-primary custom-btn w-100">Register Now</a>
-
-                    </div>
-
+            <!-- Smaller Hero Image -->
+            <div class="col-lg-5 col-md-6 col-12 mb-4 mb-md-0" data-aos="fade-right">
+                <div class="hero-img-container text-center">
+                    <img src="static/images/w1.jpg" class="img-fluid rounded" alt="Upcycling Waste" style="max-height: 400px; width: auto;">
                 </div>
             </div>
-        </section>
+
+            <!-- Hero Text and Speakers -->
+            <div class="col-lg-7 col-md-6 col-12 text-center text-md-start" data-aos="fade-left">
+                <h1 class="display-2 text-dark mb-4">Upcycling For General Waste</h1>
+                <p class="lead text-dark-50 mb-4">Explore creative and sustainable ways to transform everyday waste into valuable products, reducing environmental impact and promoting a circular economy.</p>
+                
+                <!-- Speakers with Names -->
+                <div class="webinar-speakers mb-4">
+                    <div class="d-flex justify-content-start align-items-center flex-wrap">
+                        <div class="d-flex align-items-center me-4 mb-2">
+                            <img src="static/images/profile.jpg" class="rounded-circle me-2" alt="Speaker 1" style="width: 50px; height: 50px;">
+                            <span class="text-dark fw-bold">Jane Doe</span>
+                        </div>
+                        <div class="d-flex align-items-center me-4 mb-2">
+                            <img src="static/images/profile.jpg" class="rounded-circle me-2" alt="Speaker 2" style="width: 50px; height: 50px;">
+                            <span class="text-dark fw-bold">John Smith</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#" class="btn btn-primary custom-btn w-100">Register Now</a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
         <section class="countdown-section py-4 bg-dark text-white text-center" style="padding-top: 20px; padding-bottom: 20px;">
             <div class="container">
                 <div class="row justify-content-center">
