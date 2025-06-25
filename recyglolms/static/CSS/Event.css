@@ -67,7 +67,7 @@
       position: absolute;
       top: 15px;
       left: 15px;
-      background: #0066ff;
+      background: #ff6699;
       color: white;
       font-size: 12px;
       padding: 5px 10px;
@@ -103,13 +103,13 @@
     }
 
     .webinar-card .btn {
-      background-color: #0066ff;
+      background-color: #ff6699;
       border: none;
       transition: background-color 0.3s ease;
     }
 
     .webinar-card .btn:hover {
-      background-color: #004ec2;
+      background-color: #ff6699;
     }
 
 
