@@ -18,7 +18,7 @@
 .webinar-card {
     background-color: #fff;
     border: 1px solid #dee2e6;
-    padding: 30px; /* This padding applies to the entire card by default, will be adjusted for .webinar-card-body below */
+    /* padding: 30px; -- REMOVED: Padding will now be applied to .webinar-card-body */
     border-radius: 1rem; /* Added border-radius to match the image's rounded corners */
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Added subtle shadow for depth */
 }
@@ -143,7 +143,7 @@
     overflow: hidden;
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
-    /* Flex properties for centering: useful if object-fit was 'contain' or image smaller */
+    /* Flex properties for centering: good for explicit centering if object-fit was 'contain' or image smaller */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -157,7 +157,7 @@
     transition: transform 0.3s ease;
 }
 
-/* Default (mobile-first) for the webinar card structure */
+/* Default (mobile-first) for the webinar card structure in the 'All Webinars' section */
 .all-webinars-section .webinar-card {
     height: 100%; /* Ensures cards in a grid maintain height */
     display: flex;
@@ -178,8 +178,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Distributes content vertically */
+    text-align: center; /* Center text and inline elements in body for mobile */
 }
-
 
 /* Hover effect for the entire card */
 .webinar-card:hover .webinar-card-img-container img {
@@ -189,9 +189,6 @@
 
 /* Responsive Adjustments */
 @media (max-width: 991.98px) { /* Adjust for medium devices (Bootstrap's lg breakpoint) */
-    .webinar-card {
-        /* margin-bottom: 3rem; /* Add space between card and text on smaller screens (consider if this is still needed with col-mb) */
-    }
     .hero-section h1 {
         font-size: 3rem; /* Slightly smaller for tablets */
     }
@@ -221,9 +218,10 @@
     .hero-section .row {
         flex-direction: column-reverse; /* Put the text above the card on mobile */
     }
-    .col-lg-6.col-md-6.col-12 {
-        text-align: center; /* Center text on mobile */
-    }
+    /* No need for text-align: center here if .webinar-card-body is already set to center */
+    /* .col-lg-6.col-md-6.col-12 {
+        text-align: center;
+    } */
 }
 
 @media (max-width: 575.98px) { /* Adjust for extra small devices (Bootstrap's sm breakpoint) */
@@ -232,7 +230,7 @@
         padding-bottom: 40px;
     }
     .webinar-card {
-        padding: 20px; /* Reduced padding on very small screens, this applies to the whole card by default */
+        /* padding: 20px; -- removed, padding on body now */
         margin-bottom: 2rem;
     }
     .webinar-card-body {
@@ -389,6 +387,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        text-align: left; /* Text alignment within body is left for desktop */
     }
 }
 
@@ -402,15 +401,6 @@
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
 }
-
-/* This media query block is now consolidated and handled above within the .all-webinars-section .webinar-card rule */
-/* @media (min-width: 768px) {
-    .webinar-card-img {
-        border-top-right-radius: 0;
-        border-bottom-left-radius: 0.75rem;
-    }
-} */
-
 
 .webinar-tag {
     position: absolute;
