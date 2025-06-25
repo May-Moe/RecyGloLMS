@@ -2,7 +2,7 @@
 #top {
     min-height: 100vh; /* Ensure it takes full viewport height */
     /* background: linear-gradient(to right, #f8f9fa, #e9ecef); */ /* Subtle gradient background, uncomment if needed */
-    padding-top: 100px; /* Adjust based on your fixed navbar height */
+    padding-top: 40px; /* Adjust based on your fixed navbar height */
     padding-bottom: 60px;
     display: flex; /* Use flexbox to center content vertically */
     align-items: center; /* Center items vertically */
@@ -143,6 +143,9 @@
     overflow: hidden;
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     
 }
 
