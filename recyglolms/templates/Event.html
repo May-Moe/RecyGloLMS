@@ -157,9 +157,14 @@
           </div>
           <div class="webinar-card-body">
             <h5 class="webinar-card-title">Floating Islands Tour</h5>
-            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> June 28, 2025</p>
+            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025<br>
+            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+            </p>
             <p class="webinar-card-text">Enjoy the beauty of floating villas and the crystal-clear waters of the Maldives Islands.</p>
-            <a href="#" class="btn btn-primary w-100">Register Now</a>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
+  Register Now
+</button>
+
           </div>
         </div>
       </div>
@@ -173,9 +178,13 @@
           </div>
           <div class="webinar-card-body">
             <h5 class="webinar-card-title">Kayak Experience</h5>
-            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> July 10, 2025</p>
+           <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025<br>
+            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+            </p>
             <p class="webinar-card-text">Paddle through stunning mountain lakes and immerse in nature like never before.</p>
-            <a href="#" class="btn btn-primary w-100">Register Now</a>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
+  Register Now
+</button>
           </div>
         </div>
       </div>
@@ -189,9 +198,13 @@
           </div>
           <div class="webinar-card-body">
             <h5 class="webinar-card-title">Desert Dune Safari</h5>
-            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025</p>
+            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025<br>
+            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+            </p>
             <p class="webinar-card-text">Explore the Sahara Desert’s golden dunes with thrilling rides and cultural stories.</p>
-            <a href="#" class="btn btn-primary w-100">Register Now</a>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
+  Register Now
+</button>
           </div>
         </div>
       </div>
@@ -212,6 +225,38 @@
                 </div>
             </div>
         </section>
+
+<div class="modal fade" id="registerModal1" tabindex="-1" aria-labelledby="registerModalLabel1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registerModalLabel1">Kayak Experience</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body d-flex flex-column flex-md-row">
+        <!-- Image -->
+        <div class="col-md-5 text-center mb-3 mb-md-0">
+          <img src="your-image-path.jpg" class="img-fluid rounded" alt="Webinar Image">
+        </div>
+
+        <!-- Info -->
+        <div class="col-md-7 ps-md-4">
+          <p><strong>Date:</strong> July 10, 2025</p>
+          <p><strong>Speaker:</strong> John Doe, Expert Adventurer</p>
+          <p><strong>Description:</strong><br>
+            Paddle through stunning mountain lakes and immerse in nature like never before. This experience combines adventure, learning, and unforgettable views.
+          </p>
+          <a href="https://youtube.com/examplelink" target="_blank" class="btn btn-outline-danger mt-2">
+            Watch on YouTube
+          </a>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
     </main>
 
