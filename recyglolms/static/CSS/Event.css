@@ -143,6 +143,9 @@
     overflow: hidden;
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
+    display: flex; /* Make the container a flex container */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
 }
 
 .webinar-card-img-container img {
