@@ -40,7 +40,9 @@
                     <li class="nav-item"><a class="nav-link click-scroll" href="shework.html#section_5">Programs</a></li>
                     <li class="nav-item"><a class="nav-link click-scroll" href="shework.html#section_6">Success Storys</a></li>
                     <li class="nav-item"><a class="nav-link click-scroll" href="shework.html#section_7">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link click-scroll active" href="Event.html">Event</a></li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.event') }}">Event</a>
+                        </li>
                     <li class="nav-item language-dropdown">
                         <button class="language-btn nav-link btn">
                             <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
@@ -162,7 +164,7 @@
             </p>
             <p class="webinar-card-text">Enjoy the beauty of floating villas and the crystal-clear waters of the Maldives Islands.</p>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
-  Register Now
+  View Details
 </button>
 
           </div>
@@ -183,7 +185,7 @@
             </p>
             <p class="webinar-card-text">Paddle through stunning mountain lakes and immerse in nature like never before.</p>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
-  Register Now
+  View Details
 </button>
           </div>
         </div>
@@ -203,11 +205,58 @@
             </p>
             <p class="webinar-card-text">Explore the Sahara Desert’s golden dunes with thrilling rides and cultural stories.</p>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
-  Register Now
+  View Details
 </button>
           </div>
         </div>
       </div>
+
+      <!-- Card 4 -->
+      <div class="col-lg-4 col-md-6 d-none extra-webinar">
+        <div class="webinar-card">
+          <div class="webinar-card-img-container">
+            <img src="static/images/w1.jpg" class="webinar-card-img" alt="Webinar 3">
+            <span class="webinar-tag">Culture</span>
+          </div>
+          <div class="webinar-card-body">
+            <h5 class="webinar-card-title">Desert Dune Safari</h5>
+            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025<br>
+            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+            </p>
+            <p class="webinar-card-text">Explore the Sahara Desert’s golden dunes with thrilling rides and cultural stories.</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
+  View Details
+</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Card 4 -->
+      <div class="col-lg-4 col-md-6 d-none extra-webinar">
+        <div class="webinar-card">
+          <div class="webinar-card-img-container">
+            <img src="static/images/w1.jpg" class="webinar-card-img" alt="Webinar 3">
+            <span class="webinar-tag">Culture</span>
+          </div>
+          <div class="webinar-card-body">
+            <h5 class="webinar-card-title">Desert Dune Safari</h5>
+            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025<br>
+            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+            </p>
+            <p class="webinar-card-text">Explore the Sahara Desert’s golden dunes with thrilling rides and cultural stories.</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
+  View Details
+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- See More / Show Less Button -->
+<div class="text-center mt-3">
+  <button id="toggleWebinarsBtn" class="btn btn-outline-primary">See More</button>
+</div>
+
     </div>
   </div>
   </section>
@@ -236,7 +285,7 @@
       <div class="modal-body d-flex flex-column flex-md-row">
         <!-- Image -->
         <div class="col-md-5 text-center mb-3 mb-md-0">
-          <img src="your-image-path.jpg" class="img-fluid rounded" alt="Webinar Image">
+          <img src="static/images/w1.jpg" class="img-fluid rounded" alt="Webinar Image">
         </div>
 
         <!-- Info -->
