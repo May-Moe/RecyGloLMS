@@ -446,6 +446,21 @@
         document.addEventListener('DOMContentLoaded', function() {
             startSecondaryCountdown();
         });
+
+  const toggleBtn = document.getElementById('toggleWebinarsBtn');
+  const extraCards = document.querySelectorAll('.extra-webinar');
+  let isExpanded = false;
+
+  toggleBtn.addEventListener('click', () => {
+    isExpanded = !isExpanded;
+
+    extraCards.forEach(card => {
+      card.classList.toggle('d-none');
+    });
+
+    toggleBtn.textContent = isExpanded ? 'Show Less' : 'See More';
+  });
+
     </script>
 </body>
 </html>
