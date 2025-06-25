@@ -127,104 +127,75 @@
             </div>
         </section>
         
-<section class="all-webinars-section py-4" id="all-webinars">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center" data-aos="fade-up">
-                <h2 class="section-title">All Webinars</h2>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6 mb-3 mb-md-0">
-                <input type="text" class="form-control" placeholder="Search Webinars...">
-            </div>
-            <div class="col-md-6">
-                <select class="form-select">
-                    <option selected>All Categories</option>
-                    <option value="1">Environment</option>
-                    <option value="2">Technology</option>
-                    <option value="3">Business</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Repeat this block for each webinar -->
-            <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="webinar-card d-flex flex-column">
-                    <div class="webinar-card-img-container position-relative">
-                        <img src="static/images/w1.jpg" class="webinar-card-img img-fluid" alt="Waste Segregation">
-                        <span class="webinar-tag">Environment</span>
-                    </div>
-                    <div class="webinar-card-body p-3">
-                        <h5 class="webinar-card-title">Waste Segregation</h5>
-                        <p class="webinar-card-meta">
-                            <i class="bi-calendar-event me-1"></i> Date: May 5, 2025<br>
-                            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
-                        </p>
-                        <p class="webinar-card-text">Waste segregation is a crucial aspect of responsible waste management...</p>
-                        <a href="#" class="btn btn-primary custom-btn w-100">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="webinar-card d-flex flex-column">
-                    <div class="webinar-card-img-container position-relative">
-                        <img src="static/images/w3.jpg" class="webinar-card-img img-fluid" alt="Upcycling Challenge">
-                        <span class="webinar-tag">Sustainability</span>
-                    </div>
-                    <div class="webinar-card-body p-3">
-                        <h5 class="webinar-card-title">The Upcycling Challenge</h5>
-                        <p class="webinar-card-meta">
-                            <i class="bi-calendar-event me-1"></i> Date: April 1, 2025<br>
-                            <i class="bi-person-circle me-1"></i> Speaker: Alice Wonderland
-                        </p>
-                        <p class="webinar-card-text">Join us for a 6-week challenge to transform waste into new products...</p>
-                        <a href="#" class="btn btn-primary custom-btn w-100">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-             <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="webinar-card d-flex flex-column">
-                    <div class="webinar-card-img-container position-relative">
-                        <img src="static/images/w4.jpg" class="webinar-card-img img-fluid" alt="Upcycling Challenge">
-                        <span class="webinar-tag">Sustainability</span>
-                    </div>
-                    <div class="webinar-card-body p-3">
-                        <h5 class="webinar-card-title">The Upcycling Challenge</h5>
-                        <p class="webinar-card-meta">
-                            <i class="bi-calendar-event me-1"></i> Date: April 1, 2025<br>
-                            <i class="bi-person-circle me-1"></i> Speaker: Alice Wonderland
-                        </p>
-                        <p class="webinar-card-text">Join us for a 6-week challenge to transform waste into new products...</p>
-                        <a href="#" class="btn btn-primary custom-btn w-100">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-             <div class="col-lg-6 col-md-6 col-12 mb-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="webinar-card d-flex flex-column">
-                    <div class="webinar-card-img-container position-relative">
-                        <img src="static/images/w3.jpg" class="webinar-card-img img-fluid" alt="Upcycling Challenge">
-                        <span class="webinar-tag">Sustainability</span>
-                    </div>
-                    <div class="webinar-card-body p-3">
-                        <h5 class="webinar-card-title">The Upcycling Challenge</h5>
-                        <p class="webinar-card-meta">
-                            <i class="bi-calendar-event me-1"></i> Date: April 1, 2025<br>
-                            <i class="bi-person-circle me-1"></i> Speaker: Alice Wonderland
-                        </p>
-                        <p class="webinar-card-text">Join us for a 6-week challenge to transform waste into new products...</p>
-                        <a href="#" class="btn btn-primary custom-btn w-100">View Details</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+<section class="all-webinars-section py-5" id="all-webinars">
+  <div class="container">
+    <div class="row mb-5 text-center">
+      <div class="col-12">
+        <h2 class="section-title">All Webinars</h2>
+        <p class="text-muted">Explore upcoming and past webinars on sustainability, technology, and innovation.</p>
+      </div>
     </div>
+
+    <!-- Search and Filter -->
+    <div class="row mb-4 justify-content-center">
+      <div class="col-md-5 mb-2">
+        <input type="text" class="form-control" placeholder="Search Webinars...">
+      </div>
+      <div class="col-md-4 mb-2">
+        <select class="form-select">
+          <option selected>All Categories</option>
+          <option value="1">Environment</option>
+          <option value="2">Technology</option>
+          <option value="3">Business</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Webinar Cards -->
+    <div class="row gy-4">
+      <!-- Webinar Card -->
+      <div class="col-lg-6">
+        <div class="webinar-card d-flex flex-column">
+          <div class="webinar-card-img-container position-relative">
+            <img src="static/images/w1.jpg" alt="Waste Segregation" class="webinar-card-img img-fluid">
+            <span class="webinar-tag">Environment</span>
+          </div>
+          <div class="webinar-card-body p-4">
+            <h5 class="webinar-card-title">Waste Segregation</h5>
+            <p class="webinar-card-meta">
+              <i class="bi-calendar-event me-1"></i> May 5, 2025 &nbsp;&nbsp;
+              <i class="bi-person-circle me-1"></i> Jane Doe
+            </p>
+            <p class="webinar-card-text">Learn how to properly sort and manage different types of waste to reduce environmental harm.</p>
+            <a href="#" class="btn btn-primary w-100">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Webinar Card -->
+      <div class="col-lg-6">
+        <div class="webinar-card d-flex flex-column">
+          <div class="webinar-card-img-container position-relative">
+            <img src="static/images/w3.jpg" alt="Upcycling Challenge" class="webinar-card-img img-fluid">
+            <span class="webinar-tag">Sustainability</span>
+          </div>
+          <div class="webinar-card-body p-4">
+            <h5 class="webinar-card-title">The Upcycling Challenge</h5>
+            <p class="webinar-card-meta">
+              <i class="bi-calendar-event me-1"></i> April 1, 2025 &nbsp;&nbsp;
+              <i class="bi-person-circle me-1"></i> Alice Wonderland
+            </p>
+            <p class="webinar-card-text">Transform everyday waste into usable items in this interactive 6-week challenge.</p>
+            <a href="#" class="btn btn-primary w-100">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add more cards as needed using same structure -->
+    </div>
+  </div>
 </section>
+
 
         <section class="newsletter-section section-padding" data-aos="fade-up" style="background-color: #FF6699">
             <div class="container">
