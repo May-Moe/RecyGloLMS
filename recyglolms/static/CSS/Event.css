@@ -18,7 +18,7 @@
 .webinar-card {
     background-color: #fff;
     border: 1px solid #dee2e6;
-    padding: 30px;
+    padding: 30px; /* This padding applies to the entire card by default, will be adjusted for .webinar-card-body below */
     border-radius: 1rem; /* Added border-radius to match the image's rounded corners */
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Added subtle shadow for depth */
 }
@@ -61,7 +61,6 @@
     color: #ff6699; /* Ensure icons are pink */
     margin-bottom: 0.5rem;
 }
-
 
 .countdown-timer .countdown-item {
     padding: 10px;
@@ -137,39 +136,61 @@
     margin-bottom: 2rem; /* More space below paragraph */
 }
 
+/* Default (mobile-first) styles for webinar card image container */
 .webinar-card-img-container {
     width: 100%;
-    height: 250px; /* Fixed height for all images */
+    height: 250px; /* Fixed height for all images (on mobile and default) */
     overflow: hidden;
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
-    display: flex; /* Make the container a flex container */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
+    /* Flex properties for centering: useful if object-fit was 'contain' or image smaller */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .webinar-card-img-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* This makes the image fill and crop */
     display: block;
     transition: transform 0.3s ease;
 }
 
+/* Default (mobile-first) for the webinar card structure */
 .all-webinars-section .webinar-card {
-    height: 100%;
+    height: 100%; /* Ensures cards in a grid maintain height */
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Stacks image and body vertically on small screens */
+    /* Base styles from .webinar-card are inherited, but specifically applied here for this section */
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.75rem;
+    overflow: hidden; /* Important for image border-radius */
+    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Webinar card body specific styles */
+.webinar-card-body {
+    padding: 1.5rem; /* Default padding for the body content */
+    flex-grow: 1; /* Allows the body to grow and fill available space in a column flex */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distributes content vertically */
+}
+
+
+/* Hover effect for the entire card */
 .webinar-card:hover .webinar-card-img-container img {
     transform: scale(1.03); /* Slight zoom on hover */
 }
 
+
 /* Responsive Adjustments */
 @media (max-width: 991.98px) { /* Adjust for medium devices (Bootstrap's lg breakpoint) */
     .webinar-card {
-        margin-bottom: 3rem; /* Add space between card and text on smaller screens */
+        /* margin-bottom: 3rem; /* Add space between card and text on smaller screens (consider if this is still needed with col-mb) */
     }
     .hero-section h1 {
         font-size: 3rem; /* Slightly smaller for tablets */
@@ -211,8 +232,11 @@
         padding-bottom: 40px;
     }
     .webinar-card {
-        padding: 20px;
+        padding: 20px; /* Reduced padding on very small screens, this applies to the whole card by default */
         margin-bottom: 2rem;
+    }
+    .webinar-card-body {
+        padding: 1rem; /* Adjust body padding for very small screens */
     }
     .webinar-title {
         font-size: 1.5rem;
@@ -333,28 +357,45 @@
     border-radius: 2px;
 }
 
-.all-webinars-section .webinar-card { /* This targets webinar cards *within* this section specifically */
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 0.75rem;
-    overflow: hidden; /* Important for image border-radius */
-    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.all-webinars-section .webinar-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.12);
-}
-
+/* This is the key media query for desktop layout of webinar cards */
 @media (min-width: 768px) {
+    /* Change the webinar card to a horizontal layout */
+    .all-webinars-section .webinar-card {
+        flex-direction: row; /* Arranges image container and body side-by-side */
+        padding: 0; /* Remove padding from the main card, let children handle it */
+    }
+
+    /* Adjust the image container for the horizontal layout */
     .webinar-card-img-container {
-        width: 40%; /* Take 40% width on medium screens and up */
-        height: auto; /* Allow height to adjust */
+        width: 40%; /* Image container takes 40% of the card's total width */
+        height: auto; /* Its height will stretch to match the body content (flex behavior) */
+        
+        /* Adjust border-radius for the horizontal layout */
+        border-top-right-radius: 0; /* Remove top-right radius */
+        border-bottom-left-radius: 0.75rem; /* Add bottom-left radius */
+    }
+    
+    /* Ensure the image itself also follows the border-radius */
+    .webinar-card-img-container img {
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0.75rem;
+    }
+
+    /* Adjust the card body for the horizontal layout */
+    .webinar-card-body {
+        width: 60%; /* Card body takes the remaining 60% of the card's total width */
+        padding: 1.5rem; /* Re-apply consistent padding to the body */
+        /* Make sure the body also uses flex to space out its content if desired */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 }
 
+/* Your original .webinar-card-img, keep it as it applies to the img element */
 .webinar-card-img {
+    /* These styles are applied directly to the <img> element within the container */
+    /* They are covered by .webinar-card-img-container img, but keeping this for completeness */
     width: 100%;
     height: 100%;
     object-fit: cover; /* Cover the container */
@@ -362,12 +403,13 @@
     border-top-right-radius: 0.75rem;
 }
 
-@media (min-width: 768px) {
+/* This media query block is now consolidated and handled above within the .all-webinars-section .webinar-card rule */
+/* @media (min-width: 768px) {
     .webinar-card-img {
         border-top-right-radius: 0;
-        border-bottom-left-radius: 0.75rem; /* Rounded bottom-left for horizontal layout */
+        border-bottom-left-radius: 0.75rem;
     }
-}
+} */
 
 
 .webinar-tag {
