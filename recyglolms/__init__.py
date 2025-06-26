@@ -7,7 +7,8 @@ import os
 import logging
 import pymysql
 from flask_sqlalchemy import SQLAlchemy
-from config import STORAGE_BUCKET  # ✅ Import STORAGE_BUCKET
+from flask_migrate import Migrate  # Import Flask-Migrate
+from config import STORAGE_BUCKET
 
 # Install pymysql to replace MySQLdb
 pymysql.install_as_MySQLdb()
@@ -17,11 +18,11 @@ db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 scheduler = APScheduler()
-
+migrate = Migrate() # Create a Migrate instance
 
 def create_app():
     app = Flask(__name__)
-    # ✅ Load config from environment or config.py
+    #  Load config from environment or config.py
     app.config.from_object('config')
 
     # App Config
@@ -41,9 +42,10 @@ def create_app():
     app.config["STORAGE_BUCKET"] = STORAGE_BUCKET  
 
     # Initialize extensions with app
-    db.init_app(app)  # Ensure this is called
+    db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    migrate.init_app(app, db) # Initialize Migrate with the app and db
     login_manager.login_view = 'auth.login'
     scheduler.init_app(app)
 
@@ -51,10 +53,10 @@ def create_app():
     logging.basicConfig(level=logging.DEBUG)
     scheduler.add_listener(lambda event: logging.info(f"Event: {event}"), EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
 
-    # Ensure models are loaded after db is initialized
-    with app.app_context():
-        from recyglolms import models  # Import models after initializing db
-        db.create_all()  # Ensure tables are created
+    # IMPORTANT: Remove db.create_all(). Migrations will handle the database schema.
+    # with app.app_context():
+    #     from recyglolms import models
+    #     db.create_all()
 
     # Register blueprints after initializing the database
     from recyglolms.main import main_bp
@@ -65,6 +67,7 @@ def create_app():
     from recyglolms.quiz import quiz_bp
     from recyglolms.assesement import assessment_bp
     from recyglolms.certificate_grading import grading_bp
+    from recyglolms.events import events_bp # Import your new events blueprint
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
@@ -74,11 +77,12 @@ def create_app():
     app.register_blueprint(quiz_bp)
     app.register_blueprint(assessment_bp)
     app.register_blueprint(grading_bp)
+    app.register_blueprint(events_bp) # Register the events blueprint
 
     # User loader function for Flask-Login
     @login_manager.user_loader
     def load_user(user_id):
-        from recyglolms.models import User  # Import User model here to avoid circular import
+        from recyglolms.models import User
         return User.query.get(int(user_id))
 
     return app

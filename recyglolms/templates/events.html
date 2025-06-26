@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Events</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Our Events</h1>
+
+    <!-- Add Event Button (Admins only) -->
+    {% if current_user.role != 0 %}
+    <div class="mb-4 text-end">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#eventModal" onclick="openAddEventModal()">Add Event</button>
+    </div>
+    {% endif %}
+
+    <div class="mb-5">
+        <h2>Upcoming Events</h2>
+        <hr>
+        {% if upcoming_events %}
+            <div class="row">
+                {% for event in upcoming_events %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ event.image_url or url_for('static', filename='uploads/default-event.jpg') }}" class="card-img-top" alt="{{ event.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                {{ event.event_date.strftime('%A, %B %d, %Y at %I:%M %p') }}
+                            </h6>
+                            <p class="card-text">{{ event.category }}</p>
+                            <p class="card-text"><i class="fab fa-youtube"></i> <a href="{{ event.youtube_link }}" target="_blank">{{ event.youtube_link }}</a></p>
+                            {% if event.speaker_names %}
+                                <p class="card-text"><strong>Speakers:</strong> {{ event.speaker_names|join(', ') }}</p>
+                            {% endif %}
+                            <p class="card-text"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+                            <p class="card-text">{{ event.description|truncate(150) }}</p>
+                        </div>
+                        {% if current_user.role != 0 %}
+                        <div class="card-footer d-flex justify-content-between">
+                            <button class="btn btn-sm btn-primary" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#eventModal"
+                                    onclick="openEditEventModal({{ event.id }}, '{{ event.title|escapejs }}', '{{ event.description|escapejs }}', '{{ event.event_date.strftime('%Y-%m-%dT%H:%M') }}', '{{ event.location|escapejs }}', '{{ event.image_url|default('') }}')">
+                                Edit
+                            </button>
+                            <form method="POST" action="{{ url_for('events.delete_event', event_id=event.id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No upcoming events scheduled. Please check back soon!</p>
+        {% endif %}
+    </div>
+
+    <div>
+        <h2>Past Events</h2>
+        <hr>
+        {% if past_events %}
+            <div class="row">
+                {% for event in past_events %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 bg-light">
+                        <img src="{{ event.image_url or url_for('static', filename='uploads/default-event.jpg') }}" class="card-img-top" alt="{{ event.title }}" style="filter: grayscale(100%);">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                {{ event.event_date.strftime('%B %d, %Y') }}
+                            </h6>
+                            <p class="card-text">{{ event.description|truncate(100) }}</p>
+                        </div>
+                        {% if current_user.role != 0 %}
+                        <div class="card-footer d-flex justify-content-between">
+                            <button class="btn btn-sm btn-primary" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#eventModal"
+                                    onclick="openEditEventModal({{ event.id }}, '{{ event.title|escapejs }}', '{{ event.description|escapejs }}', '{{ event.event_date.strftime('%Y-%m-%dT%H:%M') }}', '{{ event.location|escapejs }}', '{{ event.image_url|default('') }}')">
+                                Edit
+                            </button>
+                            <form method="POST" action="{{ url_for('events.delete_event', event_id=event.id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No past events to display.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal for Add/Edit Event -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="eventForm" method="POST" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eventModalLabel">Add/Edit Event</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="eventId" name="event_id">
+            <div class="mb-3">
+                <label for="eventTitle" class="form-label">Title</label>
+                <input type="text" class="form-control" id="eventTitle" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="eventDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="eventDescription" name="description" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="eventDate" class="form-label">Event Date & Time</label>
+                <input type="datetime-local" class="form-control" id="eventDate" name="event_date" required>
+            </div>
+            <div class="mb-3">
+                <label for="eventLocation" class="form-label">Location</label>
+                <input type="text" class="form-control" id="eventLocation" name="location">
+            </div>
+            <div class="mb-3">
+                <label for="eventCategory" class="form-label">Category</label>
+                <input type="text" class="form-control" id="eventCategory" name="category">
+            </div>
+            <div class="mb-3">
+                <label for="eventYoutube" class="form-label">YouTube Link</label>
+                <input type="url" class="form-control" id="eventYoutube" name="youtube_link">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Speakers</label>
+                <div id="speakersContainer"></div>
+                <button type="button" class="btn btn-outline-secondary btn-sm mt-2" onclick="addSpeakerField()">Add Speaker</button>
+            </div>
+            <div class="mb-3">
+                <label for="eventImage" class="form-label">Image</label>
+                <input type="file" class="form-control" id="eventImage" name="image" accept="image/*">
+                <img id="eventImagePreview" src="" alt="" class="img-fluid mt-2" style="max-height:150px; display:none;">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="eventSubmitBtn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS (for modal support) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function openAddEventModal() {
+    document.getElementById('eventModalLabel').innerText = 'Add Event';
+    document.getElementById('eventForm').action = "{{ url_for('events.add_event') }}";
+    document.getElementById('eventId').value = '';
+    document.getElementById('eventTitle').value = '';
+    document.getElementById('eventDescription').value = '';
+    document.getElementById('eventDate').value = '';
+    document.getElementById('eventLocation').value = '';
+    document.getElementById('eventCategory').value = '';
+    document.getElementById('eventYoutube').value = '';
+    document.getElementById('eventImage').value = '';
+    document.getElementById('eventImagePreview').style.display = 'none';
+    clearSpeakerFields();
+    addSpeakerField(); // Start with one speaker field
+}
+
+function openEditEventModal(id, title, description, event_date, location, image_url, category, youtube_link, speakers) {
+    document.getElementById('eventModalLabel').innerText = 'Edit Event';
+    document.getElementById('eventForm').action = "/events/edit/" + id;
+    document.getElementById('eventId').value = id;
+    document.getElementById('eventTitle').value = title;
+    document.getElementById('eventDescription').value = description;
+    document.getElementById('eventDate').value = event_date;
+    document.getElementById('eventLocation').value = location;
+    document.getElementById('eventCategory').value = category || '';
+    document.getElementById('eventYoutube').value = youtube_link || '';
+    document.getElementById('eventImage').value = '';
+    if (image_url) {
+        document.getElementById('eventImagePreview').src = image_url;
+        document.getElementById('eventImagePreview').style.display = 'block';
+    } else {
+        document.getElementById('eventImagePreview').style.display = 'none';
+    }
+    clearSpeakerFields();
+    if (speakers && speakers.length > 0) {
+        speakers.forEach(function(name) {
+            addSpeakerField(name);
+        });
+    } else {
+        addSpeakerField();
+    }
+}
+
+// Dynamic speaker fields logic
+function addSpeakerField(value = '') {
+    const container = document.getElementById('speakersContainer');
+    const div = document.createElement('div');
+    div.className = "input-group mb-2";
+    div.innerHTML = `
+        <input type="text" name="speaker_names" class="form-control" placeholder="Speaker Name" value="${value || ''}">
+        <button type="button" class="btn btn-outline-danger" onclick="removeSpeakerField(this)">Remove</button>
+    `;
+    container.appendChild(div);
+}
+function removeSpeakerField(btn) {
+    btn.parentElement.remove();
+}
+function clearSpeakerFields() {
+    document.getElementById('speakersContainer').innerHTML = '';
+}
+</script>
+</body>
+</html>

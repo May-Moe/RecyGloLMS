@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask_login import UserMixin
 from recyglolms import db
+from sqlalchemy.sql import func
 
 
 # # Initialize db as None at first
@@ -399,6 +400,28 @@ class Assese_Response(db.Model):
 
         print(str(query))  # Debugging line to check generated SQL query
         return query.all()
+    
+class Event(db.Model):
+    __tablename__ = 'events'  # Explicitly name the table 'events'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    event_date = db.Column(db.DateTime, nullable=False)
+    location = db.Column(db.String(255), nullable=True)
+    image_url = db.Column(db.String(255), nullable=True) # To store a link to an event image
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # New columns
+    speaker_names = db.Column(db.JSON, nullable=True)  # store list of names in JSON format like ['John', 'Alice']
+    category = db.Column(db.String(100), nullable=True)
+    youtube_link = db.Column(db.String(255), nullable=True)
+        
+    # Optional: Link to the user who created the event
+    user_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    user = db.relationship('User', backref=db.backref('events', lazy=True))
+
+    def __repr__(self):
+        return f"<Event {self.title}>"
 
 # class Certificate(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
