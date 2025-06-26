@@ -1174,3 +1174,7 @@ def class_detail():
     return render_template('class-detail.html', 
                            current_user_name = current_user.name,
                             current_user_email = current_user.email)
+
+@admin_bp.route('/event')
+def event():
+    return render_template('Event.html')

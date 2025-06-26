@@ -1,0 +1,670 @@
+/* Hero Section Custom Styles */
+#top {
+    min-height: 100vh; /* Ensure it takes full viewport height */
+    /* background: linear-gradient(to right, #f8f9fa, #e9ecef); */ /* Subtle gradient background, uncomment if needed */
+    padding-top: 40px; /* Adjust based on your fixed navbar height */
+    padding-bottom: 60px;
+    display: flex; /* Use flexbox to center content vertically */
+    align-items: center; /* Center items vertically */
+}
+
+/* Specific styling for the hero section itself if it contains a hero-section class */
+.hero-section.hero-section-full-height {
+    min-height: 100vh; /* Re-affirm full height for this specific section */
+    display: flex; /* Apply flexbox to the hero section */
+    align-items: center; /* Vertically center content inside the hero section */
+}
+
+/* All Webinars Section */
+.all-webinars-section {
+    background-color: #fff5f8; /* soft pink background */
+    padding: 60px 0;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    color: #cc2a6b;
+    font-weight: 700;
+}
+
+/* Search and Filter Row */
+.all-webinars-section .form-control,
+.all-webinars-section .form-select {
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+}
+
+.webinar-card {
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      background-color: #fff;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .webinar-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .webinar-card-img-container {
+      height: 230px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .webinar-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .webinar-tag {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #ff6699;
+      color: white;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: 600;
+    }
+
+    .webinar-card-body {
+      padding: 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .webinar-card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .webinar-card-meta {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .webinar-card-text {
+      font-size: 15px;
+      color: #555;
+      flex-grow: 1;
+      margin-bottom: 15px;
+    }
+
+    .webinar-card .btn {
+      background-color: #ff6699;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .webinar-card .btn:hover {
+      background-color: #ff6699;
+    }
+
+
+.countdown-timer .countdown-item {
+    padding: 10px;
+    background-color: #fce4ec; /* Light pink background for countdown items */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    min-width: 80px; /* Ensure consistent width */
+    flex: 1; /* Allow items to grow and fill space */
+    margin: 0 5px; /* Small margin between items */
+}
+
+.countdown-timer .countdown-item span {
+    font-size: 2.5rem; /* Larger numbers for countdown */
+    display: block; /* Ensure numbers are block for padding/margin */
+}
+
+.countdown-timer .countdown-item small {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    display: block; /* Ensure text is block */
+}
+
+.qr-code-section {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.qr-code-img {
+    max-width: 150px; /* Size of QR code */
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Center the QR code */
+    border: 1px solid #eee;
+    padding: 5px;
+    background-color: #fff;
+    border-radius: 0.5rem; /* Slightly rounded corners for QR image */
+}
+
+/* Ensure the custom-btn is styled correctly if not already */
+.custom-btn {
+    background-color: #ff6699; /* Your pink color for buttons */
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px; /* Fully rounded button */
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-decoration: none; /* Remove underline from links */
+    display: inline-block; /* Ensure padding and width work */
+}
+
+.custom-btn:hover,
+.custom-btn:focus { /* Add focus state for accessibility */
+    background-color: #e05c8a; /* Slightly darker pink on hover */
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1); /* Subtle shadow on hover */
+}
+
+/* Adjust heading size for the right column */
+.hero-section h1 {
+    font-size: 3.8rem; /* Even larger for impact */
+    line-height: 1.2;
+    font-weight: 700;
+    color: #333; /* Darker text for readability */
+    margin-bottom: 1.5rem; /* Space below heading */
+}
+
+.hero-section p.lead {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 2rem; /* More space below paragraph */
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) { /* Adjust for medium devices (Bootstrap's lg breakpoint) */
+    .webinar-card {
+        margin-bottom: 3rem; /* Add space between card and text on smaller screens */
+    }
+    .hero-section h1 {
+        font-size: 3rem; /* Slightly smaller for tablets */
+    }
+    .hero-section p.lead {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 767.98px) { /* Adjust for small devices (Bootstrap's md breakpoint) */
+    .hero-section h1 {
+        font-size: 2.5rem; /* Further reduction for smaller tablets */
+        margin-top: 1.5rem; /* Add space above heading if card is above */
+    }
+    .hero-section p.lead {
+        font-size: 1.1rem;
+    }
+    .webinar-title {
+        font-size: 1.8rem;
+    }
+    .countdown-timer .countdown-item span {
+        font-size: 1.8rem;
+    }
+    .countdown-timer .countdown-item {
+        min-width: 60px;
+        padding: 8px;
+    }
+    .hero-section .row {
+        flex-direction: column-reverse; /* Put the text above the card on mobile */
+    }
+    .col-lg-6.col-md-6.col-12 {
+        text-align: center; /* Center text on mobile */
+    }
+}
+
+@media (max-width: 575.98px) { /* Adjust for extra small devices (Bootstrap's sm breakpoint) */
+    #top {
+        padding-top: 80px; /* Less padding on very small screens */
+        padding-bottom: 40px;
+    }
+    .webinar-card {
+        padding: 20px;
+        margin-bottom: 2rem;
+    }
+    .webinar-title {
+        font-size: 1.5rem;
+    }
+    .speaker-img {
+        width: 50px;
+        height: 50px;
+    }
+    .countdown-timer .countdown-item span {
+        font-size: 1.5rem;
+    }
+    .countdown-timer .countdown-item {
+        min-width: 50px;
+        padding: 5px;
+        margin: 0 3px; /* Smaller margin for very small screens */
+    }
+    .qr-code-img {
+        max-width: 100px;
+    }
+    .hero-section h1 {
+        font-size: 2rem;
+        margin-top: 1rem;
+    }
+    .hero-section p.lead {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .webinar-info {
+        flex-direction: column; /* Stack date and time vertically on very small screens */
+        align-items: center;
+    }
+    .webinar-info > div {
+        margin-bottom: 10px; /* Space between stacked date/time */
+    }
+}
+
+/* CSS for the second countdown section */
+.countdown-section {
+    background-color: #343a40; /* Dark background */
+    color: #fff;
+}
+
+.countdown-timer-secondary .countdown-item {
+    background-color: #495057; /* Slightly lighter dark background */
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 0 10px; /* Space between items */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+}
+
+.countdown-timer-secondary .countdown-value-secondary {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fff; /* White numbers */
+    line-height: 1;
+}
+
+.countdown-timer-secondary .countdown-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #ced4da; /* Lighter grey for labels */
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .countdown-timer-secondary .countdown-item {
+        min-width: 80px;
+        padding: 10px 15px;
+    }
+    .countdown-timer-secondary .countdown-value-secondary {
+        font-size: 2.5rem;
+    }
+    .countdown-timer-secondary .countdown-label {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .countdown-timer-secondary .countdown-item {
+        min-width: 70px;
+        padding: 8px 10px;
+        margin: 0 5px;
+    }
+    .countdown-timer-secondary .countdown-value-secondary {
+        font-size: 2rem;
+    }
+    .countdown-timer-secondary .countdown-label {
+        font-size: 0.6rem;
+    }
+}
+
+/* Styles for the "All Webinars" section and speaker cards */
+.all-webinars-section {
+    background-color: #f8f9fa; /* Light background for this section */
+}
+
+.section-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 3rem;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: #ff6699; /* Pink underline */
+    border-radius: 2px;
+}
+
+.all-webinars-section .webinar-card { /* This targets webinar cards *within* this section specifically */
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.75rem;
+    overflow: hidden; /* Important for image border-radius */
+    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.all-webinars-section .webinar-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.12);
+}
+
+.webinar-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the container */
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+}
+
+@media (min-width: 768px) {
+    .webinar-card-img {
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0.75rem; /* Rounded bottom-left for horizontal layout */
+    }
+}
+
+
+.webinar-tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: #ff6699; /* Pink tag */
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 10;
+}
+
+.webinar-card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.webinar-card-meta {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.webinar-card-meta i {
+    color: #ff6699; /* Pink icons */
+}
+
+.webinar-card-text {
+    font-size: 0.95rem;
+    color: #495057;
+    margin-bottom: 1.5rem;
+}
+
+.custom-btn-outline {
+    border: 2px solid #ff6699;
+    color: #ff6699;
+    background-color: transparent;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.custom-btn-outline:hover {
+    background-color: #ff6699;
+    color: #fff;
+}
+
+/* Speaker Card Styles */
+.speaker-card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.08);
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%; /* Ensure cards are same height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.speaker-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.12);
+}
+
+.speaker-card .speaker-img { /* Override the hero speaker-img if needed, or refine existing */
+    width: 100px; /* Larger image for individual speaker cards */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #ff6699; /* Pink border */
+    margin-bottom: 15px;
+}
+
+.speaker-name {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.2;
+}
+
+.speaker-title {
+    font-size: 0.95rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.speaker-bio {
+    font-size: 0.9rem;
+    color: #495057;
+    flex-grow: 1; /* Allow bio to take available space */
+}
+
+.speaker-card .btn-link {
+    color: #ff6699;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.speaker-card .btn-link:hover {
+    color: #e05c8a;
+    text-decoration: underline;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    padding: 80px 0;
+    background: #343a40; /* Dark background */
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    color: #fff;
+}
+
+.newsletter-section h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.newsletter-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.newsletter-input {
+    flex-grow: 1;
+    padding: 12px 20px;
+    border-radius: 50px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 1rem;
+}
+
+.newsletter-input::placeholder {
+    color: #888;
+}
+
+.newsletter-btn {
+    padding: 12px 30px;
+    border-radius: 50px;
+    background-color: #ff6699; /* Pink subscribe button */
+    border-color: #ff6699;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.newsletter-btn:hover {
+    background-color: #e05c8a;
+    border-color: #e05c8a;
+}
+
+/* Back to top button */
+#backToTopBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position */
+    bottom: 30px; /* Place at the bottom */
+    right: 30px; /* Place at the right */
+    z-index: 99; /* Ensure it's above other content */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: #ff6699; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 18px; /* Increase font size */
+    transition: background-color 0.3s ease;
+}
+
+#backToTopBtn:hover {
+    background-color: #e05c8a; /* Darker background on hover */
+}
+
+
+/* Footer Styles */
+.site-footer {
+    background-color: #212529; /* Dark background */
+    color: #adb5bd; /* Light gray text */
+    padding-top: 60px;
+    font-size: 0.95rem;
+}
+
+.site-footer .logo {
+    max-width: 180px; /* Adjust logo size */
+    margin-bottom: 20px;
+}
+
+.site-footer-title {
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.footer-menu {
+    padding: 0;
+    list-style: none;
+}
+
+.footer-menu-item {
+    margin-bottom: 10px;
+}
+
+.footer-menu-link {
+    color: #adb5bd;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-menu-link:hover {
+    color: #ff6699; /* Pink on hover */
+}
+
+.site-footer-link {
+    color: #adb5bd;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.site-footer-link:hover {
+    color: #ff6699;
+}
+
+.site-footer i.bi-telephone,
+.site-footer i.bi-envelope,
+.site-footer i.bi-geo-alt {
+    color: #ff6699; /* Pink icons in footer contact info */
+    font-size: 1.1rem;
+    margin-top: 3px; /* Align with text */
+}
+
+.site-footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 25px;
+    padding-bottom: 25px;
+    margin-top: 40px;
+}
+
+.copyright-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.social-icon {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.social-icon-item {
+    margin: 0 8px;
+}
+
+.social-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #495057;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.social-icon-link:hover {
+    background-color: #ff6699; /* Pink on hover */
+    color: #fff;
+}

@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="">
+    <link rel="icon" href="static/img/shework4.png" type="image/png">
+    <title>SheWorks</title>
+
+    <link href="static/CSS/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <link href="static/CSS/style.css" rel="stylesheet">
+    <link href="static/CSS/shework.css" rel="stylesheet">
+    <link href="static/CSS/Event.css" rel="stylesheet">
+    <link href="static/CSS/custom-hero.css" rel="stylesheet"> 
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-light shadow-lg sticky-top" id="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="shework.html#section_1">
+                <img src="static/img/shework.png" class="logo img-fluid" alt="Kind Heart Charity">
+                <span>
+                    SheWorks with Purpose
+                    <small>Vocational training Programs</small>
+                </span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link click-scroll" href="shework.html#top">Home</a></li>
+                    <li class="nav-item"><a class="nav-link click-scroll" href="shework.html#section_2">About</a></li>
+                    <li class="nav-item"><a class="nav-link click-scroll" href="shework.html#section_5">Programs</a></li>
+                    <li class="nav-item"><a class="nav-link click-scroll" href="shework.html#section_6">Success Storys</a></li>
+                    <li class="nav-item"><a class="nav-link click-scroll" href="shework.html#section_7">Contact</a></li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.event') }}">Event</a>
+                        </li>
+                    <li class="nav-item language-dropdown">
+                        <button class="language-btn nav-link btn">
+                            <img src="static/img/uk.svg" class="flag-icon"> English <i class="fas fa-chevron-down icon"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="?lang=en"><img src="static/img/uk.svg" class="flag-icon"> English</a>
+                            <a href="?lang=th"><img src="static/img/th.svg" class="flag-icon"> Thailand</a>
+                            <a href="?lang=my"><img src="static/img/my.svg" class="flag-icon"> Myanmar</a>
+                            <a href="?lang=vi"><img src="static/img/vi.svg" class="flag-icon"> Vietnam</a>
+                            <a href="?lang=in"><img src="static/img/id.svg" class="flag-icon"> Indonia</a>
+                            <a href="?lang=ko"><img src="static/img/kr.svg" class="flag-icon"> Korea</a>
+                        </div>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="nav-link custom-btn custom-border-btn btn" href="{{ url_for('auth.login') }}">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero-section hero-section-full-height d-flex align-items-center" style="background-color: pink;" id="top">
+    <div class="container rounded" style="background-image: url(static/images/pink2.webp); background-size: cover; background-position: center; min-height: 110vh; padding: 100px 60px 60px 100px;">
+        <div class="row align-items-center">
+
+            <!-- Smaller Hero Image -->
+            <div class="col-lg-5 col-md-6 col-12 mb-4 mb-md-0" data-aos="fade-right">
+                <div class="hero-img-container text-center">
+                    <img src="static/images/w1.jpg" class="img-fluid rounded" alt="Upcycling Waste" style="max-height: 400px; width: auto;">
+                </div>
+            </div>
+
+            <!-- Hero Text and Speakers -->
+            <div class="col-lg-7 col-md-6 col-12 text-center text-md-start" data-aos="fade-left">
+                <h1 class="display-2 text-dark mb-4">Upcycling For General Waste</h1>
+                <p class="lead text-white mb-4" style="font-size: 17px;">Explore creative and sustainable ways to transform everyday waste into valuable products, reducing environmental impact and promoting a circular economy.</p>
+                
+                <!-- Speakers with Names -->
+                <div class="webinar-speakers mb-4">
+                    <div class="d-flex justify-content-start align-items-center flex-wrap">
+                        <div class="d-flex align-items-center me-4 mb-2">
+                            <img src="static/images/por.jpg" class="rounded-circle me-2" alt="Speaker 1" style="width: 50px; height: 50px;">
+                            <span class="text-dark fw-bold">Jane Doe</span>
+                        </div>
+                        <div class="d-flex align-items-center me-4 mb-2">
+                            <img src="static/images/profile.jpg" class="rounded-circle me-2" alt="Speaker 2" style="width: 50px; height: 50px;">
+                            <span class="text-dark fw-bold">John Smith</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#" class="btn btn-primary custom-btn w-100">Register Now</a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+        <section class="countdown-section py-4 bg-dark text-white text-center" style="padding-top: 20px; padding-bottom: 20px;">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-10 col-12">
+                        <div class="countdown-timer-secondary d-flex justify-content-center align-items-center">
+                            <div class="countdown-item mx-3">
+                                <span class="countdown-value-secondary" id="secondary-days">00</span>
+                                <span class="countdown-label">DAYS</span>
+                            </div>
+                            <div class="countdown-item mx-3">
+                                <span class="countdown-value-secondary" id="secondary-hours">00</span>
+                                <span class="countdown-label">HOURS</span>
+                            </div>
+                            <div class="countdown-item mx-3">
+                                <span class="countdown-value-secondary" id="secondary-minutes">00</span>
+                                <span class="countdown-label">MINS</span>
+                            </div>
+                            <div class="countdown-item mx-3">
+                                <span class="countdown-value-secondary" id="secondary-seconds">00</span>
+                                <span class="countdown-label">SECS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+<section class="all-webinars-section py-5" id="all-webinars">
+    <div class="container py-5">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Explore Top Webinars</h2>
+      <p class="text-muted">Join our most popular sessions on sustainability, innovation, and more.</p>
+      <div class="row">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search Webinars...">
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-select" id="categoryFilter">
+                            <option value="All">All Categories</option>
+                            <option value="Environment">Environment</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Business">Business</option>
+                        </select>
+                    </div>
+                </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Card 1 -->
+      <div class="col-lg-4 col-md-6 webinar-card-item" data-title="Floating Islands Tour"
+     data-category="Environment">
+        <div class="webinar-card">
+          <div class="webinar-card-img-container">
+            <img src="static/images/w1.jpg" class="webinar-card-img" alt="Webinar 1">
+            <span class="webinar-tag">Environment</span>
+          </div>
+          <div class="webinar-card-body">
+            <h5 class="webinar-card-title">Floating Islands Tour</h5>
+            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025<br>
+            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+            </p>
+            <p class="webinar-card-text">Enjoy the beauty of floating villas and the crystal-clear waters of the Maldives Islands.</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
+  View Details
+</button>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="col-lg-4 col-md-6 webinar-card-item" data-title="Kayak Experience"
+     data-category="Adventure">
+        <div class="webinar-card">
+          <div class="webinar-card-img-container">
+            <img src="static/images/w1.jpg" class="webinar-card-img" alt="Webinar 2">
+            <span class="webinar-tag">Adventure</span>
+          </div>
+          <div class="webinar-card-body">
+            <h5 class="webinar-card-title">Kayak Experience</h5>
+           <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025<br>
+            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+            </p>
+            <p class="webinar-card-text">Paddle through stunning mountain lakes and immerse in nature like never before.</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
+  View Details
+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="col-lg-4 col-md-6 webinar-card-item" data-title="Desert Dune Safari"
+     data-category="Culture">
+        <div class="webinar-card">
+          <div class="webinar-card-img-container">
+            <img src="static/images/w1.jpg" class="webinar-card-img" alt="Webinar 3">
+            <span class="webinar-tag">Culture</span>
+          </div>
+          <div class="webinar-card-body">
+            <h5 class="webinar-card-title">Desert Dune Safari</h5>
+            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025<br>
+            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+            </p>
+            <p class="webinar-card-text">Explore the Sahara Desert’s golden dunes with thrilling rides and cultural stories.</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
+  View Details
+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="col-lg-4 col-md-6 d-none extra-webinar">
+        <div class="webinar-card">
+          <div class="webinar-card-img-container">
+            <img src="static/images/w1.jpg" class="webinar-card-img" alt="Webinar 3">
+            <span class="webinar-tag">Culture</span>
+          </div>
+          <div class="webinar-card-body">
+            <h5 class="webinar-card-title">Desert Dune Safari</h5>
+            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025<br>
+            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+            </p>
+            <p class="webinar-card-text">Explore the Sahara Desert’s golden dunes with thrilling rides and cultural stories.</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
+  View Details
+</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Card 4 -->
+      <div class="col-lg-4 col-md-6 d-none extra-webinar">
+        <div class="webinar-card">
+          <div class="webinar-card-img-container">
+            <img src="static/images/w1.jpg" class="webinar-card-img" alt="Webinar 3">
+            <span class="webinar-tag">Culture</span>
+          </div>
+          <div class="webinar-card-body">
+            <h5 class="webinar-card-title">Desert Dune Safari</h5>
+            <p class="webinar-card-meta"><i class="bi bi-calendar-event"></i> Aug 15, 2025<br>
+            <i class="bi-person-circle me-1"></i> Speaker: Jane Doe
+            </p>
+            <p class="webinar-card-text">Explore the Sahara Desert’s golden dunes with thrilling rides and cultural stories.</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal1">
+  View Details
+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- See More / Show Less Button -->
+<div class="text-center mt-3">
+  <button id="toggleWebinarsBtn" class="btn" style="background-color: #FF6699; color: white;">See More</button>
+</div>
+
+    </div>
+  </div>
+  </section>
+
+        <section class="newsletter-section section-padding" data-aos="fade-up" style="background-color: #FF6699">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-10 col-12 text-center">
+                        <h2 class="mb-3">Stay in the loop - Get notified about our upcoming events!</h2>
+                        <form class="newsletter-form d-flex flex-column flex-sm-row justify-content-center align-items-center mt-4">
+                            <input type="email" class="form-control newsletter-input me-sm-2 mb-2 mb-sm-0" placeholder="Enter Your Email" required>
+                            <button type="submit" class="btn btn-success custom-btn newsletter-btn" style="background-color: rgb(3, 3, 24);">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<div class="modal fade" id="registerModal1" tabindex="-1" aria-labelledby="registerModalLabel1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registerModalLabel1">Kayak Experience</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body d-flex flex-column flex-md-row">
+        <!-- Image -->
+        <div class="col-md-5 text-center mb-3 mb-md-0">
+          <img src="static/images/w1.jpg" class="img-fluid rounded" alt="Webinar Image">
+        </div>
+
+        <!-- Info -->
+        <div class="col-md-7 ps-md-4">
+          <p><strong>Date:</strong> July 10, 2025</p>
+          <p><strong>Speaker:</strong> John Doe, Expert Adventurer</p>
+          <p><strong>Description:</strong><br>
+            Paddle through stunning mountain lakes and immerse in nature like never before. This experience combines adventure, learning, and unforgettable views.
+          </p>
+          <a href="https://youtube.com/examplelink" target="_blank" class="btn btn-outline-danger mt-2">
+            Watch on YouTube
+          </a>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </main>
+
+    <button onclick="topFunction()" id="backToTopBtn" title="Go to top">Top</button>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-12 mb-4">
+                    <a href="index.html#section_1"><img src="static/img/shework2.png" class="logo img-fluid" alt=""></a>
+                </div>
+
+                <div class="col-lg-4 col-md-6 col-12 mb-4">
+                    <h5 class="site-footer-title mb-3">Quick Links</h5>
+                    <ul class="footer-menu">
+                        <li class="footer-menu-item"><a href="index.html#section_2" class="footer-menu-link">Our Story</a></li>
+                        <li class="footer-menu-item"><a href="index.html#section_5" class="footer-menu-link">Programs</a></li>
+                        <li class="footer-menu-item"><a href="index.html#section_6" class="footer-menu-link">Success Storys</a></li>
+                        <li class="footer-menu-item"><a href="index.html#section_7" class="footer-menu-link">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 col-12 mx-auto">
+                    <h5 class="site-footer-title mb-3">Contact Information</h5>
+                    <p class="text-white d-flex mb-2">
+                        <i class="bi-telephone me-2"></i>
+                        <a href="tel: +959404245800" class="site-footer-link">
+                            +95 9 404 245 800
+                        </a>
+                    </p>
+                    <p class="text-white d-flex">
+                        <i class="bi-envelope me-2"></i>
+                        <a href="mailto:sheworks.mm@gmail.com" class="site-footer-link">
+                            sheworks.mm@gmail.com
+                        </a>
+                    </p>
+                    <p class="text-white d-flex mt-3">
+                        <i class="bi-geo-alt me-2"></i>
+                        No. 29/30B, Lan Thit Street, Bahosi Housing, Lanmadaw Township,Yangon
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7 col-12">
+                        <p class="copyright-text mb-0">© Copyright 2025 by RecyGlo Company Pte. Ltd. All rights reserved.</p>
+                    </div>
+                    <div class="col-lg-6 col-md-5 col-12 d-flex justify-content-center align-items-center mx-auto">
+                        <ul class="social-icon">
+                            <li class="social-icon-item">
+                                <a href="https://www.facebook.com/share/1AAaD6Qc9z/" class="social-icon-link bi-facebook"></a>
+                            </li>
+                            <li class="social-icon-item">
+                                <a href="https://www.instagram.com/sheworks.mm?igsh=eWJheGRpYzZ3OGFy" class="social-icon-link bi-instagram"></a>
+                            </li>
+                            <li class="social-icon-item">
+                                <a href="https://www.linkedin.com/company/recyglo-thailand/" class="social-icon-link bi-linkedin"></a>
+                            </li>
+                            <li class="social-icon-item">
+                                <a href="https://youtube.com/@recyglorecyglo7210?si=LTKiBe55x_ippcPJ" class="social-icon-link bi-youtube"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="static/JS/bootstrap.min.js"></script>
+    <script src="static/JS/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: false,
+            mirror: true
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script>
+        const lightbox = GLightbox({
+            selector: '.glightbox'
+        });
+    </script>
+    <script>
+        // Back to top button functionality
+        let mybutton = document.getElementById("backToTopBtn");
+        window.onscroll = function() {scrollFunction()};
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+        // Secondary Countdown Timer Function (Now the ONLY countdown)
+        function startSecondaryCountdown() {
+            // Set the target date for your countdown here (e.g., June 28, 2025, 10:00 AM ICT, which is GMT+0700)
+            const secondaryCountDownDate = new Date("June 28, 2025 10:00:00 GMT+0700").getTime();
+
+            const secondaryCountdownInterval = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = secondaryCountDownDate - now;
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000); // Added seconds here as per typical countdowns
+
+                if (document.getElementById("secondary-days")) { // Check for secondary IDs
+                    document.getElementById("secondary-days").innerHTML = String(days).padStart(2, '0');
+                    document.getElementById("secondary-hours").innerHTML = String(hours).padStart(2, '0');
+                    document.getElementById("secondary-minutes").innerHTML = String(minutes).padStart(2, '0');
+                    document.getElementById("secondary-seconds").innerHTML = String(seconds).padStart(2, '0'); // Update seconds
+                }
+
+                if (distance < 0) {
+                    clearInterval(secondaryCountdownInterval);
+                    if (document.getElementById("secondary-days")) {
+                        document.getElementById("secondary-days").innerHTML = "00";
+                        document.getElementById("secondary-hours").innerHTML = "00";
+                        document.getElementById("secondary-minutes").innerHTML = "00";
+                        document.getElementById("secondary-seconds").innerHTML = "00";
+                    }
+                }
+            }, 1000);
+        }
+
+        // Call the countdown function when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            startSecondaryCountdown();
+        });
+
+  const toggleBtn = document.getElementById('toggleWebinarsBtn');
+  const extraCards = document.querySelectorAll('.extra-webinar');
+  let isExpanded = false;
+
+  toggleBtn.addEventListener('click', () => {
+    isExpanded = !isExpanded;
+
+    extraCards.forEach(card => {
+      card.classList.toggle('d-none');
+    });
+
+    toggleBtn.textContent = isExpanded ? 'Show Less' : 'See More';
+  });
+
+
+  //search and filter functionality
+  const searchInput = document.getElementById('searchInput');
+  const categoryFilter = document.getElementById('categoryFilter');
+  const webinarItems = document.querySelectorAll('.webinar-card-item');
+
+  function filterWebinars() {
+    const searchText = searchInput.value.toLowerCase();
+    const selectedCategory = categoryFilter.value;
+
+    webinarItems.forEach(item => {
+      const title = item.getAttribute('data-title').toLowerCase();
+      const category = item.getAttribute('data-category');
+
+      const matchesSearch = title.includes(searchText);
+      const matchesCategory = selectedCategory === 'All' || category === selectedCategory;
+
+      if (matchesSearch && matchesCategory) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  searchInput.addEventListener('input', filterWebinars);
+  categoryFilter.addEventListener('change', filterWebinars);
+
+    </script>
+</body>
+</html>
